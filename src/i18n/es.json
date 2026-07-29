@@ -1,0 +1,177 @@
+{
+  "brand": {
+    "name": "AdCrypto",
+    "tagline": "Tu billetera y exchange de criptomonedas todo en uno"
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Nosotros",
+    "login": "Iniciar sesión",
+    "dashboard": "Panel",
+    "signUp": "Registrarse"
+  },
+  "theme": {
+    "toggleToLight": "Cambiar a modo claro",
+    "toggleToDark": "Cambiar a modo oscuro"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "hero": {
+    "navInvesting": "Inversión",
+    "navCash": "Efectivo",
+    "navPlanning": "Planificación",
+    "navAbout": "Nosotros",
+    "marketsLive": "Mercados en vivo",
+    "badge": "Bienvenido a AdCrypto",
+    "title": "Soluciones cripto sin fricciones, creadas para escalar.",
+    "subtitle": "AdCrypto redefine la experiencia con las criptomonedas: una plataforma integral pensada para emprendedores y empresas que entran en el dinámico mundo de los activos digitales.",
+    "ctaPrimary": "Explorar ahora",
+    "ctaIconLabel": "Ver cómo funciona",
+    "metaNoCard": "Sin tarjeta",
+    "metaWithdraw": "Retira cuando quieras",
+    "metaFee": "0,10% de comisión spot",
+    "scroll": "Desliza",
+    "phonePortfolioLabel": "Valor de la cartera",
+    "phonePortfolioValue": "24.918,40 $",
+    "phonePortfolioChange": "+7,84% hoy",
+    "phoneCustody": "Custodia asegurada · Protegido con 2FA",
+    "phoneTime": "9:41",
+    "phoneActionBuy": "Comprar",
+    "phoneActionSell": "Vender",
+    "phoneActionSwap": "Cambiar",
+    "phoneHoldings": "Tus activos",
+    "phoneViewAll": "Ver todos los activos"
+  },
+  "howItWorks": {
+    "badge": "Cómo funciona",
+    "titleLead": "Una guía de cómo",
+    "titleAccent": "funciona AdCrypto",
+    "subtitle": "Una solución integral para quien se adentra en el dinámico mundo de los activos digitales: configúralo una vez y después compra, opera y liquida con confianza.",
+    "steps": {
+      "onboarding": {
+        "title": "Registro sencillo",
+        "body": "Facilita tus datos, supera la autenticación una sola vez y entra en un panel que te da una visión completa de tu mundo cripto."
+      },
+      "transactions": {
+        "title": "Transacciones con criptomonedas",
+        "body": "Opera de forma segura con los parámetros que se ajusten a ti — intercambiar, comprar o vender, con las comisiones a la vista antes de confirmar."
+      },
+      "secure": {
+        "title": "Conecta y protege",
+        "body": "Retiros sin complicaciones y transferencias entre personas, protegidos por custodia asegurada y 2FA en cada acción."
+      }
+    }
+  },
+  "home": {
+    "featuresTitle": "Todo lo que necesitas para gestionar cripto",
+    "featuresSubtitle": "Funciones principales incluidas en cada cuenta de AdCrypto.",
+    "features": {
+      "multiWallet": {
+        "title": "Billetera de múltiples criptomonedas",
+        "text": "Gestiona varias billeteras de criptomonedas en un solo lugar, para manejar distintas monedas y activos de forma eficiente."
+      },
+      "buyInside": {
+        "title": "Comprar cripto dentro de la billetera",
+        "text": "Compra cripto directamente en tu billetera interna eligiendo la moneda y la red e introduciendo tus datos de pago."
+      },
+      "buyOutside": {
+        "title": "Comprar cripto para billeteras externas",
+        "text": "Compra criptomonedas para billeteras externas eligiendo la moneda, la red e introduciendo la dirección de destino."
+      },
+      "sellInside": {
+        "title": "Vender cripto dentro de la billetera",
+        "text": "Vende tu cripto rápidamente dentro de tu billetera interna seleccionando los detalles de la moneda y confirmando el método de pago."
+      },
+      "sellOutside": {
+        "title": "Vender cripto a billeteras externas",
+        "text": "Vende cripto a billeteras externas especificando la moneda, la red e introduciendo la dirección de la billetera externa."
+      },
+      "withdraw": {
+        "title": "Retirar cripto",
+        "text": "Retira fondos de forma segura a billeteras externas introduciendo el monto y verificando tu dirección de billetera."
+      },
+      "exchange": {
+        "title": "Intercambiar cripto",
+        "text": "Cambia entre distintas criptomonedas en tu billetera, gestionando las transferencias de forma eficiente."
+      },
+      "pushNotification": {
+        "title": "Notificaciones push",
+        "text": "Mantente al día con notificaciones push en tiempo real sobre transacciones, pagos y actividad de tu cuenta."
+      },
+      "emailVerification": {
+        "title": "Verificación de correo",
+        "text": "Mejora la seguridad verificando tu correo para confirmar tu identidad y proteger tu cuenta."
+      },
+      "kyc": {
+        "title": "Verificación KYC",
+        "text": "Completa la verificación KYC para garantizar la seguridad de la cuenta y cumplir con los requisitos regulatorios."
+      },
+      "twoFa": {
+        "title": "Seguridad 2FA",
+        "text": "Activa la autenticación de dos factores para añadir una capa extra de seguridad al acceso de tu cuenta."
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "Sobre nosotros",
+    "title": "Creado para quienes quieren tener el control de su cripto",
+    "intro": "AdCrypto es una plataforma de billetera y exchange de criptomonedas que permite comprar, vender, guardar y mover activos digitales de forma segura desde un solo panel.",
+    "missionTitle": "Nuestra misión",
+    "missionText": "Hacer que gestionar varias criptomonedas sea tan sencillo como usar una app bancaria normal, sin renunciar a la seguridad ni al control de tus fondos.",
+    "visionTitle": "Nuestra visión",
+    "visionText": "Un único lugar de confianza para guardar cada moneda que posees, moverla a donde sea y demostrar quién eres una sola vez.",
+    "valuesTitle": "Lo que nos importa",
+    "values": {
+      "security": {
+        "title": "La seguridad primero",
+        "text": "KYC, 2FA y verificación de correo están integrados desde el primer día, no añadidos después."
+      },
+      "simplicity": {
+        "title": "Simple por defecto",
+        "text": "Comprar, vender e intercambiar cripto debería tomar unos toques, no un manual."
+      },
+      "transparency": {
+        "title": "Actividad transparente",
+        "text": "Cada transacción queda registrada y visible para ti, en tiempo real."
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "Bienvenido de nuevo",
+    "loginSubtitle": "Inicia sesión para acceder a tu billetera AdCrypto",
+    "labelEmail": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "labelPassword": "Contraseña",
+    "passwordPlaceholder": "Introduce tu contraseña",
+    "loginButton": "Iniciar sesión",
+    "loggingIn": "Iniciando sesión...",
+    "noAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crea una",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "errorEmailRequired": "Introduce un correo electrónico válido",
+    "errorPasswordRequired": "La contraseña es obligatoria",
+    "loginSuccess": "Sesión iniciada correctamente",
+    "loginFailed": "No se pudo iniciar sesión con esos datos"
+  },
+  "dashboard": {
+    "welcomeTitle": "Bienvenido de nuevo",
+    "welcomeSubtitle": "Aquí tienes un resumen de tu cuenta de AdCrypto.",
+    "statTotalBalance": "Saldo total",
+    "statActiveWallets": "Billeteras activas",
+    "statPendingOrders": "Órdenes pendientes",
+    "statSupportTickets": "Tickets abiertos",
+    "recentActivityTitle": "Actividad reciente",
+    "emptyActivityTitle": "Aún no hay actividad",
+    "emptyActivityText": "Tus transacciones aparecerán aquí en cuanto empieces a usar tu billetera.",
+    "logout": "Cerrar sesión"
+  },
+  "footer": {
+    "tagline": "Gestiona, compra y vende cripto, todo en una sola billetera.",
+    "rights": "Todos los derechos reservados."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "comingSoon": "Próximamente"
+  }
+}

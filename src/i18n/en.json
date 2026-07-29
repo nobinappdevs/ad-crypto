@@ -1,0 +1,177 @@
+{
+  "brand": {
+    "name": "AdCrypto",
+    "tagline": "Your all-in-one crypto wallet & exchange"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "login": "Sign In",
+    "dashboard": "Dashboard",
+    "signUp": "Sign Up"
+  },
+  "theme": {
+    "toggleToLight": "Switch to light mode",
+    "toggleToDark": "Switch to dark mode"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "hero": {
+    "navInvesting": "Investing",
+    "navCash": "Cash",
+    "navPlanning": "Planning",
+    "navAbout": "About",
+    "marketsLive": "Markets live",
+    "badge": "Welcome to AdCrypto",
+    "title": "Seamless cryptocurrency solutions, built to scale.",
+    "subtitle": "AdCrypto redefines the cryptocurrency experience — a comprehensive platform tailored for entrepreneurs and businesses entering the dynamic world of digital assets.",
+    "ctaPrimary": "Explore Now",
+    "ctaIconLabel": "See how it works",
+    "metaNoCard": "No card required",
+    "metaWithdraw": "Withdraw anytime",
+    "metaFee": "0.10% spot fee",
+    "scroll": "Scroll",
+    "phonePortfolioLabel": "Portfolio value",
+    "phonePortfolioValue": "$24,918.40",
+    "phonePortfolioChange": "+7.84% today",
+    "phoneCustody": "Insured custody · 2FA protected",
+    "phoneTime": "9:41",
+    "phoneActionBuy": "Buy",
+    "phoneActionSell": "Sell",
+    "phoneActionSwap": "Swap",
+    "phoneHoldings": "Your holdings",
+    "phoneViewAll": "View all assets"
+  },
+  "howItWorks": {
+    "badge": "How It Works",
+    "titleLead": "A Guide to How",
+    "titleAccent": "AdCrypto Works",
+    "subtitle": "A comprehensive solution for anyone venturing into the dynamic world of digital assets — set up once, then buy, trade and settle with confidence.",
+    "steps": {
+      "onboarding": {
+        "title": "User-Friendly Onboarding",
+        "body": "Provide your details, clear authentication once, and step into a dashboard that gives a holistic view of your crypto world."
+      },
+      "transactions": {
+        "title": "Cryptocurrency Transactions",
+        "body": "Trade securely with the parameters that fit your needs — exchanging, buying or selling, with fees shown before you confirm."
+      },
+      "secure": {
+        "title": "Connect and Secure",
+        "body": "Hassle-free withdrawals and peer-to-peer transfers, protected by insured custody and 2FA on every action."
+      }
+    }
+  },
+  "home": {
+    "featuresTitle": "Everything you need to manage crypto",
+    "featuresSubtitle": "Core features built into every AdCrypto account.",
+    "features": {
+      "multiWallet": {
+        "title": "Multiple Cryptocurrency Wallet",
+        "text": "Manage multiple cryptocurrency wallets in one place, enabling efficient handling of different coins and assets."
+      },
+      "buyInside": {
+        "title": "Buy Crypto Inside Wallet",
+        "text": "Purchase crypto directly into your internal wallet by selecting the coin and network and entering your payment details."
+      },
+      "buyOutside": {
+        "title": "Buy Crypto Outside Wallet",
+        "text": "Buy cryptocurrency for external wallets by choosing the coin, network, and entering the destination crypto address."
+      },
+      "sellInside": {
+        "title": "Sell Crypto Inside Wallet",
+        "text": "Quickly sell crypto within your internal wallet by selecting coin details and confirming the payment method."
+      },
+      "sellOutside": {
+        "title": "Sell Crypto Outside Wallet",
+        "text": "Sell crypto to external wallets by specifying the coin, network, and entering the external wallet address."
+      },
+      "withdraw": {
+        "title": "Withdraw Crypto",
+        "text": "Withdraw funds securely to external wallets by entering the amount and verifying your wallet address."
+      },
+      "exchange": {
+        "title": "Exchange Crypto",
+        "text": "Swap between different cryptocurrencies in your wallet, managing transfers efficiently in one place."
+      },
+      "pushNotification": {
+        "title": "Push Notification",
+        "text": "Stay updated with real-time push notifications about transactions, payments and account activity."
+      },
+      "emailVerification": {
+        "title": "Email Verification",
+        "text": "Enhance security by verifying your email to confirm your identity and protect your account."
+      },
+      "kyc": {
+        "title": "KYC Verification",
+        "text": "Complete KYC verification to ensure account security and compliance with regulatory requirements."
+      },
+      "twoFa": {
+        "title": "2FA Security",
+        "text": "Enable two-factor authentication to add an extra layer of security to your account access."
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "About us",
+    "title": "Built for people who want control of their crypto",
+    "intro": "AdCrypto is a crypto wallet and exchange platform that lets people buy, sell, hold and move digital assets safely from a single dashboard.",
+    "missionTitle": "Our mission",
+    "missionText": "Make managing multiple cryptocurrencies as simple as using a regular banking app, without giving up security or control over your funds.",
+    "visionTitle": "Our vision",
+    "visionText": "A single trusted place to hold every coin you own, move it anywhere, and prove who you are only once.",
+    "valuesTitle": "What we care about",
+    "values": {
+      "security": {
+        "title": "Security first",
+        "text": "KYC, 2FA and email verification are built in from day one, not bolted on later."
+      },
+      "simplicity": {
+        "title": "Simple by default",
+        "text": "Buying, selling and exchanging crypto should take a few taps, not a manual."
+      },
+      "transparency": {
+        "title": "Transparent activity",
+        "text": "Every transaction is logged and visible to you, in real time."
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to access your AdCrypto wallet",
+    "labelEmail": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "labelPassword": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "loginButton": "Sign in",
+    "loggingIn": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create one",
+    "forgotPassword": "Forgot password?",
+    "errorEmailRequired": "Enter a valid email address",
+    "errorPasswordRequired": "Password is required",
+    "loginSuccess": "Logged in successfully",
+    "loginFailed": "Unable to sign in with those details"
+  },
+  "dashboard": {
+    "welcomeTitle": "Welcome back",
+    "welcomeSubtitle": "Here's a snapshot of your AdCrypto account.",
+    "statTotalBalance": "Total balance",
+    "statActiveWallets": "Active wallets",
+    "statPendingOrders": "Pending orders",
+    "statSupportTickets": "Open tickets",
+    "recentActivityTitle": "Recent activity",
+    "emptyActivityTitle": "No activity yet",
+    "emptyActivityText": "Your transactions will show up here once you start using your wallet.",
+    "logout": "Log out"
+  },
+  "footer": {
+    "tagline": "Manage, buy and sell crypto — all in one wallet.",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "comingSoon": "Coming soon"
+  }
+}

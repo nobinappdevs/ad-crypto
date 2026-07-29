@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; background: #060911; }
+    a { color: #6ee7ff; }
+    a:hover { color: #9df3ff; }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+    @keyframes pulseGlow { 0%,100% { opacity: 0.55; } 50% { opacity: 0.9; } }
+  </style>
+</helmet>
+
+<section style="position:relative; width:100%; min-height:960px; overflow:hidden; background:radial-gradient(circle at 78% 20%, rgba(56,189,248,0.16), transparent 55%), radial-gradient(circle at 15% 85%, rgba(124,58,237,0.14), transparent 50%), linear-gradient(180deg, #060911 0%, #0a0e1c 100%); font-family:'Inter', sans-serif; color:#f5f7ff;">
+
+  <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px); background-size:64px 64px; mask-image: radial-gradient(circle at 65% 35%, black, transparent 70%); pointer-events:none;"></div>
+
+  <nav style="position:relative; z-index:2; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px; padding:28px 64px; max-width:1440px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+      <div style="width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,#38bdf8,#6366f1); display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(56,189,248,0.5); flex-shrink:0;">
+        <span style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px; color:#06111f;">A</span>
+      </div>
+      <span style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; letter-spacing:-0.01em; white-space:nowrap;">AdCrypto</span>
+    </div>
+
+    <div style="display:flex; align-items:center; flex-wrap:wrap; gap:28px; order:3; flex-basis:100%; justify-content:center;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+        <a href="{{ item.href }}" style="font-size:15px; font-weight:500; color:{{ item.active }}; text-decoration:none; transition:color .2s; white-space:nowrap;">{{ item.label }}</a>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px; flex-shrink:0;">
+      <div style="display:flex; align-items:center; gap:6px; padding:9px 16px; border:1px solid rgba(255,255,255,0.12); border-radius:999px; font-size:14px; color:#cbd5e1; background:rgba(255,255,255,0.03); white-space:nowrap;">
+        English <span style="font-size:10px; opacity:0.7;">▾</span>
+      </div>
+      <button style="padding:11px 24px; border-radius:999px; border:none; background:linear-gradient(135deg,#38bdf8,#818cf8); color:#04101c; font-weight:600; font-size:14px; cursor:pointer; box-shadow:0 8px 24px rgba(56,189,248,0.35); white-space:nowrap;">Dashboard</button>
+    </div>
+  </nav>
+
+  <div style="position:relative; z-index:2; max-width:1440px; margin:0 auto; padding:72px 64px 100px; display:flex; flex-wrap:wrap; gap:40px; align-items:center;">
+    <div style="flex:1 1 480px; min-width:0;">
+      <div style="display:inline-flex; align-items:center; gap:9px; padding:8px 18px 8px 8px; border-radius:999px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); margin-bottom:28px;">
+        <span style="width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#6366f1); display:flex; align-items:center; justify-content:center; font-size:12px;">$</span>
+        <span style="font-size:13px; font-weight:600; color:#a5e6ff; letter-spacing:0.02em;">Welcome to AdCrypto</span>
+      </div>
+
+      <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:64px; line-height:1.06; letter-spacing:-0.02em; margin:0 0 28px;">
+        Seamless<br>
+        <span style="background:linear-gradient(120deg,#38bdf8,#818cf8,#c084fc); -webkit-background-clip:text; background-clip:text; color:transparent;">Cryptocurrency</span><br>
+        Solutions
+      </h1>
+
+      <p style="font-size:17px; line-height:1.7; color:#9aa5c0; max-width:480px; margin:0 0 40px;">
+        We redefine the cryptocurrency experience, providing a comprehensive platform tailored for entrepreneurs and businesses entering the dynamic world of digital assets.
+      </p>
+
+      <div style="display:flex; align-items:center; gap:20px;">
+        <button style="padding:17px 34px; border-radius:999px; border:none; background:linear-gradient(135deg,#38bdf8,#6366f1); color:#04101c; font-weight:600; font-size:16px; cursor:pointer; box-shadow:0 12px 32px rgba(56,189,248,0.4);">Explore Now</button>
+        <button style="display:flex; align-items:center; gap:12px; background:none; border:none; cursor:pointer; color:#f5f7ff;">
+          <span style="width:52px; height:52px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.04);">
+            <span style="width:0; height:0; border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:11px solid #f5f7ff; margin-left:2px;"></span>
+          </span>
+          <span style="font-size:14px; font-weight:500; color:#cbd5e1;">Watch Intro</span>
+        </button>
+      </div>
+
+      <div style="display:flex; gap:44px; margin-top:64px; padding-top:36px; border-top:1px solid rgba(255,255,255,0.08);">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;">{{ s.value }}</div>
+            <div style="font-size:13px; color:#7c88a8; margin-top:4px;">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="position:relative; flex:1 1 420px; min-width:320px; height:620px; display:flex; align-items:center; justify-content:center;">
+      <div style="position:absolute; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, rgba(56,189,248,0.35), rgba(99,102,241,0.12) 60%, transparent 75%); filter:blur(4px); animation:pulseGlow 4s ease-in-out infinite;"></div>
+      <div style="position:relative; width:480px; height:480px; animation:floatY 6s ease-in-out infinite;">
+        <image-slot id="hero-graphic" shape="rounded" radius="28" placeholder="Drop hero illustration / product shot" style="width:100%; height:100%; box-shadow:0 40px 80px -20px rgba(56,189,248,0.35);"></image-slot>
+      </div>
+      <div style="position:absolute; top:8%; right:6%; width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:600; color:#6ee7ff; animation:floatY 5s ease-in-out infinite;">₮</div>
+      <div style="position:absolute; bottom:12%; left:2%; width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:600; color:#c084fc; animation:floatY 7s ease-in-out infinite reverse;">Ξ</div>
+    </div>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      navItems: [
+        { label: 'Home', href: '#', active: '#6ee7ff' },
+        { label: 'About', href: '#', active: '#e5e9f5' },
+        { label: 'Service', href: '#', active: '#e5e9f5' },
+        { label: 'Web Journal', href: '#', active: '#e5e9f5' },
+        { label: 'Contact', href: '#', active: '#e5e9f5' },
+      ],
+      stats: [
+        { value: '2.4M+', label: 'Active users' },
+        { value: '$180B', label: 'Volume traded' },
+        { value: '99.9%', label: 'Uptime' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

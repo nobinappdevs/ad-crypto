@@ -1,0 +1,177 @@
+{
+  "brand": {
+    "name": "AdCrypto",
+    "tagline": "Votre portefeuille et exchange crypto tout-en-un"
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "login": "Connexion",
+    "dashboard": "Tableau de bord",
+    "signUp": "S'inscrire"
+  },
+  "theme": {
+    "toggleToLight": "Passer au mode clair",
+    "toggleToDark": "Passer au mode sombre"
+  },
+  "language": {
+    "label": "Langue"
+  },
+  "hero": {
+    "navInvesting": "Investir",
+    "navCash": "Liquidités",
+    "navPlanning": "Planification",
+    "navAbout": "À propos",
+    "marketsLive": "Marchés en direct",
+    "badge": "Bienvenue sur AdCrypto",
+    "title": "Des solutions crypto fluides, conçues pour évoluer.",
+    "subtitle": "AdCrypto redéfinit l'expérience des cryptomonnaies : une plateforme complète pensée pour les entrepreneurs et les entreprises qui entrent dans l'univers dynamique des actifs numériques.",
+    "ctaPrimary": "Explorer",
+    "ctaIconLabel": "Voir comment ça marche",
+    "metaNoCard": "Sans carte bancaire",
+    "metaWithdraw": "Retraits à tout moment",
+    "metaFee": "0,10 % de frais spot",
+    "scroll": "Défiler",
+    "phonePortfolioLabel": "Valeur du portefeuille",
+    "phonePortfolioValue": "24 918,40 $",
+    "phonePortfolioChange": "+7,84 % aujourd'hui",
+    "phoneCustody": "Conservation assurée · Protégé par 2FA",
+    "phoneTime": "9:41",
+    "phoneActionBuy": "Acheter",
+    "phoneActionSell": "Vendre",
+    "phoneActionSwap": "Échanger",
+    "phoneHoldings": "Vos actifs",
+    "phoneViewAll": "Voir tous les actifs"
+  },
+  "howItWorks": {
+    "badge": "Comment ça marche",
+    "titleLead": "Guide du fonctionnement",
+    "titleAccent": "d'AdCrypto",
+    "subtitle": "Une solution complète pour quiconque se lance dans l'univers dynamique des actifs numériques : configurez une fois, puis achetez, tradez et réglez en toute confiance.",
+    "steps": {
+      "onboarding": {
+        "title": "Inscription simplifiée",
+        "body": "Renseignez vos informations, passez l'authentification une seule fois et accédez à un tableau de bord qui offre une vue d'ensemble de votre univers crypto."
+      },
+      "transactions": {
+        "title": "Transactions en cryptomonnaies",
+        "body": "Tradez en toute sécurité avec les paramètres qui vous conviennent — échanger, acheter ou vendre, avec les frais affichés avant validation."
+      },
+      "secure": {
+        "title": "Connecter et sécuriser",
+        "body": "Des retraits sans friction et des transferts entre particuliers, protégés par une conservation assurée et la 2FA à chaque action."
+      }
+    }
+  },
+  "home": {
+    "featuresTitle": "Tout ce qu'il faut pour gérer vos cryptos",
+    "featuresSubtitle": "Les fonctionnalités principales incluses dans chaque compte AdCrypto.",
+    "features": {
+      "multiWallet": {
+        "title": "Portefeuille multi-cryptomonnaies",
+        "text": "Gérez plusieurs portefeuilles de cryptomonnaies au même endroit pour manipuler efficacement différentes pièces et actifs."
+      },
+      "buyInside": {
+        "title": "Acheter des cryptos dans le portefeuille",
+        "text": "Achetez des cryptos directement dans votre portefeuille interne en choisissant la pièce et le réseau, puis en saisissant vos informations de paiement."
+      },
+      "buyOutside": {
+        "title": "Acheter des cryptos vers un portefeuille externe",
+        "text": "Achetez des cryptomonnaies pour des portefeuilles externes en choisissant la pièce, le réseau et en saisissant l'adresse de destination."
+      },
+      "sellInside": {
+        "title": "Vendre des cryptos dans le portefeuille",
+        "text": "Vendez rapidement vos cryptos depuis votre portefeuille interne en sélectionnant les détails de la pièce et en confirmant le mode de paiement."
+      },
+      "sellOutside": {
+        "title": "Vendre des cryptos vers un portefeuille externe",
+        "text": "Vendez des cryptos vers des portefeuilles externes en précisant la pièce, le réseau et l'adresse du portefeuille externe."
+      },
+      "withdraw": {
+        "title": "Retirer des cryptos",
+        "text": "Retirez vos fonds en toute sécurité vers des portefeuilles externes en saisissant le montant et en vérifiant l'adresse du portefeuille."
+      },
+      "exchange": {
+        "title": "Échanger des cryptos",
+        "text": "Échangez entre différentes cryptomonnaies dans votre portefeuille en gérant efficacement les transferts."
+      },
+      "pushNotification": {
+        "title": "Notifications push",
+        "text": "Restez informé en temps réel des transactions, paiements et activités de votre compte grâce aux notifications push."
+      },
+      "emailVerification": {
+        "title": "Vérification de l'e-mail",
+        "text": "Renforcez la sécurité en vérifiant votre e-mail pour confirmer votre identité et protéger votre compte."
+      },
+      "kyc": {
+        "title": "Vérification KYC",
+        "text": "Complétez la vérification KYC pour garantir la sécurité du compte et la conformité réglementaire."
+      },
+      "twoFa": {
+        "title": "Sécurité 2FA",
+        "text": "Activez l'authentification à deux facteurs pour ajouter une couche de sécurité supplémentaire à l'accès à votre compte."
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "À propos de nous",
+    "title": "Conçu pour ceux qui veulent garder le contrôle de leurs cryptos",
+    "intro": "AdCrypto est une plateforme de portefeuille et d'échange de cryptomonnaies qui permet d'acheter, vendre, conserver et transférer des actifs numériques en toute sécurité depuis un seul tableau de bord.",
+    "missionTitle": "Notre mission",
+    "missionText": "Rendre la gestion de plusieurs cryptomonnaies aussi simple que l'utilisation d'une application bancaire classique, sans renoncer à la sécurité ni au contrôle de vos fonds.",
+    "visionTitle": "Notre vision",
+    "visionText": "Un seul endroit de confiance pour conserver chaque pièce que vous possédez, la déplacer où vous voulez, et prouver qui vous êtes une seule fois.",
+    "valuesTitle": "Ce qui compte pour nous",
+    "values": {
+      "security": {
+        "title": "La sécurité d'abord",
+        "text": "Le KYC, la 2FA et la vérification de l'e-mail sont intégrés dès le premier jour, pas ajoutés plus tard."
+      },
+      "simplicity": {
+        "title": "Simple par défaut",
+        "text": "Acheter, vendre et échanger des cryptos devrait prendre quelques clics, pas un manuel."
+      },
+      "transparency": {
+        "title": "Activité transparente",
+        "text": "Chaque transaction est enregistrée et visible pour vous, en temps réel."
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "Content de vous revoir",
+    "loginSubtitle": "Connectez-vous pour accéder à votre portefeuille AdCrypto",
+    "labelEmail": "Adresse e-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "labelPassword": "Mot de passe",
+    "passwordPlaceholder": "Saisissez votre mot de passe",
+    "loginButton": "Se connecter",
+    "loggingIn": "Connexion en cours...",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "createAccount": "Créez-en un",
+    "forgotPassword": "Mot de passe oublié ?",
+    "errorEmailRequired": "Saisissez une adresse e-mail valide",
+    "errorPasswordRequired": "Le mot de passe est requis",
+    "loginSuccess": "Connexion réussie",
+    "loginFailed": "Impossible de se connecter avec ces informations"
+  },
+  "dashboard": {
+    "welcomeTitle": "Content de vous revoir",
+    "welcomeSubtitle": "Voici un aperçu de votre compte AdCrypto.",
+    "statTotalBalance": "Solde total",
+    "statActiveWallets": "Portefeuilles actifs",
+    "statPendingOrders": "Commandes en attente",
+    "statSupportTickets": "Tickets ouverts",
+    "recentActivityTitle": "Activité récente",
+    "emptyActivityTitle": "Aucune activité pour le moment",
+    "emptyActivityText": "Vos transactions apparaîtront ici dès que vous commencerez à utiliser votre portefeuille.",
+    "logout": "Se déconnecter"
+  },
+  "footer": {
+    "tagline": "Gérez, achetez et vendez vos cryptos, tout en un seul portefeuille.",
+    "rights": "Tous droits réservés."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "comingSoon": "Bientôt disponible"
+  }
+}
