@@ -11,105 +11,103 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; background: #04040a; }
-    a { color: #ffffff; text-decoration: none; }
-    a:hover { color: #b9c2ff; }
+    body { margin: 0; background: #04040a; transition: background .45s ease; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: #6d7cff; }
     @keyframes floatCard { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   </style>
 </helmet>
 
-<div style="position:relative; width:1440px; margin:0 auto; background:#04040a; font-family:'Inter', sans-serif; color:#ffffff;">
+<div ref="{{ rootRef }}" style="--bg:#04040a; --fg:#ffffff; --fg-strong:rgba(255,255,255,0.88); --fg-soft:rgba(255,255,255,0.72); --fg-dim:rgba(255,255,255,0.64); --fg-mute:rgba(255,255,255,0.5); --glass-bg:rgba(255,255,255,0.1); --glass-br:rgba(255,255,255,0.16); --hair:rgba(255,255,255,0.14); --btn-bg:#ffffff; --btn-fg:#0b0b18; --btn-ring:rgba(255,255,255,0.28); --btn-ring-bg:rgba(255,255,255,0.06); --btn-glow:rgba(255,255,255,0.14); --wordmark:#ffffff; --glow-main:radial-gradient(closest-side, #5555ff 0%, #3a30d8 24%, #211bb0 44%, #131358 64%, rgba(8,8,30,0) 80%); --glow-bloom:radial-gradient(closest-side, rgba(150,150,255,0.34) 0%, rgba(88,72,240,0.18) 42%, rgba(10,10,40,0) 74%); --glow-lilac:radial-gradient(closest-side, rgba(196,181,253,0.46), rgba(129,140,248,0.14) 58%, transparent 78%); --glow-cyan:radial-gradient(closest-side, rgba(88,214,255,0.3), rgba(63,139,255,0.1) 58%, transparent 78%); --hero-core:radial-gradient(closest-side, rgba(4,4,12,0.97), rgba(4,4,12,0.72) 52%, rgba(4,4,12,0) 80%); --hero-vignette:linear-gradient(180deg, rgba(4,4,10,0.55) 0%, rgba(4,4,10,0) 26%, rgba(4,4,10,0) 62%, rgba(4,4,10,0.85) 100%); --hiw-flat:#08091a; --hiw-grad:radial-gradient(120% 90% at 22% 34%, #16184a 0%, #0d0e28 46%, #090a1c 72%, #08091a 100%); --hiw-glow:radial-gradient(closest-side, rgba(63,63,255,0.26), rgba(20,20,107,0.1) 58%, transparent 78%); --grid-line:rgba(255,255,255,0.075); --accent:#2f4bff; --accent-soft:#5b7bff; position:relative; width:100%; margin:0 auto; background:var(--bg); font-family:'Inter', sans-serif; color:var(--fg); transition:background .45s ease, color .45s ease;">
 
-  <div ref="{{ sceneRef }}" style="position:relative; width:1440px; height:2500px;">
-    <div style="position:sticky; top:0; width:max(100vw, 1440px); margin-left:min(0px, calc(720px - 50vw)); height:100vh; max-height:900px; overflow:hidden; background:#04040a; display:flex; align-items:flex-start; justify-content:center;">
-      <div style="position:absolute; inset:0; background:#04040a; z-index:0;"></div>
-      <div ref="{{ hiwBgRef }}" style="position:absolute; inset:0; background:#08091a; transform:translateY(900px); will-change:transform; z-index:1;"></div>
-      <div ref="{{ stageRef }}" style="position:relative; z-index:2; flex:0 0 auto; width:1440px; height:900px; overflow:hidden; background:transparent; transform-origin:center center;">
+  <div ref="{{ sceneRef }}" style="position:relative; width:100%; height:2500px;">
+    <div style="position:sticky; top:0; width:100%; height:100vh; overflow:hidden; background:var(--bg); display:flex; align-items:flex-start; justify-content:center;">
+      <div style="position:absolute; inset:0; background:var(--bg); z-index:0;"></div>
+      <div ref="{{ hiwBgRef }}" style="position:absolute; inset:0; background:var(--hiw-flat); transform:translateY(900px); will-change:transform; z-index:1;"></div>
+      <div ref="{{ stageRef }}" style="position:relative; z-index:2; flex:0 0 auto; width:1440px; height:900px; overflow:hidden; background:transparent; transform-origin:top center;">
 
       <div ref="{{ heroRef }}" style="position:absolute; inset:0; z-index:2; will-change:transform, opacity;">
-        <div style="position:absolute; inset:0; background:#04040a;"></div>
-        <div style="position:absolute; top:-460px; left:50%; transform:translateX(-50%); width:1520px; height:1180px; border-radius:50%; background:radial-gradient(closest-side, #5555ff 0%, #3a30d8 24%, #211bb0 44%, #131358 64%, rgba(8,8,30,0) 80%); filter:blur(3px);"></div>
-        <div style="position:absolute; top:-260px; left:50%; transform:translateX(-50%); width:980px; height:820px; border-radius:50%; background:radial-gradient(closest-side, rgba(150,150,255,0.34) 0%, rgba(88,72,240,0.18) 42%, rgba(10,10,40,0) 74%); filter:blur(30px);"></div>
-        <div style="position:absolute; top:-140px; left:50%; transform:translateX(-50%); width:1000px; height:720px; border-radius:50%; background:radial-gradient(closest-side, rgba(4,4,12,0.97), rgba(4,4,12,0.72) 52%, rgba(4,4,12,0) 80%);"></div>
-        <div style="position:absolute; top:40px; left:60px; width:440px; height:400px; border-radius:50%; background:radial-gradient(closest-side, rgba(196,181,253,0.46), rgba(129,140,248,0.14) 58%, transparent 78%); filter:blur(40px);"></div>
-        <div style="position:absolute; top:150px; right:20px; width:420px; height:420px; border-radius:50%; background:radial-gradient(closest-side, rgba(88,214,255,0.3), rgba(63,139,255,0.1) 58%, transparent 78%); filter:blur(46px);"></div>
-        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,4,10,0.55) 0%, rgba(4,4,10,0) 26%, rgba(4,4,10,0) 62%, rgba(4,4,10,0.85) 100%); pointer-events:none;"></div>
+        <div style="position:absolute; inset:0; background:var(--bg);"></div>
+        <div style="position:absolute; top:-460px; left:50%; transform:translateX(-50%); width:1520px; height:1180px; border-radius:50%; background:var(--glow-main); filter:blur(3px);"></div>
+        <div style="position:absolute; top:-260px; left:50%; transform:translateX(-50%); width:980px; height:820px; border-radius:50%; background:var(--glow-bloom); filter:blur(30px);"></div>
+        <div style="position:absolute; top:-140px; left:50%; transform:translateX(-50%); width:1000px; height:720px; border-radius:50%; background:var(--hero-core);"></div>
+        <div style="position:absolute; top:40px; left:60px; width:440px; height:400px; border-radius:50%; background:var(--glow-lilac); filter:blur(40px);"></div>
+        <div style="position:absolute; top:150px; right:20px; width:420px; height:420px; border-radius:50%; background:var(--glow-cyan); filter:blur(46px);"></div>
+        <div style="position:absolute; inset:0; background:var(--hero-vignette); pointer-events:none;"></div>
 
         <nav style="position:absolute; top:0; left:0; width:1440px; height:88px; display:flex; align-items:center; padding:0 56px; box-sizing:border-box;">
           <div style="display:flex; align-items:center; gap:34px; width:420px;">
             <sc-for list="{{ navLeft }}" as="item" hint-placeholder-count="4">
-              <a href="#" style="display:flex; align-items:center; height:44px; font-size:15px; font-weight:500; color:rgba(255,255,255,0.88); white-space:nowrap; transition:color .18s;" style-hover="color:#ffffff;">{{ item }}</a>
+              <a href="#" style="display:flex; align-items:center; height:44px; font-size:15px; font-weight:500; color:var(--fg-strong); white-space:nowrap; transition:color .18s;" style-hover="color:var(--accent)">{{ item }}</a>
             </sc-for>
           </div>
 
           <div style="flex:1; display:flex; justify-content:center;">
-            <div style="width:30px; height:30px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.9); position:relative;">
-              <span style="position:absolute; left:50%; top:2px; bottom:2px; width:1.5px; background:rgba(255,255,255,0.9); transform:translateX(-50%);"></span>
-              <span style="position:absolute; top:50%; left:2px; right:2px; height:1.5px; background:rgba(255,255,255,0.9); transform:translateY(-50%);"></span>
+            <div style="width:30px; height:30px; border-radius:50%; border:1.5px solid currentColor; opacity:0.9; position:relative;">
+              <span style="position:absolute; left:50%; top:2px; bottom:2px; width:1.5px; background:currentColor; transform:translateX(-50%);"></span>
+              <span style="position:absolute; top:50%; left:2px; right:2px; height:1.5px; background:currentColor; transform:translateY(-50%);"></span>
             </div>
           </div>
 
-          <div style="display:flex; align-items:center; justify-content:flex-end; gap:16px; width:420px;">
-            <div style="display:flex; align-items:center; gap:7px; height:34px; padding:0 13px; border-radius:999px; border:1px solid rgba(255,255,255,0.14); font-size:12.5px; font-weight:500; color:rgba(255,255,255,0.75);">
-              <span style="width:6px; height:6px; border-radius:50%; background:#4ade80; animation:livePulse 2s ease-in-out infinite;"></span>
-              Markets live
-            </div>
-            <a href="#" style="display:flex; align-items:center; height:44px; font-size:15px; font-weight:500; color:rgba(255,255,255,0.88); transition:color .18s;" style-hover="color:#ffffff;">Sign In</a>
-            <button style="height:40px; padding:0 22px; border:none; border-radius:999px; background:#2f4bff; color:#ffffff; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; cursor:pointer; box-shadow:0 8px 22px rgba(47,75,255,0.4); transition:background .18s, transform .18s;" style-hover="background:#4a63ff; transform:translateY(-1px);">Sign Up</button>
+          <div style="display:flex; align-items:center; justify-content:flex-end; gap:14px; width:420px;">
+            <button onClick="{{ toggleTheme }}" title="{{ themeTitle }}" style="width:34px; height:34px; border-radius:50%; border:1px solid var(--hair); background:var(--btn-ring-bg); color:var(--fg-strong); font-size:14px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .18s, border-color .18s;" style-hover="background:var(--glass-bg)">{{ themeIcon }}</button>
+
+            <a href="#" style="display:flex; align-items:center; height:44px; font-size:15px; font-weight:500; color:var(--fg-strong); transition:color .18s;" style-hover="color:var(--accent)">Sign In</a>
+            <button style="height:40px; padding:0 22px; border:none; border-radius:999px; background:var(--accent); color:#ffffff; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; cursor:pointer; box-shadow:0 8px 22px rgba(47,75,255,0.4); transition:background .18s, transform .18s;" style-hover="background:#4a63ff; transform:translateY(-1px)">Sign Up</button>
           </div>
         </nav>
 
-        <div style="position:absolute; top:148px; left:50%; transform:translateX(-50%); width:900px; display:flex; flex-direction:column; align-items:center; text-align:center;">
-          <div style="display:inline-flex; align-items:center; gap:8px; height:32px; padding:0 14px 0 5px; border-radius:999px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.16); margin-bottom:26px;">
-            <span style="width:22px; height:22px; border-radius:50%; background:#ffffff; color:#1d2bff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">$</span>
-            <span style="font-size:12.5px; font-weight:600; letter-spacing:0.02em; color:rgba(255,255,255,0.9);">Welcome to AdCrypto</span>
+        <div style="position:absolute; top:88px; left:50%; height:calc(100% - 470px); transform:translateX(-50%); width:900px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:8px; height:32px; padding:0 14px 0 5px; border-radius:999px; background:var(--glass-bg); border:1px solid var(--glass-br); margin-bottom:26px;">
+            <span style="width:22px; height:22px; border-radius:50%; background:var(--accent); color:#ffffff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">$</span>
+            <span style="font-size:12.5px; font-weight:600; letter-spacing:0.02em; color:var(--fg-soft);">Welcome to AdCrypto</span>
           </div>
 
           <h1 style="font-family:'Inter Tight',sans-serif; font-weight:700; font-size:62px; line-height:1.06; letter-spacing:-0.035em; margin:0; width:900px;">
             Seamless cryptocurrency<br>solutions, built to scale.
           </h1>
 
-          <p style="font-size:16px; line-height:1.62; color:rgba(255,255,255,0.72); width:530px; margin:22px 0 0;">
+          <p style="font-size:16px; line-height:1.62; color:var(--fg-soft); width:530px; margin:22px 0 0;">
             AdCrypto redefines the cryptocurrency experience — a comprehensive platform tailored for entrepreneurs and businesses entering the dynamic world of digital assets.
           </p>
 
           <div style="display:flex; align-items:center; gap:10px; margin-top:32px;">
-            <button style="height:48px; padding:0 28px; border:none; border-radius:999px; background:#ffffff; color:#0b0b18; font-family:'Inter',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:transform .18s, box-shadow .18s; box-shadow:0 10px 26px rgba(255,255,255,0.14);" style-hover="transform:translateY(-2px); box-shadow:0 16px 34px rgba(255,255,255,0.22);">Explore Now</button>
-            <button style="width:48px; height:48px; border-radius:999px; border:1px solid rgba(255,255,255,0.28); background:rgba(255,255,255,0.06); color:#ffffff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .18s;" style-hover="background:rgba(255,255,255,0.16);">↗</button>
+            <button style="height:48px; padding:0 28px; border:none; border-radius:999px; background:var(--btn-bg); color:var(--btn-fg); font-family:'Inter',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:transform .18s, box-shadow .18s; box-shadow:0 10px 26px var(--btn-glow);" style-hover="transform:translateY(-2px)">Explore Now</button>
+            <button style="width:48px; height:48px; border-radius:999px; border:1px solid var(--btn-ring); background:var(--btn-ring-bg); color:var(--fg); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .18s;" style-hover="background:var(--glass-bg)">↗</button>
           </div>
 
-          <div style="display:flex; align-items:center; gap:18px; margin-top:18px; font-size:12.5px; color:rgba(255,255,255,0.55);">
+          <div style="display:flex; align-items:center; gap:18px; margin-top:18px; font-size:12.5px; color:var(--fg-mute);">
             <span>No card required</span>
-            <span style="width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,0.3);"></span>
+            <span style="width:3px; height:3px; border-radius:50%; background:currentColor; opacity:0.6;"></span>
             <span>Withdraw anytime</span>
-            <span style="width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,0.3);"></span>
+            <span style="width:3px; height:3px; border-radius:50%; background:currentColor; opacity:0.6;"></span>
             <span>0.10% spot fee</span>
           </div>
         </div>
 
-        <div style="position:absolute; bottom:-34px; left:0; width:1440px; text-align:center; font-family:'Inter Tight',sans-serif; font-weight:700; font-size:270px; line-height:1; letter-spacing:-0.045em; color:#ffffff; white-space:nowrap; mask-image:linear-gradient(180deg, rgba(255,255,255,0.98) 30%, rgba(255,255,255,0.55) 78%, rgba(255,255,255,0.15) 100%); pointer-events:none;">AdCrypto</div>
+        <div style="position:absolute; bottom:22px; left:0; width:1440px; text-align:center; font-family:'Inter Tight',sans-serif; font-weight:500; font-size:230px; line-height:1; letter-spacing:0.03em; color:var(--wordmark); white-space:nowrap; opacity:0.5; mask-image:linear-gradient(180deg, rgba(255,255,255,0.8) 24%, rgba(255,255,255,0.4) 74%, rgba(255,255,255,0.1) 100%); pointer-events:none;">AdCrypto</div>
       </div>
 
       <div ref="{{ hiwRef }}" style="position:absolute; inset:0; z-index:4; transform:translateY(900px); will-change:transform;">
-        <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 22% 34%, #16184a 0%, #0d0e28 46%, #090a1c 72%, #08091a 100%);"></div>
-        <div style="position:absolute; top:-140px; left:20px; width:820px; height:820px; border-radius:50%; background:radial-gradient(closest-side, rgba(63,63,255,0.26), rgba(20,20,107,0.1) 58%, transparent 78%); filter:blur(20px);"></div>
-        <div style="position:absolute; top:520px; left:70px; width:660px; height:400px; background-image:linear-gradient(rgba(255,255,255,0.075) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.075) 1px, transparent 1px); background-size:52px 52px; transform:perspective(760px) rotateX(62deg) rotateZ(45deg); mask-image:radial-gradient(closest-side, #000 35%, transparent 78%);"></div>
-
+        <div style="position:absolute; inset:0; background:var(--hiw-grad);"></div>
+        <div style="position:absolute; top:-140px; left:20px; width:820px; height:820px; border-radius:50%; background:var(--hiw-glow); filter:blur(20px);"></div>
+        <div style="position:absolute; top:calc(100% - 380px); left:70px; width:660px; height:400px; background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size:52px 52px; transform:perspective(760px) rotateX(62deg) rotateZ(45deg); mask-image:radial-gradient(closest-side, #000 35%, transparent 78%);"></div>
         <div style="position:absolute; top:210px; left:180px; width:440px; height:440px; border-radius:50%; background:radial-gradient(closest-side, rgba(91,123,255,0.32), rgba(47,75,255,0.1) 58%, transparent 78%); filter:blur(12px);"></div>
 
         <div ref="{{ hiwTextRef }}" style="position:absolute; top:120px; left:800px; width:560px; will-change:transform, opacity;">
-          <div style="display:inline-flex; align-items:center; gap:9px; height:34px; padding:0 16px 0 5px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); margin-bottom:22px;">
-            <span style="width:24px; height:24px; border-radius:50%; background:#2f4bff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;">$</span>
-            <span style="font-size:12.5px; font-weight:600; letter-spacing:0.02em; color:rgba(255,255,255,0.9);">How It Works</span>
+          <div style="display:inline-flex; align-items:center; gap:9px; height:34px; padding:0 16px 0 5px; border-radius:999px; background:var(--glass-bg); border:1px solid var(--glass-br); margin-bottom:22px;">
+            <span style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#ffffff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;">$</span>
+            <span style="font-size:12.5px; font-weight:600; letter-spacing:0.02em; color:var(--fg-soft);">How It Works</span>
           </div>
 
           <h2 style="font-family:'Inter Tight',sans-serif; font-weight:700; font-size:44px; line-height:1.1; letter-spacing:-0.032em; margin:0;">
-            A Guide to How <span style="color:#5b7bff;">AdCrypto Works</span>
+            A Guide to How <span style="color:var(--accent-soft);">AdCrypto Works</span>
           </h2>
 
-          <p style="font-size:15.5px; line-height:1.6; color:rgba(255,255,255,0.68); width:480px; margin:16px 0 0;">
+          <p style="font-size:15.5px; line-height:1.6; color:var(--fg-dim); width:480px; margin:16px 0 0;">
             A comprehensive solution for anyone venturing into the dynamic world of digital assets — set up once, then buy, trade and settle with confidence.
           </p>
 
@@ -117,10 +115,10 @@
             <div style="position:absolute; top:24px; bottom:60px; left:23px; width:0; border-left:1.5px dashed rgba(91,123,255,0.55);"></div>
             <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
               <div style="position:relative; display:flex; gap:22px; align-items:flex-start;">
-                <div style="position:relative; z-index:2; flex-shrink:0; width:48px; height:48px; border-radius:50%; background:linear-gradient(140deg,#2f4bff,#4a34d8); display:flex; align-items:center; justify-content:center; font-family:'Inter Tight',sans-serif; font-size:15px; font-weight:700; box-shadow:0 10px 26px rgba(47,75,255,0.42);">{{ s.num }}</div>
+                <div style="position:relative; z-index:2; flex-shrink:0; width:48px; height:48px; border-radius:50%; background:linear-gradient(140deg,#2f4bff,#4a34d8); color:#ffffff; display:flex; align-items:center; justify-content:center; font-family:'Inter Tight',sans-serif; font-size:15px; font-weight:700; box-shadow:0 10px 26px rgba(47,75,255,0.42);">{{ s.num }}</div>
                 <div style="padding-top:2px;">
                   <div style="font-family:'Inter Tight',sans-serif; font-size:21px; font-weight:700; letter-spacing:-0.02em;">{{ s.title }}</div>
-                  <div style="font-size:14.5px; line-height:1.56; color:rgba(255,255,255,0.64); margin-top:6px; width:470px;">{{ s.body }}</div>
+                  <div style="font-size:14.5px; line-height:1.56; color:var(--fg-dim); margin-top:6px; width:470px;">{{ s.body }}</div>
                 </div>
               </div>
             </sc-for>
@@ -128,7 +126,7 @@
         </div>
       </div>
 
-      <div ref="{{ phoneRef }}" style="position:absolute; top:566px; left:720px; transform:translateX(-50%); transform-origin:top center; width:300px; height:600px; z-index:7; will-change:transform, opacity;">
+      <div ref="{{ phoneRef }}" style="position:absolute; top:calc(100% - 334px); left:720px; transform:translateX(-50%); transform-origin:top center; width:300px; height:600px; z-index:7; color:#ffffff; will-change:transform, opacity;">
         <div ref="{{ bezelRef }}" style="position:absolute; inset:0; border-radius:44px; mask-image:linear-gradient(180deg, #000 68%, rgba(0,0,0,0.35) 88%, transparent 100%); background:#0a0a14; border:1px solid rgba(255,255,255,0.14); box-shadow:0 -20px 70px rgba(0,0,0,0.55), 0 0 0 8px rgba(10,10,20,0.9); overflow:hidden;">
           <div style="position:absolute; inset:6px; border-radius:38px; background:linear-gradient(170deg, #1a1f52 0%, #2b2fa8 38%, #4b3fd8 70%, #6f4de0 100%); overflow:hidden;">
             <div style="position:absolute; top:0; left:0; right:0; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; font-size:12px; font-weight:600; color:#ffffff;">
@@ -148,51 +146,164 @@
               <span style="width:5px; height:5px; border-radius:50%; background:#8affc1;"></span>
               Insured custody · 2FA protected
             </div>
+
+            <div style="position:absolute; top:342px; left:16px; right:16px; display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
+              <sc-for list="{{ actions }}" as="a" hint-placeholder-count="3">
+                <div style="height:60px; border-radius:16px; background:rgba(255,255,255,0.13); border:1px solid rgba(255,255,255,0.16); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;">
+                  <span style="font-size:15px; line-height:1;">{{ a.icon }}</span>
+                  <span style="font-size:11px; font-weight:600; color:rgba(255,255,255,0.9);">{{ a.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="position:absolute; top:410px; left:22px; right:22px; display:flex; align-items:center; justify-content:space-between; font-size:11.5px; font-weight:600; color:rgba(255,255,255,0.62); letter-spacing:0.04em; text-transform:uppercase;">
+              <span>Your assets</span>
+              <span style="text-transform:none; letter-spacing:0; font-weight:500;">See all</span>
+            </div>
+
+            <div style="position:absolute; top:428px; left:16px; right:16px; display:flex; flex-direction:column; gap:5px;">
+              <sc-for list="{{ holdings }}" as="h" hint-placeholder-count="2">
+                <div style="height:41px; border-radius:14px; background:rgba(255,255,255,0.07); display:flex; align-items:center; gap:10px; padding:0 12px; box-sizing:border-box;">
+                  <span style="width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.92); color:#2b2fa8; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ h.glyph }}</span>
+                  <span style="flex:1; min-width:0;">
+                    <span style="display:block; font-size:12.5px; font-weight:600;">{{ h.name }}</span>
+                    <span style="display:block; font-size:10.5px; color:rgba(255,255,255,0.58);">{{ h.units }}</span>
+                  </span>
+                  <span style="text-align:right;">
+                    <span style="display:block; font-size:12.5px; font-weight:600;">{{ h.value }}</span>
+                    <span style="display:block; font-size:10.5px; font-weight:600; color:{{ h.color }};">{{ h.change }}</span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="position:absolute; bottom:18px; left:16px; right:16px; height:46px; border-radius:16px; background:#ffffff; color:#12142e; display:flex; align-items:center; justify-content:center; font-size:13.5px; font-weight:600;">Buy crypto</div>
+
           </div>
         </div>
 
-        <div style="position:absolute; top:186px; left:-96px; width:330px; height:74px; border-radius:20px; background:rgba(255,255,255,0.11); border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(14px); display:flex; align-items:center; padding:0 18px; box-sizing:border-box; gap:12px; animation:floatCard 6s ease-in-out infinite;">
-          <span style="width:34px; height:34px; border-radius:50%; background:#ffffff; color:#2b2fa8; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center;">Ξ</span>
+        <div style="position:absolute; top:196px; left:-96px; width:330px; height:74px; border-radius:20px; background:var(--card-bg); border:1px solid var(--card-br); backdrop-filter:blur(14px); display:flex; align-items:center; padding:0 18px; box-sizing:border-box; gap:12px; color:var(--card-fg); box-shadow:var(--card-shadow); animation:floatCard 6s ease-in-out infinite;">
+          <span style="width:34px; height:34px; border-radius:50%; background:var(--card-chip-bg); color:#2b2fa8; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center;">Ξ</span>
           <span style="flex:1;">
             <span style="display:block; font-size:14px; font-weight:600;">Ethereum</span>
-            <span style="display:block; font-size:11.5px; color:rgba(255,255,255,0.6);">ETH</span>
+            <span style="display:block; font-size:11.5px; opacity:0.62;">ETH</span>
           </span>
           <span style="text-align:right;">
             <span style="display:block; font-size:14px; font-weight:600;">$1,467.38</span>
-            <span style="display:block; font-size:11.5px; color:#8affc1;">+7.1%</span>
+            <span style="display:block; font-size:11.5px; color:var(--pos);">+7.1%</span>
           </span>
         </div>
 
-        <div style="position:absolute; top:266px; left:-52px; width:330px; height:68px; border-radius:20px; background:rgba(255,255,255,0.11); border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(14px); display:flex; align-items:center; padding:0 18px; box-sizing:border-box; gap:12px; animation:floatCard 7.5s ease-in-out infinite reverse;">
-          <span style="width:34px; height:34px; border-radius:50%; background:#ffffff; color:#2b2fa8; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center;">B</span>
+        <div style="position:absolute; top:276px; left:-52px; width:330px; height:68px; border-radius:20px; background:var(--card-bg); border:1px solid var(--card-br); backdrop-filter:blur(14px); display:flex; align-items:center; padding:0 18px; box-sizing:border-box; gap:12px; color:var(--card-fg); box-shadow:var(--card-shadow); animation:floatCard 7.5s ease-in-out infinite reverse;">
+          <span style="width:34px; height:34px; border-radius:50%; background:var(--card-chip-bg); color:#2b2fa8; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center;">B</span>
           <span style="flex:1;">
             <span style="display:block; font-size:14px; font-weight:600;">BinanceUSD</span>
-            <span style="display:block; font-size:11.5px; color:rgba(255,255,255,0.6);">BUSD</span>
+            <span style="display:block; font-size:11.5px; opacity:0.62;">BUSD</span>
           </span>
           <span style="text-align:right;">
             <span style="display:block; font-size:14px; font-weight:600;">$1.65</span>
-            <span style="display:block; font-size:11.5px; color:rgba(255,255,255,0.6);">+0.2%</span>
+            <span style="display:block; font-size:11.5px; opacity:0.62;">+0.2%</span>
           </span>
         </div>
       </div>
 
-      <div ref="{{ hintRef }}" style="position:absolute; bottom:26px; left:56px; display:flex; align-items:center; gap:10px; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.5); z-index:8;">
+      <div ref="{{ hintRef }}" style="position:absolute; bottom:26px; left:56px; display:flex; align-items:center; gap:10px; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--fg-mute); z-index:8;">
         <span>Scroll</span>
-        <span style="width:34px; height:1px; background:linear-gradient(90deg, rgba(255,255,255,0.5), transparent);"></span>
+        <span style="width:34px; height:1px; background:linear-gradient(90deg, currentColor, transparent);"></span>
       </div>
       </div>
     </div>
   </div>
 
-  <section style="position:relative; width:1440px; height:300px; display:flex; align-items:center; justify-content:center;">
-    <div style="position:absolute; top:0; bottom:0; left:50%; width:max(100vw, 1440px); transform:translateX(-50%); background:#08091a; border-top:1px solid rgba(255,255,255,0.08);"></div>
-    <div style="position:relative; font-family:'Inter Tight',sans-serif; font-size:28px; font-weight:600; letter-spacing:-0.02em; color:rgba(255,255,255,0.5);">Next section continues here</div>
+  <section style="position:relative; width:100%; height:300px; display:flex; align-items:center; justify-content:center;">
+    <div style="position:absolute; inset:0; background:var(--hiw-flat); border-top:1px solid var(--hair);"></div>
+    <div style="position:relative; font-family:'Inter Tight',sans-serif; font-size:28px; font-weight:600; letter-spacing:-0.02em; color:var(--fg-mute);">Next section continues here</div>
   </section>
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;light&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+const DARK = {
+  '--bg': '#04040a',
+  '--fg': '#ffffff',
+  '--fg-strong': 'rgba(255,255,255,0.88)',
+  '--fg-soft': 'rgba(255,255,255,0.72)',
+  '--fg-dim': 'rgba(255,255,255,0.64)',
+  '--fg-mute': 'rgba(255,255,255,0.5)',
+  '--glass-bg': 'rgba(255,255,255,0.1)',
+  '--glass-br': 'rgba(255,255,255,0.16)',
+  '--hair': 'rgba(255,255,255,0.14)',
+  '--btn-bg': '#ffffff',
+  '--btn-fg': '#0b0b18',
+  '--btn-ring': 'rgba(255,255,255,0.28)',
+  '--btn-ring-bg': 'rgba(255,255,255,0.06)',
+  '--btn-glow': 'rgba(255,255,255,0.14)',
+  '--wordmark': '#ffffff',
+  '--glow-main': 'radial-gradient(closest-side, #5555ff 0%, #3a30d8 24%, #211bb0 44%, #131358 64%, rgba(8,8,30,0) 80%)',
+  '--glow-bloom': 'radial-gradient(closest-side, rgba(150,150,255,0.34) 0%, rgba(88,72,240,0.18) 42%, rgba(10,10,40,0) 74%)',
+  '--glow-lilac': 'radial-gradient(closest-side, rgba(196,181,253,0.46), rgba(129,140,248,0.14) 58%, transparent 78%)',
+  '--glow-cyan': 'radial-gradient(closest-side, rgba(88,214,255,0.3), rgba(63,139,255,0.1) 58%, transparent 78%)',
+  '--hero-core': 'radial-gradient(closest-side, rgba(4,4,12,0.97), rgba(4,4,12,0.72) 52%, rgba(4,4,12,0) 80%)',
+  '--hero-vignette': 'linear-gradient(180deg, rgba(4,4,10,0.55) 0%, rgba(4,4,10,0) 26%, rgba(4,4,10,0) 62%, rgba(4,4,10,0.85) 100%)',
+  '--hiw-flat': '#08091a',
+  '--hiw-grad': 'radial-gradient(120% 90% at 22% 34%, #16184a 0%, #0d0e28 46%, #090a1c 72%, #08091a 100%)',
+  '--hiw-glow': 'radial-gradient(closest-side, rgba(63,63,255,0.26), rgba(20,20,107,0.1) 58%, transparent 78%)',
+  '--grid-line': 'rgba(255,255,255,0.075)',
+  '--card-bg': 'rgba(255,255,255,0.11)',
+  '--card-br': 'rgba(255,255,255,0.2)',
+  '--card-fg': '#ffffff',
+  '--card-chip-bg': '#ffffff',
+  '--card-shadow': 'none',
+  '--ticker-bg-unused': '0',
+  '--pos': '#8affc1',
+  '--neg': '#ff9d9d',
+  '--ticker-bg': 'rgba(8,8,22,0.55)',
+  '--accent': '#2f4bff',
+  '--accent-soft': '#5b7bff',
+};
+
+const LIGHT = {
+  '--bg': '#f1f0f8',
+  '--fg': '#0d0f28',
+  '--fg-strong': 'rgba(13,15,40,0.86)',
+  '--fg-soft': 'rgba(13,15,40,0.66)',
+  '--fg-dim': 'rgba(13,15,40,0.6)',
+  '--fg-mute': 'rgba(13,15,40,0.45)',
+  '--glass-bg': 'rgba(255,255,255,0.6)',
+  '--glass-br': 'rgba(13,15,40,0.1)',
+  '--hair': 'rgba(13,15,40,0.12)',
+  '--btn-bg': '#12142e',
+  '--btn-fg': '#ffffff',
+  '--btn-ring': 'rgba(13,15,40,0.18)',
+  '--btn-ring-bg': 'rgba(255,255,255,0.55)',
+  '--btn-glow': 'rgba(18,20,46,0.18)',
+  '--wordmark': '#14163a',
+  '--glow-main': 'radial-gradient(closest-side, #ffffff 0%, #e8e6ff 26%, #cfcaf8 46%, #b9b2f0 64%, rgba(241,240,248,0) 82%)',
+  '--glow-bloom': 'radial-gradient(closest-side, rgba(255,255,255,0.95) 0%, rgba(226,222,255,0.5) 44%, rgba(241,240,248,0) 76%)',
+  '--glow-lilac': 'radial-gradient(closest-side, rgba(196,181,253,0.5), rgba(160,150,240,0.16) 58%, transparent 78%)',
+  '--glow-cyan': 'radial-gradient(closest-side, rgba(140,200,255,0.42), rgba(120,150,255,0.12) 58%, transparent 78%)',
+  '--hero-core': 'radial-gradient(closest-side, rgba(255,255,255,0.95), rgba(255,255,255,0.55) 54%, rgba(255,255,255,0) 80%)',
+  '--hero-vignette': 'linear-gradient(180deg, rgba(241,240,248,0.5) 0%, rgba(241,240,248,0) 24%, rgba(241,240,248,0) 60%, rgba(241,240,248,0.75) 100%)',
+  '--hiw-flat': '#eceafa',
+  '--hiw-grad': 'radial-gradient(120% 90% at 22% 34%, #ffffff 0%, #eeebfb 44%, #e7e4f7 72%, #eceafa 100%)',
+  '--hiw-glow': 'radial-gradient(closest-side, rgba(120,120,255,0.22), rgba(90,90,220,0.08) 58%, transparent 78%)',
+  '--grid-line': 'rgba(13,15,40,0.075)',
+  '--card-bg': 'rgba(255,255,255,0.78)',
+  '--card-br': 'rgba(13,15,40,0.08)',
+  '--card-fg': '#12142e',
+  '--card-chip-bg': '#eef0ff',
+  '--card-shadow': '0 18px 40px rgba(20,22,60,0.16)',
+  '--pos': '#0f9f5f',
+  '--neg': '#d4483f',
+  '--ticker-bg': 'rgba(255,255,255,0.6)',
+  '--accent': '#2f4bff',
+  '--accent-soft': '#3f56e0',
+};
+
 class Component extends DCLogic {
+  state = { light: this.props.light ?? false };
+
+  rootRef = React.createRef();
   sceneRef = React.createRef();
   stageRef = React.createRef();
   heroRef = React.createRef();
@@ -203,7 +314,21 @@ class Component extends DCLogic {
   bezelRef = React.createRef();
   hintRef = React.createRef();
 
+  paintTheme() {
+    const el = this.rootRef.current;
+    if (!el) return;
+    const map = this.state.light ? LIGHT : DARK;
+    Object.keys(map).forEach(k => el.style.setProperty(k, map[k]));
+    document.body.style.background = map['--bg'];
+  }
+
+  componentDidUpdate(prev) {
+    if (!prev || prev.light !== this.state.light) this.paintTheme();
+  }
+
   componentDidMount() {
+    this.paintTheme();
+
     const clamp = (v) => Math.max(0, Math.min(1, v));
     const seg = (p, a, b) => clamp((p - a) / (b - a));
     const ease = (t) => t * t * (3 - 2 * t);
@@ -211,11 +336,20 @@ class Component extends DCLogic {
     this.target = 0;
     this.cur = 0;
 
+    this.stageH = 900;
     this.readTarget = () => {
       const scene = this.sceneRef.current;
       if (!scene) return;
+      const vw = window.innerWidth || 1440;
       const vh = window.innerHeight || 900;
-      const travel = Math.max(1, scene.offsetHeight - Math.min(vh, 900));
+      const stage = this.stageRef.current;
+      if (stage) {
+        const sc = Math.min(1, vw / 1440);
+        const h = Math.round(vh / sc);
+        if (h !== this.stageH) { this.stageH = h; stage.style.height = h + 'px'; }
+        stage.style.transform = 'scale(' + sc.toFixed(4) + ')';
+      }
+      const travel = Math.max(1, scene.offsetHeight - vh);
       this.target = clamp(-scene.getBoundingClientRect().top / travel);
     };
 
@@ -229,7 +363,8 @@ class Component extends DCLogic {
         hero.style.transform = 'translateY(' + (-90 * heroOut).toFixed(1) + 'px)';
         hero.style.opacity = (1 - heroOut).toFixed(3);
       }
-      const slide = 'translateY(' + (900 * (1 - hiwIn)).toFixed(1) + 'px)';
+      const H = this.stageH;
+      const slide = 'translateY(' + (H * (1 - hiwIn)).toFixed(1) + 'px)';
       const hiw = this.hiwRef.current;
       if (hiw) hiw.style.transform = slide;
       const hiwBg = this.hiwBgRef.current;
@@ -244,14 +379,15 @@ class Component extends DCLogic {
 
       const phone = this.phoneRef.current;
       if (phone) {
-        const dx = -320 * move, dy = -376 * move, sc = 1 - 0.24 * move;
+        const dx = -320 * move, dy = (190 - (H - 334)) * move, sc = 1 - 0.24 * move;
         phone.style.transform = 'translate3d(calc(-50% + ' + dx.toFixed(2) + 'px), ' + dy.toFixed(2) + 'px, 0) scale(' + sc.toFixed(4) + ')';
         const bezel = this.bezelRef.current;
         if (bezel) bezel.style.maskImage = move > 0.03 ? 'none' : 'linear-gradient(180deg, #000 68%, rgba(0,0,0,0.35) 88%, transparent 100%)';
       }
 
+      const fadeOut = (1 - ease(seg(p, 0.02, 0.18))).toFixed(3);
       const hint = this.hintRef.current;
-      if (hint) hint.style.opacity = (1 - ease(seg(p, 0.02, 0.18))).toFixed(3);
+      if (hint) hint.style.opacity = fadeOut;
     };
 
     this.loop = () => {
@@ -263,7 +399,6 @@ class Component extends DCLogic {
       }
       this.raf = requestAnimationFrame(this.loop);
     };
-    this.cur = 0;
     this.readTarget();
     this.cur = this.target;
     this.apply(this.cur);
@@ -275,6 +410,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    const light = this.state.light;
     const bars = Array.from({ length: 14 }, (_, i) => {
       const v = Math.sin(i * 0.72) * 0.3 + Math.sin(i * 1.9) * 0.16 + 0.55;
       return Math.round(Math.max(0.22, Math.min(1, v)) * 36) + 'px';
@@ -284,9 +420,23 @@ class Component extends DCLogic {
       { num: '02', title: 'Cryptocurrency Transactions', body: 'Trade securely with the parameters that fit your needs — exchanging, buying or selling, with fees shown before you confirm.' },
       { num: '03', title: 'Connect and Secure', body: 'Hassle-free withdrawals and peer-to-peer transfers, protected by insured custody and 2FA on every action.' },
     ];
+    const holdings = [
+      { glyph: '₿', name: 'Bitcoin', units: '0.2418 BTC', value: '$15,336.02', change: '+2.41%', color: '#8affc1' },
+      { glyph: 'Ξ', name: 'Ethereum', units: '2.140 ETH', value: '$6,815.30', change: '+1.18%', color: '#8affc1' },
+    ];
+    const actions = [
+      { icon: '＋', label: 'Buy' },
+      { icon: '↑', label: 'Send' },
+      { icon: '⇄', label: 'Swap' },
+    ];
     return {
       navLeft: ['Investing', 'Cash', 'Planning', 'About'],
-      bars, steps,
+      actions,
+      bars, steps, holdings,
+      themeIcon: light ? '☾' : '☀',
+      themeTitle: light ? 'Switch to dark mode' : 'Switch to light mode',
+      toggleTheme: () => this.setState(s => ({ light: !s.light })),
+      rootRef: this.rootRef,
       sceneRef: this.sceneRef, stageRef: this.stageRef, heroRef: this.heroRef, hiwRef: this.hiwRef, hiwBgRef: this.hiwBgRef,
       hiwTextRef: this.hiwTextRef, phoneRef: this.phoneRef, bezelRef: this.bezelRef, hintRef: this.hintRef,
     };

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Wallet } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
+import { NAV_LINKS } from "@/config/nav";
 import { Container } from "./Container";
 
 const LAUNCH_YEAR = 2026;
@@ -19,7 +20,15 @@ export function Footer() {
           </span>
           <span className="inline! text-[15px] font-bold text-heading">{t("brand.name")}</span>
         </Link>
-        <span className="inline! text-muted">
+        <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          {NAV_LINKS.map((link) => (
+            <Link key={link.key} href={link.href} className="text-muted">
+              {t(link.key)}
+            </Link>
+          ))}
+        </nav>
+
+        <span className="inline! text-center text-muted">
           &copy; {LAUNCH_YEAR} {t("brand.name")}. {t("footer.rights")}
         </span>
       </Container>

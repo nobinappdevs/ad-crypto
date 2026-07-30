@@ -13,12 +13,15 @@ type Variant = "field" | "hero";
 
 const TRIGGER: Record<Variant, string> = {
   field: "border-border text-heading hover:bg-surface",
-  hero: "border-hero-border text-hero-fg-muted hover:bg-hero-surface hover:text-hero-fg",
+  // A fill + blur is required, not decorative: the hero nav floats over the
+  // header's chrome artwork, and an unfilled pill disappears against it.
+  hero: "border-hero-border bg-hero-bg/55 text-hero-fg/90 backdrop-blur-md hover:bg-hero-surface-strong hover:text-hero-fg",
 };
 
 const MENU: Record<Variant, string> = {
   field: "border-border bg-card",
-  hero: "border-hero-border bg-hero-deep",
+  // Opaque, so the open list is never read through to the artwork behind it.
+  hero: "border-hero-border bg-hero-deep shadow-[0_18px_44px_rgb(0_0_0/0.5)]",
 };
 
 const OPTION: Record<Variant, { active: string; idle: string }> = {

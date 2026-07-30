@@ -1,7 +1,6 @@
 "use client";
 
 import type { RefObject } from "react";
-import { ArrowDownLeft, ArrowUpRight, ChevronRight, Home, PieChart, Repeat, User } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 
 /**
@@ -14,56 +13,58 @@ const BARS = Array.from({ length: 14 }, (_, i) => {
 });
 
 const ACTIONS = [
-  { key: "buy", icon: ArrowDownLeft },
-  { key: "sell", icon: ArrowUpRight },
-  { key: "swap", icon: Repeat },
+  { key: "buy", glyph: "＋" },
+  { key: "send", glyph: "↑" },
+  { key: "swap", glyph: "⇄" },
 ];
 
-/** Holdings list that fills the lower half of the screen. */
 const HOLDINGS = [
-  { symbol: "₿", name: "Bitcoin", ticker: "BTC", amount: "0.4128", value: "$18,204.10", change: "+2.4%", up: true },
-  { symbol: "Ξ", name: "Ethereum", ticker: "ETH", amount: "3.204", value: "$4,701.55", change: "+7.1%", up: true },
-  { symbol: "₮", name: "Tether", ticker: "USDT", amount: "2,012.75", value: "$2,012.75", change: "-0.1%", up: false },
-  { symbol: "◎", name: "Solana", ticker: "SOL", amount: "12.60", value: "$1,884.20", change: "+3.8%", up: true },
+  { glyph: "₿", key: "btc", units: "0.2418 BTC", value: "$15,336.02", change: "+2.41%", up: true },
+  { glyph: "Ξ", key: "eth", units: "2.140 ETH", value: "$6,815.30", change: "+1.18%", up: true },
 ];
-
-const TABS = [Home, PieChart, Repeat, User];
 
 /**
- * Glass cards floating beside the phone, desktop-only.
+ * Price cards floating over the device.
  *
- * The reference design overlaps them far across the phone, but its phone is
- * sparse — the cards visually FILL its empty lower half. Ours is a full wallet
- * UI, so the overlap is capped at the screen's 26px inner padding (6px bezel
- * inset + 20px px-5). Past that they'd cover the Buy/Sell/Swap row.
- * On mobile there is no room beside a 288px phone, and the holdings list
- * already carries the same information, so they're hidden.
+ * They overlap it heavily — and can, because the screen deliberately leaves the
+ * 158px-342px band empty for exactly this purpose. Move either the cards or the
+ * screen's content and that clearance is what breaks.
+ *
+ * Unlike the phone itself these DO follow the theme, via the `card-*` tokens: an
+ * opaque white card with a cast shadow on the light hero, translucent glass on
+ * the dark one.
  */
 const FLOATING = [
   {
-    symbol: "Ξ",
+    key: "eth",
+    glyph: "Ξ",
     name: "Ethereum",
     ticker: "ETH",
     price: "$1,467.38",
     change: "+7.1%",
-    up: true,
-    position: "lg:top-[168px] lg:-left-[284px] lg:w-75",
+    tinted: true,
+    // Mobile offsets are measured from the phone's OUTER edge, while the screen's
+    // content sits 6px inside it — so the band's usable top is 164px, not 158px.
+    box: "top-[186px] inset-x-4 h-[74px] lg:top-[196px] lg:inset-x-auto lg:-left-24 lg:w-[330px]",
     duration: "6s",
     reverse: false,
   },
   {
-    symbol: "B",
+    key: "busd",
+    glyph: "B",
     name: "BinanceUSD",
     ticker: "BUSD",
     price: "$1.65",
     change: "+0.2%",
-    up: false,
-    position: "lg:top-[264px] lg:-left-[276px] lg:w-75",
-    // 24px of overlap — inside the screen's padding, so no UI is hidden.
+    tinted: false,
+    box: "top-[266px] inset-x-4 h-[68px] lg:top-[276px] lg:inset-x-auto lg:-left-13 lg:w-[330px]",
     duration: "7.5s",
     reverse: true,
   },
 ];
+
+const BEZEL_SHADOW =
+  "0 -20px 70px rgb(0 0 0 / 0.55), 0 0 0 8px rgb(var(--phone-bezel) / 0.9)";
 
 export function PhoneMockup({
   phoneRef,
@@ -75,10 +76,13 @@ export function PhoneMockup({
   const { t } = useLang();
 
   return (
+    // Fixed 300x600 at every breakpoint. The screen's contents are absolutely
+    // positioned at the design's exact offsets, so scaling the box would need all
+    // of them re-derived; 300px still clears the narrowest phone viewport.
     <div
       ref={phoneRef}
       data-hero-phone
-      className="relative z-7 mx-auto h-150 w-[288px] origin-top sm:w-75 lg:absolute lg:top-[566px] lg:left-1/2 lg:mx-0 lg:w-75"
+      className="relative z-7 mx-auto h-150 w-75 origin-top lg:absolute lg:top-[calc(100%-334px)] lg:left-1/2 lg:mx-0"
       style={{ willChange: "transform, opacity" }}
     >
       {/* Bezel. The mask fades the phone's bottom into the hero on first paint;
@@ -86,154 +90,141 @@ export function PhoneMockup({
       <div
         ref={bezelRef}
         data-hero-bezel
-        className="absolute inset-0 overflow-hidden rounded-[44px] border border-phone-border bg-phone-bezel shadow-[0_-20px_70px_rgb(0_0_0/0.28),0_0_0_8px_rgb(var(--phone-bezel)/0.92)]"
+        className="absolute inset-0 overflow-hidden rounded-[44px] border border-phone-border bg-phone-bezel"
+        style={{ boxShadow: BEZEL_SHADOW }}
       >
-        {/* Screen. Follows the theme: vivid indigo in dark, light lavender in light. */}
         <div
-          className="absolute inset-1.5 flex flex-col overflow-hidden rounded-[38px] text-phone-fg"
+          className="absolute inset-1.5 overflow-hidden rounded-[38px] text-phone-fg"
           style={{ background: "var(--phone-screen)" }}
         >
-          {/* Status bar + notch */}
-          <div className="relative flex h-11 shrink-0 items-center justify-between px-5 text-[12px] font-semibold">
-            <span className="inline!">{t("hero.phoneTime")}</span>
-            <span
-              aria-hidden
-              className="absolute top-2.5 left-1/2 h-6.5 w-22 -translate-x-1/2 rounded-full bg-phone-notch"
-            />
-            <span aria-hidden className="inline! tracking-widest opacity-85">
+          {/* Status bar */}
+          <div className="absolute inset-x-0 top-0 flex h-11 items-center justify-between px-5.5 text-[12px] font-semibold">
+            <div>{t("hero.phoneTime")}</div>
+            <div aria-hidden className="tracking-[1px] opacity-85">
               ▮▮ ⌁
-            </span>
-          </div>
-
-          {/* Portfolio header */}
-          <div className="shrink-0 px-5 pt-3">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <span className="block text-[11.5px] text-phone-fg-muted">
-                  {t("hero.phonePortfolioLabel")}
-                </span>
-                <span className="mt-1 block text-[27px] leading-none font-bold tracking-tight">
-                  {t("hero.phonePortfolioValue")}
-                </span>
-                <span className="mt-1.5 block text-[11.5px] font-semibold text-phone-mint">
-                  {t("hero.phonePortfolioChange")}
-                </span>
-              </div>
-              <div aria-hidden className="mt-1 flex h-9 w-21 shrink-0 items-end gap-0.5">
-                {BARS.map((height, i) => (
-                  <span
-                    key={i}
-                    className="flex-1 rounded-[1.5px] bg-phone-fg/40"
-                    style={{ height: `${height}px` }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-2.5 flex items-center gap-2 text-[10.5px] text-phone-fg-muted">
-              <span aria-hidden className="h-1.25 w-1.25 shrink-0 rounded-full bg-phone-mint" />
-              <span className="inline! truncate">{t("hero.phoneCustody")}</span>
             </div>
           </div>
-
-          {/* Quick actions */}
-          <div className="mt-4 grid shrink-0 grid-cols-3 gap-2 px-5">
-            {ACTIONS.map(({ key, icon: Icon }) => (
-              <span
-                key={key}
-                className="flex flex-col items-center gap-1.5 rounded-2xl border border-phone-border bg-phone-surface py-2.5 text-[10.5px] font-semibold"
-              >
-                <Icon size={15} aria-hidden />
-                {t(`hero.phoneAction${key[0].toUpperCase()}${key.slice(1)}`)}
-              </span>
-            ))}
-          </div>
-
-          {/* Holdings — this is what used to be empty space. */}
-          <div className="mt-4 flex min-h-0 flex-1 flex-col px-5">
-            <span className="mb-2 block text-[10.5px] font-semibold tracking-widest text-phone-fg-muted uppercase">
-              {t("hero.phoneHoldings")}
-            </span>
-            <div className="flex flex-col gap-2">
-              {HOLDINGS.map((coin) => (
-                <span
-                  key={coin.ticker}
-                  className="flex items-center gap-2.5 rounded-2xl bg-phone-surface px-2.5 py-2"
-                >
-                  <span
-                    aria-hidden
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-hero-accent text-[13px] font-bold text-white"
-                  >
-                    {coin.symbol}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12px] font-semibold">{coin.name}</span>
-                    <span className="block text-[10px] text-phone-fg-muted">
-                      {coin.amount} {coin.ticker}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-right">
-                    <span className="block text-[12px] font-semibold">{coin.value}</span>
-                    <span
-                      className={`block text-[10px] ${coin.up ? "text-phone-mint" : "text-phone-fg-muted"}`}
-                    >
-                      {coin.change}
-                    </span>
-                  </span>
-                </span>
-              ))}
-            </div>
-
-            {/* Pinned to the bottom of the remaining space so the screen never
-                shows a dead gap above the tab bar. */}
-            <span className="mt-auto mb-3 flex items-center justify-center gap-1.5 rounded-full border border-phone-border bg-phone-surface py-2 text-[10.5px] font-semibold">
-              {t("hero.phoneViewAll")}
-              <ChevronRight size={12} aria-hidden />
-            </span>
-          </div>
-
-          {/* Bottom tab bar */}
           <div
             aria-hidden
-            className="mt-3 flex shrink-0 items-center justify-around border-t border-phone-border bg-phone-tabbar px-4 pt-2.5 pb-3"
+            className="absolute top-2.5 left-1/2 h-6.5 w-22 -translate-x-1/2 rounded-full bg-phone-notch"
+          />
+
+          {/* Portfolio block */}
+          <div className="absolute top-19 left-5.5 text-[12px] text-phone-fg-muted">
+            {t("hero.phonePortfolioLabel")}
+          </div>
+          <div className="absolute top-24 left-5.5 text-[30px] leading-none font-bold tracking-[-0.02em]">
+            {t("hero.phonePortfolioValue")}
+          </div>
+          <div className="absolute top-34 left-5.5 text-[12px] font-semibold text-phone-mint">
+            {t("hero.phonePortfolioChange")}
+          </div>
+          <div
+            aria-hidden
+            className="absolute top-[62px] right-5 flex h-9 w-22 items-end gap-0.5"
           >
-            {TABS.map((Icon, i) => (
-              <Icon key={i} size={17} className={i === 0 ? "text-hero-accent" : "text-phone-fg-muted"} />
+            {BARS.map((height, i) => (
+              <span
+                key={i}
+                className="flex-1 rounded-[1.5px] bg-phone-fg/42"
+                style={{ height: `${height}px` }}
+              />
             ))}
           </div>
-          <span
-            aria-hidden
-            className="mx-auto mb-2 block h-1 w-26 shrink-0 rounded-full bg-phone-fg/30"
-          />
+          <div className="absolute top-[158px] inset-x-5.5 flex items-center gap-2 text-[11px] text-phone-fg-muted">
+            <span aria-hidden className="h-1.25 w-1.25 shrink-0 rounded-full bg-phone-mint" />
+            <span className="truncate">{t("hero.phoneCustody")}</span>
+          </div>
+
+          {/* 158px-342px is intentionally clear — the floating cards sit here. */}
+
+          {/* Quick actions */}
+          <div className="absolute top-[342px] inset-x-4 grid grid-cols-3 gap-2">
+            {ACTIONS.map((action) => (
+              <div
+                key={action.key}
+                className="flex h-15 flex-col items-center justify-center gap-1.25 rounded-2xl border border-phone-border bg-phone-surface"
+              >
+                <div aria-hidden className="text-[15px] leading-none">
+                  {action.glyph}
+                </div>
+                <div className="text-[11px] font-semibold text-phone-fg/90">
+                  {t(`hero.phoneAction${action.key[0].toUpperCase()}${action.key.slice(1)}`)}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Assets */}
+          <div className="absolute top-[410px] inset-x-5.5 flex items-center justify-between text-[11.5px] font-semibold tracking-[0.04em] text-phone-fg/62 uppercase">
+            <div>{t("hero.phoneAssets")}</div>
+            <div className="font-medium tracking-normal normal-case">{t("hero.phoneSeeAll")}</div>
+          </div>
+
+          <div className="absolute top-[428px] inset-x-4 flex flex-col gap-1.25">
+            {HOLDINGS.map((coin) => (
+              <div
+                key={coin.key}
+                className="flex h-[41px] items-center gap-2.5 rounded-[14px] bg-phone-fg/7 px-3"
+              >
+                <div
+                  aria-hidden
+                  className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full bg-phone-chip text-[12px] font-bold text-primary"
+                >
+                  {coin.glyph}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[12.5px] font-semibold">
+                    {t(`hero.phoneCoin.${coin.key}`)}
+                  </div>
+                  <div className="text-[10.5px] text-phone-fg/58">{coin.units}</div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <div className="text-[12.5px] font-semibold">{coin.value}</div>
+                  <div
+                    className={`text-[10.5px] font-semibold ${coin.up ? "text-phone-mint" : "text-phone-fg/58"}`}
+                  >
+                    {coin.change}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Primary CTA, pinned to the bottom of the screen */}
+          <div className="absolute inset-x-4 bottom-4.5 flex h-[46px] items-center justify-center rounded-2xl bg-white text-[13.5px] font-semibold text-hero-badge">
+            {t("hero.phoneBuyCrypto")}
+          </div>
         </div>
       </div>
 
       {FLOATING.map((coin) => (
         <div
-          key={coin.ticker}
-          className={`absolute hidden items-center gap-3 rounded-[20px] border border-hero-border bg-hero-deep/85 px-4 py-3.5 text-hero-fg shadow-xl backdrop-blur-[14px] lg:flex ${coin.position}`}
+          key={coin.key}
+          // Below `lg` there is no room beside a 300px phone, so these sit INSIDE
+          // the screen's empty band instead of floating outside it — otherwise
+          // hiding them leaves that reserved gap as a blank slab.
+          className={`absolute flex items-center gap-3 rounded-[20px] border border-card-line bg-card-glass px-4.5 text-card-fg shadow-float backdrop-blur-[14px] ${coin.box}`}
           style={{
             animation: `float-y ${coin.duration} ease-in-out infinite ${coin.reverse ? "reverse" : ""}`,
           }}
         >
-          <span
+          <div
             aria-hidden
-            className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-full bg-hero-accent text-[15px] font-bold text-white"
+            className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-full bg-card-chip text-[15px] font-bold text-primary"
           >
-            {coin.symbol}
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-[14px] font-semibold">{coin.name}</span>
-            <span className="block text-[11.5px] text-hero-fg-muted">{coin.ticker}</span>
-          </span>
-          <span className="shrink-0 text-right">
-            <span className="block text-[14px] font-semibold">{coin.price}</span>
-            <span
-              className={`block text-[11.5px] ${coin.up ? "text-hero-mint" : "text-hero-fg-muted"}`}
-            >
+            {coin.glyph}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-[14px] font-semibold">{coin.name}</div>
+            <div className="text-[11.5px] opacity-62">{coin.ticker}</div>
+          </div>
+          <div className="shrink-0 text-right">
+            <div className="text-[14px] font-semibold">{coin.price}</div>
+            <div className={`text-[11.5px] ${coin.tinted ? "text-hero-mint" : "opacity-62"}`}>
               {coin.change}
-            </span>
-          </span>
+            </div>
+          </div>
         </div>
       ))}
     </div>

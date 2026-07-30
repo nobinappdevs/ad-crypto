@@ -8,14 +8,6 @@ const DESKTOP_QUERY = "(min-width: 1024px)";
 /** How much of the gap to the target we close per frame. Lower = smoother/laggier. */
 const SMOOTHING = 0.085;
 
-/**
- * The scene's fixed design height. The stage is a 900px canvas at every
- * viewport — deliberately NOT tied to `innerHeight`, because deriving the
- * layout from viewport height shifts the internal spacing on short screens
- * and breaks the composition.
- */
-export const STAGE_HEIGHT = 900;
-
 export const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 /** Normalize `p` inside the [a, b] window, clamped to 0..1 outside it. */
@@ -47,7 +39,10 @@ export function useScrollProgress(
     let current = 0;
 
     const readTarget = () => {
-      const travel = Math.max(1, scene.offsetHeight - STAGE_HEIGHT);
+      // The sticky stage is one viewport tall, so that — not a fixed 900px — is
+      // what the runway has to subtract, or progress finishes early or late
+      // depending on the window height.
+      const travel = Math.max(1, scene.offsetHeight - window.innerHeight);
       return clamp01(-scene.getBoundingClientRect().top / travel);
     };
 

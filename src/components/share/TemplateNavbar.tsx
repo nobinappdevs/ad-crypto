@@ -1,14 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { Navbar } from "./Navbar";
 
 /**
- * The home page's hero scene renders its own nav as part of the design, so the
- * shared navbar would double up there. Every other public page keeps it.
+ * Kept as a thin wrapper so the template layout has one nav entry point. Every
+ * public page uses the banner's nav bar — there is no separate variant.
  */
 export function TemplateNavbar() {
-  const pathname = usePathname();
-  if (pathname === "/") return null;
   return <Navbar />;
 }

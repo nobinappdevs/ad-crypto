@@ -6,9 +6,121 @@
   "nav": {
     "home": "Home",
     "about": "About",
+    "service": "Service",
+    "webJournal": "Web Journal",
+    "contact": "Contact",
     "login": "Sign In",
     "dashboard": "Dashboard",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "breadcrumb": "Breadcrumb"
+  },
+  "service": {
+    "title": "Services built for digital assets",
+    "subtitle": "Wallets, trading, settlement and compliance — the full set of tools your business needs to operate in crypto.",
+    "badge": "Services",
+    "headingLead": "What we",
+    "headingAccent": "serve",
+    "learnMore": "Learn more",
+    "highlights": {
+      "spread": "0.10% flat spot fee, no tiers",
+      "pairs": "Every listed pair, every supported network",
+      "settlement": "Settlement confirmed before you commit"
+    },
+    "items": {
+      "exchange": {
+        "title": "Crypto Exchange",
+        "text": "Facilitating seamless cryptocurrency trading on a secure, user-friendly platform — with the fee shown before you confirm."
+      },
+      "payments": {
+        "title": "Payment Solutions",
+        "text": "Efficient and reliable payment processing for diverse business needs."
+      },
+      "security": {
+        "title": "Security Systems",
+        "text": "Robust measures that safeguard digital assets and protect user data."
+      },
+      "wallet": {
+        "title": "Wallet Management",
+        "text": "Storage and management of digital currencies through user-friendly wallet tools."
+      },
+      "support": {
+        "title": "User Support",
+        "text": "Responsive, thorough assistance for user enquiries and concerns."
+      },
+      "analytics": {
+        "title": "Data Analytics",
+        "text": "Advanced analytics that turn market movement into insight you can act on."
+      },
+      "mobile": {
+        "title": "Mobile App",
+        "text": "A feature-rich mobile application for transacting on the go."
+      },
+      "p2p": {
+        "title": "Peer-to-Peer Transactions",
+        "text": "Direct, secure transfers between users inside the platform."
+      }
+    }
+  },
+  "webJournal": {
+    "title": "Web Journal",
+    "subtitle": "Product updates, engineering notes and what the team is thinking about.",
+    "posts": {
+      "custody": {
+        "date": "12 March 2026",
+        "title": "How we think about insured custody",
+        "excerpt": "Where your keys live, who can touch them, and what our insurance actually covers.",
+        "readTime": "6 min read",
+        "body1": "Insured custody means two separate things, and they get conflated. The first is where the private keys physically live: in our case, split across hardware modules that no single employee can reach alone. The second is what happens if that fails.",
+        "body2": "Our policy covers loss from external breach and internal misuse, up to the stated limit. It does not cover a compromise of your own device or credentials, which is why 2FA is mandatory on withdrawals rather than optional."
+      },
+      "fees": {
+        "date": "28 February 2026",
+        "title": "A flat 0.10% spot fee, explained",
+        "excerpt": "Why we moved to a single spot fee and what it means for high-volume accounts.",
+        "readTime": "4 min read",
+        "body1": "A flat 0.10% spot fee replaced a tiered schedule that almost nobody could predict. The old model rewarded volume, but it also meant the number on your confirmation screen depended on where the month had landed.",
+        "body2": "For high-volume accounts the flat rate is slightly worse on paper. In practice the certainty turned out to be worth more than the rebate — most of the desks we spoke to were pricing in the worst tier anyway."
+      },
+      "kycFlow": {
+        "date": "9 February 2026",
+        "title": "Rebuilding KYC to take under two minutes",
+        "excerpt": "The old flow lost people at document upload. Here is what we changed.",
+        "readTime": "5 min read",
+        "body1": "Document upload was where the old flow lost people. Roughly a third of them stopped at that step, most on a phone, most after the second failed capture attempt.",
+        "body2": "So we moved the capture guidance to before the camera opens, accepted a wider range of image quality, and pushed the checks that used to block submission into the background. The median completion time is now under two minutes."
+      },
+      "roadmap": {
+        "date": "21 January 2026",
+        "title": "What is shipping next",
+        "excerpt": "Peer-to-peer transfers, more networks per coin, and a redesigned wallet view.",
+        "readTime": "4 min read",
+        "body1": "Peer-to-peer transfers are the next thing to ship. The mechanics are in place; what remains is the dispute path, which we would rather get right than get out early.",
+        "body2": "After that: more networks per coin, and a wallet view rebuilt around holdings instead of accounts. The current screen made sense with three coins and stopped making sense at thirty."
+      },
+      "networks": {
+        "date": "14 January 2026",
+        "title": "More networks for every coin",
+        "excerpt": "Choosing a network used to be guesswork. Each coin now lists the networks it actually supports, with fees attached.",
+        "readTime": "3 min read",
+        "body1": "Choosing a network used to be guesswork: the field accepted anything, and a wrong choice meant funds arriving somewhere unrecoverable. That is a bad way to learn how chains differ.",
+        "body2": "Each coin now lists only the networks it genuinely supports, with the fee and the expected settlement time attached to each. Anything unsupported is not selectable rather than a warning you can click past."
+      },
+      "security": {
+        "date": "6 January 2026",
+        "title": "What 2FA does and does not protect",
+        "excerpt": "Two-factor stops someone using a stolen password. Here is what still needs your attention, and why we ask for it on withdrawals.",
+        "readTime": "7 min read",
+        "body1": "Two-factor authentication stops one specific thing well: someone who has your password using it. That is the most common attack by a wide margin, which is why it is on by default.",
+        "body2": "What it does not stop is a compromise of the device holding the second factor, or your approving a transfer you were talked into. Withdrawals therefore carry a separate confirmation, and new addresses hold for a short window before the first send."
+      }
+    },
+    "readArticle": "Read article",
+    "backToList": "Back to Web Journal",
+    "relatedTitle": "More from the journal",
+    "notFoundTitle": "Article not found",
+    "notFoundText": "That link does not point to an article we have. Head back to the journal and pick one from the list."
   },
   "theme": {
     "toggleToLight": "Switch to light mode",
@@ -40,8 +152,14 @@
     "phoneActionBuy": "Buy",
     "phoneActionSell": "Sell",
     "phoneActionSwap": "Swap",
-    "phoneHoldings": "Your holdings",
-    "phoneViewAll": "View all assets"
+    "phoneActionSend": "Send",
+    "phoneAssets": "Your assets",
+    "phoneSeeAll": "See all",
+    "phoneBuyCrypto": "Buy crypto",
+    "phoneCoin": {
+      "btc": "Bitcoin",
+      "eth": "Ethereum"
+    }
   },
   "howItWorks": {
     "badge": "How It Works",
@@ -137,6 +255,23 @@
       }
     }
   },
+  "contact": {
+    "headerTitle": "How can we help?",
+    "headerSubtitle": "Questions about your wallet, a transaction, or getting started — send us a note and the team will get back to you within one business day.",
+    "titleLine1": "Let's",
+    "titleLine2": "Get In",
+    "titleLine3": "Touch",
+    "subtitle": "We'd love to hear from you! Whether you have questions, feedback, or need support, feel free to reach out to us.",
+    "labelName": "Name",
+    "namePlaceholder": "Your name",
+    "labelEmail": "Email",
+    "emailPlaceholder": "you@example.com",
+    "labelMessage": "Message",
+    "messagePlaceholder": "Write your message...",
+    "sendButton": "Send Message",
+    "sending": "Sending...",
+    "sentSuccess": "Your message has been sent."
+  },
   "auth": {
     "loginTitle": "Welcome back",
     "loginSubtitle": "Sign in to access your AdCrypto wallet",
@@ -173,5 +308,70 @@
   "common": {
     "loading": "Loading...",
     "comingSoon": "Coming soon"
+  },
+  "security": {
+    "badge": "Security system",
+    "headingLead": "8 ways we keep your",
+    "headingAccent": "assets secure",
+    "subtitle": "Security is not one feature. It is eight overlapping layers, each covering what the others cannot.",
+    "note": "All eight, on by default",
+    "items": {
+      "smsEmail": {
+        "title": "SMS or Email Verification",
+        "text": "Both email and SMS make for more secure authentication, and each has trade-offs — so you choose which one guards your account."
+      },
+      "kyc": {
+        "title": "KYC Solution",
+        "text": "Identity checks that satisfy compliance without turning sign-up into paperwork. Verified once, in under two minutes."
+      },
+      "twoFa": {
+        "title": "Two-Factor Authentication",
+        "text": "An extra layer of protection beyond a username and password, required on every withdrawal rather than offered as an option."
+      },
+      "encryption": {
+        "title": "End-to-end Encryption",
+        "text": "Communication where only the people talking can read the messages. Not us, and not anyone who intercepts them."
+      },
+      "behavior": {
+        "title": "Behaviour Monitoring",
+        "text": "We learn how your account normally behaves, so a login or transfer that does not fit gets challenged before it settles."
+      },
+      "ssl": {
+        "title": "Secure Sockets Layer",
+        "text": "TLS encryption on every request between you and AdCrypto, so nothing readable crosses the network in between."
+      },
+      "waf": {
+        "title": "Web Application Firewall",
+        "text": "A WAF inspects and filters HTTP traffic reaching the platform, stopping known attack patterns before they touch the app."
+      },
+      "rbac": {
+        "title": "Role-Based Access Control",
+        "text": "Administrative access is scoped to roles and responsibilities, so no single person can reach everything."
+      }
+    }
+  },
+  "download": {
+    "badge": "Download app",
+    "headingLead": "Elevate your experience with",
+    "headingAccent": "our app",
+    "subtitle": "AdCrypto simplifies crypto operations for entrepreneurs and businesses. Available on Android and iOS — exchange, buy and sell digital assets, and withdraw without the friction.",
+    "imageAlt": "The AdCrypto app shown on two phones, buying USDT inside the wallet",
+    "highlights": {
+      "exchange": "Buy, sell and swap 100+ coins from one screen",
+      "wallets": "Every wallet and network you hold, in your pocket",
+      "withdrawals": "Withdraw to any address with 2FA on every transfer"
+    },
+    "rating": "4.9 average across both stores",
+    "qrCaption": "Scan to download",
+    "stores": {
+      "android": {
+        "label": "Get it on",
+        "name": "Google Play"
+      },
+      "apple": {
+        "label": "Download on the",
+        "name": "App Store"
+      }
+    }
   }
 }

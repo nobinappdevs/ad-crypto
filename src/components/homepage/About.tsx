@@ -3,6 +3,7 @@
 import { Eye, ShieldCheck, Sparkles, Target } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
+import { PageHeader } from "@/components/share/PageHeader";
 
 const VALUE_KEYS = ["security", "simplicity", "transparency"] as const;
 const VALUE_ICONS = { security: ShieldCheck, simplicity: Sparkles, transparency: Eye };
@@ -12,12 +13,13 @@ export function About() {
 
   return (
     <>
-      <section className="bg-surface py-16 sm:py-20">
-        <Container className="max-w-3xl text-center">
-          <span className="inline-block! text-[13px] font-semibold uppercase tracking-wide text-primary">
-            {t("about.eyebrow")}
-          </span>
-          <h1 className="mt-3">{t("about.title")}</h1>
+      <PageHeader titleKey="nav.about" />
+
+      {/* The header carries only the page name now, so the descriptive opening
+          lives here as the page's first real section. */}
+      <section className="pt-14 sm:pt-16">
+        <Container className="max-w-3xl">
+          <h2>{t("about.title")}</h2>
           <p className="mt-4">{t("about.intro")}</p>
         </Container>
       </section>

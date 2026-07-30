@@ -6,9 +6,121 @@
   "nav": {
     "home": "Inicio",
     "about": "Nosotros",
+    "service": "Servicios",
+    "webJournal": "Diario Web",
+    "contact": "Contacto",
     "login": "Iniciar sesión",
     "dashboard": "Panel",
-    "signUp": "Registrarse"
+    "signUp": "Registrarse",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "breadcrumb": "Ruta de navegación"
+  },
+  "service": {
+    "title": "Servicios creados para activos digitales",
+    "subtitle": "Billeteras, trading, liquidación y cumplimiento: el conjunto completo de herramientas que tu negocio necesita para operar en cripto.",
+    "badge": "Servicios",
+    "headingLead": "Lo que",
+    "headingAccent": "ofrecemos",
+    "learnMore": "Saber más",
+    "highlights": {
+      "spread": "Comisión spot fija del 0,10%, sin tramos",
+      "pairs": "Todos los pares listados, todas las redes admitidas",
+      "settlement": "Liquidación confirmada antes de que confirmes"
+    },
+    "items": {
+      "exchange": {
+        "title": "Intercambio de cripto",
+        "text": "Trading de criptomonedas sin fricción en una plataforma segura y fácil de usar, con la comisión visible antes de confirmar."
+      },
+      "payments": {
+        "title": "Soluciones de pago",
+        "text": "Procesamiento de pagos eficiente y fiable para necesidades de negocio diversas."
+      },
+      "security": {
+        "title": "Sistemas de seguridad",
+        "text": "Medidas sólidas que protegen los activos digitales y los datos de los usuarios."
+      },
+      "wallet": {
+        "title": "Gestión de billeteras",
+        "text": "Almacenamiento y gestión de monedas digitales con herramientas de billetera claras."
+      },
+      "support": {
+        "title": "Soporte al usuario",
+        "text": "Asistencia rápida y completa para consultas y problemas de los usuarios."
+      },
+      "analytics": {
+        "title": "Análisis de datos",
+        "text": "Analítica avanzada que convierte el movimiento del mercado en información aprovechable."
+      },
+      "mobile": {
+        "title": "Aplicación móvil",
+        "text": "Una app móvil completa para operar desde cualquier lugar."
+      },
+      "p2p": {
+        "title": "Transacciones entre personas",
+        "text": "Transferencias directas y seguras entre usuarios dentro de la plataforma."
+      }
+    }
+  },
+  "webJournal": {
+    "title": "Diario Web",
+    "subtitle": "Novedades del producto, notas de ingeniería y en qué está pensando el equipo.",
+    "posts": {
+      "custody": {
+        "date": "12 de marzo de 2026",
+        "title": "Cómo entendemos la custodia asegurada",
+        "excerpt": "Dónde viven tus claves, quién puede tocarlas y qué cubre realmente nuestro seguro.",
+        "readTime": "6 min de lectura",
+        "body1": "La custodia asegurada son dos cosas distintas que suelen confundirse. La primera es dónde residen físicamente las claves privadas: en nuestro caso, repartidas entre módulos de hardware que ningún empleado puede alcanzar por sí solo. La segunda es qué ocurre si eso falla.",
+        "body2": "Nuestra póliza cubre pérdidas por brecha externa y uso indebido interno, hasta el límite indicado. No cubre el compromiso de tu propio dispositivo o credenciales, y por eso el 2FA es obligatorio en los retiros, no opcional."
+      },
+      "fees": {
+        "date": "28 de febrero de 2026",
+        "title": "Una comisión spot fija del 0,10%, explicada",
+        "excerpt": "Por qué pasamos a una única comisión spot y qué significa para cuentas de alto volumen.",
+        "readTime": "4 min de lectura",
+        "body1": "Una comisión spot fija del 0,10% sustituyó a una tabla por tramos que casi nadie podía predecir. El modelo anterior premiaba el volumen, pero también hacía que la cifra de tu pantalla de confirmación dependiera del punto del mes.",
+        "body2": "Para cuentas de alto volumen la tarifa fija es algo peor sobre el papel. En la práctica, la certeza valió más que el descuento: casi todas las mesas con las que hablamos ya presupuestaban el peor tramo."
+      },
+      "kycFlow": {
+        "date": "9 de febrero de 2026",
+        "title": "Rediseñar el KYC para que tarde menos de dos minutos",
+        "excerpt": "El flujo anterior perdía usuarios al subir documentos. Esto es lo que cambiamos.",
+        "readTime": "5 min de lectura",
+        "body1": "La subida de documentos era donde el flujo antiguo perdía gente. Cerca de un tercio se detenía en ese paso, la mayoría desde el móvil y tras el segundo intento fallido de captura.",
+        "body2": "Movimos las indicaciones de captura a antes de abrir la cámara, aceptamos un rango más amplio de calidad de imagen y pasamos a segundo plano las comprobaciones que antes bloqueaban el envío. La mediana de finalización ya está por debajo de dos minutos."
+      },
+      "roadmap": {
+        "date": "21 de enero de 2026",
+        "title": "Lo próximo que lanzaremos",
+        "excerpt": "Transferencias entre personas, más redes por moneda y una vista de billetera rediseñada.",
+        "readTime": "4 min de lectura",
+        "body1": "Las transferencias entre personas son lo siguiente. La mecánica ya está; falta la vía de disputas, que preferimos resolver bien antes que lanzar pronto.",
+        "body2": "Después: más redes por moneda y una vista de billetera reconstruida en torno a las tenencias y no a las cuentas. La pantalla actual tenía sentido con tres monedas y dejó de tenerlo con treinta."
+      },
+      "networks": {
+        "date": "14 de enero de 2026",
+        "title": "Más redes para cada moneda",
+        "excerpt": "Elegir una red era adivinar. Ahora cada moneda muestra las redes que admite de verdad, con sus comisiones.",
+        "readTime": "3 min de lectura",
+        "body1": "Elegir una red era adivinar: el campo aceptaba cualquier cosa y una elección errónea significaba fondos en un lugar irrecuperable. Mala forma de aprender en qué se diferencian las cadenas.",
+        "body2": "Ahora cada moneda muestra solo las redes que admite de verdad, con su comisión y el tiempo de liquidación previsto. Lo no admitido no es seleccionable, en lugar de un aviso que puedas ignorar."
+      },
+      "security": {
+        "date": "6 de enero de 2026",
+        "title": "Qué protege el 2FA y qué no",
+        "excerpt": "El doble factor evita que usen una contraseña robada. Esto es lo que aún requiere tu atención, y por qué lo pedimos en los retiros.",
+        "readTime": "7 min de lectura",
+        "body1": "La autenticación de doble factor evita bien una cosa concreta: que alguien con tu contraseña la use. Es el ataque más común con diferencia, y por eso está activada por defecto.",
+        "body2": "Lo que no evita es el compromiso del dispositivo con el segundo factor, ni que apruebes una transferencia a la que te convencieron. Por eso los retiros llevan una confirmación aparte y las direcciones nuevas esperan un breve periodo antes del primer envío."
+      }
+    },
+    "readArticle": "Leer artículo",
+    "backToList": "Volver al Diario Web",
+    "relatedTitle": "Más del diario",
+    "notFoundTitle": "Artículo no encontrado",
+    "notFoundText": "Ese enlace no apunta a ningún artículo nuestro. Vuelve al diario y elige uno de la lista."
   },
   "theme": {
     "toggleToLight": "Cambiar a modo claro",
@@ -40,8 +152,14 @@
     "phoneActionBuy": "Comprar",
     "phoneActionSell": "Vender",
     "phoneActionSwap": "Cambiar",
-    "phoneHoldings": "Tus activos",
-    "phoneViewAll": "Ver todos los activos"
+    "phoneActionSend": "Enviar",
+    "phoneAssets": "Tus activos",
+    "phoneSeeAll": "Ver todo",
+    "phoneBuyCrypto": "Comprar cripto",
+    "phoneCoin": {
+      "btc": "Bitcoin",
+      "eth": "Ethereum"
+    }
   },
   "howItWorks": {
     "badge": "Cómo funciona",
@@ -137,6 +255,23 @@
       }
     }
   },
+  "contact": {
+    "headerTitle": "¿Cómo podemos ayudarte?",
+    "headerSubtitle": "Dudas sobre tu billetera, una transacción o cómo empezar: escríbenos y el equipo te responderá en un día laborable.",
+    "titleLine1": "Hablemos",
+    "titleLine2": "Y Vamos A",
+    "titleLine3": "Conectar",
+    "subtitle": "¡Nos encantaría saber de ti! Si tienes preguntas, comentarios o necesitas ayuda, no dudes en contactarnos.",
+    "labelName": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "labelEmail": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "labelMessage": "Mensaje",
+    "messagePlaceholder": "Escribe tu mensaje...",
+    "sendButton": "Enviar mensaje",
+    "sending": "Enviando...",
+    "sentSuccess": "Tu mensaje ha sido enviado."
+  },
   "auth": {
     "loginTitle": "Bienvenido de nuevo",
     "loginSubtitle": "Inicia sesión para acceder a tu billetera AdCrypto",
@@ -173,5 +308,69 @@
   "common": {
     "loading": "Cargando...",
     "comingSoon": "Próximamente"
+  },
+  "security": {
+    "badge": "Sistema de seguridad",
+    "headingLead": "8 formas de proteger tus",
+    "headingAccent": "activos digitales",
+    "subtitle": "La seguridad no es una función. Son ocho capas superpuestas, y cada una cubre lo que las demás no alcanzan.",
+    "note": "Las ocho, activas por defecto",
+    "items": {
+      "smsEmail": {
+        "title": "Verificación por SMS o correo",
+        "text": "Tanto el correo como el SMS refuerzan la autenticación y cada uno tiene sus ventajas, así que tú eliges cuál protege tu cuenta."
+      },
+      "kyc": {
+        "title": "Solución KYC",
+        "text": "Verificación de identidad que cumple la normativa sin convertir el registro en un trámite. Una sola vez, en menos de dos minutos."
+      },
+      "twoFa": {
+        "title": "Autenticación en dos pasos",
+        "text": "Una capa extra más allá del usuario y la contraseña, obligatoria en cada retiro en lugar de ofrecerse como opción."
+      },
+      "encryption": {
+        "title": "Cifrado de extremo a extremo",
+        "text": "Comunicación en la que solo quienes hablan pueden leer los mensajes. Ni nosotros, ni quien los intercepte."
+      },
+      "behavior": {
+        "title": "Monitorización de comportamiento",
+        "text": "Aprendemos cómo se comporta tu cuenta, así que un acceso o una transferencia fuera de lo normal se verifica antes de completarse."
+      },
+      "ssl": {
+        "title": "Capa de sockets seguros",
+        "text": "Cifrado TLS en cada petición entre tú y AdCrypto, para que nada legible cruce la red por el camino."
+      },
+      "waf": {
+        "title": "Firewall de aplicaciones web",
+        "text": "Un WAF inspecciona y filtra el tráfico HTTP que llega a la plataforma y detiene patrones de ataque conocidos antes de que lleguen a la app."
+      },
+      "rbac": {
+        "title": "Control de acceso por roles",
+        "text": "El acceso administrativo se limita según funciones y responsabilidades, de modo que nadie por sí solo puede alcanzarlo todo."
+      }
+    }
+  },
+  "download": {
+    "badge": "Descargar app",
+    "headingLead": "Mejora tu experiencia con",
+    "headingAccent": "nuestra app",
+    "subtitle": "AdCrypto simplifica las operaciones cripto para emprendedores y empresas. Disponible en Android e iOS: intercambia, compra y vende activos digitales y retira sin fricción.",
+    "imageAlt": "La app de AdCrypto en dos teléfonos, comprando USDT dentro de la billetera",
+    "highlights": {
+      "exchange": "Compra, vende e intercambia más de 100 monedas desde una pantalla",
+      "wallets": "Todas tus billeteras y redes, en tu bolsillo",
+      "withdrawals": "Retira a cualquier dirección con 2FA en cada transferencia"
+    },
+    "rating": "4,9 de media en ambas tiendas",
+    "stores": {
+      "android": {
+        "label": "Disponible en",
+        "name": "Google Play"
+      },
+      "apple": {
+        "label": "Descárgala en",
+        "name": "App Store"
+      }
+    }
   }
 }

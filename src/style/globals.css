@@ -6,7 +6,7 @@
 :root {
   color-scheme: light;
 
-  --primary__color: 47, 90, 231; /* AdCrypto brand blue — the ONE value to change per project */
+  --primary__color: 1, 148, 252;
 
   --bg: 255, 255, 255; /* page background            */
   --surface: 247, 249, 250; /* inputs, table headers      */
@@ -19,106 +19,131 @@
   --border: 229, 231, 235;
 
   /* ---- Hero scene (light) --------------------------------------------
-     The hero has its own palette because it is a self-contained showcase
-     surface, but it DOES follow the theme. Light values live here, dark
-     overrides below. */
-  --hero-bg: 255, 255, 255;
-  --hero-deep: 244, 246, 255;
-  --hero-panel: 235, 239, 254;
-  --hero-accent: 47, 75, 255;
-  --hero-accent-soft: 62, 92, 245;
-  --hero-mint: 4, 138, 90;
+     The whole hero is derived from --primary__color (#0194fc, azure). The old
+     palette was built on indigo/lavender, which clashed badly with azure — so
+     every glow, spot and surface below was re-cut on the same hue (H 205) and
+     only the lightness varies. That ladder is:
 
-  --hero-fg: 11, 13, 32; /* headings / strong          */
-  --hero-fg-soft: 58, 66, 96; /* body copy                  */
-  --hero-fg-muted: 108, 116, 146; /* meta, hints                */
+       #01131f  #012b44  #013d5f  #0163a0  #0194fc  #34a9fd
+       #67bffe  #9ad4fe  #c2e5ff  #e0f2ff  #f0f8ff
 
-  --hero-surface: rgb(11 13 32 / 0.045); /* glass fill      */
-  --hero-surface-strong: rgb(11 13 32 / 0.085); /* glass hover */
-  --hero-border: rgb(11 13 32 / 0.12);
+     Note the inversion that runs through this: the light hero's glow is a WHITE
+     core ringed in pale azure, where the dark hero's is a bright azure core
+     fading to near-black. Same geometry, opposite luminance. */
+  --hero-bg: 240, 246, 253;
+  --hero-deep: 231, 241, 251;
+  --hero-panel: 231, 241, 251;
+  --hero-accent: 1, 148, 252; /* #0194fc — the primary itself */
+  --hero-accent-soft: 1, 148, 252;
+  --hero-mint: 15, 159, 95; /* #0f9f5f — positive change */
+  --hero-neg: 212, 72, 63; /* #d4483f — negative change */
 
-  /* Solid pill CTA — a dark button on the light hero, a light button on the
-     dark hero. Same inversion logic as the reference design in both modes. */
-  --hero-cta-bg: 11, 13, 32;
+  --hero-fg: 9, 22, 40; /* kept a bare triple: used with /88 opacity */
+  --hero-fg-soft: rgb(9 22 40 / 0.66); /* body copy   */
+  --hero-fg-dim: rgb(9 22 40 / 0.6); /* panel copy  */
+  --hero-fg-muted: rgb(9 22 40 / 0.45); /* meta, hints */
+
+  --hero-surface: rgb(255 255 255 / 0.6); /* glass fill  */
+  --hero-surface-strong: rgb(255 255 255 / 0.8); /* glass hover */
+  --hero-border: rgb(9 22 40 / 0.1);
+  --hero-hair: rgb(9 22 40 / 0.12); /* 1px dividers */
+
+  /* Solid pill CTA — dark on the light hero, light on the dark hero. */
+  --hero-cta-bg: 9, 26, 46;
   --hero-cta-fg: 255, 255, 255;
+  --hero-cta-ring: rgb(9 22 40 / 0.18);
+  --hero-cta-ring-bg: rgb(255 255 255 / 0.55);
+  --hero-cta-glow: rgb(9 26 46 / 0.18);
 
-  /* The hero's layered glow stack, mirroring the reference design:
-     glow (brand core) -> halo (soft bloom) -> vignette (legibility) ->
-     two corner accents -> edge fade. Light keeps it a pale wash. */
+  /* Dark navy pill behind the hero badge — the same in both themes, since it
+     always carries white text. */
+  --hero-badge-bg: 9, 32, 60;
+
   --hero-glow: radial-gradient(
     closest-side,
-    rgb(129 140 248 / 0.26) 0%,
-    rgb(139 148 250 / 0.18) 24%,
-    rgb(165 180 252 / 0.12) 44%,
-    rgb(199 210 254 / 0.06) 64%,
-    rgb(255 255 255 / 0) 80%
+    #ffffff 0%,
+    #e0f2ff 26%,
+    #c2e5ff 46%,
+    #9ad4fe 64%,
+    rgb(240 246 253 / 0) 82%
   );
   --hero-halo: radial-gradient(
     closest-side,
-    rgb(150 150 255 / 0.16) 0%,
-    rgb(129 140 248 / 0.08) 42%,
-    rgb(255 255 255 / 0) 74%
+    rgb(255 255 255 / 0.95) 0%,
+    rgb(194 229 255 / 0.5) 44%,
+    rgb(240 246 253 / 0) 76%
   );
   --hero-vignette: radial-gradient(
     closest-side,
-    rgb(255 255 255 / 0.9),
-    rgb(255 255 255 / 0.55) 52%,
+    rgb(255 255 255 / 0.95),
+    rgb(255 255 255 / 0.55) 54%,
     rgb(255 255 255 / 0) 80%
   );
   --hero-spot: radial-gradient(
     closest-side,
-    rgb(167 139 250 / 0.16),
-    rgb(129 140 248 / 0.06) 58%,
+    rgb(154 212 254 / 0.5),
+    rgb(1 148 252 / 0.16) 58%,
     transparent 78%
   );
   --hero-spot-2: radial-gradient(
     closest-side,
-    rgb(56 189 248 / 0.14),
-    rgb(59 130 246 / 0.05) 58%,
+    rgb(103 191 254 / 0.42),
+    rgb(1 148 252 / 0.12) 58%,
     transparent 78%
   );
   --hero-edge: linear-gradient(
     180deg,
-    rgb(255 255 255 / 0.5) 0%,
-    rgb(255 255 255 / 0) 26%,
-    rgb(255 255 255 / 0) 62%,
-    rgb(255 255 255 / 0.75) 100%
+    rgb(240 246 253 / 0.5) 0%,
+    rgb(240 246 253 / 0) 24%,
+    rgb(240 246 253 / 0) 60%,
+    rgb(240 246 253 / 0.75) 100%
   );
   --hero-panel-bg: radial-gradient(
     120% 90% at 22% 34%,
-    #eceffe 0%,
-    #f2f4ff 46%,
-    #f7f8ff 72%,
-    #f9faff 100%
+    #ffffff 0%,
+    #eaf4fe 44%,
+    #dfeefb 72%,
+    #e7f1fb 100%
   );
-  --hero-wordmark: linear-gradient(180deg, rgb(11 13 32 / 0.14) 30%, rgb(11 13 32 / 0.05) 100%);
-  --hero-grid-line: rgb(11 13 32 / 0.07);
+  --hero-wordmark: 9, 26, 48; /* solid; opacity + mask applied in JSX */
+  --hero-grid-line: rgb(9 22 40 / 0.075);
 
-  /* The How-It-Works panel's two ambient glows. */
   --hero-panel-glow-a: radial-gradient(
     closest-side,
-    rgb(99 102 241 / 0.16),
-    rgb(129 140 248 / 0.07) 58%,
+    rgb(1 148 252 / 0.2),
+    rgb(1 99 160 / 0.07) 58%,
     transparent 78%
   );
   --hero-panel-glow-b: radial-gradient(
     closest-side,
-    rgb(79 70 229 / 0.14),
-    rgb(99 102 241 / 0.06) 58%,
+    rgb(1 148 252 / 0.2),
+    rgb(1 99 160 / 0.07) 58%,
     transparent 78%
   );
 
-  /* ---- Phone mockup (light) ------------------------------------------
-     The device follows the theme too. */
-  --phone-bezel: 226, 230, 245;
-  --phone-screen: linear-gradient(170deg, #f8f9ff 0%, #eef1ff 38%, #e6eaff 70%, #dcdfff 100%);
-  --phone-fg: 17, 20, 44;
-  --phone-fg-muted: 96, 104, 136;
-  --phone-surface: rgb(17 20 44 / 0.055);
-  --phone-border: rgb(17 20 44 / 0.1);
-  --phone-mint: 4, 138, 90;
-  --phone-notch: 214, 219, 238;
-  --phone-tabbar: rgb(17 20 44 / 0.04);
+  /* ---- Floating price cards (light) ----------------------------------
+     These DO follow the theme, unlike the phone below: a white card with a cast
+     shadow on the light hero, translucent white glass on the dark one. */
+  --card-bg: rgb(255 255 255 / 0.78);
+  --card-br: rgb(9 22 40 / 0.08);
+  --card-fg: 9, 26, 46;
+  --card-chip-bg: 224, 242, 255; /* #e0f2ff */
+  --card-shadow: 0 18px 40px rgb(9 30 60 / 0.16);
+
+  /* ---- Phone mockup ---------------------------------------------------
+     The device does NOT follow the theme. It is a physical object in the scene,
+     so it stays dark with the same screen in both modes — which is why these
+     values are duplicated below. The screen now climbs the azure ladder
+     (deep navy -> primary -> light azure) instead of navy -> indigo -> violet. */
+  --phone-bezel: 6, 12, 20;
+  --phone-screen: linear-gradient(170deg, #082742 0%, #015c97 38%, #0c86de 70%, #38adfd 100%);
+  --phone-fg: 255, 255, 255;
+  --phone-fg-muted: rgb(255 255 255 / 0.68);
+  --phone-surface: rgb(255 255 255 / 0.13);
+  --phone-border: rgb(255 255 255 / 0.16);
+  --phone-mint: 138, 255, 193; /* #8affc1 */
+  --phone-notch: 3, 8, 14;
+  --phone-chip: 255, 255, 255;
 }
 
 [data-theme="dark"] {
@@ -131,103 +156,112 @@
   --muted: 156, 163, 175;
   --border: 39, 44, 61;
 
-  /* ---- Hero scene (dark) — the original design ---------------------- */
-  --hero-bg: 4, 4, 10;
-  --hero-deep: 13, 14, 40; /* #0d0e28 — a stop from the panel gradient */
-  --hero-panel: 8, 9, 26; /* #08091a — where the panel settles */
-  --hero-accent: 47, 75, 255;
-  --hero-accent-soft: 91, 123, 255;
-  --hero-mint: 138, 255, 193;
+  /* ---- Hero scene (dark) — same azure ladder, inverted luminance ----- */
+  --hero-bg: 3, 7, 15;
+  --hero-deep: 4, 18, 32;
+  --hero-panel: 4, 18, 32;
+  --hero-accent: 1, 148, 252;
+  --hero-accent-soft: 103, 191, 254; /* #67bffe */
+  --hero-mint: 138, 255, 193; /* #8affc1 */
+  --hero-neg: 255, 157, 157; /* #ff9d9d */
 
   --hero-fg: 255, 255, 255;
-  --hero-fg-soft: 214, 218, 234;
-  --hero-fg-muted: 150, 157, 184;
+  --hero-fg-soft: rgb(255 255 255 / 0.72);
+  --hero-fg-dim: rgb(255 255 255 / 0.64);
+  --hero-fg-muted: rgb(255 255 255 / 0.5);
 
-  --hero-surface: rgb(255 255 255 / 0.11);
+  --hero-surface: rgb(255 255 255 / 0.1);
   --hero-surface-strong: rgb(255 255 255 / 0.18);
   --hero-border: rgb(255 255 255 / 0.16);
+  --hero-hair: rgb(255 255 255 / 0.14);
 
   --hero-cta-bg: 255, 255, 255;
-  --hero-cta-fg: 11, 11, 24;
+  --hero-cta-fg: 4, 16, 30;
+  --hero-cta-ring: rgb(255 255 255 / 0.28);
+  --hero-cta-ring-bg: rgb(255 255 255 / 0.06);
+  --hero-cta-glow: rgb(255 255 255 / 0.14);
+
+  --hero-badge-bg: 9, 32, 60;
 
   --hero-glow: radial-gradient(
     closest-side,
-    #5555ff 0%,
-    #3a30d8 24%,
-    #211bb0 44%,
-    #131358 64%,
-    rgb(8 8 30 / 0) 80%
+    #34a9fd 0%,
+    #0163a0 24%,
+    #013d5f 44%,
+    #012b44 64%,
+    rgb(3 12 26 / 0) 80%
   );
   --hero-halo: radial-gradient(
     closest-side,
-    rgb(150 150 255 / 0.34) 0%,
-    rgb(88 72 240 / 0.18) 42%,
-    rgb(10 10 40 / 0) 74%
+    rgb(154 212 254 / 0.34) 0%,
+    rgb(1 148 252 / 0.18) 42%,
+    rgb(4 20 40 / 0) 74%
   );
   --hero-vignette: radial-gradient(
     closest-side,
-    rgb(4 4 12 / 0.97),
-    rgb(4 4 12 / 0.72) 52%,
-    rgb(4 4 12 / 0) 80%
+    rgb(3 9 18 / 0.97),
+    rgb(3 9 18 / 0.72) 52%,
+    rgb(3 9 18 / 0) 80%
   );
   --hero-spot: radial-gradient(
     closest-side,
-    rgb(196 181 253 / 0.46),
-    rgb(129 140 248 / 0.14) 58%,
+    rgb(154 212 254 / 0.46),
+    rgb(52 169 253 / 0.14) 58%,
     transparent 78%
   );
   --hero-spot-2: radial-gradient(
     closest-side,
     rgb(88 214 255 / 0.3),
-    rgb(63 139 255 / 0.1) 58%,
+    rgb(1 148 252 / 0.1) 58%,
     transparent 78%
   );
   --hero-edge: linear-gradient(
     180deg,
-    rgb(4 4 10 / 0.55) 0%,
-    rgb(4 4 10 / 0) 26%,
-    rgb(4 4 10 / 0) 62%,
-    rgb(4 4 10 / 0.85) 100%
+    rgb(3 7 15 / 0.55) 0%,
+    rgb(3 7 15 / 0) 26%,
+    rgb(3 7 15 / 0) 62%,
+    rgb(3 7 15 / 0.85) 100%
   );
   --hero-panel-bg: radial-gradient(
     120% 90% at 22% 34%,
-    #16184a 0%,
-    #0d0e28 46%,
-    #090a1c 72%,
-    #08091a 100%
+    #04243f 0%,
+    #041c33 46%,
+    #031526 72%,
+    #041220 100%
   );
-  --hero-wordmark: linear-gradient(
-    180deg,
-    rgb(255 255 255 / 0.98) 30%,
-    rgb(255 255 255 / 0.55) 78%,
-    rgb(255 255 255 / 0.15) 100%
-  );
+  --hero-wordmark: 255, 255, 255;
   --hero-grid-line: rgb(255 255 255 / 0.075);
 
-  /* Exactly the two glows from the original dark design. */
   --hero-panel-glow-a: radial-gradient(
     closest-side,
-    rgb(63 63 255 / 0.26),
-    rgb(20 20 107 / 0.1) 58%,
+    rgb(1 148 252 / 0.26),
+    rgb(1 61 95 / 0.1) 58%,
     transparent 78%
   );
   --hero-panel-glow-b: radial-gradient(
     closest-side,
-    rgb(91 123 255 / 0.32),
-    rgb(47 75 255 / 0.1) 58%,
+    rgb(103 191 254 / 0.32),
+    rgb(1 148 252 / 0.1) 58%,
     transparent 78%
   );
 
-  /* ---- Phone mockup (dark) — the original vivid indigo device -------- */
-  --phone-bezel: 10, 10, 20;
-  --phone-screen: linear-gradient(170deg, #1a1f52 0%, #2b2fa8 38%, #4b3fd8 70%, #6f4de0 100%);
+  /* ---- Floating price cards (dark) ----------------------------------- */
+  --card-bg: rgb(255 255 255 / 0.11);
+  --card-br: rgb(255 255 255 / 0.2);
+  --card-fg: 255, 255, 255;
+  --card-chip-bg: 255, 255, 255;
+  --card-shadow: none;
+
+  /* ---- Phone mockup (dark) — identical to light on purpose ----------- */
+  --phone-bezel: 6, 12, 20;
+  --phone-screen: linear-gradient(170deg, #082742 0%, #015c97 38%, #0c86de 70%, #38adfd 100%);
   --phone-fg: 255, 255, 255;
-  --phone-fg-muted: 190, 195, 220;
-  --phone-surface: rgb(255 255 255 / 0.1);
-  --phone-border: rgb(255 255 255 / 0.14);
+  --phone-fg-muted: rgb(255 255 255 / 0.68);
+  --phone-surface: rgb(255 255 255 / 0.13);
+  --phone-border: rgb(255 255 255 / 0.16);
   --phone-mint: 138, 255, 193;
-  --phone-notch: 5, 5, 12;
-  --phone-tabbar: rgb(0 0 0 / 0.15);
+  --phone-notch: 3, 8, 14;
+  --phone-chip: 255, 255, 255;
 }
 
 @theme {
@@ -252,27 +286,45 @@
   --color-hero-accent-soft: rgb(var(--hero-accent-soft));
   --color-hero-mint: rgb(var(--hero-mint));
 
+  --color-hero-neg: rgb(var(--hero-neg));
+
   --color-hero-fg: rgb(var(--hero-fg));
-  --color-hero-fg-soft: rgb(var(--hero-fg-soft));
-  --color-hero-fg-muted: rgb(var(--hero-fg-muted));
+  /* Already carry their own alpha, so they are passed through rather than
+     wrapped in rgb() like the bare triples above. */
+  --color-hero-fg-soft: var(--hero-fg-soft);
+  --color-hero-fg-dim: var(--hero-fg-dim);
+  --color-hero-fg-muted: var(--hero-fg-muted);
 
   --color-hero-surface: var(--hero-surface);
   --color-hero-surface-strong: var(--hero-surface-strong);
   --color-hero-border: var(--hero-border);
+  --color-hero-hair: var(--hero-hair);
 
   --color-hero-cta-bg: rgb(var(--hero-cta-bg));
   --color-hero-cta-fg: rgb(var(--hero-cta-fg));
+  --color-hero-cta-ring: var(--hero-cta-ring);
+  --color-hero-cta-ring-bg: var(--hero-cta-ring-bg);
+
+  --color-hero-wordmark: rgb(var(--hero-wordmark));
+  --color-hero-badge: rgb(var(--hero-badge-bg));
+
+  /* Floating price cards — theme-aware, unlike the phone. */
+  --color-card-glass: var(--card-bg);
+  --color-card-line: var(--card-br);
+  --color-card-fg: rgb(var(--card-fg));
+  --color-card-chip: rgb(var(--card-chip-bg));
 
   --color-phone-bezel: rgb(var(--phone-bezel));
   --color-phone-fg: rgb(var(--phone-fg));
-  --color-phone-fg-muted: rgb(var(--phone-fg-muted));
+  --color-phone-fg-muted: var(--phone-fg-muted);
   --color-phone-surface: var(--phone-surface);
   --color-phone-border: var(--phone-border);
   --color-phone-mint: rgb(var(--phone-mint));
   --color-phone-notch: rgb(var(--phone-notch));
-  --color-phone-tabbar: var(--phone-tabbar);
+  --color-phone-chip: rgb(var(--phone-chip));
 
   --shadow-card: 0 12px 32px -12px rgb(13 17 23 / 0.18);
+  --shadow-float: var(--card-shadow);
 }
 
 html {
@@ -283,11 +335,6 @@ body {
   background: rgb(var(--bg));
   overflow-x: hidden;
 }
-img {
-  max-width: 100%;
-  height: auto;
-}
-
 ::selection {
   @apply bg-primary text-white;
 }
@@ -303,6 +350,15 @@ input[type="number"] {
 }
 
 @layer base {
+  /* Inside `base`, NOT at the top level. Unlayered declarations outrank every
+     @layer — including Tailwind's utilities — so as a plain `img { height: auto }`
+     rule this silently defeated any `h-*` class on an image, and logos rendered
+     at their full intrinsic size. */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
   h1 {
     @apply text-heading font-bold leading-[36px] text-[30px] sm:leading-[44px] sm:text-[38px] md:leading-[56px] md:text-[48px] lg:leading-[64px] lg:text-[55px];
   }
@@ -333,6 +389,24 @@ input[type="number"] {
 
   span {
     @apply block leading-tight text-body font-medium text-[12px] md:text-[14px] xl:text-[16px];
+  }
+
+  /* The phone mockup is a dark surface in BOTH themes, so the `text-body` above
+     resolves to dark slate in light mode and every unstyled span inside the
+     device renders dark-on-dark. Spans in there inherit their container's colour
+     instead.
+
+     This has to live in `base`: it outranks the bare `span` rule on specificity,
+     while still losing to any `text-*` utility on the span itself — so
+     `text-phone-mint` and `text-phone-fg-muted` keep working.
+
+     The same applies to the size scale: the phone's type runs 10-13px, far below
+     the standalone span scale, so an unstyled span there jumps to 14-16px and
+     breaks the device's proportions. */
+  [data-hero-phone] span {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 
   /* A span used for inline emphasis inside text should take on that text's

@@ -2,20 +2,24 @@
 
 import { useCallback, useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, DollarSign } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
-import { ease, segment, STAGE_HEIGHT, useScrollProgress } from "@/hooks/useScrollProgress";
-import { HeroNav } from "./HeroNav";
+import { ease, segment, useScrollProgress } from "@/hooks/useScrollProgress";
 import { PhoneMockup } from "./PhoneMockup";
 import { HowItWorksPanel } from "./HowItWorksPanel";
 
 /**
- * Where the phone ends up, as a fraction of the 900px stage. Taken from the
- * design's -320px / -376px offsets on a 1440x900 canvas, kept proportional so
- * the travel still reads correctly on wider screens.
+ * Where the phone ends up. X is a fraction of stage width so the travel stays
+ * proportional on wider screens (-0.222 x 1440 = the design's -320px).
+ *
+ * Y cannot be a fraction: the phone STARTS at `100% - PHONE_BOTTOM_OFFSET`, so a
+ * proportional shift would land it somewhere different on every window height.
+ * It is solved from the destination instead — `PHONE_END_Y` measured from the top
+ * of the stage — which is what keeps the composition put as the viewport grows.
  */
 const PHONE_TRAVEL_X = -0.222;
-const PHONE_TRAVEL_Y = -0.418;
+const PHONE_BOTTOM_OFFSET = 334;
+const PHONE_END_Y = 190;
 const PHONE_END_SCALE = 0.76;
 
 const BEZEL_MASK = "linear-gradient(180deg, #000 68%, rgba(0,0,0,0.35) 88%, transparent 100%)";
@@ -75,8 +79,12 @@ export function HeroScene() {
     if (phone) {
       const stage = stageRef.current;
       const width = stage?.offsetWidth ?? 1440;
+      const height = stage?.offsetHeight ?? 900;
       const dx = PHONE_TRAVEL_X * width * travel;
-      const dy = PHONE_TRAVEL_Y * STAGE_HEIGHT * travel;
+      // Distance from the phone's start (height - PHONE_BOTTOM_OFFSET) to its
+      // destination (PHONE_END_Y). Re-derived from the live stage height every
+      // frame, so a taller window doesn't push the end position off-screen.
+      const dy = (PHONE_END_Y - (height - PHONE_BOTTOM_OFFSET)) * travel;
       const scale = 1 - (1 - PHONE_END_SCALE) * travel;
       phone.style.transform = `translate3d(calc(-50% + ${dx.toFixed(2)}px), ${dy.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
       // Once the phone lifts off the hero it sits on the panel, where the
@@ -90,17 +98,22 @@ export function HeroScene() {
   useScrollProgress(sceneRef, apply);
 
   return (
-    // The scroll runway and the stage are BOTH fixed pixel heights (2250 =
-    // 2.5 x 900). Nothing here is derived from viewport height, so the
-    // composition is identical on a 720px laptop and a 1440px monitor.
-    <div ref={sceneRef} data-hero-scene className="relative bg-hero-bg lg:h-[2250px]">
-      {/* Rendered OUTSIDE the hero layer on purpose: that layer carries a
-          transform/will-change, which would make this `fixed` bar position
-          against it instead of the viewport (and fade out with it). */}
-      <HeroNav />
-
-      <div className="lg:sticky lg:top-0 lg:h-[900px] lg:overflow-hidden">
-        <div ref={stageRef} className="relative overflow-hidden lg:h-[900px]">
+    // 2500px is the scroll runway (v2's figure). The STAGE, though, is one
+    // viewport tall rather than a fixed 900px: at a fixed height anything taller
+    // than 900px left a dead band below the phone, since the phone and wordmark
+    // anchor to the stage's bottom, not the window's.
+    <div ref={sceneRef} data-hero-scene className="relative bg-hero-bg  lg:h-[2500px]">
+      {/* The floor is set by the copy block, not taste: it is centred inside
+          `100% - 470px`, and the headline stack needs ~400px, so anything under
+          ~880px makes that box smaller than its contents and the text spills into
+          the nav above and the phone below. On a shorter window the sticky
+          element is taller than the viewport, which just means the scene scrolls
+          a little before it pins — the phone's lower edge is masked anyway. */}
+      <div className="lg:sticky lg:top-0  lg:h-screen lg:min-h-220 lg:overflow-hidden">
+        <div
+          ref={stageRef}
+          className="relative overflow-hidden lg:h-screen lg:min-h-220"
+        >
           {/* ---------------- Hero layer ---------------- */}
           <div
             ref={heroRef}
@@ -151,16 +164,21 @@ export function HeroScene() {
             />
 
             {/* pt clears the fixed nav on mobile, where it is out of flow. */}
-            <div className="relative z-[3] mx-auto flex w-full max-w-[900px] flex-col items-center px-5 pt-24 pb-10 text-center sm:px-8 sm:pt-28 lg:absolute lg:top-37 lg:left-1/2 lg:w-215 lg:max-w-none lg:-translate-x-1/2 lg:px-0 lg:pt-0 lg:pb-0 xl:w-225">
-              <span className="mb-5 inline-flex! items-center gap-2 rounded-full border border-hero-border bg-hero-surface py-1 pr-3.5 pl-1 text-[12.5px] font-semibold text-hero-fg lg:mb-[26px]">
-                <span
-                  aria-hidden
-                  className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-hero-accent text-[12px] font-bold text-white"
-                >
-                  $
-                </span>
-                {t("hero.badge")}
-              </span>
+            {/* Centred in the band between the nav (88px) and the phone, rather
+                than pinned to a fixed `top`: the stage is now viewport-height, so
+                a fixed offset would drift away from the phone as the window
+                grows. 470 = the phone's 334px bottom offset plus clearance. */}
+            <div className="relative z-[3] mx-auto flex w-full max-w-[900px] flex-col items-center px-5 pt-24 pb-10 text-center sm:px-8 sm:pt-28 lg:absolute lg:top-22 lg:left-1/2 lg:h-[calc(100%-470px)] lg:w-215 lg:max-w-none lg:-translate-x-1/2 lg:justify-center lg:px-0 lg:pt-0 lg:pb-0 xl:w-225">
+              {/* <div className="relative inline-flex items-center my-4">
+      <div className="relative z-20 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary shadow-md shadow-primary/25">
+        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-primary">
+          <DollarSign className="h-4 w-4 stroke-[3]" />
+        </div>
+      </div>
+      <div className="-ml-5 flex h-9 items-center rounded-full bg-hero-badge pl-8 pr-5 text-sm font-semibold text-white tracking-wide shadow-inner">
+       {t("hero.badge")}
+      </div>
+    </div> */}
 
               <h1 className="text-[28px]! leading-[1.1]! font-bold tracking-[-0.03em] text-hero-fg sm:text-[38px]! md:text-[46px]! lg:text-[52px]! lg:tracking-[-0.035em] xl:text-[62px]!">
                 {t("hero.title")}
@@ -173,46 +191,42 @@ export function HeroScene() {
               <div className="mt-7 flex items-center gap-2.5 lg:mt-8">
                 <Link
                   href="/login"
-                  className="inline-flex! h-11 items-center rounded-full bg-hero-cta-bg px-6 text-[14px] font-semibold text-hero-cta-fg shadow-lg transition duration-200 hover:-translate-y-0.5 hover:text-hero-cta-fg sm:h-12 sm:px-7 sm:text-[15px]"
+                  className="inline-flex! h-11 items-center rounded-full bg-hero-cta-bg px-6 text-[14px] font-semibold text-hero-cta-fg shadow-[0_10px_26px_var(--hero-cta-glow)] transition duration-200 hover:-translate-y-0.5 hover:text-hero-cta-fg sm:h-12 sm:px-7 sm:text-[15px]"
                 >
                   {t("hero.ctaPrimary")}
                 </Link>
                 <Link
                   href="/about"
                   aria-label={t("hero.ctaIconLabel")}
-                  className="inline-flex! h-11 w-11 items-center justify-center rounded-full border border-hero-border bg-hero-surface text-hero-fg transition duration-200 hover:bg-hero-surface-strong hover:text-hero-fg sm:h-12 sm:w-12"
+                  className="inline-flex! h-11 w-11 items-center justify-center rounded-full border border-hero-cta-ring bg-hero-cta-ring-bg text-hero-fg transition duration-200 hover:bg-hero-surface-strong hover:text-hero-fg sm:h-12 sm:w-12"
                 >
                   <ArrowUpRight size={18} aria-hidden />
                 </Link>
               </div>
 
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[12px] text-hero-fg-muted sm:text-[12.5px] lg:mt-[18px] lg:gap-x-[18px]">
-                {META_KEYS.map((key, i) => (
-                  <span key={key} className="inline-flex! items-center gap-x-4 lg:gap-x-[18px]">
-                    {i > 0 && (
-                      <span
-                        aria-hidden
-                        className="hidden h-[3px] w-[3px] rounded-full bg-hero-fg-muted opacity-50 sm:block"
-                      />
-                    )}
-                    <span className="inline!">{t(key)}</span>
-                  </span>
-                ))}
-              </div>
+
             </div>
 
-            {/* Oversized wordmark. The gradient is clipped to the glyphs so it
-                fades out toward the bottom in both themes. `relative z-[2]` is
+            {/* Oversized wordmark, masked so it fades out toward the bottom in
+                both themes. `relative z-[2]` is
                 required: on mobile this is in normal flow, so without it the
                 absolutely-positioned edge fade above would paint over it. */}
             <div
               aria-hidden
-              className="pointer-events-none relative z-2 mt-6 w-full text-center text-[clamp(60px,18vw,270px)] leading-none font-bold tracking-[-0.045em] whitespace-nowrap select-none lg:absolute lg:-bottom-8.5 lg:left-0 lg:mt-0"
+              // Larger and far looser than before: the reference runs the wordmark
+              // wall to wall and lets it crop at both edges, which the scene's
+              // `overflow-hidden` handles.
+              // v2 sets this as a SOLID colour at 50% opacity with a downward
+              // mask, not a background-clipped gradient — the mask fades the
+              // glyphs without also fading the colour, so it reads the same in
+              // both themes. Weight 500 and positive tracking, both unusual for a
+              // display size, are what keep it from looking like a headline.
+              className="pointer-events-none relative z-2 mt-6 w-full text-center text-[clamp(64px,16vw,230px)] leading-none font-medium tracking-[0.03em] whitespace-nowrap text-hero-wordmark opacity-50 select-none lg:absolute lg:bottom-5.5 lg:left-0 lg:mt-0"
               style={{
-                backgroundImage: "var(--hero-wordmark)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
+                maskImage:
+                  "linear-gradient(180deg, rgb(0 0 0 / 0.8) 24%, rgb(0 0 0 / 0.4) 74%, rgb(0 0 0 / 0.1) 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(180deg, rgb(0 0 0 / 0.8) 24%, rgb(0 0 0 / 0.4) 74%, rgb(0 0 0 / 0.1) 100%)",
               }}
             >
               {t("brand.name")}

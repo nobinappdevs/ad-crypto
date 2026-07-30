@@ -6,9 +6,121 @@
   "nav": {
     "home": "Accueil",
     "about": "À propos",
+    "service": "Services",
+    "webJournal": "Journal Web",
+    "contact": "Contact",
     "login": "Connexion",
     "dashboard": "Tableau de bord",
-    "signUp": "S'inscrire"
+    "signUp": "S'inscrire",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "breadcrumb": "Fil d'Ariane"
+  },
+  "service": {
+    "title": "Des services conçus pour les actifs numériques",
+    "subtitle": "Portefeuilles, trading, règlement et conformité — l'ensemble des outils dont votre entreprise a besoin pour opérer dans la crypto.",
+    "badge": "Services",
+    "headingLead": "Ce que nous",
+    "headingAccent": "proposons",
+    "learnMore": "En savoir plus",
+    "highlights": {
+      "spread": "Frais spot fixes de 0,10 %, sans paliers",
+      "pairs": "Toutes les paires listées, tous les réseaux pris en charge",
+      "settlement": "Règlement confirmé avant votre validation"
+    },
+    "items": {
+      "exchange": {
+        "title": "Échange de cryptos",
+        "text": "Un trading fluide sur une plateforme sûre et simple, avec les frais affichés avant validation."
+      },
+      "payments": {
+        "title": "Solutions de paiement",
+        "text": "Traitement des paiements efficace et fiable pour des besoins variés."
+      },
+      "security": {
+        "title": "Systèmes de sécurité",
+        "text": "Des mesures solides qui protègent les actifs numériques et les données des utilisateurs."
+      },
+      "wallet": {
+        "title": "Gestion de portefeuille",
+        "text": "Stockage et gestion des cryptos via des outils de portefeuille clairs."
+      },
+      "support": {
+        "title": "Assistance utilisateur",
+        "text": "Une aide réactive et complète pour vos questions comme pour vos incidents."
+      },
+      "analytics": {
+        "title": "Analyse de données",
+        "text": "Une analytique avancée qui transforme les mouvements de marché en décisions."
+      },
+      "mobile": {
+        "title": "Application mobile",
+        "text": "Une application mobile complète pour transiger où que vous soyez."
+      },
+      "p2p": {
+        "title": "Transactions entre particuliers",
+        "text": "Des transferts directs et sécurisés entre utilisateurs, dans la plateforme."
+      }
+    }
+  },
+  "webJournal": {
+    "title": "Journal Web",
+    "subtitle": "Nouveautés produit, notes techniques et réflexions de l'équipe.",
+    "posts": {
+      "custody": {
+        "date": "12 mars 2026",
+        "title": "Notre approche de la conservation assurée",
+        "excerpt": "Où vivent vos clés, qui peut y toucher et ce que notre assurance couvre réellement.",
+        "readTime": "6 min de lecture",
+        "body1": "La conservation assurée désigne deux choses distinctes, souvent confondues. D'abord, où résident physiquement les clés privées : chez nous, réparties entre des modules matériels qu'aucun employé ne peut atteindre seul. Ensuite, ce qui se passe si cela échoue.",
+        "body2": "Notre police couvre les pertes liées à une intrusion externe et à un usage interne abusif, dans la limite indiquée. Elle ne couvre pas la compromission de votre appareil ou de vos identifiants — d'où la 2FA obligatoire sur les retraits."
+      },
+      "fees": {
+        "date": "28 février 2026",
+        "title": "Des frais spot fixes de 0,10 %, expliqués",
+        "excerpt": "Pourquoi nous sommes passés à des frais spot uniques et ce que cela change pour les gros volumes.",
+        "readTime": "4 min de lecture",
+        "body1": "Des frais spot fixes de 0,10 % ont remplacé un barème par paliers que presque personne ne pouvait anticiper. L'ancien modèle récompensait le volume, mais le montant affiché dépendait du moment du mois.",
+        "body2": "Pour les gros volumes, le taux fixe est légèrement moins avantageux sur le papier. En pratique, la prévisibilité a compté davantage : la plupart des desks budgétaient déjà le pire palier."
+      },
+      "kycFlow": {
+        "date": "9 février 2026",
+        "title": "Refondre le KYC pour passer sous les deux minutes",
+        "excerpt": "L'ancien parcours perdait les utilisateurs à l'envoi des documents. Voici ce que nous avons changé.",
+        "readTime": "5 min de lecture",
+        "body1": "L'envoi des documents était le point de rupture de l'ancien parcours. Près d'un tiers des personnes s'y arrêtaient, surtout sur mobile et après un deuxième échec de capture.",
+        "body2": "Nous avons déplacé les consignes avant l'ouverture de la caméra, élargi la qualité d'image acceptée et basculé en arrière-plan les contrôles qui bloquaient l'envoi. La durée médiane est désormais inférieure à deux minutes."
+      },
+      "roadmap": {
+        "date": "21 janvier 2026",
+        "title": "Ce qui arrive ensuite",
+        "excerpt": "Transferts entre particuliers, plus de réseaux par crypto et une vue portefeuille repensée.",
+        "readTime": "4 min de lecture",
+        "body1": "Les transferts entre particuliers arrivent ensuite. La mécanique est prête ; reste le parcours de litige, que nous préférons réussir plutôt que sortir vite.",
+        "body2": "Ensuite : davantage de réseaux par crypto et une vue portefeuille repensée autour des avoirs plutôt que des comptes. L'écran actuel tenait avec trois cryptos, plus avec trente."
+      },
+      "networks": {
+        "date": "14 janvier 2026",
+        "title": "Plus de réseaux pour chaque crypto",
+        "excerpt": "Choisir un réseau relevait de la devinette. Chaque crypto liste désormais les réseaux réellement pris en charge, frais inclus.",
+        "readTime": "3 min de lecture",
+        "body1": "Choisir un réseau relevait de la devinette : le champ acceptait tout, et une erreur envoyait les fonds vers un endroit irrécupérable. Mauvaise façon d'apprendre ce qui distingue les chaînes.",
+        "body2": "Chaque crypto ne liste désormais que les réseaux réellement pris en charge, avec les frais et le délai de règlement attendu. Ce qui n'est pas pris en charge n'est pas sélectionnable."
+      },
+      "security": {
+        "date": "6 janvier 2026",
+        "title": "Ce que la 2FA protège, et ce qu'elle ne protège pas",
+        "excerpt": "Le double facteur empêche l'usage d'un mot de passe volé. Voici ce qui exige encore votre vigilance, et pourquoi nous l'imposons aux retraits.",
+        "readTime": "7 min de lecture",
+        "body1": "La double authentification bloque bien une chose précise : l'usage de votre mot de passe par un tiers. C'est de loin l'attaque la plus courante, d'où son activation par défaut.",
+        "body2": "Elle n'empêche ni la compromission de l'appareil portant le second facteur, ni un virement que l'on vous a persuadé d'approuver. Les retraits exigent donc une confirmation distincte et les nouvelles adresses patientent avant le premier envoi."
+      }
+    },
+    "readArticle": "Lire l'article",
+    "backToList": "Retour au Journal Web",
+    "relatedTitle": "Plus d'articles",
+    "notFoundTitle": "Article introuvable",
+    "notFoundText": "Ce lien ne correspond à aucun de nos articles. Revenez au journal et choisissez-en un dans la liste."
   },
   "theme": {
     "toggleToLight": "Passer au mode clair",
@@ -40,8 +152,14 @@
     "phoneActionBuy": "Acheter",
     "phoneActionSell": "Vendre",
     "phoneActionSwap": "Échanger",
-    "phoneHoldings": "Vos actifs",
-    "phoneViewAll": "Voir tous les actifs"
+    "phoneActionSend": "Envoyer",
+    "phoneAssets": "Vos actifs",
+    "phoneSeeAll": "Tout voir",
+    "phoneBuyCrypto": "Acheter des cryptos",
+    "phoneCoin": {
+      "btc": "Bitcoin",
+      "eth": "Ethereum"
+    }
   },
   "howItWorks": {
     "badge": "Comment ça marche",
@@ -137,6 +255,23 @@
       }
     }
   },
+  "contact": {
+    "headerTitle": "Comment pouvons-nous aider ?",
+    "headerSubtitle": "Une question sur votre portefeuille, une transaction ou vos premiers pas — écrivez-nous et l'équipe vous répondra sous un jour ouvré.",
+    "titleLine1": "Restons",
+    "titleLine2": "En",
+    "titleLine3": "Contact",
+    "subtitle": "Nous aimerions avoir de vos nouvelles ! Que vous ayez des questions, des retours ou besoin d'aide, n'hésitez pas à nous contacter.",
+    "labelName": "Nom",
+    "namePlaceholder": "Votre nom",
+    "labelEmail": "E-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "labelMessage": "Message",
+    "messagePlaceholder": "Écrivez votre message...",
+    "sendButton": "Envoyer le message",
+    "sending": "Envoi...",
+    "sentSuccess": "Votre message a été envoyé."
+  },
   "auth": {
     "loginTitle": "Content de vous revoir",
     "loginSubtitle": "Connectez-vous pour accéder à votre portefeuille AdCrypto",
@@ -173,5 +308,69 @@
   "common": {
     "loading": "Chargement...",
     "comingSoon": "Bientôt disponible"
+  },
+  "security": {
+    "badge": "Système de sécurité",
+    "headingLead": "8 façons de protéger vos",
+    "headingAccent": "actifs numériques",
+    "subtitle": "La sécurité n'est pas une fonctionnalité. Ce sont huit couches superposées, chacune couvrant ce que les autres ne peuvent pas.",
+    "note": "Les huit, actives par défaut",
+    "items": {
+      "smsEmail": {
+        "title": "Vérification par SMS ou e-mail",
+        "text": "E-mail et SMS renforcent tous deux l'authentification, avec leurs compromis respectifs : à vous de choisir lequel protège votre compte."
+      },
+      "kyc": {
+        "title": "Solution KYC",
+        "text": "Une vérification d'identité conforme, sans transformer l'inscription en paperasse. Une seule fois, en moins de deux minutes."
+      },
+      "twoFa": {
+        "title": "Authentification à deux facteurs",
+        "text": "Une protection au-delà de l'identifiant et du mot de passe, exigée à chaque retrait plutôt que proposée en option."
+      },
+      "encryption": {
+        "title": "Chiffrement de bout en bout",
+        "text": "Des échanges que seuls les interlocuteurs peuvent lire. Ni nous, ni quiconque les intercepterait."
+      },
+      "behavior": {
+        "title": "Surveillance comportementale",
+        "text": "Nous apprenons le comportement habituel de votre compte : une connexion ou un virement inhabituel est vérifié avant d'aboutir."
+      },
+      "ssl": {
+        "title": "Couche SSL/TLS",
+        "text": "Un chiffrement TLS sur chaque requête entre vous et AdCrypto, pour que rien de lisible ne traverse le réseau."
+      },
+      "waf": {
+        "title": "Pare-feu applicatif web",
+        "text": "Un WAF inspecte et filtre le trafic HTTP entrant et bloque les schémas d'attaque connus avant qu'ils n'atteignent l'application."
+      },
+      "rbac": {
+        "title": "Contrôle d'accès par rôles",
+        "text": "Les accès administrateur sont limités aux rôles et responsabilités : personne seul ne peut tout atteindre."
+      }
+    }
+  },
+  "download": {
+    "badge": "Télécharger l'app",
+    "headingLead": "Passez au niveau supérieur avec",
+    "headingAccent": "notre app",
+    "subtitle": "AdCrypto simplifie les opérations crypto des entrepreneurs et des entreprises. Sur Android et iOS : échangez, achetez et vendez vos actifs, et retirez sans friction.",
+    "imageAlt": "L'application AdCrypto sur deux téléphones, achat d'USDT dans le portefeuille",
+    "highlights": {
+      "exchange": "Achetez, vendez et échangez plus de 100 cryptos depuis un seul écran",
+      "wallets": "Tous vos portefeuilles et réseaux, dans votre poche",
+      "withdrawals": "Retirez vers n'importe quelle adresse, avec 2FA à chaque virement"
+    },
+    "rating": "4,9 de moyenne sur les deux stores",
+    "stores": {
+      "android": {
+        "label": "Disponible sur",
+        "name": "Google Play"
+      },
+      "apple": {
+        "label": "Télécharger dans l'",
+        "name": "App Store"
+      }
+    }
   }
 }

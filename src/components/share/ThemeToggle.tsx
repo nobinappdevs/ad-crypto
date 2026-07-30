@@ -13,7 +13,8 @@ type Variant = "field" | "hero";
 
 const STYLES: Record<Variant, string> = {
   field: "border-border text-heading hover:bg-surface",
-  hero: "border-hero-border text-hero-fg-muted hover:bg-hero-surface hover:text-hero-fg",
+  // Matches the language switcher — see the note there on why the fill matters.
+  hero: "border-hero-border bg-hero-bg/55 text-hero-fg/90 backdrop-blur-md hover:bg-hero-surface-strong hover:text-hero-fg",
 };
 
 export function ThemeToggle({ variant = "field" }: { variant?: Variant } = {}) {
