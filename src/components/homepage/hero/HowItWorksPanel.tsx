@@ -22,6 +22,7 @@ export function HowItWorksPanel({
   return (
     <div
       ref={panelRef}
+      id="how-it-works"
       data-hero-panel
       className="relative z-[4] overflow-hidden lg:absolute lg:inset-0"
       style={{ background: "var(--hero-panel-bg)", willChange: "transform" }}

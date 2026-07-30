@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Check, Play, Star } from "lucide-react";
+import QRCode from "react-qr-code";
+import { Play } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
-
-const HIGHLIGHT_KEYS = ["exchange", "wallets", "withdrawals"] as const;
 
 /**
  * Inlined rather than taken from lucide: its `Apple` icon is a piece of fruit,
@@ -20,9 +19,49 @@ function AppleMark({ size = 24 }: { size?: number }) {
   );
 }
 
+/**
+ * Loop-arrow doodle sitting beside the headline, curling down to point at the
+ * accent phrase — a hand-drawn accent rather than a functional icon.
+ */
+function LoopArrow({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 100" fill="none" className={className} aria-hidden>
+      <path
+        d="M52 18c24-14 56-2 54 20-2 20-30 26-42 12"
+        stroke="rgb(var(--primary__color))"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M64 50c-10 10-22 20-38 26"
+        stroke="rgb(var(--primary__color))"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M9 60l-3 18 19 3"
+        stroke="rgb(var(--primary__color))"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+// Placeholder store fronts until AdCrypto has real listing URLs — swap these
+// for the actual Play Store / App Store product pages once published.
 const STORES = [
-  { key: "android", mark: (s: number) => <Play size={s} aria-hidden /> },
-  { key: "apple", mark: (s: number) => <AppleMark size={s} /> },
+  {
+    key: "android",
+    href: "https://play.google.com/store",
+    mark: (s: number) => <Play size={s} aria-hidden />,
+  },
+  {
+    key: "apple",
+    href: "https://www.apple.com/app-store/",
+    mark: (s: number) => <AppleMark size={s} />,
+  },
 ] as const;
 
 export function DownloadApp() {
@@ -45,75 +84,72 @@ export function DownloadApp() {
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* ---------------- Copy ---------------- */}
           <div className="order-2 lg:order-1">
-            <span className="inline-flex! items-center gap-2 rounded-full border border-border bg-surface py-1 pr-3.5 pl-1 text-[12.5px] font-semibold text-heading">
-              <span
-                aria-hidden
-                className="flex h-5.5 w-5.5 items-center justify-center rounded-full bg-primary text-[12px] font-bold text-white"
-              >
-                $
-              </span>
-              {t("download.badge")}
-            </span>
-
-            <h2 className="mt-4">
-              {t("download.headingLead")}{" "}
-              <span className="text-primary!">{t("download.headingAccent")}</span>
-            </h2>
-
-            <p className="mt-4 max-w-140">{t("download.subtitle")}</p>
-
-            <ul className="mt-7 flex flex-col gap-3">
-              {HIGHLIGHT_KEYS.map((key) => (
-                <li key={key} className="flex items-center gap-3">
-                  <span
-                    aria-hidden
-                    className="grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full bg-primary/15 text-primary"
-                  >
-                    <Check size={12} strokeWidth={3} />
-                  </span>
-                  <span className="inline! text-[13px] text-body md:text-[14px]">
-                    {t(`download.highlights.${key}`)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            {/* Store buttons: stacked black pills, one platform mark and its
-                two-line label per row — the vertical stack is what reads as
-                a pair of store badges rather than a generic button row. */}
-            <div className="mt-8 flex flex-col items-start gap-3.5">
-              {STORES.map((store) => {
-                return (
-                  <Link
-                    key={store.key}
-                    href="#"
-                    className="group inline-flex! items-center gap-3 rounded-full bg-hero-badge px-6 py-3.5 text-white transition duration-200 hover:-translate-y-0.5 hover:text-white"
-                  >
-                    <span className="shrink-0">{store.mark(22)}</span>
-                    <span className="block!">
-                      <span className="block text-[10.5px] leading-tight tracking-wide text-white/60 uppercase">
-                        {t(`download.stores.${store.key}.label`)}
-                      </span>
-                      <span className="block text-[15px] leading-tight font-semibold text-white">
-                        {t(`download.stores.${store.key}.name`)}
-                      </span>
-                    </span>
-                  </Link>
-                );
-              })}
+            <div className="relative">
+              <h2 className="text-[32px]! leading-[1.15]! font-extrabold tracking-tight sm:text-[38px]! lg:text-[44px]!">
+                {t("download.headingLead")}{" "}
+                <span className="text-primary!">{t("download.headingAccent")}</span>
+              </h2>
+              <LoopArrow className="pointer-events-none absolute -top-2 left-full ml-2 hidden h-20 w-24 sm:block" />
             </div>
 
-            {/* Rating strip — cheap social proof, and it fills the space the QR
-                blocks used to occupy without shipping an unscannable fake code. */}
-            <div className="mt-6 flex items-center gap-3">
-              <span aria-hidden className="flex items-center gap-0.5 text-primary">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} size={14} className="fill-current" />
-                ))}
+            <p className="mt-4 max-w-110 text-body/70">{t("download.subtitle")}</p>
+
+            {/* Ghost pill linking down to the How-It-Works panel higher on the
+                page — a lavender tint plus a white play-disc, matching the
+                reference rather than a solid CTA that would compete with the
+                store badges below. */}
+            <Link
+              href="#how-it-works"
+              className="mt-6 inline-flex! items-center gap-2.5 rounded-full bg-primary/10 py-1.5 pr-5 pl-1.5 text-[14px] font-semibold text-primary transition hover:bg-primary/15"
+            >
+              <span className="flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
+                <Play size={13} fill="currentColor" />
               </span>
-              <span className="inline! text-[13px] text-muted md:text-[13px]">
-                {t("download.rating")}
-              </span>
+              {t("download.howItWorks")}
+            </Link>
+
+            {/* Store badges: full pill, black, side by side. Hovering reveals a
+                QR panel encoding that same store link, so a desktop visitor
+                can scan straight to their phone. */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              {STORES.map((store) => {
+                return (
+                  <div key={store.key} className="group relative">
+                    <div
+                      className="pointer-events-none absolute bottom-full left-1/2 mb-3 w-max -translate-x-1/2 scale-95 rounded-2xl bg-surface p-3 text-center opacity-0 shadow-xl ring-1 ring-border transition duration-200 group-hover:scale-100 group-hover:opacity-100"
+                      aria-hidden
+                    >
+                      <QRCode
+                        value={store.href}
+                        size={104}
+                        bgColor="transparent"
+                        fgColor="rgb(var(--heading))"
+                      />
+                      <span className="mt-1.5 block! text-[11px] text-muted">
+                        {t("download.qrCaption")}
+                      </span>
+                      <span className="absolute top-full left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1.5 rotate-45 bg-surface ring-1 ring-border" />
+                    </div>
+
+                    <Link
+                      href={store.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex! items-center gap-3 rounded-full bg-hero-badge px-6 py-3.5 text-white transition duration-200 hover:-translate-y-0.5 hover:text-white"
+                    >
+                      <span className="shrink-0">{store.mark(22)}</span>
+                      <span className="block!">
+                        <span className="block text-[10.5px] leading-tight tracking-wide text-white/60 uppercase">
+                          {t(`download.stores.${store.key}.label`)}
+                        </span>
+                        <span className="block text-[15px] leading-tight font-semibold text-white">
+                          {t(`download.stores.${store.key}.name`)}
+                        </span>
+                      </span>
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

@@ -362,6 +362,8 @@
       "withdrawals": "Retirez vers n'importe quelle adresse, avec 2FA à chaque virement"
     },
     "rating": "4,9 de moyenne sur les deux stores",
+    "qrCaption": "Scannez pour télécharger",
+    "howItWorks": "Comment ça marche",
     "stores": {
       "android": {
         "label": "Disponible sur",

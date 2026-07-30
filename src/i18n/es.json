@@ -362,6 +362,8 @@
       "withdrawals": "Retira a cualquier dirección con 2FA en cada transferencia"
     },
     "rating": "4,9 de media en ambas tiendas",
+    "qrCaption": "Escanea para descargar",
+    "howItWorks": "Cómo funciona",
     "stores": {
       "android": {
         "label": "Disponible en",

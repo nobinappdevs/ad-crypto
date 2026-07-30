@@ -363,6 +363,7 @@
     },
     "rating": "4.9 average across both stores",
     "qrCaption": "Scan to download",
+    "howItWorks": "How it works",
     "stores": {
       "android": {
         "label": "Get it on",
