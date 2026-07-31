@@ -383,22 +383,35 @@
     "registerAction": "Log In Now",
     "divider": "Or continue with",
     "showPassword": "Show password",
-    "promoLead": "Join AdCrypto",
-    "promoAccent": "8800USDT",
-    "promoTail": "welcome gifts",
-    "stats": {
-      "deposit": {
-        "value": "800 USDT",
-        "label": "Max Deposit Rewards"
-      },
-      "spot": {
-        "value": "3500 USDT",
-        "label": "Max Spot Rewards"
-      },
-      "futures": {
-        "value": "4500 USDT",
-        "label": "Max Futures Rewards"
-      }
+    "backToHome": "Back to Home",
+    "forgotPassword": {
+      "backToLogin": "Back to Log In",
+      "stepOne": "Step 1 of 3",
+      "stepTwo": "Step 2 of 3",
+      "stepThree": "Step 3 of 3",
+      "emailTitle": "Reset Your Password",
+      "emailBlurb": "Enter the email address linked to your account and we'll send a one-time code to verify it's you.",
+      "sendOtp": "Send OTP",
+      "sending": "Sending...",
+      "otpSentToast": "Verification code sent to your email.",
+      "otpTitle": "Check Your Email",
+      "otpBlurbLead": "We've sent a 6-digit verification code to",
+      "otpBlurbTail": "Enter it below to continue.",
+      "otpPlaceholder": "······",
+      "changeEmail": "Wrong email? Change it",
+      "resend": "Resend OTP",
+      "resendIn": "Resend in",
+      "resendSuccessToast": "Code resent.",
+      "verify": "Verify Code",
+      "verifying": "Verifying...",
+      "otpVerifiedToast": "Code verified.",
+      "resetTitle": "Set a New Password",
+      "resetBlurb": "Choose a strong password you haven't used before.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "resetCta": "Reset Password",
+      "resetting": "Resetting...",
+      "resetSuccessToast": "Password reset successfully. Log in with your new password."
     }
   },
   "dashboard": {

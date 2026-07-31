@@ -3,15 +3,21 @@
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Mail } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { useLogin } from "@/hooks/useAuth";
 import { loginRequestSchema, type LoginRequest } from "@/schemas/auth.schema";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
+import { AuthBackHome } from "@/components/auth/AuthBackHome";
+import { AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
 
+/**
+ * The right-hand column on `/login`. `AuthShell` (in the route group's layout)
+ * supplies everything else — the promo panel, the theme toggle, the panel frame
+ * — so this only ever renders the form itself, and swapping to `/register` swaps
+ * only this column.
+ */
 export function LoginForm() {
   const { t } = useLang();
+  const k = (name: string) => t(`authPanel.${name}`);
   const login = useLogin();
 
   const {
@@ -29,78 +35,86 @@ export function LoginForm() {
       onError: (err) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const fieldErrors = (err as any)?.response?.data?.errors;
-        if (fieldErrors) {
-          (["email", "password"] as const).forEach((field) => {
-            const msg = fieldErrors[field]?.[0];
-            if (msg) setError(field, { type: "server", message: msg });
-          });
-        }
+        if (!fieldErrors) return;
+        (["email", "password"] as const).forEach((field) => {
+          const msg = fieldErrors[field]?.[0];
+          if (msg) setError(field, { type: "server", message: msg });
+        });
       },
     });
   };
 
   return (
-    <div>
-      <h3>{t("auth.loginTitle")}</h3>
-      <p className="mt-1">{t("auth.loginSubtitle")}</p>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-5.5"
+      style={{ animation: "panel-rise 0.45s ease both" }}
+    >
+      <AuthBackHome />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4" noValidate>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <Input
-              type="email"
-              label={t("auth.labelEmail")}
-              placeholder={t("auth.emailPlaceholder")}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              error={errors.email?.message}
-              leftIcon={<Mail size={16} strokeWidth={2} aria-hidden />}
-            />
-          )}
-        />
+      <div className="flex flex-col gap-2.5">
+        <h1 className="text-[26px]! leading-[1.14]! font-bold! tracking-[-0.03em] text-panel-fg sm:text-[30px]! lg:text-[34px]!">
+          {k("loginTitle")}
+        </h1>
+        <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">
+          {k("loginBlurb")}
+        </p>
+      </div>
 
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <Input
-              type="password"
-              label={t("auth.labelPassword")}
-              placeholder={t("auth.passwordPlaceholder")}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              error={errors.password?.message}
-              leftIcon={<Lock size={16} strokeWidth={2} aria-hidden />}
-            />
-          )}
-        />
+      <Controller
+        name="email"
+        control={control}
+        render={({ field }) => (
+          <AuthInput
+            type="email"
+            placeholder={k("loginEmail")}
+            error={errors.email?.message}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+          />
+        )}
+      />
 
-        <div className="flex justify-end">
-          <Link href="#" className="text-[13px]! text-primary">
-            {t("auth.forgotPassword")}
-          </Link>
-        </div>
+      <Controller
+        name="password"
+        control={control}
+        render={({ field }) => (
+          <AuthPasswordInput
+            placeholder={k("loginPassword")}
+            error={errors.password?.message}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+          />
+        )}
+      />
 
-        <Button
-          type="submit"
-          fullWidth
-          loading={login.isPending}
-          disabled={login.isPending}
-        >
-          {login.isPending ? t("auth.loggingIn") : t("auth.loginButton")}
-        </Button>
-      </form>
+      <div className="flex justify-end">
+        <Link href="/forgot-password" className="text-[13.5px]! font-semibold! text-primary">
+          {k("forgot")}
+        </Link>
+      </div>
 
-      <p className="mt-6 text-center">
-        {t("auth.noAccount")}{" "}
-        <Link href="#" className="inline! text-primary">
-          {t("auth.createAccount")}
+      <button
+        type="submit"
+        disabled={login.isPending}
+        className="mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(1_148_252/0.44)] disabled:cursor-default disabled:hover:translate-y-0"
+        style={{ boxShadow: "0 16px 34px rgb(1 148 252 / 0.34)" }}
+      >
+        {login.isPending ? t("auth.loggingIn") : k("loginCta")}
+      </button>
+
+      {/* A single text flow, not a flex row of separate items — that way a
+          narrow column or a longer translation wraps like an ordinary
+          sentence instead of snapping the link onto its own line. */}
+      <p className="text-center text-[13.5px]! text-panel-muted">
+        {k("loginPrompt")}{" "}
+        <Link href="/register" className="inline! font-bold! text-primary">
+          {k("loginAction")}
         </Link>
       </p>
-    </div>
+    </form>
   );
 }

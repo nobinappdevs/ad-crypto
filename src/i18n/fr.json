@@ -383,22 +383,35 @@
     "registerAction": "Se connecter",
     "divider": "Ou continuer avec",
     "showPassword": "Afficher le mot de passe",
-    "promoLead": "Rejoignez AdCrypto :",
-    "promoAccent": "8800USDT",
-    "promoTail": "de cadeaux",
-    "stats": {
-      "deposit": {
-        "value": "800 USDT",
-        "label": "Bonus de dépôt max."
-      },
-      "spot": {
-        "value": "3500 USDT",
-        "label": "Bonus spot max."
-      },
-      "futures": {
-        "value": "4500 USDT",
-        "label": "Bonus futures max."
-      }
+    "backToHome": "Retour à l'accueil",
+    "forgotPassword": {
+      "backToLogin": "Retour à la connexion",
+      "stepOne": "Étape 1 sur 3",
+      "stepTwo": "Étape 2 sur 3",
+      "stepThree": "Étape 3 sur 3",
+      "emailTitle": "Réinitialisez votre mot de passe",
+      "emailBlurb": "Saisissez l'adresse e-mail liée à votre compte, nous vous enverrons un code à usage unique pour vérifier votre identité.",
+      "sendOtp": "Envoyer le code",
+      "sending": "Envoi en cours...",
+      "otpSentToast": "Code de vérification envoyé par e-mail.",
+      "otpTitle": "Consultez votre e-mail",
+      "otpBlurbLead": "Nous avons envoyé un code de vérification à 6 chiffres à",
+      "otpBlurbTail": "Saisissez-le ci-dessous pour continuer.",
+      "otpPlaceholder": "······",
+      "changeEmail": "Mauvais e-mail ? Modifiez-le",
+      "resend": "Renvoyer le code",
+      "resendIn": "Renvoyer dans",
+      "resendSuccessToast": "Code renvoyé.",
+      "verify": "Vérifier le code",
+      "verifying": "Vérification...",
+      "otpVerifiedToast": "Code vérifié.",
+      "resetTitle": "Définissez un nouveau mot de passe",
+      "resetBlurb": "Choisissez un mot de passe robuste que vous n'avez jamais utilisé.",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "resetCta": "Réinitialiser le mot de passe",
+      "resetting": "Réinitialisation...",
+      "resetSuccessToast": "Mot de passe réinitialisé. Connectez-vous avec votre nouveau mot de passe."
     }
   },
   "dashboard": {

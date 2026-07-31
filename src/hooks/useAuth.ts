@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
 import { TOKEN_KEY } from "@/lib/axios";
-import type { LoginRequest } from "@/schemas/auth.schema";
+import type {
+  ForgotPasswordRequest,
+  LoginRequest,
+  ResetPasswordRequest,
+  VerifyOtpRequest,
+} from "@/schemas/auth.schema";
 
 /** Pull a human message out of any error shape (string | {success:[]} | errors{}). */
 export function getApiErrorMessage(err: unknown): string {
@@ -45,6 +50,39 @@ export function useLogin() {
       }
       toast.success(getApiSuccessMessage(res, "Login successful"));
       router.push("/dashboard");
+    },
+    onError: (err) => toast.error(getApiErrorMessage(err)),
+  });
+}
+
+/** Step 1 of the reset flow: emails the account a one-time code. */
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (payload: ForgotPasswordRequest) => authService.forgotPassword(payload),
+    onError: (err) => toast.error(getApiErrorMessage(err)),
+  });
+}
+
+/** Step 2: confirms the code before the password field is ever shown. */
+export function useVerifyOtp() {
+  return useMutation({
+    mutationFn: (payload: VerifyOtpRequest) => authService.verifyOtp(payload),
+    onError: (err) => toast.error(getApiErrorMessage(err)),
+  });
+}
+
+/** Step 3: sets the new password, then sends the user back to log in with it.
+ *  `successMessage` is the caller's localized fallback — this hook has no
+ *  `useLang()` of its own, so the string comes from whichever form calls it. */
+export function useResetPassword(successMessage: string) {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (payload: Omit<ResetPasswordRequest, "confirmPassword">) =>
+      authService.resetPassword(payload),
+    onSuccess: (res) => {
+      toast.success(getApiSuccessMessage(res, successMessage));
+      router.push("/login");
     },
     onError: (err) => toast.error(getApiErrorMessage(err)),
   });

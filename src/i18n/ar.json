@@ -383,22 +383,35 @@
     "registerAction": "سجّل الدخول",
     "divider": "أو تابع باستخدام",
     "showPassword": "إظهار كلمة المرور",
-    "promoLead": "انضم إلى AdCrypto واحصل على",
-    "promoAccent": "8800USDT",
-    "promoTail": "هدايا ترحيب",
-    "stats": {
-      "deposit": {
-        "value": "800 USDT",
-        "label": "أقصى مكافأة إيداع"
-      },
-      "spot": {
-        "value": "3500 USDT",
-        "label": "أقصى مكافأة فورية"
-      },
-      "futures": {
-        "value": "4500 USDT",
-        "label": "أقصى مكافأة آجلة"
-      }
+    "backToHome": "العودة إلى الصفحة الرئيسية",
+    "forgotPassword": {
+      "backToLogin": "العودة لتسجيل الدخول",
+      "stepOne": "الخطوة 1 من 3",
+      "stepTwo": "الخطوة 2 من 3",
+      "stepThree": "الخطوة 3 من 3",
+      "emailTitle": "إعادة تعيين كلمة المرور",
+      "emailBlurb": "أدخل البريد الإلكتروني المرتبط بحسابك وسنرسل لك رمزًا لمرة واحدة للتحقق من هويتك.",
+      "sendOtp": "إرسال الرمز",
+      "sending": "جارٍ الإرسال...",
+      "otpSentToast": "تم إرسال رمز التحقق إلى بريدك الإلكتروني.",
+      "otpTitle": "تحقق من بريدك الإلكتروني",
+      "otpBlurbLead": "أرسلنا رمز تحقق مكوّنًا من 6 أرقام إلى",
+      "otpBlurbTail": "أدخله أدناه للمتابعة.",
+      "otpPlaceholder": "······",
+      "changeEmail": "بريد إلكتروني خاطئ؟ غيّره",
+      "resend": "إعادة إرسال الرمز",
+      "resendIn": "إعادة الإرسال خلال",
+      "resendSuccessToast": "تم إعادة إرسال الرمز.",
+      "verify": "تحقق من الرمز",
+      "verifying": "جارٍ التحقق...",
+      "otpVerifiedToast": "تم التحقق من الرمز.",
+      "resetTitle": "تعيين كلمة مرور جديدة",
+      "resetBlurb": "اختر كلمة مرور قوية لم تستخدمها من قبل.",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "resetCta": "إعادة تعيين كلمة المرور",
+      "resetting": "جارٍ إعادة التعيين...",
+      "resetSuccessToast": "تمت إعادة تعيين كلمة المرور. سجّل الدخول بكلمة المرور الجديدة."
     }
   },
   "dashboard": {

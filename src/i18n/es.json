@@ -383,22 +383,35 @@
     "registerAction": "Inicia sesión",
     "divider": "O continúa con",
     "showPassword": "Mostrar contraseña",
-    "promoLead": "Únete a AdCrypto:",
-    "promoAccent": "8800USDT",
-    "promoTail": "de regalo",
-    "stats": {
-      "deposit": {
-        "value": "800 USDT",
-        "label": "Máx. por depósito"
-      },
-      "spot": {
-        "value": "3500 USDT",
-        "label": "Máx. en spot"
-      },
-      "futures": {
-        "value": "4500 USDT",
-        "label": "Máx. en futuros"
-      }
+    "backToHome": "Volver al inicio",
+    "forgotPassword": {
+      "backToLogin": "Volver a iniciar sesión",
+      "stepOne": "Paso 1 de 3",
+      "stepTwo": "Paso 2 de 3",
+      "stepThree": "Paso 3 de 3",
+      "emailTitle": "Restablece tu contraseña",
+      "emailBlurb": "Ingresa el correo vinculado a tu cuenta y te enviaremos un código de un solo uso para verificar que eres tú.",
+      "sendOtp": "Enviar código",
+      "sending": "Enviando...",
+      "otpSentToast": "Código de verificación enviado a tu correo.",
+      "otpTitle": "Revisa tu correo",
+      "otpBlurbLead": "Hemos enviado un código de verificación de 6 dígitos a",
+      "otpBlurbTail": "Ingrésalo abajo para continuar.",
+      "otpPlaceholder": "······",
+      "changeEmail": "¿Correo incorrecto? Cámbialo",
+      "resend": "Reenviar código",
+      "resendIn": "Reenviar en",
+      "resendSuccessToast": "Código reenviado.",
+      "verify": "Verificar código",
+      "verifying": "Verificando...",
+      "otpVerifiedToast": "Código verificado.",
+      "resetTitle": "Crea una nueva contraseña",
+      "resetBlurb": "Elige una contraseña segura que no hayas usado antes.",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "resetCta": "Restablecer contraseña",
+      "resetting": "Restableciendo...",
+      "resetSuccessToast": "Contraseña restablecida. Inicia sesión con tu nueva contraseña."
     }
   },
   "dashboard": {
