@@ -81,10 +81,22 @@ export function useScrollProgress(
 
     const sync = () => (desktop.matches ? start() : stop());
 
+    // The loop only repaints when progress MOVES, and `apply` derives the phone's
+    // travel from the live stage width — so a resize or a device rotation that
+    // leaves the scroll position alone would otherwise keep the previous width's
+    // transform. Re-apply at the current progress instead of waiting for a scroll.
+    const onResize = () => {
+      if (desktop.matches) apply(current, true);
+    };
+
     sync();
     desktop.addEventListener("change", sync);
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
     return () => {
       desktop.removeEventListener("change", sync);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
       if (raf) cancelAnimationFrame(raf);
     };
   }, [sceneRef, apply]);

@@ -89,7 +89,11 @@ export function DownloadApp() {
                 {t("download.headingLead")}{" "}
                 <span className="text-primary!">{t("download.headingAccent")}</span>
               </h2>
-              <LoopArrow className="pointer-events-none absolute -top-2 left-full ml-2 hidden h-20 w-24 sm:block" />
+              {/* Anchored to the heading block's own end edge, not past it:
+                  `left-full` put the doodle 96px beyond the wrapper, which in the
+                  single-column layout meant outside the container entirely (the
+                  section's `overflow-hidden` then sliced it in half). */}
+              <LoopArrow className="pointer-events-none absolute -top-6 inset-e-0 hidden h-20 w-24 lg:block" />
             </div>
 
             <p className="mt-4 max-w-110 text-body/70">{t("download.subtitle")}</p>

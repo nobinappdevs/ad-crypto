@@ -65,11 +65,10 @@ export function LanguageSwitcher({ variant = "field" }: { variant?: Variant } = 
         aria-expanded={open}
         aria-label={t("language.label")}
         className={cn(
-          "inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium transition",
+          "inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium transition",
           TRIGGER[variant],
         )}
       >
-        <span className="inline! text-[14px] leading-none">{active.flag}</span>
         <span className="inline! uppercase">{active.code}</span>
         <ChevronDown size={14} className={cn("transition", open && "rotate-180")} />
       </button>
@@ -93,7 +92,7 @@ export function LanguageSwitcher({ variant = "field" }: { variant?: Variant } = 
                   setOpen(false);
                 }}
                 className={cn(
-                  "flex w-full items-center gap-2 px-3 py-2 text-left text-[13px] transition",
+                  "flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-[13px] transition",
                   l.code === lang ? OPTION[variant].active : OPTION[variant].idle,
                 )}
               >

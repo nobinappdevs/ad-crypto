@@ -42,13 +42,18 @@ export function Navbar() {
         (scrolled || open) && "border-b border-hero-border bg-hero-bg/80 backdrop-blur-md",
       )}
     >
-      <nav className="flex h-18 items-center gap-3 px-4 sm:h-22 sm:gap-4 sm:px-8 lg:px-14">
-        <div className="flex flex-1 items-center gap-6 lg:w-105 lg:flex-none xl:gap-8.5">
+      {/* The three tracks are equal `flex-1` columns rather than two pinned
+          420px rails: at 1024-1150px those rails plus the 160px wordmark added up
+          to more than the viewport, so the login button was pushed off-screen.
+          Equal flexible columns centre the wordmark the same way at wide widths
+          and simply give ground as the bar tightens. */}
+      <nav className="flex h-18 items-center gap-3 px-4 sm:h-22 sm:gap-4 sm:px-8 xl:px-14">
+        <div className="flex flex-1 items-center gap-6 xl:gap-8.5">
           <Link href="/" aria-label={t("brand.name")} className="lg:hidden!">
             <Logo />
           </Link>
           {/* Five links, so the row runs tighter than the original four. */}
-          <div className="hidden items-center gap-5.5 lg:flex xl:gap-7">
+          <div className="hidden items-center gap-5 lg:flex xl:gap-7">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.key}
@@ -73,26 +78,20 @@ export function Navbar() {
           <Logo />
         </Link>
 
-        <div className="flex items-center justify-end gap-2 sm:gap-3 lg:w-105 lg:flex-none">
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
           <LanguageSwitcher variant="hero" />
           <ThemeToggle variant="hero" />
 
-          {!authed && (
-            <Link
-              href="/login"
-              // The shadow keeps this readable where it crosses the header's
-              // chrome artwork, which is bright enough to swallow plain text.
-              className="hidden! h-11 items-center text-[15px] font-medium whitespace-nowrap text-hero-fg drop-shadow-[0_1px_6px_rgb(0_0_0/0.65)] transition-colors duration-200 hover:text-hero-fg sm:flex!"
-            >
-              {t("nav.login")}
-            </Link>
-          )}
-
+          {/* Hidden below `sm`, and the sheet carries it instead. The wordmark, the
+              language pill, the theme toggle, this CTA and the burger together need
+              ~397px of row, so on a 320-390px viewport the burger — the only way
+              into the rest of the nav — was the thing pushed off the edge. The
+              sheet's duplicate link was already written for exactly this split. */}
           <Link
             href={authed ? "/dashboard" : "/login"}
-            className="inline-flex! h-9 items-center rounded-full bg-hero-accent px-4 text-[13px] font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_rgb(var(--hero-accent)/0.4)] transition duration-200 hover:-translate-y-px hover:bg-hero-accent-soft hover:text-white sm:h-10 sm:px-5 sm:text-[14px]"
+            className="hidden! h-9 items-center rounded-full bg-hero-accent px-4 text-[13px] font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_rgb(var(--hero-accent)/0.4)] transition duration-200 hover:-translate-y-px hover:bg-hero-accent-soft hover:text-white sm:inline-flex! sm:h-10 sm:px-5 sm:text-[14px]"
           >
-            {authed ? t("nav.dashboard") : t("nav.signUp")}
+            {authed ? t("nav.dashboard") : t("nav.login")}
           </Link>
 
           <button
@@ -123,11 +122,15 @@ export function Navbar() {
                 {t(link.key)}
               </Link>
             ))}
-            {!authed && (
-              <Link href="/login" className="py-3 text-[15px]! text-hero-fg/88 sm:hidden!">
-                {t("nav.login")}
-              </Link>
-            )}
+            {/* Stands in for the header CTA below `sm`, so it has to cover the
+                authed case too — otherwise a signed-in visitor on a phone has no
+                route to the dashboard at all. */}
+            <Link
+              href={authed ? "/dashboard" : "/login"}
+              className="py-3 text-[15px]! text-hero-fg/88 sm:hidden!"
+            >
+              {authed ? t("nav.dashboard") : t("nav.login")}
+            </Link>
           </nav>
         </div>
       )}

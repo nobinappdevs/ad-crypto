@@ -26,19 +26,24 @@ import { cn } from "@/components/ui/cn";
  *
  * `wide` cards put the icon beside the text instead of above it — at ~600px a
  * single column of copy runs past a comfortable measure.
+ *
+ * The uneven grid only turns on at `xl`. On a 12-column grid a 1024px container
+ * gives about 63px per column, so a 3-span card came out ~230px wide — roughly 25
+ * characters per line at the `lg` body size, which is below a readable measure.
+ * Between `sm` and `xl` the section falls back to two equal columns instead.
  */
 const LAYERS: { key: string; icon: LucideIcon; span: string; wide?: boolean }[] = [
   // Ordered so the longest copy takes the widest slot in each row. A 3-column
   // card is only ~44 characters per line, so putting a long description there
   // makes it run several lines taller than its neighbours.
-  { key: "twoFa", icon: KeyRound, span: "lg:col-span-5" },
-  { key: "smsEmail", icon: MailCheck, span: "lg:col-span-4" },
-  { key: "kyc", icon: ScanFace, span: "lg:col-span-3" },
-  { key: "rbac", icon: UserCog, span: "lg:col-span-3" },
-  { key: "behavior", icon: Activity, span: "lg:col-span-4" },
-  { key: "waf", icon: BrickWall, span: "lg:col-span-5" },
-  { key: "encryption", icon: LockKeyhole, span: "lg:col-span-6", wide: true },
-  { key: "ssl", icon: ShieldCheck, span: "lg:col-span-6", wide: true },
+  { key: "twoFa", icon: KeyRound, span: "xl:col-span-5" },
+  { key: "smsEmail", icon: MailCheck, span: "xl:col-span-4" },
+  { key: "kyc", icon: ScanFace, span: "xl:col-span-3" },
+  { key: "rbac", icon: UserCog, span: "xl:col-span-3" },
+  { key: "behavior", icon: Activity, span: "xl:col-span-4" },
+  { key: "waf", icon: BrickWall, span: "xl:col-span-5" },
+  { key: "encryption", icon: LockKeyhole, span: "xl:col-span-6", wide: true },
+  { key: "ssl", icon: ShieldCheck, span: "xl:col-span-6", wide: true },
 ];
 
 /** Four bars that fill left-to-right on hover — the "layers" idea, in miniature. */
@@ -97,11 +102,14 @@ function LayerCard({ item, index }: { item: (typeof LAYERS)[number]; index: numb
             opens a visible gap under the shorter descriptions, because the grid
             stretches every card in a row to the tallest one. Letting the footer
             follow the text turns that leftover space into bottom padding. */}
-        <div className={cn("relative flex gap-5", item.wide ? "flex-row" : "flex-col")}>
+        {/* `wide` only means "icon beside the text" once the card really is wide.
+            Below `xl` these two share the same two-column grid as every other card,
+            where a side-by-side icon leaves ~160px for the copy. */}
+        <div className={cn("relative flex gap-5", item.wide ? "flex-col xl:flex-row" : "flex-col")}>
           <span
             className={cn(
               "grid shrink-0 place-items-center rounded-2xl bg-primary/12 text-primary ring-1 ring-primary/20 transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:ring-primary group-hover:shadow-lg group-hover:shadow-primary/30",
-              item.wide ? "h-14 w-14" : "h-12 w-12",
+              item.wide ? "h-12 w-12 xl:h-14 xl:w-14" : "h-12 w-12",
             )}
           >
             <Icon size={item.wide ? 24 : 21} aria-hidden />
@@ -180,7 +188,7 @@ export function SecuritySystem() {
           <p className="mt-4">{t("security.subtitle")}</p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-12">
+        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-16 xl:grid-cols-12">
           {LAYERS.map((item, i) => (
             <LayerCard key={item.key} item={item} index={i} />
           ))}

@@ -144,21 +144,28 @@
     "metaWithdraw": "Retira cuando quieras",
     "metaFee": "0,10% de comisión spot",
     "scroll": "Desliza",
-    "phonePortfolioLabel": "Valor de la cartera",
-    "phonePortfolioValue": "24.918,40 $",
-    "phonePortfolioChange": "+7,84% hoy",
-    "phoneCustody": "Custodia asegurada · Protegido con 2FA",
-    "phoneTime": "9:41",
-    "phoneActionBuy": "Comprar",
-    "phoneActionSell": "Vender",
-    "phoneActionSwap": "Cambiar",
-    "phoneActionSend": "Enviar",
-    "phoneAssets": "Tus activos",
-    "phoneSeeAll": "Ver todo",
-    "phoneBuyCrypto": "Comprar cripto",
+    "phoneTime": "10:00",
     "phoneCoin": {
       "btc": "Bitcoin",
       "eth": "Ethereum"
+    },
+    "phoneApp": {
+      "menu": "Menú",
+      "account": "Cuenta",
+      "tabBuy": "Comprar cripto",
+      "tabSell": "Vender cripto",
+      "tabWithdraw": "Retirar cripto",
+      "insideWallet": "Billetera interna",
+      "outsideWallet": "Billetera externa",
+      "selectCoin": "Elegir moneda",
+      "selectNetwork": "Elegir red",
+      "paymentMethod": "Método de pago",
+      "paymentPlaceholder": "Elegir método de pago",
+      "amount": "Importe",
+      "amountPlaceholder": "Ingresa el importe",
+      "minAmount": "Mínimo: 0.0001 USDT",
+      "rate": "Tasa: 1 USD = 0.00001 USDT",
+      "continue": "Continuar"
     }
   },
   "howItWorks": {
@@ -255,6 +262,69 @@
       }
     }
   },
+  "aboutPanel": {
+    "badge": "Sobre nosotros",
+    "headingLine1": "Una billetera para",
+    "headingLine2": "cada moneda que tienes.",
+    "para1": "AdCrypto nació de una frustración simple: mover activos digitales exigía demasiadas apps, demasiadas confirmaciones y demasiadas suposiciones. Reconstruimos el flujo de principio a fin — verificación, custodia, liquidación — para que tener cripto se sienta como tener dinero.",
+    "para2": "Hoy la plataforma atiende cientos de miles de transacciones al día en cuatro monedas principales y nueve pasarelas de pago, envueltas en ocho capas de protección que nunca te piden pensar en ellas.",
+    "bullets": {
+      "custody": "Custodia totalmente asegurada con acceso interno por roles",
+      "settlement": "Liquidación en menos de un segundo en máxima carga",
+      "fees": "Sin comisiones ocultas: cada coste se muestra antes de confirmar"
+    },
+    "ctaFaq": "Leer las preguntas frecuentes",
+    "ctaContact": "Contactar al equipo",
+    "promoLead": "Creado para quienes tienen cripto",
+    "promoAccent": "de verdad",
+    "promoTail": "",
+    "stats": {
+      "founded": {
+        "value": "2019",
+        "label": "Fundada"
+      },
+      "transactions": {
+        "value": "500 K",
+        "label": "Transacciones diarias"
+      },
+      "gateways": {
+        "value": "9",
+        "label": "Pasarelas de pago"
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "headingLine1": "Las preguntas que",
+      "headingLine2": "más nos hacen.",
+      "text": "¿Sigues con dudas? Nuestro equipo responde en menos de una hora, todos los días.",
+      "items": {
+        "what": {
+          "q": "¿Qué es AdCrypto?",
+          "a": "AdCrypto es una única billetera para comprar, guardar y mover activos digitales. Una sola cuenta cubre spot, futuros y liquidación, en Android, iOS y la web."
+        },
+        "protection": {
+          "q": "¿Está protegida mi cuenta?",
+          "a": "Cada cuenta funciona detrás de ocho capas de protección: verificación, 2FA, cifrado de extremo a extremo, acceso por roles, SSL y un firewall de aplicaciones, entre otras."
+        },
+        "currencies": {
+          "q": "¿Qué monedas puedo tener?",
+          "a": "Cuatro monedas principales están admitidas desde el lanzamiento para guardar, intercambiar y liquidar, con nueve pasarelas de pago para cargar tu saldo."
+        },
+        "fees": {
+          "q": "¿Hay comisiones ocultas?",
+          "a": "No. Los costes de red se muestran antes de confirmar una transferencia, y no hay sorpresas al retirar ni cargos mensuales de cuenta."
+        },
+        "speed": {
+          "q": "¿Cuánto tardan las transferencias?",
+          "a": "Las transferencias internas llegan al instante. La liquidación en cadena suele confirmarse en menos de un segundo en las redes que admitimos, incluso en máxima carga."
+        },
+        "rewards": {
+          "q": "¿Cómo reclamo las recompensas de bienvenida?",
+          "a": "Crea una cuenta, completa la verificación y tus recompensas de depósito, spot y futuros se desbloquean automáticamente — hasta 8.800 USDT en total."
+        }
+      }
+    }
+  },
   "contact": {
     "headerTitle": "¿Cómo podemos ayudarte?",
     "headerSubtitle": "Dudas sobre tu billetera, una transacción o cómo empezar: escríbenos y el equipo te responderá en un día laborable.",
@@ -289,6 +359,48 @@
     "loginSuccess": "Sesión iniciada correctamente",
     "loginFailed": "No se pudo iniciar sesión con esos datos"
   },
+  "authPanel": {
+    "tabLogin": "Iniciar sesión",
+    "tabRegister": "Registrarse",
+    "loginTitle": "Inicia sesión y mantente conectado",
+    "registerTitle": "Regístrate hoy mismo",
+    "loginBlurb": "Nuestro proceso de acceso seguro garantiza la confidencialidad de tu información. Inicia sesión hoy y mantente conectado a tus finanzas, en cualquier momento y lugar.",
+    "registerBlurb": "Forma parte de nuestra comunidad registrándote hoy. Disfruta de un conjunto de ventajas y funciones pensadas para lo que necesitas.",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "loginEmail": "Introduce tu email...",
+    "registerEmail": "Email",
+    "loginPassword": "Introduce tu contraseña...",
+    "registerPassword": "Contraseña",
+    "termsLead": "He aceptado los",
+    "termsLink": "Términos de uso y la Política de privacidad",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "loginCta": "Entrar ahora",
+    "registerCta": "Registrarme ahora",
+    "loginPrompt": "¿No tienes cuenta?",
+    "loginAction": "Regístrate",
+    "registerPrompt": "¿Ya tienes cuenta?",
+    "registerAction": "Inicia sesión",
+    "divider": "O continúa con",
+    "showPassword": "Mostrar contraseña",
+    "promoLead": "Únete a AdCrypto:",
+    "promoAccent": "8800USDT",
+    "promoTail": "de regalo",
+    "stats": {
+      "deposit": {
+        "value": "800 USDT",
+        "label": "Máx. por depósito"
+      },
+      "spot": {
+        "value": "3500 USDT",
+        "label": "Máx. en spot"
+      },
+      "futures": {
+        "value": "4500 USDT",
+        "label": "Máx. en futuros"
+      }
+    }
+  },
   "dashboard": {
     "welcomeTitle": "Bienvenido de nuevo",
     "welcomeSubtitle": "Aquí tienes un resumen de tu cuenta de AdCrypto.",
@@ -303,7 +415,57 @@
   },
   "footer": {
     "tagline": "Gestiona, compra y vende cripto, todo en una sola billetera.",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "newsletter": {
+      "text": "Movimientos del mercado, notas de producto y registros de lanzamiento: solo cuando hay algo que merece la pena saber. Sin ruido, y puedes darte de baja con un toque.",
+      "placeholder": "Tu correo electrónico",
+      "submit": "Suscribirse",
+      "title": "NEWSLETTER"
+    },
+    "about": "El contraste entre velocidad y control da como resultado una cartera muy moderna.",
+    "backToTop": "VOLVER ARRIBA",
+    "socials": {
+      "instagram": "AdCrypto en Instagram",
+      "facebook": "AdCrypto en Facebook",
+      "twitter": "AdCrypto en X",
+      "youtube": "AdCrypto en YouTube"
+    },
+    "columns": {
+      "about": {
+        "title": "SOBRE NOSOTROS",
+        "items": {
+          "partnership": "Colaboraciones",
+          "terms": "Términos de uso",
+          "privacy": "Privacidad"
+        }
+      },
+      "product": {
+        "title": "PRODUCTO",
+        "items": {
+          "about": "Quiénes somos",
+          "features": "Funciones",
+          "support": "Soporte"
+        }
+      },
+      "resources": {
+        "title": "RECURSOS",
+        "items": {
+          "career": "Empleo",
+          "blog": "Blog",
+          "legal": "Legal"
+        }
+      },
+      "contact": {
+        "title": "CONTACTO",
+        "items": {
+          "address": "Los Ángeles, CA",
+          "site": "adcrypto.com",
+          "phone": "+1564-644-5965"
+        }
+      }
+    },
+    "brand": "AD_CRYPTO",
+    "brandInline": "ad_crypto"
   },
   "common": {
     "loading": "Cargando...",
@@ -372,6 +534,93 @@
       "apple": {
         "label": "Descárgala en",
         "name": "App Store"
+      }
+    }
+  },
+  "suite": {
+    "eyebrow": "Suite de seguridad",
+    "headingLead": "8 capas de",
+    "headingAccent": "sistema de seguridad",
+    "themeToggle": "Cambiar el tema",
+    "scroll": "Desplaza",
+    "groups": {
+      "a": "Identidad y acceso",
+      "b": "Red y datos"
+    },
+    "intro": {
+      "line1": "¿Qué necesitas?",
+      "line2": "Podemos hacerlo",
+      "text": "Ocho capas de protección en dos pasadas. Primero la verificación y el acceso, después los controles de red y de datos que están detrás."
+    },
+    "items": {
+      "smsEmail": {
+        "title": "Verificación por SMS o correo",
+        "text": "Tanto el correo como el SMS hacen la autenticación más segura, pero todo tiene sus ventajas y sus inconvenientes."
+      },
+      "kyc": {
+        "title": "Solución KYC",
+        "text": "Simplificar el cumplimiento: una guía completa de las soluciones KYC"
+      },
+      "twoFa": {
+        "title": "Autenticación en dos pasos",
+        "text": "La 2FA es una capa extra de protección que asegura las cuentas en línea más allá de un usuario y una contraseña."
+      },
+      "encryption": {
+        "title": "Cifrado de extremo a extremo",
+        "text": "El cifrado de extremo a extremo es un sistema de comunicación en el que solo quienes se comunican pueden leer los mensajes."
+      },
+      "behavior": {
+        "title": "Seguimiento de comportamiento",
+        "text": "Es una técnica que las empresas y los anunciantes usan para crear anuncios y campañas dirigidas."
+      },
+      "ssl": {
+        "title": "Capa de sockets seguros",
+        "text": "El cifrado SSL garantiza una comunicación segura entre los usuarios y el sitio web."
+      },
+      "waf": {
+        "title": "Firewall de aplicaciones web",
+        "text": "Un WAF supervisa y filtra el tráfico HTTP entre una aplicación web e internet."
+      },
+      "rbac": {
+        "title": "Control de acceso por roles",
+        "text": "Restringe el acceso administrativo según los roles y las responsabilidades."
+      }
+    }
+  },
+  "welcome": {
+    "headingLine1": "Descarga",
+    "headingLine2Lead": "la app de",
+    "headingLine2Accent": "AdCrypto",
+    "tagline": "El truco cripto más inteligente ya está aquí.",
+    "text": "Adiós a las comisiones ocultas. Hasta luego a las transferencias lentas. Adiós a la pesadilla de saltar entre carteras.",
+    "phoneAlt": "La app de AdCrypto en un teléfono",
+    "avatarAlt": "Miembro de AdCrypto"
+  },
+  "overview": {
+    "badge": "Resumen",
+    "headingLead": "Revolucionamos tu",
+    "headingAccent": "experiencia con las criptomonedas",
+    "text": "Nuestro resumen recoge la visión y la misión que guían nuestro compromiso de revolucionar tu experiencia cripto: una sola cartera, todas las monedas, sin fricciones.",
+    "chips": {
+      "verified": "Nómina W2",
+      "amount": "749",
+      "range": "3 feb - 17 feb, 2024"
+    },
+    "stats": {
+      "gateways": {
+        "value": "9",
+        "label": "Pasarelas de pago",
+        "text": "Conecta en unos clics las vías de pago en las que tus clientes ya confían."
+      },
+      "currencies": {
+        "value": "4",
+        "label": "Divisas",
+        "text": "Guarda, cambia y liquida en las principales monedas sin salir de la app."
+      },
+      "transactions": {
+        "value": "500 K",
+        "label": "Transacciones por día",
+        "text": "Máximo rendimiento con confirmaciones en menos de un segundo."
       }
     }
   }

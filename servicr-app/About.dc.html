@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  * { -webkit-font-smoothing: antialiased; }
+  a { color: #0194fc; text-decoration: none; }
+  a:hover { color: #67bffe; }
+  @keyframes authFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-16px) rotate(2deg); } }
+  @keyframes authFloatSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes authOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes authSheen { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(180%); } }
+  @keyframes authSpark { 0%, 100% { opacity: 0.15; transform: scale(0.7); } 50% { opacity: 0.9; transform: scale(1.15); } }
+  @keyframes authRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+<div style="--accent: {{ c.accent }}; --pageBg: {{ c.pageBg }}; --panelBg: {{ c.panelBg }}; --promoBg: {{ c.promoBg }}; --fg: {{ c.fg }}; --muted: {{ c.muted }}; --fieldBg: {{ c.fieldBg }}; --border: {{ c.border }}; --statBg: {{ c.statBg }}; min-width: 1280px; box-sizing: border-box; padding: 56px 56px 90px; font-family: Outfit, system-ui, sans-serif; background: var(--pageBg); transition: background 0.5s ease;">
+
+  <div style="width: 1180px; box-sizing: border-box; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(150deg, #0194fc 0%, #0163a0 100%); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.6l8-4.4 8 4.4v6.8l-8 4.4-8-4.4z" /><path d="M12 12l8-3.4M12 12v8.2M12 12L4 8.6" /></svg>
+        </span>
+        <span style="font-size: 21px; font-weight: 700; letter-spacing: -0.03em; color: var(--fg);">Ad<span style="color: var(--accent);">Crypto</span></span>
+      </div>
+      <button type="button" onClick="{{ toggleTheme }}" title="Toggle theme" style="width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--border); background: var(--fieldBg); color: var(--fg); cursor: pointer; padding: 0;" style-hover="border-color: var(--accent);">
+        <span style="display: block; width: 16px; height: 16px;">{{ themeIcon }}</span>
+      </button>
+    </div>
+
+    <div style="border-radius: 30px; overflow: hidden; background: var(--panelBg); border: 1px solid var(--border); box-shadow: 0 46px 100px rgb(1 20 40 / 0.28); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);">
+
+      <div style="position: relative; margin: 18px; border-radius: 22px; overflow: hidden; background: var(--promoBg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 46px 40px 40px; min-height: 620px;">
+        <div style="position: relative; width: 340px; height: 330px;">
+          <svg viewBox="0 0 340 330" style="position: absolute; inset: 0; width: 340px; height: 330px; overflow: visible;">
+            <defs>
+              <linearGradient id="giftFrontL" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#67bffe" stop-opacity="0.42" />
+                <stop offset="1" stop-color="#0194fc" stop-opacity="0.2" />
+              </linearGradient>
+              <linearGradient id="giftFrontR" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0194fc" stop-opacity="0.34" />
+                <stop offset="1" stop-color="#015c97" stop-opacity="0.42" />
+              </linearGradient>
+              <linearGradient id="giftInner" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#013b63" stop-opacity="0.55" />
+                <stop offset="1" stop-color="#0194fc" stop-opacity="0.28" />
+              </linearGradient>
+              <linearGradient id="lidTop" x1="0.1" y1="0" x2="0.9" y2="1">
+                <stop offset="0" stop-color="#ffffff" />
+                <stop offset="0.5" stop-color="#e9f0f6" />
+                <stop offset="1" stop-color="#c3d0dc" />
+              </linearGradient>
+              <linearGradient id="lidEdge" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#c9d5e0" />
+                <stop offset="1" stop-color="#93a4b4" />
+              </linearGradient>
+              <linearGradient id="bowGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#67bffe" />
+                <stop offset="1" stop-color="#0194fc" />
+              </linearGradient>
+            </defs>
+
+            <ellipse cx="172" cy="228" rx="126" ry="46" fill="none" stroke="var(--accent, #0194fc)" stroke-width="1.1" stroke-opacity="0.45" transform="rotate(-11 172 228)" />
+            <circle cx="48" cy="238" r="4.4" fill="var(--accent, #0194fc)" />
+            <path d="M126 128 C 166 92, 222 100, 244 136" fill="none" stroke="var(--accent, #0194fc)" stroke-width="1.1" stroke-opacity="0.35" />
+
+            <g style="animation: authFloat 6.6s ease-in-out infinite; transform-origin: 170px 96px;">
+              <path d="M170 104 C 132 104, 112 74, 132 58 C 152 43, 166 78, 170 104 Z" fill="url(#bowGrad)" fill-opacity="0.25" stroke="url(#bowGrad)" stroke-width="9" stroke-linejoin="round" />
+              <path d="M170 104 C 208 104, 228 74, 208 58 C 188 43, 174 78, 170 104 Z" fill="url(#bowGrad)" fill-opacity="0.25" stroke="url(#bowGrad)" stroke-width="9" stroke-linejoin="round" />
+              <ellipse cx="170" cy="104" rx="11" ry="8" fill="var(--accent, #0194fc)" />
+            </g>
+
+            <g style="animation: authFloat 6.6s ease-in-out infinite; transform-origin: 170px 130px;">
+              <path d="M170 108 L 262 140 L 176 172 L 84 140 Z" fill="url(#lidTop)" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1" />
+              <path d="M84 140 L 176 172 L 176 184 L 84 152 Z" fill="url(#lidEdge)" />
+              <path d="M176 172 L 262 140 L 262 152 L 176 184 Z" fill="#a8b7c5" />
+              <path d="M120 132 L 200 158" stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.4" />
+            </g>
+
+            <g style="animation: authFloatSlow 7.5s ease-in-out infinite; transform-origin: 170px 226px;">
+              <path d="M170 176 L 246 202 L 170 228 L 94 202 Z" fill="url(#giftInner)" stroke="#8ed4ff" stroke-opacity="0.6" stroke-width="1.2" />
+              <path d="M94 202 L 170 228 L 170 292 L 94 266 Z" fill="url(#giftFrontL)" stroke="#8ed4ff" stroke-opacity="0.55" stroke-width="1.2" />
+              <path d="M170 228 L 246 202 L 246 266 L 170 292 Z" fill="url(#giftFrontR)" stroke="#8ed4ff" stroke-opacity="0.45" stroke-width="1.2" />
+              <path d="M170 228 L 170 292" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.2" />
+              <path d="M104 206 L 104 264" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1" />
+              <path d="M236 206 L 236 264" stroke="#ffffff" stroke-opacity="0.28" stroke-width="1" />
+            </g>
+
+            <ellipse cx="170" cy="300" rx="86" ry="16" fill="var(--accent, #0194fc)" fill-opacity="0.16" />
+          </svg>
+
+          <div style="position: absolute; left: 70px; top: 78px; width: 200px; height: 200px; pointer-events: none; animation: authOrbit 26s linear infinite;">
+            <div style="position: absolute; left: 50%; top: -13px; margin-left: -13px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 34% 26%, #bfe6ff 0%, var(--accent, #0194fc) 60%, #0163a0 100%); box-shadow: 0 6px 14px rgb(1 148 252 / 0.4); color: #ffffff; font-size: 13px; font-weight: 700;">₿</div>
+            <div style="position: absolute; left: 50%; bottom: -11px; margin-left: -11px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 34% 26%, #e7f6ff 0%, #67bffe 62%, #0177cd 100%); box-shadow: 0 6px 14px rgb(1 148 252 / 0.32); color: #ffffff; font-size: 11px; font-weight: 700;">₿</div>
+          </div>
+
+          <div style="position: absolute; left: 62px; top: 62px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent, #0194fc); animation: authSpark 3.2s ease-in-out infinite;"></div>
+          <div style="position: absolute; left: 292px; top: 118px; width: 6px; height: 6px; border-radius: 50%; background: #67bffe; animation: authSpark 2.6s ease-in-out 0.7s infinite;"></div>
+          <div style="position: absolute; left: 34px; top: 168px; width: 5px; height: 5px; border-radius: 50%; background: #67bffe; animation: authSpark 3.6s ease-in-out 1.4s infinite;"></div>
+          <div style="position: absolute; left: 306px; top: 268px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent, #0194fc); animation: authSpark 3s ease-in-out 1.9s infinite;"></div>
+
+          <div style="position: absolute; left: 132px; top: 148px; width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 34% 26%, #9edaff 0%, var(--accent, #0194fc) 52%, #0163a0 100%); border: 4px solid rgb(255 255 255 / 0.78); box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.55), 0 22px 40px rgb(1 148 252 / 0.4); color: #ffffff; z-index: 3; overflow: hidden; animation: authFloat 5.8s ease-in-out 0.3s infinite;">
+            <span style="position: absolute; top: -20%; left: 0; width: 34%; height: 140%; background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent); transform: skewX(-18deg); animation: authSheen 4.4s ease-in-out infinite;"></span>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8.6 6.6h4.6a2.7 2.7 0 010 5.4H8.6h5.2a2.7 2.7 0 010 5.4H8.6" /><path d="M8.6 6.6v10.8M10.9 4.2v2.4M13.6 4.2v2.4M10.9 17.4v2.4M13.6 17.4v2.4" /></svg>
+          </div>
+
+          <div style="position: absolute; left: 162px; top: 218px; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 34% 26%, #c6e9ff 0%, #38adfd 56%, #0177cd 100%); border: 3px solid rgb(255 255 255 / 0.7); box-shadow: 0 18px 32px rgb(1 148 252 / 0.34); color: #ffffff; z-index: 3; animation: authFloat 6.8s ease-in-out 0.9s infinite;">
+            <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7h4.2a2.5 2.5 0 010 5H9h4.6a2.5 2.5 0 010 5H9" /><path d="M9 7v10M11.4 4.8V7M11.4 17v2.2" /></svg>
+          </div>
+
+          <div style="position: absolute; left: 226px; top: 12px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 34% 26%, #a6dfff 0%, var(--accent, #0194fc) 58%, #0163a0 100%); border: 2px solid rgb(255 255 255 / 0.6); box-shadow: 0 14px 26px rgb(1 148 252 / 0.34); color: #ffffff; animation: authFloat 5.2s ease-in-out 0.5s infinite;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.4 7.2h3.8a2.4 2.4 0 010 4.8H9.4h4.2a2.4 2.4 0 010 4.8H9.4" /><path d="M9.4 7.2v9.6M11.6 5.2v2M11.6 16.8v2" /></svg>
+          </div>
+
+          <div style="position: absolute; left: 8px; top: 250px; width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 34% 26%, #e7f6ff 0%, #67bffe 52%, #0177cd 100%); border: 3px solid rgb(255 255 255 / 0.85); box-shadow: 0 18px 30px rgb(1 60 110 / 0.32); color: #014a80; transform: rotate(-18deg); animation: authFloat 6.2s ease-in-out 1.3s infinite;">
+            <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4" stroke-opacity="0.45" /><path d="M9.6 7.8h3.6a2.3 2.3 0 010 4.6H9.6h4a2.3 2.3 0 010 4.6H9.6" /><path d="M9.6 7.8v9.2M11.7 6v1.8M11.7 17v1.8" /></svg>
+          </div>
+
+          <div style="position: absolute; left: 258px; top: 204px; width: 68px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 38% 24%, #24384c 0%, #0b1c2b 58%, #061421 100%); border: 2px solid rgb(103 191 254 / 0.75); box-shadow: 0 18px 32px rgb(0 0 0 / 0.4); color: #8ed4ff; transform: rotate(24deg); animation: authFloat 7.2s ease-in-out 1.8s infinite;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8.6c-.7-1.2-1.9-1.8-3.2-1.8-1.8 0-3.1 1-3.1 2.4 0 1.5 1.5 2 3.2 2.5s3.2 1 3.2 2.5c0 1.4-1.4 2.4-3.2 2.4-1.4 0-2.6-.6-3.2-1.8" /><path d="M12 4.4v15.2" /></svg>
+          </div>
+        </div>
+
+        <h2 style="margin: 14px 0 0; width: 100%; text-align: center; font-size: 23px; line-height: 1.3; white-space: nowrap; font-weight: 700; letter-spacing: -0.025em; color: var(--fg);">Built for people who hold <span style="color: var(--accent);">real</span> crypto</h2>
+
+        <div style="margin-top: 22px; width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 16px; background: var(--statBg); border: 1px solid var(--border); overflow: hidden;">
+          <div style="padding: 18px 14px; display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center;">
+            <span style="font-size: 16px; font-weight: 700; color: var(--fg);">2019</span>
+            <span style="font-size: 11.5px; color: var(--muted);">Founded</span>
+          </div>
+          <div style="padding: 18px 14px; display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
+            <span style="font-size: 16px; font-weight: 700; color: var(--fg);">500 K</span>
+            <span style="font-size: 11.5px; color: var(--muted);">Daily Transactions</span>
+          </div>
+          <div style="padding: 18px 14px; display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center;">
+            <span style="font-size: 16px; font-weight: 700; color: var(--fg);">9</span>
+            <span style="font-size: 11.5px; color: var(--muted);">Payment Gateways</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 58px 62px; display: flex; flex-direction: column; justify-content: center; gap: 22px;">
+        <span style="display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 7px 16px; border-radius: 999px; background: var(--fieldBg); border: 1px solid var(--border); font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);">About us</span>
+        <h1 style="margin: 0; font-size: 44px; line-height: 1.1; font-weight: 700; letter-spacing: -0.035em; color: var(--fg);">One wallet for<br />every coin you own.</h1>
+        <p style="margin: 0; font-size: 15px; line-height: 1.78; color: var(--muted);">AdCrypto started with a simple frustration: moving digital assets took too many apps, too many confirmations and too much guesswork. We rebuilt the flow end to end — verification, custody, settlement — so that holding crypto feels like holding money.</p>
+        <p style="margin: 0; font-size: 15px; line-height: 1.78; color: var(--muted);">Today the platform serves hundreds of thousands of transactions a day across four major currencies and nine payment gateways, wrapped in eight layers of protection that never ask you to think about them.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; padding-top: 6px;">
+          <div style="display: flex; align-items: flex-start; gap: 13px;">
+            <span style="width: 26px; height: 26px; flex: 0 0 26px; border-radius: 9px; display: grid; place-items: center; background: var(--accent); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11" /></svg>
+            </span>
+            <span style="font-size: 14.5px; line-height: 1.6; color: var(--fg);">Fully-insured custody with role-based internal access</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 13px;">
+            <span style="width: 26px; height: 26px; flex: 0 0 26px; border-radius: 9px; display: grid; place-items: center; background: var(--accent); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11" /></svg>
+            </span>
+            <span style="font-size: 14.5px; line-height: 1.6; color: var(--fg);">Sub-second settlement at peak throughput</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 13px;">
+            <span style="width: 26px; height: 26px; flex: 0 0 26px; border-radius: 9px; display: grid; place-items: center; background: var(--accent); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11" /></svg>
+            </span>
+            <span style="font-size: 14.5px; line-height: 1.6; color: var(--fg);">No hidden fees — every cost shown before you confirm</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; padding-top: 8px;">
+          <a href="#faq" style="padding: 14px 26px; border-radius: 999px; background: var(--accent); color: #ffffff; font-size: 14.5px; font-weight: 700; box-shadow: 0 16px 32px rgb(1 148 252 / 0.32); transition: transform 0.25s ease;" style-hover="transform: translateY(-2px); color: #ffffff;">Read the FAQ</a>
+          <a href="#" style="padding: 14px 26px; border-radius: 999px; border: 1px solid var(--border); background: var(--fieldBg); color: var(--fg); font-size: 14.5px; font-weight: 600; transition: border-color 0.25s ease;" style-hover="border-color: var(--accent); color: var(--fg);">Contact the team</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="faq" style="padding-top: 46px; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 56px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 14px; position: sticky; top: 40px;">
+        <span style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent);">FAQ</span>
+        <h2 style="margin: 0; font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.035em; color: var(--fg);">Questions we<br />get most often.</h2>
+        <p style="margin: 0; max-width: 300px; font-size: 14.5px; line-height: 1.7; color: var(--muted);">Still stuck? Our team answers in under an hour, every day of the week.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ faqs }}" as="item" hint-placeholder-count="6">
+          <div style="border-radius: 18px; border: 1px solid {{ item.border }}; background: {{ item.bg }}; overflow: hidden; transition: border-color 0.3s ease, background 0.3s ease;">
+            <button type="button" onClick="{{ item.toggle }}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 24px; border: none; background: transparent; font-family: inherit; font-size: 16.5px; font-weight: 600; text-align: left; color: var(--fg); cursor: pointer;">
+              {{ item.q }}
+              <span style="width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%; display: grid; place-items: center; background: {{ item.iconBg }}; color: {{ item.iconFg }}; transform: rotate({{ item.rotate }}); transition: transform 0.35s ease, background 0.3s ease, color 0.3s ease;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13" /></svg>
+              </span>
+            </button>
+            <div style="max-height: {{ item.maxHeight }}; opacity: {{ item.opacity }}; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;">
+              <p style="margin: 0; padding: 0 62px 24px 24px; font-size: 14.5px; line-height: 1.75; color: var(--muted);">{{ item.a }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;\&quot;dark\&quot; | \&quot;light\&quot;&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#0194fc&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#0194fc&quot;,&quot;#0f9f5f&quot;,&quot;#67bffe&quot;,&quot;#d4483f&quot;]}}">
+const THEMES = {
+  dark: {
+    pageBg: "radial-gradient(120% 80% at 78% 8%, #061a2e 0%, #03070f 58%, #03070f 100%)",
+    panelBg: "linear-gradient(180deg, #071c31 0%, #041424 100%)",
+    promoBg: "radial-gradient(120% 90% at 30% 22%, #06304f 0%, #041f38 48%, #031425 100%)",
+    fg: "#ffffff",
+    muted: "rgb(255 255 255 / 0.62)",
+    fieldBg: "rgb(255 255 255 / 0.05)",
+    border: "rgb(255 255 255 / 0.14)",
+    statBg: "rgb(255 255 255 / 0.04)",
+    openBg: "rgb(255 255 255 / 0.06)"
+  },
+  light: {
+    pageBg: "radial-gradient(120% 80% at 78% 8%, #ffffff 0%, #eaf3fd 46%, #e3eefa 100%)",
+    panelBg: "#ffffff",
+    promoBg: "radial-gradient(120% 90% at 30% 22%, #ffffff 0%, #eaf4fe 46%, #dfeefb 100%)",
+    fg: "#091628",
+    muted: "rgb(9 22 40 / 0.6)",
+    fieldBg: "rgb(9 22 40 / 0.03)",
+    border: "rgb(9 22 40 / 0.12)",
+    statBg: "rgb(255 255 255 / 0.7)",
+    openBg: "rgb(1 148 252 / 0.05)"
+  }
+};
+
+const QA = [["What is AdCrypto?","AdCrypto is a single wallet for buying, holding and moving digital assets. One account covers spot, futures and settlement, on Android, iOS and the web."],["Is my account protected?","Every account runs behind eight layers of protection — verification, 2FA, end-to-end encryption, role-based access, SSL and an application firewall among them."],["Which currencies can I hold?","Four majors are supported at launch for holding, swapping and settlement, with nine payment gateways to fund your balance."],["Are there hidden fees?","No. Network costs are shown before you confirm a transfer, and there are no withdrawal surprises or monthly account charges."],["How fast do transfers settle?","Internal transfers land instantly. On-chain settlement typically confirms in under a second on the networks we support at peak throughput."],["How do I claim the welcome rewards?","Create an account, complete verification and your deposit, spot and futures rewards unlock automatically — up to 8,800 USDT in total."]];
+
+const svg = (props, ...paths) => React.createElement("svg", Object.assign({ viewBox: "0 0 24 24", width: "100%", height: "100%" }, props), ...paths);
+
+class Component extends DCLogic {
+  state = { open: 0, theme: null };
+
+  syncBody() {
+    const th = THEMES[this.state.theme ?? this.props.theme ?? "dark"] || THEMES.dark;
+    document.body.style.background = th.pageBg;
+  }
+
+  componentDidMount() { this.syncBody(); }
+  componentDidUpdate() { this.syncBody(); }
+
+  renderVals() {
+    const accent = this.props.accent ?? "#0194fc";
+    const themeName = this.state.theme ?? this.props.theme ?? "dark";
+    const th = THEMES[themeName] || THEMES.dark;
+
+    return {
+      c: Object.assign({ accent }, th),
+      faqs: QA.map(([q, a], i) => {
+        const open = this.state.open === i;
+        return {
+          q, a,
+          toggle: () => this.setState((s) => ({ open: s.open === i ? -1 : i })),
+          bg: open ? th.openBg : th.fieldBg,
+          border: open ? accent : th.border,
+          iconBg: open ? accent : th.fieldBg,
+          iconFg: open ? "#ffffff" : th.muted,
+          rotate: open ? "135deg" : "0deg",
+          maxHeight: open ? "220px" : "0px",
+          opacity: open ? 1 : 0
+        };
+      }),
+      toggleTheme: () => this.setState({ theme: themeName === "dark" ? "light" : "dark" }),
+      themeIcon: themeName === "dark"
+        ? svg({ fill: "none", stroke: "currentColor", strokeWidth: 1.9, strokeLinecap: "round" },
+            React.createElement("circle", { key: "a", cx: 12, cy: 12, r: 4 }),
+            React.createElement("path", { key: "b", d: "M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4" }))
+        : svg({ fill: "none", stroke: "currentColor", strokeWidth: 1.9, strokeLinecap: "round", strokeLinejoin: "round" },
+            React.createElement("path", { key: "a", d: "M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z" }))
+    };
+  }
+}
+</script>
+</body>
+</html>

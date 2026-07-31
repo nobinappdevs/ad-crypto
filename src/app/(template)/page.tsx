@@ -1,7 +1,8 @@
 import { HeroScene } from "@/components/homepage/hero/HeroScene";
-import { SecuritySystem } from "@/components/homepage/SecuritySystem";
+import { SecuritySuite } from "@/components/homepage/SecuritySuite";
+import { Overview } from "@/components/homepage/Overview";
 import { Features } from "@/components/homepage/Features";
-import { DownloadApp } from "@/components/homepage/DownloadApp";
+import { WelcomeApp } from "@/components/homepage/WelcomeApp";
 
 export const metadata = {
   title: "AdCrypto — Manage, buy and sell crypto in one wallet",
@@ -15,9 +16,14 @@ export default function HomePage() {
       {/* HeroScene contains the banner AND the How-It-Works panel, so this lands
           directly beneath both. */}
       <HeroScene />
-      <SecuritySystem />
-      <Features />
-      <DownloadApp />
+      {/* Sticky scroll scene: 620vh of runway that swaps two passes of security
+          cards. The grid version of this content now lives on /service. */}
+      <SecuritySuite />
+      {/* Overview's dome is anchored to its own top edge, so it has to sit
+          directly under the scroll scene for the curve to read as a horizon. */}
+      <Overview />
+      {/* <Features /> */}
+      <WelcomeApp />
     </>
   );
 }

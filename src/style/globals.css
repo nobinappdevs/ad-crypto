@@ -133,17 +133,146 @@
   /* ---- Phone mockup ---------------------------------------------------
      The device does NOT follow the theme. It is a physical object in the scene,
      so it stays dark with the same screen in both modes — which is why these
-     values are duplicated below. The screen now climbs the azure ladder
-     (deep navy -> primary -> light azure) instead of navy -> indigo -> violet. */
+     values are duplicated below. The screen is the app's own dark-navy chrome:
+     the azure ladder it used to run made the form's blue accents unreadable, so
+     the blue now belongs to the UI and the background stays out of its way. */
   --phone-bezel: 6, 12, 20;
-  --phone-screen: linear-gradient(170deg, #082742 0%, #015c97 38%, #0c86de 70%, #38adfd 100%);
+  --phone-screen: radial-gradient(130% 65% at 50% 0%, #0d2a52 0%, #071b36 46%, #040f20 100%);
   --phone-fg: 255, 255, 255;
   --phone-fg-muted: rgb(255 255 255 / 0.68);
-  --phone-surface: rgb(255 255 255 / 0.13);
-  --phone-border: rgb(255 255 255 / 0.16);
+  --phone-surface: rgb(255 255 255 / 0.07);
+  --phone-border: rgb(255 255 255 / 0.12);
+  /* Form fields sit a step below --phone-surface: on the navy screen a 7% wash
+     already reads as a card, so inputs need to be quieter than the cards. */
+  --phone-field: rgb(255 255 255 / 0.045);
+  --phone-field-line: rgb(255 255 255 / 0.09);
   --phone-mint: 138, 255, 193; /* #8affc1 */
   --phone-notch: 3, 8, 14;
   --phone-chip: 255, 255, 255;
+
+  /* ---- Phone body: the 3D read ----------------------------------------
+     The device is NOT rotated or skewed — it stands square to the viewer, and
+     the volume comes entirely from these four layers: a banded metal rail
+     (light catches the corners, the mid-edges stay dark), a specular ring
+     inside that rail, one diagonal sheen across the glass, and a two-stop
+     drop shadow. Bands, not a smooth gradient: a linear ramp reads as a flat
+     grey stripe, while abrupt light/dark steps read as a machined edge. */
+  --phone-rail: linear-gradient(
+    138deg,
+    #232e3c 0%,
+    #a8b8cc 6%,
+    #47535f 16%,
+    #1b2431 34%,
+    #172029 50%,
+    #33404f 64%,
+    #93a3b6 82%,
+    #3b4653 90%,
+    #1c2530 100%
+  );
+  --phone-rail-edge:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.3), inset 0 1.5px 1px rgb(255 255 255 / 0.4),
+    inset 0 -1.5px 1px rgb(0 0 0 / 0.45);
+  --phone-gloss: linear-gradient(
+    116deg,
+    rgb(255 255 255 / 0.13) 0%,
+    rgb(255 255 255 / 0.04) 15%,
+    rgb(255 255 255 / 0) 30%,
+    rgb(255 255 255 / 0) 66%,
+    rgb(255 255 255 / 0.05) 80%,
+    rgb(255 255 255 / 0.01) 100%
+  );
+  --phone-drop:
+    0 54px 84px -28px rgb(2 10 22 / 0.7), 0 26px 46px -22px rgb(2 10 22 / 0.55),
+    0 0 0 1px rgb(0 0 0 / 0.55);
+
+  /* ---- Security Suite + Welcome scene (light) -------------------------
+     A self-contained palette for the two scroll-driven sections ported from
+     the standalone design (SecuritySuite / WelcomeApp). Deliberately NOT
+     folded into the --hero-* set: several values differ from the hero by a
+     hundredth of an alpha step, and aliasing them would quietly shift the
+     design. Same ladder, same hue (H 205), only the lightness varies. */
+  --suite-bg: radial-gradient(120% 80% at 78% 8%, #ffffff 0%, #eaf3fd 46%, #e3eefa 100%);
+  /* The gradient's outer stop, on its own. --suite-bg paints a white core at
+     78% 8% of *each* box it is applied to, so a run of stacked sections gets a
+     visible seam at every boundary — each one restarts the hotspot. Sections
+     that continue the run use this instead; only the section that opens it
+     carries the gradient. */
+  --suite-bg-flat: #e3eefa;
+  --suite-panel-bg: radial-gradient(
+    120% 90% at 22% 34%,
+    #ffffff 0%,
+    #eaf4fe 44%,
+    #dfeefb 72%,
+    #e7f1fb 100%
+  );
+  --suite-panel-shadow: 0 30px 70px rgb(9 30 60 / 0.14);
+  --suite-grid-line: rgb(9 22 40 / 0.075);
+
+  --suite-fg: #091628;
+  --suite-muted: rgb(9 22 40 / 0.5);
+
+  --suite-intro-bg: rgb(255 255 255 / 0.72);
+  --suite-intro-br: rgb(9 22 40 / 0.12);
+
+  --suite-card-bg: rgb(255 255 255 / 0.88);
+  --suite-card-br: rgb(9 22 40 / 0.12);
+  --suite-card-fg: #091628;
+  --suite-card-muted: rgb(9 22 40 / 0.6);
+  --suite-card-shadow: 0 18px 40px rgb(9 30 60 / 0.18);
+
+  --suite-chip-bg: #e0f2ff;
+  --suite-chip-icon: #0194fc;
+
+  /* The "current group" card inverts: a dark navy tile on the light theme. */
+  --suite-active-bg: linear-gradient(150deg, #0d2c50 0%, #092040 100%);
+  --suite-active-fg: #ffffff;
+  --suite-active-muted: rgb(255 255 255 / 0.7);
+  --suite-active-chip: rgb(255 255 255 / 0.14);
+  --suite-active-icon: #9ad4fe;
+
+  --suite-pill-off-bg: rgb(9 22 40 / 0.04);
+  --suite-pill-off-fg: rgb(9 22 40 / 0.7);
+  --suite-pill-off-br: rgb(9 22 40 / 0.12);
+  --suite-pill-off-chip: rgb(9 22 40 / 0.06);
+  --suite-pill-off-icon: rgb(9 22 40 / 0.55);
+
+  --suite-wm-fill: rgb(9 22 40 / 0.035);
+  --suite-wm-line: rgb(9 22 40 / 0.08);
+
+  /* Overview scene: the dome behind the section, its dot field, and the floating
+     chips — which sit on a near-opaque card rather than the translucent glass the
+     rest of the suite uses, so they stay legible over the dots. */
+  --suite-arc-bg: rgb(9 22 40 / 0.03);
+  --suite-dot: rgb(9 22 40 / 0.22);
+  --suite-chip-card: rgb(255 255 255 / 0.92);
+
+  --suite-store-bg: #0d1b3d;
+  --suite-store-fg: #ffffff;
+
+  /* Theme-independent in the source design, so they are declared once. */
+  --suite-card-shadow-hover: 0 26px 54px rgb(1 30 60 / 0.4);
+  --suite-pill-on-chip: rgb(255 255 255 / 0.22);
+  --suite-pill-on-shadow: 0 14px 30px rgb(1 148 252 / 0.32);
+  --suite-pill-underline: rgb(255 255 255 / 0.6);
+
+  /* ---- Story / Auth panels (light) ------------------------------------
+     The About and Auth pages are one design language: a rounded panel split
+     into a tinted promo half and a content half. Their palette is a separate
+     set from --suite-* because the promo gradient's hotspot sits at 30% 22%
+     rather than 22% 34% — close enough to look related, different enough that
+     aliasing them would move the light. The page background itself IS
+     --suite-bg, which already carries the same value. */
+  --panel-bg: #ffffff;
+  --panel-promo-bg: radial-gradient(120% 90% at 30% 22%, #ffffff 0%, #eaf4fe 46%, #dfeefb 100%);
+  --panel-fg: 9, 22, 40; /* #091628, kept as a triple for /opacity use */
+  --panel-muted: rgb(9 22 40 / 0.6);
+  --panel-field: rgb(9 22 40 / 0.03);
+  --panel-border: rgb(9 22 40 / 0.12);
+  --panel-stat: rgb(255 255 255 / 0.7);
+  /* An opened FAQ row. Tinted with the accent in light mode, a plain lift in
+     dark — a 5% azure wash disappears entirely against #041424. */
+  --panel-open: rgb(1 148 252 / 0.05);
+  --panel-shadow: 0 46px 100px rgb(1 20 40 / 0.28);
 }
 
 [data-theme="dark"] {
@@ -254,14 +383,106 @@
 
   /* ---- Phone mockup (dark) — identical to light on purpose ----------- */
   --phone-bezel: 6, 12, 20;
-  --phone-screen: linear-gradient(170deg, #082742 0%, #015c97 38%, #0c86de 70%, #38adfd 100%);
+  --phone-screen: radial-gradient(130% 65% at 50% 0%, #0d2a52 0%, #071b36 46%, #040f20 100%);
   --phone-fg: 255, 255, 255;
   --phone-fg-muted: rgb(255 255 255 / 0.68);
-  --phone-surface: rgb(255 255 255 / 0.13);
-  --phone-border: rgb(255 255 255 / 0.16);
+  --phone-surface: rgb(255 255 255 / 0.07);
+  --phone-border: rgb(255 255 255 / 0.12);
+  --phone-field: rgb(255 255 255 / 0.045);
+  --phone-field-line: rgb(255 255 255 / 0.09);
   --phone-mint: 138, 255, 193;
   --phone-notch: 3, 8, 14;
   --phone-chip: 255, 255, 255;
+
+  /* ---- Phone body (dark) — identical to light on purpose -------------- */
+  --phone-rail: linear-gradient(
+    138deg,
+    #232e3c 0%,
+    #a8b8cc 6%,
+    #47535f 16%,
+    #1b2431 34%,
+    #172029 50%,
+    #33404f 64%,
+    #93a3b6 82%,
+    #3b4653 90%,
+    #1c2530 100%
+  );
+  --phone-rail-edge:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.3), inset 0 1.5px 1px rgb(255 255 255 / 0.4),
+    inset 0 -1.5px 1px rgb(0 0 0 / 0.45);
+  --phone-gloss: linear-gradient(
+    116deg,
+    rgb(255 255 255 / 0.13) 0%,
+    rgb(255 255 255 / 0.04) 15%,
+    rgb(255 255 255 / 0) 30%,
+    rgb(255 255 255 / 0) 66%,
+    rgb(255 255 255 / 0.05) 80%,
+    rgb(255 255 255 / 0.01) 100%
+  );
+  --phone-drop:
+    0 54px 84px -28px rgb(2 10 22 / 0.7), 0 26px 46px -22px rgb(2 10 22 / 0.55),
+    0 0 0 1px rgb(0 0 0 / 0.55);
+
+  /* ---- Security Suite + Welcome scene (dark) — inverted luminance ----- */
+  --suite-bg: radial-gradient(120% 80% at 78% 8%, #061a2e 0%, #03070f 58%, #03070f 100%);
+  --suite-bg-flat: #03070f;
+  --suite-panel-bg: radial-gradient(
+    120% 90% at 22% 34%,
+    #04243f 0%,
+    #041c33 46%,
+    #031526 72%,
+    #041220 100%
+  );
+  --suite-panel-shadow: 0 40px 90px rgb(0 0 0 / 0.5);
+  --suite-grid-line: rgb(255 255 255 / 0.06);
+
+  --suite-fg: #ffffff;
+  --suite-muted: rgb(255 255 255 / 0.5);
+
+  --suite-intro-bg: rgb(255 255 255 / 0.04);
+  --suite-intro-br: rgb(255 255 255 / 0.12);
+
+  --suite-card-bg: rgb(255 255 255 / 0.05);
+  --suite-card-br: rgb(255 255 255 / 0.14);
+  --suite-card-fg: #ffffff;
+  --suite-card-muted: rgb(255 255 255 / 0.62);
+  --suite-card-shadow: 0 18px 40px rgb(1 30 60 / 0.35);
+
+  --suite-chip-bg: rgb(1 148 252 / 0.16);
+  --suite-chip-icon: #67bffe;
+
+  --suite-active-bg: linear-gradient(150deg, #0194fc 0%, #0163a0 100%);
+  --suite-active-fg: #ffffff;
+  --suite-active-muted: rgb(255 255 255 / 0.8);
+  --suite-active-chip: rgb(255 255 255 / 0.2);
+  --suite-active-icon: #ffffff;
+
+  --suite-pill-off-bg: rgb(255 255 255 / 0.05);
+  --suite-pill-off-fg: rgb(255 255 255 / 0.72);
+  --suite-pill-off-br: rgb(255 255 255 / 0.14);
+  --suite-pill-off-chip: rgb(255 255 255 / 0.08);
+  --suite-pill-off-icon: rgb(255 255 255 / 0.6);
+
+  --suite-wm-fill: rgb(255 255 255 / 0.035);
+  --suite-wm-line: rgb(255 255 255 / 0.07);
+
+  --suite-arc-bg: rgb(255 255 255 / 0.028);
+  --suite-dot: rgb(255 255 255 / 0.28);
+  --suite-chip-card: rgb(9 30 55 / 0.72);
+
+  --suite-store-bg: linear-gradient(150deg, #0194fc 0%, #0163a0 100%);
+  --suite-store-fg: #ffffff;
+
+  /* ---- Story / Auth panels (dark) ------------------------------------- */
+  --panel-bg: linear-gradient(180deg, #071c31 0%, #041424 100%);
+  --panel-promo-bg: radial-gradient(120% 90% at 30% 22%, #06304f 0%, #041f38 48%, #031425 100%);
+  --panel-fg: 255, 255, 255;
+  --panel-muted: rgb(255 255 255 / 0.62);
+  --panel-field: rgb(255 255 255 / 0.05);
+  --panel-border: rgb(255 255 255 / 0.14);
+  --panel-stat: rgb(255 255 255 / 0.04);
+  --panel-open: rgb(255 255 255 / 0.06);
+  --panel-shadow: 0 46px 100px rgb(1 20 40 / 0.35);
 }
 
 @theme {
@@ -319,21 +540,43 @@
   --color-phone-fg-muted: var(--phone-fg-muted);
   --color-phone-surface: var(--phone-surface);
   --color-phone-border: var(--phone-border);
+  --color-phone-field: var(--phone-field);
+  --color-phone-field-line: var(--phone-field-line);
   --color-phone-mint: rgb(var(--phone-mint));
   --color-phone-notch: rgb(var(--phone-notch));
   --color-phone-chip: rgb(var(--phone-chip));
 
   --shadow-card: 0 12px 32px -12px rgb(13 17 23 / 0.18);
   --shadow-float: var(--card-shadow);
+
+  /* Story / Auth panels. Only the flat colours are mapped as utilities — the
+     two gradients (--panel-bg, --panel-promo-bg) are applied inline, since a
+     `background-image` cannot be expressed as a Tailwind colour. */
+  --color-panel-fg: rgb(var(--panel-fg));
+  --color-panel-muted: var(--panel-muted);
+  --color-panel-field: var(--panel-field);
+  --color-panel-line: var(--panel-border);
+  --color-panel-stat: var(--panel-stat);
 }
 
 html {
   font-size: 100%;
   scroll-behavior: smooth;
+  /* The public nav is `fixed` and overlays the page, so an in-page anchor has to
+     stop clear of it — otherwise `#how-it-works` lands underneath the bar. Sized
+     to the tallest nav (sm:h-22 = 88px) plus a little air. */
+  scroll-padding-top: 6rem;
 }
 body {
   background: rgb(var(--bg));
+  /* `clip` rather than `hidden`. `overflow-x: hidden` forces the other axis to
+     `auto`, which makes the body a scroll container — and a scroll container is
+     what silently breaks `position: sticky` on the hero and suite scenes. With
+     `clip` the y axis stays `visible`, so the sticky stages keep resolving
+     against the viewport. The `hidden` line above it is the fallback for
+     browsers without `clip`. */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 ::selection {
   @apply bg-primary text-white;
@@ -482,6 +725,254 @@ input[type="number"] {
 }
 [data-theme="dark"] .glass-card {
   background: rgb(var(--card) / 0.5);
+}
+
+/* ---- Security Suite surfaces ----------------------------------------------
+   The cards' resting colours live here rather than on a `style` prop: an inline
+   declaration outranks every stylesheet rule, so a hover written next to it could
+   never take effect. Only `transform`/`opacity` stay inline — the scroll loop
+   writes those every frame, and neither hover touches them. */
+/* Every card carries the resting surface, active or not — the dark active skin is
+   a separate overlay (`.suite-skin` below) that fades and slides between cards on
+   hover. Painting the active background HERE instead would mean cross-fading two
+   gradients, and `background-image` does not interpolate: it would cut. */
+[data-suite-card] {
+  border-color: var(--suite-card-br);
+  background-color: var(--suite-card-bg);
+}
+[data-suite-card="active"] {
+  /* Transparent, not a colour: the skin underneath has to meet the card's edge. */
+  border-color: transparent;
+  box-shadow: var(--suite-card-shadow);
+}
+[data-suite-card="active"]:hover {
+  box-shadow: var(--suite-card-shadow-hover);
+}
+/* Only reachable where hover does not hand the skin over — touch, mainly. */
+[data-suite-card="idle"]:hover {
+  border-color: rgb(var(--primary__color));
+}
+
+/* The travelling active skin. It lives inside the card it belongs to (so the
+   scroll swap carries it along for free) and animates in from the direction of
+   the card that just lost it — while that card's own copy animates out the same
+   way. Two halves of one gesture: the design reads as having MOVED across the
+   grid rather than switched off here and on there.
+   --sx/--sy are set per card in JSX; the overlay is remounted on every change so
+   the animation replays from the start. */
+.suite-skin {
+  background: var(--suite-active-bg);
+  animation: suite-skin-in 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.suite-skin[data-leaving] {
+  animation: suite-skin-out 400ms cubic-bezier(0.4, 0, 0.7, 0.2) forwards;
+}
+/* First paint — no card has lost the skin yet, so there is nothing to travel from. */
+.suite-skin[data-static] {
+  animation: none;
+}
+/* Both scale slightly UP, never down: an overlay smaller than its card would
+   expose the resting surface at every edge instead of just the trailing one. */
+@keyframes suite-skin-in {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--sx, 0), var(--sy, 0), 0) scale(1.05);
+  }
+  45% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes suite-skin-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--sx, 0), var(--sy, 0), 0) scale(1.05);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .suite-skin,
+  .suite-skin[data-leaving] {
+    animation-duration: 1ms;
+  }
+}
+
+[data-suite-toggle] {
+  border-color: var(--suite-card-br);
+  background: var(--suite-card-bg);
+  color: var(--suite-fg);
+}
+[data-suite-toggle]:hover {
+  border-color: rgb(var(--primary__color));
+}
+
+/* ---- Overview + footer interactive bits -----------------------------------
+   Same reason as the cards above, plus one more: the base `a` rule already
+   carries `hover:text-primary`, and it lives in the `base` layer — so an
+   unlayered resting colour here would beat it. Each resting colour therefore
+   ships with its own unlayered hover. */
+[data-suite-send] {
+  color: var(--suite-fg);
+}
+[data-suite-send]:hover {
+  color: rgb(var(--primary__color));
+  transform: translateX(6px);
+}
+
+[data-suite-input]::placeholder {
+  color: var(--suite-card-muted);
+}
+
+[data-suite-social] {
+  color: var(--suite-card-muted);
+}
+[data-suite-social]:hover {
+  color: rgb(var(--primary__color));
+  transform: translateY(-3px);
+}
+
+[data-suite-link] {
+  color: var(--suite-card-muted);
+}
+[data-suite-link]:hover {
+  color: rgb(var(--primary__color));
+}
+
+[data-suite-toplink] {
+  color: var(--suite-fg);
+}
+[data-suite-toplink]:hover {
+  color: rgb(var(--primary__color));
+}
+
+/* The Overview illustration's ambient loops. `alternate` on the arcs is what
+   makes them draw and un-draw rather than restarting from empty each cycle. */
+@keyframes suite-float-chip {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+@keyframes suite-draw-arc {
+  from {
+    stroke-dashoffset: 420;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes suite-pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.35;
+  }
+}
+
+/* The gift illustration shared by the About and Auth panels. Timings and offsets
+   are the source design's, unchanged — the whole scene is one composition and the
+   loops are deliberately out of phase with each other. */
+@keyframes promo-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+}
+@keyframes promo-float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes promo-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes promo-sheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  55%,
+  100% {
+    transform: translateX(180%);
+  }
+}
+@keyframes promo-spark {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+/* Replays whenever the auth form switches between log-in and register — the form
+   column is keyed on the mode, so React remounts it and the animation restarts. */
+@keyframes panel-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Ambient motion only — the scroll-linked scenes track the user's own input, so
+   they are left alone here (see the hero rule above for the same split). */
+@media (prefers-reduced-motion: reduce) {
+  [data-suite-overview] *,
+  [data-promo-scene] * {
+    animation: none !important;
+  }
+}
+
+/* Scroll-reveal used by the Welcome scene. The delay is per-element, set as an
+   inline `--reveal-delay`, so one class can stagger a whole composition. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal="in"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .brand-slider-mask {

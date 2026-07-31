@@ -90,7 +90,10 @@ export function HowItWorksPanel({
           {/* Dashed rail connecting the step medallions. */}
           <div
             aria-hidden
-            className="absolute top-6 bottom-15 left-[23px] border-l-[1.5px] border-dashed border-hero-accent-soft/55"
+            // `inset-s`, not `left`: the element is 0 wide and draws its line with a
+            // border, so anchoring it to the start edge puts the rail under the
+            // medallions in both reading directions.
+            className="absolute top-6 bottom-15 inset-s-[23px] border-l-[1.5px] border-dashed border-hero-accent-soft/55"
           />
           {STEPS.map((step) => (
             <div key={step.key} className="relative flex items-start gap-4 sm:gap-5.5">

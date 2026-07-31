@@ -6,15 +6,18 @@ import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
 
 /**
- * `field` uses theme tokens (public navbar, dashboard, auth pages).
+ * `field` uses theme tokens (public navbar, dashboard).
  * `hero` is pinned to the always-dark hero scene palette.
+ * `panel` uses the About/Auth panel palette, so the button reads as part of the
+ * panel's own surface rather than the page's.
  */
-type Variant = "field" | "hero";
+type Variant = "field" | "hero" | "panel";
 
 const STYLES: Record<Variant, string> = {
   field: "border-border text-heading hover:bg-surface",
   // Matches the language switcher — see the note there on why the fill matters.
   hero: "border-hero-border bg-hero-bg/55 text-hero-fg/90 backdrop-blur-md hover:bg-hero-surface-strong hover:text-hero-fg",
+  panel: "border-panel-line bg-panel-field text-panel-fg hover:border-primary",
 };
 
 export function ThemeToggle({ variant = "field" }: { variant?: Variant } = {}) {
@@ -28,7 +31,7 @@ export function ThemeToggle({ variant = "field" }: { variant?: Variant } = {}) {
       onClick={toggleTheme}
       aria-label={isDark ? t("theme.toggleToLight") : t("theme.toggleToDark")}
       className={cn(
-        "inline-flex h-9 w-9 items-center justify-center rounded-full border transition",
+        "inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border transition",
         STYLES[variant],
       )}
     >

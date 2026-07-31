@@ -1,6 +1,5 @@
 import { GuestGuard } from "@/components/guards/GuestGuard";
-import { AuthShell } from "@/components/auth/AuthShell";
-import { LoginForm } from "@/components/forms/LoginForm";
+import { AuthPanel } from "@/components/auth/AuthPanel";
 
 export const metadata = {
   title: "Sign In — AdCrypto",
@@ -9,9 +8,9 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <GuestGuard>
-      <AuthShell>
-        <LoginForm />
-      </AuthShell>
+      {/* The panel is the whole page — it carries its own background, its own
+          theme toggle and both tabs, so no AuthShell around it. */}
+      <AuthPanel />
     </GuestGuard>
   );
 }

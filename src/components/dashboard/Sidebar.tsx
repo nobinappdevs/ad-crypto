@@ -35,8 +35,11 @@ export function Sidebar({
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
             <Wallet size={16} />
           </span>
+          {/* Between `md` and `lg` the rail is pinned to 56px whatever `collapsed`
+              says, so the label has to go even when the state says otherwise —
+              otherwise the wordmark and the icon fight over 8px of content box. */}
           {!collapsed && (
-            <span className="inline! truncate text-[15px] font-bold text-heading">
+            <span className="inline! truncate text-[15px] font-bold text-heading md:hidden! lg:inline!">
               {t("brand.name")}
             </span>
           )}
@@ -54,14 +57,20 @@ export function Sidebar({
               key={href}
               href={href}
               className={cn(
-                "flex! items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium transition",
+                // Same 56px rail as above: the row centres its icon and drops its
+                // padding while the label is out, then goes back to a normal
+                // left-aligned row once there is width for one.
+                "flex! items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium transition md:justify-center md:px-2 lg:px-3",
+                collapsed ? "lg:justify-center" : "lg:justify-start",
                 active
                   ? "bg-primary/10 text-primary"
                   : "text-heading hover:bg-black/4 dark:hover:bg-white/6",
               )}
             >
               <Icon size={18} className="shrink-0" />
-              {!collapsed && <span className="inline! truncate">{t(labelKey)}</span>}
+              {!collapsed && (
+                <span className="inline! truncate md:hidden! lg:inline!">{t(labelKey)}</span>
+              )}
             </Link>
           );
         })}

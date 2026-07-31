@@ -12,7 +12,7 @@ import { ContactForm } from "@/components/forms/ContactForm";
 const TITLE_LINES = [
   { key: "contact.titleLine1", indent: "0em" },
   { key: "contact.titleLine2", indent: "0.45em" },
-  { key: "contact.titleLine3", indent: "1em" },
+  { key: "contact.titleLine3", indent: "1.2em" },
 ];
 
 export function Contact() {
@@ -34,12 +34,26 @@ function ContactHeading() {
 
   return (
     <div>
-      <h2 className="text-[46px]! leading-[1.1]! font-bold tracking-[0.01em] text-hero-fg uppercase sm:text-[64px]! md:text-[74px]! lg:text-[78px]! xl:text-[92px]!">
-        {TITLE_LINES.map((line) => (
+      {/* The staircase is set against the LONGEST translation, not the English
+          copy: the column is only half the container from `lg` up, and at 78-92px
+          Spanish ("Y Vamos A" / "Conectar") plus its 1.2em indent ran past that
+          column's edge. `lg` therefore steps back down before `xl` climbs again,
+          and `wrap-break-word` is the floor under any string longer still. */}
+      <h2 className="text-[clamp(34px,12vw,46px)]! leading-[1.1]! font-bold tracking-[0.01em] wrap-break-word text-hero-fg uppercase sm:text-[62px]! md:text-[72px]! lg:text-[60px]! xl:text-[84px]!">
+        {/* {TITLE_LINES.map((line) => (
           <span key={line.key} className="block!" style={{ paddingInlineStart: line.indent }}>
             {t(line.key)}
           </span>
-        ))}
+        ))} */}
+        {TITLE_LINES.map((line, index) => (
+  <span
+    key={line.key}
+    style={{ paddingInlineStart: line.indent }}
+    className={`block! ${index === 1 ? "text-primary" : "text-hero-fg"}`}
+  >
+    {t(line.key)}
+  </span>
+))}
       </h2>
 
       <p className="mt-8 max-w-105 text-[13px]! leading-[1.7]! text-hero-fg-muted sm:text-[14px]! lg:mt-9">

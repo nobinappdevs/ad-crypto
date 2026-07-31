@@ -144,21 +144,28 @@
     "metaWithdraw": "Withdraw anytime",
     "metaFee": "0.10% spot fee",
     "scroll": "Scroll",
-    "phonePortfolioLabel": "Portfolio value",
-    "phonePortfolioValue": "$24,918.40",
-    "phonePortfolioChange": "+7.84% today",
-    "phoneCustody": "Insured custody · 2FA protected",
-    "phoneTime": "9:41",
-    "phoneActionBuy": "Buy",
-    "phoneActionSell": "Sell",
-    "phoneActionSwap": "Swap",
-    "phoneActionSend": "Send",
-    "phoneAssets": "Your assets",
-    "phoneSeeAll": "See all",
-    "phoneBuyCrypto": "Buy crypto",
+    "phoneTime": "10:00 AM",
     "phoneCoin": {
       "btc": "Bitcoin",
       "eth": "Ethereum"
+    },
+    "phoneApp": {
+      "menu": "Menu",
+      "account": "Account",
+      "tabBuy": "Buy Crypto",
+      "tabSell": "Sell Crypto",
+      "tabWithdraw": "Withdraw Crypto",
+      "insideWallet": "Inside Wallet",
+      "outsideWallet": "Outside Wallet",
+      "selectCoin": "Select Coin",
+      "selectNetwork": "Select Network",
+      "paymentMethod": "Payment Method",
+      "paymentPlaceholder": "Select Payment Method",
+      "amount": "Amount",
+      "amountPlaceholder": "Enter Amount",
+      "minAmount": "Min Amount: 0.0001 USDT",
+      "rate": "Rate: 1 USD = 0.00001 USDT",
+      "continue": "Continue"
     }
   },
   "howItWorks": {
@@ -255,6 +262,69 @@
       }
     }
   },
+  "aboutPanel": {
+    "badge": "About us",
+    "headingLine1": "One wallet for",
+    "headingLine2": "every coin you own.",
+    "para1": "AdCrypto started with a simple frustration: moving digital assets took too many apps, too many confirmations and too much guesswork. We rebuilt the flow end to end — verification, custody, settlement — so that holding crypto feels like holding money.",
+    "para2": "Today the platform serves hundreds of thousands of transactions a day across four major currencies and nine payment gateways, wrapped in eight layers of protection that never ask you to think about them.",
+    "bullets": {
+      "custody": "Fully-insured custody with role-based internal access",
+      "settlement": "Sub-second settlement at peak throughput",
+      "fees": "No hidden fees — every cost shown before you confirm"
+    },
+    "ctaFaq": "Read the FAQ",
+    "ctaContact": "Contact the team",
+    "promoLead": "Built for people who hold",
+    "promoAccent": "real",
+    "promoTail": "crypto",
+    "stats": {
+      "founded": {
+        "value": "2019",
+        "label": "Founded"
+      },
+      "transactions": {
+        "value": "500 K",
+        "label": "Daily Transactions"
+      },
+      "gateways": {
+        "value": "9",
+        "label": "Payment Gateways"
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "headingLine1": "Questions we",
+      "headingLine2": "get most often.",
+      "text": "Still stuck? Our team answers in under an hour, every day of the week.",
+      "items": {
+        "what": {
+          "q": "What is AdCrypto?",
+          "a": "AdCrypto is a single wallet for buying, holding and moving digital assets. One account covers spot, futures and settlement, on Android, iOS and the web."
+        },
+        "protection": {
+          "q": "Is my account protected?",
+          "a": "Every account runs behind eight layers of protection — verification, 2FA, end-to-end encryption, role-based access, SSL and an application firewall among them."
+        },
+        "currencies": {
+          "q": "Which currencies can I hold?",
+          "a": "Four majors are supported at launch for holding, swapping and settlement, with nine payment gateways to fund your balance."
+        },
+        "fees": {
+          "q": "Are there hidden fees?",
+          "a": "No. Network costs are shown before you confirm a transfer, and there are no withdrawal surprises or monthly account charges."
+        },
+        "speed": {
+          "q": "How fast do transfers settle?",
+          "a": "Internal transfers land instantly. On-chain settlement typically confirms in under a second on the networks we support at peak throughput."
+        },
+        "rewards": {
+          "q": "How do I claim the welcome rewards?",
+          "a": "Create an account, complete verification and your deposit, spot and futures rewards unlock automatically — up to 8,800 USDT in total."
+        }
+      }
+    }
+  },
   "contact": {
     "headerTitle": "How can we help?",
     "headerSubtitle": "Questions about your wallet, a transaction, or getting started — send us a note and the team will get back to you within one business day.",
@@ -289,6 +359,48 @@
     "loginSuccess": "Logged in successfully",
     "loginFailed": "Unable to sign in with those details"
   },
+  "authPanel": {
+    "tabLogin": "Log In",
+    "tabRegister": "Register",
+    "loginTitle": "Log in and Stay Connected",
+    "registerTitle": "Register for an Account Today",
+    "loginBlurb": "Our secure login process ensures the confidentiality of your information. Log in today and stay connected to your finances, anytime and anywhere.",
+    "registerBlurb": "Become a part of our community by registering for an account today. Enjoy a range of benefits and features tailored to meet your needs.",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "loginEmail": "Enter Email...",
+    "registerEmail": "Email",
+    "loginPassword": "Enter Password...",
+    "registerPassword": "Password",
+    "termsLead": "I have agreed with",
+    "termsLink": "Terms Of Use & Privacy Policy",
+    "forgot": "Forgot Password?",
+    "loginCta": "Login Now",
+    "registerCta": "Register Now",
+    "loginPrompt": "Don't have an account?",
+    "loginAction": "Register Now",
+    "registerPrompt": "Already have an account?",
+    "registerAction": "Log In Now",
+    "divider": "Or continue with",
+    "showPassword": "Show password",
+    "promoLead": "Join AdCrypto",
+    "promoAccent": "8800USDT",
+    "promoTail": "welcome gifts",
+    "stats": {
+      "deposit": {
+        "value": "800 USDT",
+        "label": "Max Deposit Rewards"
+      },
+      "spot": {
+        "value": "3500 USDT",
+        "label": "Max Spot Rewards"
+      },
+      "futures": {
+        "value": "4500 USDT",
+        "label": "Max Futures Rewards"
+      }
+    }
+  },
   "dashboard": {
     "welcomeTitle": "Welcome back",
     "welcomeSubtitle": "Here's a snapshot of your AdCrypto account.",
@@ -303,7 +415,57 @@
   },
   "footer": {
     "tagline": "Manage, buy and sell crypto — all in one wallet.",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "newsletter": {
+      "text": "Market moves, product notes and release logs — sent when there is something worth knowing. No noise, and you can unsubscribe in one tap.",
+      "placeholder": "Your email address",
+      "submit": "Subscribe",
+      "title": "NEWSLETTER"
+    },
+    "about": "The contrast between speed and control makes for a highly modern wallet.",
+    "backToTop": "BACK TO TOP",
+    "socials": {
+      "instagram": "AdCrypto on Instagram",
+      "facebook": "AdCrypto on Facebook",
+      "twitter": "AdCrypto on X",
+      "youtube": "AdCrypto on YouTube"
+    },
+    "columns": {
+      "about": {
+        "title": "ABOUT",
+        "items": {
+          "partnership": "Partnership",
+          "terms": "Terms of Use",
+          "privacy": "Privacy"
+        }
+      },
+      "product": {
+        "title": "PRODUCT",
+        "items": {
+          "about": "About",
+          "features": "Features",
+          "support": "Support"
+        }
+      },
+      "resources": {
+        "title": "RESOURCES",
+        "items": {
+          "career": "Career",
+          "blog": "Blog",
+          "legal": "Legal"
+        }
+      },
+      "contact": {
+        "title": "CONTACT",
+        "items": {
+          "address": "Los Angeles, CA",
+          "site": "adcrypto.com",
+          "phone": "+1564-644-5965"
+        }
+      }
+    },
+    "brand": "AD_CRYPTO",
+    "brandInline": "ad_crypto"
   },
   "common": {
     "loading": "Loading...",
@@ -372,6 +534,93 @@
       "apple": {
         "label": "Download on the",
         "name": "App Store"
+      }
+    }
+  },
+  "suite": {
+    "eyebrow": "Security Suite",
+    "headingLead": "8 Ways to",
+    "headingAccent": "Security System",
+    "themeToggle": "Toggle theme",
+    "scroll": "Scroll",
+    "groups": {
+      "a": "Identity & Access",
+      "b": "Network & Data"
+    },
+    "intro": {
+      "line1": "What Do You Need",
+      "line2": "We Can Do It",
+      "text": "Eight layers of protection in two passes. Verification and access first, then the network and data controls behind them."
+    },
+    "items": {
+      "smsEmail": {
+        "title": "SMS or Email Verification",
+        "text": "Both email and SMS make for more secure authentication, but there are pros and cons to everything."
+      },
+      "kyc": {
+        "title": "KYC Solution",
+        "text": "Streamlining Compliance: A Comprehensive Guide to KYC Solutions"
+      },
+      "twoFa": {
+        "title": "Two-Factor Authentication",
+        "text": "2FA, is an extra layer of protection used to ensure the security of online accounts beyond just a username and password."
+      },
+      "encryption": {
+        "title": "End-to-end Encryption",
+        "text": "End-to-end encryption is a system of communication where only the users communicating can read the messages."
+      },
+      "behavior": {
+        "title": "Behavior Tracking",
+        "text": "It is a technique companies and advertisers use to create targeted advertisements and campaigns."
+      },
+      "ssl": {
+        "title": "Secure Sockets Layer",
+        "text": "SSL encryption ensures secure communication between users and the website."
+      },
+      "waf": {
+        "title": "Web Application Firewall",
+        "text": "A WAF monitors and filters HTTP traffic between a web application and the internet."
+      },
+      "rbac": {
+        "title": "Role-Based Access Control",
+        "text": "It restricts administrative access based on roles and responsibilities."
+      }
+    }
+  },
+  "welcome": {
+    "headingLine1": "Download",
+    "headingLine2Lead": "The",
+    "headingLine2Accent": "AdCrypto App",
+    "tagline": "The smartest crypto hack is here.",
+    "text": "Bye bye hidden fees. See you later slow transfers. Adios wallet-hopping nightmares.",
+    "phoneAlt": "AdCrypto app on a phone",
+    "avatarAlt": "AdCrypto member"
+  },
+  "overview": {
+    "badge": "Overview",
+    "headingLead": "Revolutionizing Your",
+    "headingAccent": "Cryptocurrency Experience",
+    "text": "Our overview encapsulates the core vision and mission driving our commitment to revolutionize your crypto experience — one wallet, every coin, no friction.",
+    "chips": {
+      "verified": "W2 Paystub",
+      "amount": "749",
+      "range": "Feb 3 - Feb 17, 2024"
+    },
+    "stats": {
+      "gateways": {
+        "value": "9",
+        "label": "Payment Gateway",
+        "text": "Connect the rails your customers already trust, in a few clicks."
+      },
+      "currencies": {
+        "value": "4",
+        "label": "Currencies",
+        "text": "Hold, swap and settle across the majors without leaving the app."
+      },
+      "transactions": {
+        "value": "500 K",
+        "label": "Transactions Per Day",
+        "text": "Peak throughput handled with sub-second confirmations."
       }
     }
   }

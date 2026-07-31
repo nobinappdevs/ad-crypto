@@ -144,21 +144,28 @@
     "metaWithdraw": "Retraits à tout moment",
     "metaFee": "0,10 % de frais spot",
     "scroll": "Défiler",
-    "phonePortfolioLabel": "Valeur du portefeuille",
-    "phonePortfolioValue": "24 918,40 $",
-    "phonePortfolioChange": "+7,84 % aujourd'hui",
-    "phoneCustody": "Conservation assurée · Protégé par 2FA",
-    "phoneTime": "9:41",
-    "phoneActionBuy": "Acheter",
-    "phoneActionSell": "Vendre",
-    "phoneActionSwap": "Échanger",
-    "phoneActionSend": "Envoyer",
-    "phoneAssets": "Vos actifs",
-    "phoneSeeAll": "Tout voir",
-    "phoneBuyCrypto": "Acheter des cryptos",
+    "phoneTime": "10:00",
     "phoneCoin": {
       "btc": "Bitcoin",
       "eth": "Ethereum"
+    },
+    "phoneApp": {
+      "menu": "Menu",
+      "account": "Compte",
+      "tabBuy": "Acheter des cryptos",
+      "tabSell": "Vendre des cryptos",
+      "tabWithdraw": "Retirer des cryptos",
+      "insideWallet": "Portefeuille interne",
+      "outsideWallet": "Portefeuille externe",
+      "selectCoin": "Choisir la crypto",
+      "selectNetwork": "Choisir le réseau",
+      "paymentMethod": "Moyen de paiement",
+      "paymentPlaceholder": "Choisir un moyen de paiement",
+      "amount": "Montant",
+      "amountPlaceholder": "Saisir le montant",
+      "minAmount": "Minimum : 0,0001 USDT",
+      "rate": "Taux : 1 USD = 0,00001 USDT",
+      "continue": "Continuer"
     }
   },
   "howItWorks": {
@@ -255,6 +262,69 @@
       }
     }
   },
+  "aboutPanel": {
+    "badge": "À propos",
+    "headingLine1": "Un portefeuille pour",
+    "headingLine2": "chaque crypto que vous détenez.",
+    "para1": "AdCrypto est né d'une frustration simple : déplacer des actifs numériques demandait trop d'applications, trop de confirmations et trop d'approximations. Nous avons reconstruit tout le parcours — vérification, conservation, règlement — pour que détenir des cryptos ressemble à détenir de l'argent.",
+    "para2": "Aujourd'hui la plateforme traite des centaines de milliers de transactions par jour sur quatre grandes devises et neuf passerelles de paiement, protégées par huit couches de sécurité auxquelles vous n'avez jamais à penser.",
+    "bullets": {
+      "custody": "Conservation entièrement assurée, accès interne par rôles",
+      "settlement": "Règlement en moins d'une seconde, même en pleine charge",
+      "fees": "Aucun frais caché — chaque coût s'affiche avant validation"
+    },
+    "ctaFaq": "Lire la FAQ",
+    "ctaContact": "Contacter l'équipe",
+    "promoLead": "Conçu pour ceux qui détiennent de",
+    "promoAccent": "vraies",
+    "promoTail": "cryptos",
+    "stats": {
+      "founded": {
+        "value": "2019",
+        "label": "Création"
+      },
+      "transactions": {
+        "value": "500 K",
+        "label": "Transactions par jour"
+      },
+      "gateways": {
+        "value": "9",
+        "label": "Passerelles de paiement"
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "headingLine1": "Les questions qu'on",
+      "headingLine2": "nous pose le plus.",
+      "text": "Toujours bloqué ? Notre équipe répond en moins d'une heure, tous les jours.",
+      "items": {
+        "what": {
+          "q": "Qu'est-ce qu'AdCrypto ?",
+          "a": "AdCrypto est un portefeuille unique pour acheter, conserver et déplacer des actifs numériques. Un seul compte couvre le spot, les futures et le règlement, sur Android, iOS et le web."
+        },
+        "protection": {
+          "q": "Mon compte est-il protégé ?",
+          "a": "Chaque compte est protégé par huit couches de sécurité : vérification, 2FA, chiffrement de bout en bout, accès par rôles, SSL et un pare-feu applicatif, entre autres."
+        },
+        "currencies": {
+          "q": "Quelles devises puis-je détenir ?",
+          "a": "Quatre grandes devises sont prises en charge au lancement pour la conservation, l'échange et le règlement, avec neuf passerelles de paiement pour alimenter votre solde."
+        },
+        "fees": {
+          "q": "Y a-t-il des frais cachés ?",
+          "a": "Non. Les frais de réseau s'affichent avant la validation d'un transfert, et il n'y a ni surprise au retrait ni frais de compte mensuels."
+        },
+        "speed": {
+          "q": "En combien de temps un transfert est-il réglé ?",
+          "a": "Les transferts internes arrivent instantanément. Le règlement on-chain se confirme généralement en moins d'une seconde sur les réseaux que nous prenons en charge."
+        },
+        "rewards": {
+          "q": "Comment obtenir les cadeaux de bienvenue ?",
+          "a": "Créez un compte, terminez la vérification et vos récompenses de dépôt, spot et futures se débloquent automatiquement — jusqu'à 8 800 USDT au total."
+        }
+      }
+    }
+  },
   "contact": {
     "headerTitle": "Comment pouvons-nous aider ?",
     "headerSubtitle": "Une question sur votre portefeuille, une transaction ou vos premiers pas — écrivez-nous et l'équipe vous répondra sous un jour ouvré.",
@@ -289,6 +359,48 @@
     "loginSuccess": "Connexion réussie",
     "loginFailed": "Impossible de se connecter avec ces informations"
   },
+  "authPanel": {
+    "tabLogin": "Connexion",
+    "tabRegister": "Inscription",
+    "loginTitle": "Connectez-vous et restez connecté",
+    "registerTitle": "Créez votre compte dès aujourd'hui",
+    "loginBlurb": "Notre processus de connexion sécurisé garantit la confidentialité de vos informations. Connectez-vous et restez en lien avec vos finances, à tout moment et partout.",
+    "registerBlurb": "Rejoignez notre communauté en créant un compte dès aujourd'hui. Profitez d'un ensemble d'avantages et de fonctionnalités pensés pour vos besoins.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "loginEmail": "Saisir l'e-mail...",
+    "registerEmail": "E-mail",
+    "loginPassword": "Saisir le mot de passe...",
+    "registerPassword": "Mot de passe",
+    "termsLead": "J'accepte les",
+    "termsLink": "Conditions d'utilisation et la Politique de confidentialité",
+    "forgot": "Mot de passe oublié ?",
+    "loginCta": "Se connecter",
+    "registerCta": "S'inscrire",
+    "loginPrompt": "Pas encore de compte ?",
+    "loginAction": "S'inscrire",
+    "registerPrompt": "Vous avez déjà un compte ?",
+    "registerAction": "Se connecter",
+    "divider": "Ou continuer avec",
+    "showPassword": "Afficher le mot de passe",
+    "promoLead": "Rejoignez AdCrypto :",
+    "promoAccent": "8800USDT",
+    "promoTail": "de cadeaux",
+    "stats": {
+      "deposit": {
+        "value": "800 USDT",
+        "label": "Bonus de dépôt max."
+      },
+      "spot": {
+        "value": "3500 USDT",
+        "label": "Bonus spot max."
+      },
+      "futures": {
+        "value": "4500 USDT",
+        "label": "Bonus futures max."
+      }
+    }
+  },
   "dashboard": {
     "welcomeTitle": "Content de vous revoir",
     "welcomeSubtitle": "Voici un aperçu de votre compte AdCrypto.",
@@ -303,7 +415,57 @@
   },
   "footer": {
     "tagline": "Gérez, achetez et vendez vos cryptos, tout en un seul portefeuille.",
-    "rights": "Tous droits réservés."
+    "rights": "Tous droits réservés.",
+    "newsletter": {
+      "text": "Mouvements du marché, notes produit et journaux de version — envoyés seulement quand il y a quelque chose à savoir. Sans bruit, et un seul geste pour se désabonner.",
+      "placeholder": "Votre adresse e-mail",
+      "submit": "S'abonner",
+      "title": "NEWSLETTER"
+    },
+    "about": "Le contraste entre vitesse et contrôle donne un portefeuille résolument moderne.",
+    "backToTop": "RETOUR EN HAUT",
+    "socials": {
+      "instagram": "AdCrypto sur Instagram",
+      "facebook": "AdCrypto sur Facebook",
+      "twitter": "AdCrypto sur X",
+      "youtube": "AdCrypto sur YouTube"
+    },
+    "columns": {
+      "about": {
+        "title": "À PROPOS",
+        "items": {
+          "partnership": "Partenariats",
+          "terms": "Conditions d'utilisation",
+          "privacy": "Confidentialité"
+        }
+      },
+      "product": {
+        "title": "PRODUIT",
+        "items": {
+          "about": "Qui sommes-nous",
+          "features": "Fonctionnalités",
+          "support": "Assistance"
+        }
+      },
+      "resources": {
+        "title": "RESSOURCES",
+        "items": {
+          "career": "Carrières",
+          "blog": "Blog",
+          "legal": "Mentions légales"
+        }
+      },
+      "contact": {
+        "title": "CONTACT",
+        "items": {
+          "address": "Los Angeles, Californie",
+          "site": "adcrypto.com",
+          "phone": "+1564-644-5965"
+        }
+      }
+    },
+    "brand": "AD_CRYPTO",
+    "brandInline": "ad_crypto"
   },
   "common": {
     "loading": "Chargement...",
@@ -372,6 +534,93 @@
       "apple": {
         "label": "Télécharger dans l'",
         "name": "App Store"
+      }
+    }
+  },
+  "suite": {
+    "eyebrow": "Suite de sécurité",
+    "headingLead": "8 couches de",
+    "headingAccent": "système de sécurité",
+    "themeToggle": "Changer de thème",
+    "scroll": "Défiler",
+    "groups": {
+      "a": "Identité et accès",
+      "b": "Réseau et données"
+    },
+    "intro": {
+      "line1": "De quoi avez-vous besoin",
+      "line2": "Nous savons le faire",
+      "text": "Huit couches de protection en deux passes. D'abord la vérification et l'accès, puis les contrôles réseau et données qui les soutiennent."
+    },
+    "items": {
+      "smsEmail": {
+        "title": "Vérification par SMS ou e-mail",
+        "text": "L'e-mail comme le SMS renforcent l'authentification, mais chaque option a ses avantages et ses inconvénients."
+      },
+      "kyc": {
+        "title": "Solution KYC",
+        "text": "Simplifier la conformité : le guide complet des solutions KYC"
+      },
+      "twoFa": {
+        "title": "Authentification à deux facteurs",
+        "text": "La 2FA est une couche de protection supplémentaire qui sécurise les comptes en ligne au-delà d'un identifiant et d'un mot de passe."
+      },
+      "encryption": {
+        "title": "Chiffrement de bout en bout",
+        "text": "Le chiffrement de bout en bout est un système de communication où seuls les interlocuteurs peuvent lire les messages."
+      },
+      "behavior": {
+        "title": "Suivi comportemental",
+        "text": "C'est une technique utilisée par les entreprises et les annonceurs pour créer des publicités et des campagnes ciblées."
+      },
+      "ssl": {
+        "title": "Couche de sockets sécurisée",
+        "text": "Le chiffrement SSL garantit une communication sécurisée entre les utilisateurs et le site web."
+      },
+      "waf": {
+        "title": "Pare-feu applicatif web",
+        "text": "Un WAF surveille et filtre le trafic HTTP entre une application web et internet."
+      },
+      "rbac": {
+        "title": "Contrôle d'accès basé sur les rôles",
+        "text": "Il restreint l'accès administratif selon les rôles et les responsabilités."
+      }
+    }
+  },
+  "welcome": {
+    "headingLine1": "Téléchargez",
+    "headingLine2Lead": "l'app",
+    "headingLine2Accent": "AdCrypto",
+    "tagline": "L'astuce crypto la plus intelligente est arrivée.",
+    "text": "Adieu les frais cachés. À bientôt les transferts lents. Fini le cauchemar du saut entre portefeuilles.",
+    "phoneAlt": "L'application AdCrypto sur un téléphone",
+    "avatarAlt": "Un membre AdCrypto"
+  },
+  "overview": {
+    "badge": "Aperçu",
+    "headingLead": "Nous réinventons votre",
+    "headingAccent": "expérience des cryptomonnaies",
+    "text": "Notre aperçu résume la vision et la mission qui guident notre engagement à réinventer votre expérience crypto : un seul portefeuille, toutes les monnaies, sans friction.",
+    "chips": {
+      "verified": "Bulletin W2",
+      "amount": "749",
+      "range": "3 févr. - 17 févr. 2024"
+    },
+    "stats": {
+      "gateways": {
+        "value": "9",
+        "label": "Passerelles de paiement",
+        "text": "Branchez en quelques clics les moyens de paiement auxquels vos clients se fient déjà."
+      },
+      "currencies": {
+        "value": "4",
+        "label": "Devises",
+        "text": "Conservez, échangez et réglez dans les principales devises sans quitter l'app."
+      },
+      "transactions": {
+        "value": "500 K",
+        "label": "Transactions par jour",
+        "text": "Débit maximal absorbé, avec des confirmations en moins d'une seconde."
       }
     }
   }
