@@ -415,16 +415,71 @@
     }
   },
   "dashboard": {
-    "welcomeTitle": "Welcome back",
-    "welcomeSubtitle": "Here's a snapshot of your AdCrypto account.",
-    "statTotalBalance": "Total balance",
-    "statActiveWallets": "Active wallets",
-    "statPendingOrders": "Pending orders",
-    "statSupportTickets": "Open tickets",
-    "recentActivityTitle": "Recent activity",
-    "emptyActivityTitle": "No activity yet",
-    "emptyActivityText": "Your transactions will show up here once you start using your wallet.",
-    "logout": "Log out"
+    "title": "Dashboard",
+    "logout": "Log out",
+    "searchPlaceholder": "Type here to start searching...",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "help": "Help",
+    "notifications": "Notifications",
+    "account": "Account",
+    "nav": {
+      "dashboard": "Dashboard",
+      "sales": "Sales",
+      "analytics": "Analytics",
+      "product": "Product",
+      "store": "Store",
+      "visitor": "Visitor",
+      "enrich": "Enrich",
+      "shipment": "Shipment",
+      "integration": "Integration"
+    },
+    "upgradeText": "Get detailed analytics for help you, upgrade pro",
+    "upgradeCta": "Upgrade Now",
+    "lightMode": "Light Mode",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
+    "tabs": {
+      "overview": "Overview",
+      "notifications": "Notifications",
+      "tradeHistory": "Trade history"
+    },
+    "filter": "Filter",
+    "share": "Share",
+    "comparedToLastMonth": "Compared to last month",
+    "stats": {
+      "income": "Total Income",
+      "profit": "Profit",
+      "revenue": "Total Revenue",
+      "conversion": "Total Conversion"
+    },
+    "analytic": "Analytic",
+    "salesEstimation": "Sales Estimation",
+    "revenue": "Revenue",
+    "target": "Target",
+    "sessionByCountry": "Session by Country",
+    "countries": {
+      "us": "United States",
+      "jp": "Japan",
+      "id": "Indonesia",
+      "kr": "South Korea"
+    },
+    "transactionHistory": "Transaction History",
+    "download": "Download",
+    "reIssue": "Re-Issue",
+    "table": {
+      "productName": "Product Name",
+      "orderAmount": "Order amount",
+      "date": "Date",
+      "status": "Status",
+      "executedBy": "Executed by",
+      "more": "More"
+    },
+    "status": {
+      "processing": "Processing",
+      "success": "Success",
+      "declined": "Declined"
+    }
   },
   "footer": {
     "tagline": "Manage, buy and sell crypto — all in one wallet.",

@@ -415,16 +415,71 @@
     }
   },
   "dashboard": {
-    "welcomeTitle": "वापसी पर स्वागत है",
-    "welcomeSubtitle": "यह रहा आपके AdCrypto अकाउंट का स्नैपशॉट।",
-    "statTotalBalance": "कुल बैलेंस",
-    "statActiveWallets": "सक्रिय वॉलेट",
-    "statPendingOrders": "लंबित ऑर्डर",
-    "statSupportTickets": "खुले टिकट",
-    "recentActivityTitle": "हाल की गतिविधि",
-    "emptyActivityTitle": "अभी तक कोई गतिविधि नहीं",
-    "emptyActivityText": "जैसे ही आप अपना वॉलेट इस्तेमाल करना शुरू करेंगे, आपके ट्रांजैक्शन यहां दिखने लगेंगे।",
-    "logout": "लॉग आउट"
+    "title": "डैशबोर्ड",
+    "logout": "लॉग आउट",
+    "searchPlaceholder": "खोजने के लिए यहाँ लिखें...",
+    "openMenu": "मेनू खोलें",
+    "closeMenu": "मेनू बंद करें",
+    "help": "मदद",
+    "notifications": "सूचनाएँ",
+    "account": "खाता",
+    "nav": {
+      "dashboard": "डैशबोर्ड",
+      "sales": "बिक्री",
+      "analytics": "एनालिटिक्स",
+      "product": "प्रोडक्ट",
+      "store": "स्टोर",
+      "visitor": "विज़िटर",
+      "enrich": "एनरिच",
+      "shipment": "शिपमेंट",
+      "integration": "इंटीग्रेशन"
+    },
+    "upgradeText": "विस्तृत एनालिटिक्स पाने के लिए प्रो में अपग्रेड करें",
+    "upgradeCta": "अभी अपग्रेड करें",
+    "lightMode": "लाइट मोड",
+    "collapse": "साइडबार समेटें",
+    "expand": "साइडबार फैलाएँ",
+    "tabs": {
+      "overview": "ओवरव्यू",
+      "notifications": "सूचनाएँ",
+      "tradeHistory": "ट्रेड इतिहास"
+    },
+    "filter": "फ़िल्टर",
+    "share": "शेयर",
+    "comparedToLastMonth": "पिछले महीने की तुलना में",
+    "stats": {
+      "income": "कुल आय",
+      "profit": "मुनाफ़ा",
+      "revenue": "कुल राजस्व",
+      "conversion": "कुल कन्वर्ज़न"
+    },
+    "analytic": "एनालिटिक",
+    "salesEstimation": "बिक्री अनुमान",
+    "revenue": "राजस्व",
+    "target": "लक्ष्य",
+    "sessionByCountry": "देश के अनुसार सेशन",
+    "countries": {
+      "us": "संयुक्त राज्य",
+      "jp": "जापान",
+      "id": "इंडोनेशिया",
+      "kr": "दक्षिण कोरिया"
+    },
+    "transactionHistory": "लेन-देन इतिहास",
+    "download": "डाउनलोड",
+    "reIssue": "री-इश्यू",
+    "table": {
+      "productName": "प्रोडक्ट का नाम",
+      "orderAmount": "ऑर्डर राशि",
+      "date": "तारीख़",
+      "status": "स्थिति",
+      "executedBy": "निष्पादक",
+      "more": "और"
+    },
+    "status": {
+      "processing": "प्रोसेसिंग",
+      "success": "सफल",
+      "declined": "अस्वीकृत"
+    }
   },
   "footer": {
     "tagline": "क्रिप्टो मैनेज करें, खरीदें और बेचें, सब कुछ एक ही वॉलेट में।",

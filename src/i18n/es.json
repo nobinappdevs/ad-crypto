@@ -415,16 +415,71 @@
     }
   },
   "dashboard": {
-    "welcomeTitle": "Bienvenido de nuevo",
-    "welcomeSubtitle": "Aquí tienes un resumen de tu cuenta de AdCrypto.",
-    "statTotalBalance": "Saldo total",
-    "statActiveWallets": "Billeteras activas",
-    "statPendingOrders": "Órdenes pendientes",
-    "statSupportTickets": "Tickets abiertos",
-    "recentActivityTitle": "Actividad reciente",
-    "emptyActivityTitle": "Aún no hay actividad",
-    "emptyActivityText": "Tus transacciones aparecerán aquí en cuanto empieces a usar tu billetera.",
-    "logout": "Cerrar sesión"
+    "title": "Panel",
+    "logout": "Cerrar sesión",
+    "searchPlaceholder": "Escribe aquí para buscar...",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "help": "Ayuda",
+    "notifications": "Notificaciones",
+    "account": "Cuenta",
+    "nav": {
+      "dashboard": "Panel",
+      "sales": "Ventas",
+      "analytics": "Analítica",
+      "product": "Producto",
+      "store": "Tienda",
+      "visitor": "Visitantes",
+      "enrich": "Enriquecer",
+      "shipment": "Envíos",
+      "integration": "Integraciones"
+    },
+    "upgradeText": "Obtén analítica detallada para ayudarte, pásate a pro",
+    "upgradeCta": "Mejorar ahora",
+    "lightMode": "Modo claro",
+    "collapse": "Contraer barra lateral",
+    "expand": "Expandir barra lateral",
+    "tabs": {
+      "overview": "Resumen",
+      "notifications": "Notificaciones",
+      "tradeHistory": "Historial de operaciones"
+    },
+    "filter": "Filtrar",
+    "share": "Compartir",
+    "comparedToLastMonth": "Comparado con el mes pasado",
+    "stats": {
+      "income": "Ingresos totales",
+      "profit": "Beneficio",
+      "revenue": "Facturación total",
+      "conversion": "Conversión total"
+    },
+    "analytic": "Analítica",
+    "salesEstimation": "Estimación de ventas",
+    "revenue": "Ingresos",
+    "target": "Objetivo",
+    "sessionByCountry": "Sesiones por país",
+    "countries": {
+      "us": "Estados Unidos",
+      "jp": "Japón",
+      "id": "Indonesia",
+      "kr": "Corea del Sur"
+    },
+    "transactionHistory": "Historial de transacciones",
+    "download": "Descargar",
+    "reIssue": "Reemitir",
+    "table": {
+      "productName": "Producto",
+      "orderAmount": "Importe",
+      "date": "Fecha",
+      "status": "Estado",
+      "executedBy": "Ejecutado por",
+      "more": "Más"
+    },
+    "status": {
+      "processing": "Procesando",
+      "success": "Completado",
+      "declined": "Rechazado"
+    }
   },
   "footer": {
     "tagline": "Gestiona, compra y vende cripto, todo en una sola billetera.",

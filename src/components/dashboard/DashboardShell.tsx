@@ -31,8 +31,10 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   }
 
   return (
+    // bg-surface, not bg-bg: the reference design floats white cards on a
+    // gray page, and white-on-white loses every panel edge in light mode.
     <div
-      className={`min-h-screen bg-bg text-heading md:grid md:grid-cols-[56px_1fr] ${
+      className={`min-h-screen bg-surface text-heading md:grid md:grid-cols-[56px_1fr] ${
         collapsed ? "lg:grid-cols-[56px_1fr]" : "lg:grid-cols-[260px_1fr]"
       }`}
     >

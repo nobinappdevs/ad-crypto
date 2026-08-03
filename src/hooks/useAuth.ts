@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authService } from "@/services/auth.service";
 import { TOKEN_KEY } from "@/lib/axios";
+import { env } from "@/config/env";
 import type {
   ForgotPasswordRequest,
   LoginRequest,
@@ -38,11 +39,40 @@ function extractToken(res: any): string | undefined {
   return res?.data?.user?.token ?? res?.data?.token ?? res?.token;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Demo mode — see env.noBackend for why this exists                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Runs `real` unless `env.noBackend` is on, in which case it resolves a canned
+ * response shaped like the API's own so `extractToken` and
+ * `getApiSuccessMessage` keep working untouched. The short delay is what makes
+ * the forms' pending states ("Signing in...", "Verifying...") actually visible.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function demoOr<T>(demo: () => any, real: () => Promise<T>) {
+  if (!env.noBackend) return real();
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return demo();
+}
+
+const DEMO_NOTE = "(demo mode — no backend connected)";
+
 export function useLogin() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (payload: LoginRequest) => authService.login(payload),
+    mutationFn: (payload: LoginRequest) =>
+      demoOr(
+        // The guards only ever check that a token is present, so the value
+        // carries nothing — keeping the email out of it avoids `btoa` throwing
+        // on an address with non-Latin1 characters.
+        () => ({
+          data: { token: "demo-session" },
+          message: { success: [`Signed in ${DEMO_NOTE}`] },
+        }),
+        () => authService.login(payload),
+      ),
     onSuccess: (res) => {
       const token = extractToken(res);
       if (token && typeof window !== "undefined") {
@@ -58,15 +88,24 @@ export function useLogin() {
 /** Step 1 of the reset flow: emails the account a one-time code. */
 export function useForgotPassword() {
   return useMutation({
-    mutationFn: (payload: ForgotPasswordRequest) => authService.forgotPassword(payload),
+    mutationFn: (payload: ForgotPasswordRequest) =>
+      demoOr(
+        () => ({ message: { success: [`Code sent ${DEMO_NOTE}`] } }),
+        () => authService.forgotPassword(payload),
+      ),
     onError: (err) => toast.error(getApiErrorMessage(err)),
   });
 }
 
-/** Step 2: confirms the code before the password field is ever shown. */
+/** Step 2: confirms the code before the password field is ever shown. In demo
+ *  mode any six digits pass — there is no code to compare against. */
 export function useVerifyOtp() {
   return useMutation({
-    mutationFn: (payload: VerifyOtpRequest) => authService.verifyOtp(payload),
+    mutationFn: (payload: VerifyOtpRequest) =>
+      demoOr(
+        () => ({ message: { success: [`Code verified ${DEMO_NOTE}`] } }),
+        () => authService.verifyOtp(payload),
+      ),
     onError: (err) => toast.error(getApiErrorMessage(err)),
   });
 }
@@ -79,7 +118,10 @@ export function useResetPassword(successMessage: string) {
 
   return useMutation({
     mutationFn: (payload: Omit<ResetPasswordRequest, "confirmPassword">) =>
-      authService.resetPassword(payload),
+      demoOr(
+        () => ({ message: { success: [`Password reset ${DEMO_NOTE}`] } }),
+        () => authService.resetPassword(payload),
+      ),
     onSuccess: (res) => {
       toast.success(getApiSuccessMessage(res, successMessage));
       router.push("/login");

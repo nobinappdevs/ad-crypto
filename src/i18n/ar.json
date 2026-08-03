@@ -415,16 +415,71 @@
     }
   },
   "dashboard": {
-    "welcomeTitle": "مرحبًا بعودتك",
-    "welcomeSubtitle": "إليك ملخص حساب AdCrypto الخاص بك.",
-    "statTotalBalance": "الرصيد الإجمالي",
-    "statActiveWallets": "المحافظ النشطة",
-    "statPendingOrders": "الطلبات المعلّقة",
-    "statSupportTickets": "تذاكر الدعم المفتوحة",
-    "recentActivityTitle": "النشاط الأخير",
-    "emptyActivityTitle": "لا يوجد نشاط بعد",
-    "emptyActivityText": "ستظهر معاملاتك هنا بمجرد أن تبدأ باستخدام محفظتك.",
-    "logout": "تسجيل الخروج"
+    "title": "لوحة التحكم",
+    "logout": "تسجيل الخروج",
+    "searchPlaceholder": "اكتب هنا لبدء البحث...",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
+    "help": "المساعدة",
+    "notifications": "الإشعارات",
+    "account": "الحساب",
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "sales": "المبيعات",
+      "analytics": "التحليلات",
+      "product": "المنتج",
+      "store": "المتجر",
+      "visitor": "الزوار",
+      "enrich": "الإثراء",
+      "shipment": "الشحنات",
+      "integration": "التكاملات"
+    },
+    "upgradeText": "احصل على تحليلات مفصلة لمساعدتك، بادر بالترقية",
+    "upgradeCta": "الترقية الآن",
+    "lightMode": "الوضع الفاتح",
+    "collapse": "طي الشريط الجانبي",
+    "expand": "توسيع الشريط الجانبي",
+    "tabs": {
+      "overview": "نظرة عامة",
+      "notifications": "الإشعارات",
+      "tradeHistory": "سجل التداول"
+    },
+    "filter": "تصفية",
+    "share": "مشاركة",
+    "comparedToLastMonth": "مقارنة بالشهر الماضي",
+    "stats": {
+      "income": "إجمالي الدخل",
+      "profit": "الربح",
+      "revenue": "إجمالي الإيرادات",
+      "conversion": "إجمالي التحويل"
+    },
+    "analytic": "التحليلات",
+    "salesEstimation": "تقدير المبيعات",
+    "revenue": "الإيرادات",
+    "target": "الهدف",
+    "sessionByCountry": "الجلسات حسب الدولة",
+    "countries": {
+      "us": "الولايات المتحدة",
+      "jp": "اليابان",
+      "id": "إندونيسيا",
+      "kr": "كوريا الجنوبية"
+    },
+    "transactionHistory": "سجل المعاملات",
+    "download": "تنزيل",
+    "reIssue": "إعادة إصدار",
+    "table": {
+      "productName": "اسم المنتج",
+      "orderAmount": "قيمة الطلب",
+      "date": "التاريخ",
+      "status": "الحالة",
+      "executedBy": "نُفِّذ بواسطة",
+      "more": "المزيد"
+    },
+    "status": {
+      "processing": "قيد المعالجة",
+      "success": "ناجح",
+      "declined": "مرفوض"
+    }
   },
   "footer": {
     "tagline": "أدر واشترِ وبِع العملات الرقمية، كل ذلك في محفظة واحدة.",

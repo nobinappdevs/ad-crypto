@@ -415,16 +415,71 @@
     }
   },
   "dashboard": {
-    "welcomeTitle": "Content de vous revoir",
-    "welcomeSubtitle": "Voici un aperçu de votre compte AdCrypto.",
-    "statTotalBalance": "Solde total",
-    "statActiveWallets": "Portefeuilles actifs",
-    "statPendingOrders": "Commandes en attente",
-    "statSupportTickets": "Tickets ouverts",
-    "recentActivityTitle": "Activité récente",
-    "emptyActivityTitle": "Aucune activité pour le moment",
-    "emptyActivityText": "Vos transactions apparaîtront ici dès que vous commencerez à utiliser votre portefeuille.",
-    "logout": "Se déconnecter"
+    "title": "Tableau de bord",
+    "logout": "Se déconnecter",
+    "searchPlaceholder": "Tapez ici pour rechercher...",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "help": "Aide",
+    "notifications": "Notifications",
+    "account": "Compte",
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "sales": "Ventes",
+      "analytics": "Analytique",
+      "product": "Produit",
+      "store": "Boutique",
+      "visitor": "Visiteurs",
+      "enrich": "Enrichir",
+      "shipment": "Expéditions",
+      "integration": "Intégrations"
+    },
+    "upgradeText": "Obtenez des analyses détaillées pour vous aider, passez pro",
+    "upgradeCta": "Passer pro",
+    "lightMode": "Mode clair",
+    "collapse": "Réduire la barre latérale",
+    "expand": "Déployer la barre latérale",
+    "tabs": {
+      "overview": "Aperçu",
+      "notifications": "Notifications",
+      "tradeHistory": "Historique des trades"
+    },
+    "filter": "Filtrer",
+    "share": "Partager",
+    "comparedToLastMonth": "Par rapport au mois dernier",
+    "stats": {
+      "income": "Revenu total",
+      "profit": "Profit",
+      "revenue": "Chiffre d'affaires total",
+      "conversion": "Conversion totale"
+    },
+    "analytic": "Analytique",
+    "salesEstimation": "Estimation des ventes",
+    "revenue": "Revenu",
+    "target": "Objectif",
+    "sessionByCountry": "Sessions par pays",
+    "countries": {
+      "us": "États-Unis",
+      "jp": "Japon",
+      "id": "Indonésie",
+      "kr": "Corée du Sud"
+    },
+    "transactionHistory": "Historique des transactions",
+    "download": "Télécharger",
+    "reIssue": "Réémettre",
+    "table": {
+      "productName": "Produit",
+      "orderAmount": "Montant",
+      "date": "Date",
+      "status": "Statut",
+      "executedBy": "Exécuté par",
+      "more": "Plus"
+    },
+    "status": {
+      "processing": "En cours",
+      "success": "Réussi",
+      "declined": "Refusé"
+    }
   },
   "footer": {
     "tagline": "Gérez, achetez et vendez vos cryptos, tout en un seul portefeuille.",
