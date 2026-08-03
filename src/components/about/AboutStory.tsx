@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLang } from "@/hooks/useLang";
 import { PromoPanel } from "@/components/promo/PromoPanel";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
  * The About panel: the shared promo half on the left, the story on the right.
@@ -48,9 +49,7 @@ export function AboutStory() {
       <PromoPanel baseKey="aboutPanel" stats={STATS} floorClass="lg:min-h-155" />
 
       <div className="flex flex-col justify-center gap-5.5 px-5 py-10 sm:px-10 sm:py-14 lg:px-15.5 lg:py-14.5">
-        <span className="inline-flex! items-center gap-2.5 self-start rounded-full border border-panel-line px-4 py-1.75 text-[12.5px]! font-semibold! tracking-[0.14em] uppercase text-primary!" style={{ background: "var(--panel-field)" }}>
-          {k("badge")}
-        </span>
+        <SectionKicker textClassName="text-panel-muted">{k("badge")}</SectionKicker>
 
         <h1 className="text-[30px]! leading-[1.1]! font-bold! tracking-[-0.035em] text-panel-fg sm:text-[36px]! lg:text-[44px]!">
           {k("headingLine1")}

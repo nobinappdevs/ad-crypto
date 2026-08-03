@@ -4,6 +4,7 @@ import { Eye, ShieldCheck, Sparkles, Target } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
 import { PageHeader } from "@/components/share/PageHeader";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 const VALUE_KEYS = ["security", "simplicity", "transparency"] as const;
 const VALUE_ICONS = { security: ShieldCheck, simplicity: Sparkles, transparency: Eye };
@@ -19,6 +20,9 @@ export function About() {
           lives here as the page's first real section. */}
       <section className="pt-14 sm:pt-16">
         <Container className="max-w-3xl">
+          <SectionKicker className="mb-4" textClassName="text-muted">
+            {t("about.eyebrow")}
+          </SectionKicker>
           <h2>{t("about.title")}</h2>
           <p className="mt-4">{t("about.intro")}</p>
         </Container>

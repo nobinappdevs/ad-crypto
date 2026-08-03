@@ -6,6 +6,7 @@ import QRCode from "react-qr-code";
 import { Play } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
  * Inlined rather than taken from lucide: its `Apple` icon is a piece of fruit,
@@ -84,6 +85,9 @@ export function DownloadApp() {
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* ---------------- Copy ---------------- */}
           <div className="order-2 lg:order-1">
+            <SectionKicker className="mb-4" textClassName="text-muted">
+              {t("download.badge")}
+            </SectionKicker>
             <div className="relative">
               <h2 className="text-[32px]! leading-[1.15]! font-extrabold tracking-tight sm:text-[38px]! lg:text-[44px]!">
                 {t("download.headingLead")}{" "}

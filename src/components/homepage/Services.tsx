@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
 import { cn } from "@/components/ui/cn";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
  * The first entry is `featured` and takes a 2x2 cell with a highlight list, so
@@ -140,15 +141,9 @@ export function Services() {
     <section className="pt-14 pb-20 sm:pt-16 sm:pb-24">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex! items-center gap-2 rounded-full border border-border bg-surface py-1 pr-3.5 pl-1 text-[12.5px] font-semibold text-heading">
-            <span
-              aria-hidden
-              className="flex h-5.5 w-5.5 items-center justify-center rounded-full bg-primary text-[12px] font-bold text-white"
-            >
-              $
-            </span>
+          <SectionKicker className="justify-center" textClassName="text-muted">
             {t("service.badge")}
-          </span>
+          </SectionKicker>
 
           <h2 className="mt-4">
             {t("service.headingLead")} <span className="text-primary!">{t("service.headingAccent")}</span>

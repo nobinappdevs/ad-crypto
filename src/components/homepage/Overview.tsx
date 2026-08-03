@@ -4,6 +4,7 @@ import { useRef, type CSSProperties, type ReactNode } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useFitScale } from "@/hooks/useFitScale";
 import { useReveal } from "@/hooks/useReveal";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
  * The illustration is a fixed canvas: three arcs drawn on a 560x400 viewBox, four
@@ -47,26 +48,6 @@ const NODES = [
 ];
 
 const STATS = ["gateways", "currencies", "transactions"] as const;
-
-/** Vertical-stroke dollar mark for the badge. */
-function DollarMark() {
-  return (
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#ffffff"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M15 8.4c-.6-1.1-1.8-1.7-3-1.7-1.7 0-3 1-3 2.4 0 1.5 1.4 2 3 2.5s3 1 3 2.5c0 1.4-1.3 2.4-3 2.4-1.3 0-2.5-.6-3-1.8" />
-      <path d="M12 4.6v14.8" />
-    </svg>
-  );
-}
 
 function Chip({
   className,
@@ -268,23 +249,7 @@ export function Overview() {
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
           {/* ---------------- Copy ---------------- */}
           <div data-reveal className="flex flex-col gap-[18px]" style={delay(0)}>
-            <span
-              className="inline-flex! items-center gap-3 self-start rounded-full border py-1.5 pr-[22px] pl-1.5 text-[14px]! font-semibold tracking-[0.01em]"
-              style={{
-                background: "var(--suite-chip-card)",
-                borderColor: "var(--suite-card-br)",
-                color: "var(--suite-card-fg)",
-              }}
-            >
-              <span
-                aria-hidden
-                className="grid! h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-primary"
-                style={{ boxShadow: "inset 0 1px 0 rgb(255 255 255 / 0.4)" }}
-              >
-                <DollarMark />
-              </span>
-              {t("overview.badge")}
-            </span>
+            <SectionKicker color="var(--suite-muted)">{t("overview.badge")}</SectionKicker>
 
             <h2
               className="text-[30px]! leading-[1.12]! font-bold! tracking-[-0.035em] wrap-break-word sm:text-[40px]! lg:text-[44px]! xl:text-[52px]!"

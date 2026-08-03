@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, type CSSProperties, type ReactNode } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
+import { Logo } from "./Logo";
 
 const LAUNCH_YEAR = 2026;
 
@@ -200,12 +201,9 @@ export function Footer() {
             data-reveal
             className="col-span-2 flex flex-col gap-5 sm:col-span-4 lg:col-span-1"
           >
-            <span
-              className="text-[26px]! font-bold! tracking-[0.01em]"
-              style={{ color: "var(--suite-fg)" }}
-            >
-              {t("footer.brand")}
-            </span>
+            <Link href="/" className="w-fit">
+              <Logo className="max-w-36 lg:max-w-36 xl:max-w-40" />
+            </Link>
             <p
               className="max-w-[230px] text-[13.5px]! leading-[1.65]!"
               style={{ color: "var(--suite-card-muted)" }}

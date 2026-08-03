@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { useLang } from "@/hooks/useLang";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /* -------------------------------------------------------------------------- */
 /* Motion constants — taken verbatim from the source design                    */
@@ -576,18 +577,7 @@ export function SecuritySuite() {
         <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-8 px-4 py-14 sm:gap-10 sm:px-6 sm:py-16 lg:sticky lg:top-[min(0px,calc(100vh-760px))] lg:min-h-screen lg:flex-row lg:items-center lg:gap-8 lg:px-6 lg:py-10 xl:gap-12 xl:px-14 xl:py-12">
           {/* ---------------- Left column ---------------- */}
           <div className="flex w-full flex-col gap-6 lg:w-[260px] lg:flex-[0_0_260px] lg:gap-[26px] xl:w-[300px] xl:flex-[0_0_300px] xl:gap-[30px]">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <span aria-hidden className="h-0.5 w-[26px] shrink-0 bg-primary" />
-                <span
-                  className="text-[12px]! font-medium! tracking-[0.2em] uppercase"
-                  style={{ color: "var(--suite-muted)" }}
-                >
-                  {t("suite.eyebrow")}
-                </span>
-              </div>
-
-            </div>
+            <SectionKicker color="var(--suite-muted)">{t("suite.eyebrow")}</SectionKicker>
 
             <h2
               className="text-[34px]! leading-[1.02]! font-extrabold! tracking-[-0.03em] text-pretty wrap-break-word sm:text-[44px]! lg:text-[44px]! xl:text-[52px]!"

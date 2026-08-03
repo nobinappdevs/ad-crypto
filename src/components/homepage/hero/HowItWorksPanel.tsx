@@ -2,7 +2,7 @@
 
 import type { RefObject } from "react";
 import { useLang } from "@/hooks/useLang";
-import { DollarSign } from "lucide-react";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 const STEPS = [
   { num: "01", key: "onboarding" },
@@ -58,24 +58,9 @@ export function HowItWorksPanel({
         style={{ willChange: "transform, opacity" }}
       >
 
-                      <div className="relative inline-flex items-center my-4">
-      {/* Outer Circle Container (Blue Base) */}
-      <div className="relative z-20 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary shadow-md shadow-primary/25">
-        {/* Inner White Circle */}
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-primary">
-          {/* Option 1: Lucide Icon */}
-          <DollarSign className="h-4 w-4 stroke-[3]" />
-          
-          {/* Option 2: Pure Text Symbol (if you want text instead of icon, uncomment line below) */}
-          {/* <span className="text-xs font-black leading-none">$</span> */}
-        </div>
-      </div>
-
-      {/* Main Pill Badge Text Area */}
-      <div className="-ml-5 flex h-9 items-center rounded-full bg-hero-badge pl-8 pr-5 text-sm font-semibold text-white tracking-wide shadow-inner">
-   {t("howItWorks.badge")}
-      </div>
-    </div>
+        <SectionKicker className="my-4" textClassName="text-hero-fg-muted">
+          {t("howItWorks.badge")}
+        </SectionKicker>
 
         <h2 className="text-[26px]! leading-tight! font-bold tracking-tight text-hero-fg sm:text-[32px]! md:text-[38px]! lg:text-[40px]! xl:text-[44px]!">
           {t("howItWorks.titleLead")}{" "}

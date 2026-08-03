@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useLang } from "@/hooks/useLang";
+import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
  * The FAQ block below the About panel: a sticky intro column and six accordion
@@ -26,9 +27,7 @@ export function AboutFaq() {
       className="grid grid-cols-1 items-start gap-8 pt-10 sm:gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14 lg:pt-11.5"
     >
       <div className="flex flex-col gap-3.5 lg:sticky lg:top-10">
-        <span className="text-[12.5px]! font-semibold! tracking-[0.18em] uppercase text-primary!">
-          {k("eyebrow")}
-        </span>
+        <SectionKicker textClassName="text-panel-muted">{k("eyebrow")}</SectionKicker>
         <h2 className="text-[28px]! leading-[1.1]! font-bold! tracking-[-0.035em] text-panel-fg sm:text-[34px]! lg:text-[40px]!">
           {k("headingLine1")}
           <br />
