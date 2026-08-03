@@ -15,6 +15,17 @@ import { cn } from "@/components/ui/cn";
  */
 const INTRINSIC = { width: 1350, height: 361 };
 
+/**
+ * Where the hexagon mark ends, as a fraction of the asset's width — measured off
+ * the PNGs, which place the glyph identically in both. `LogoMark` crops to this
+ * so the icon-only rail can show the brand without a 12px-tall wordmark beside
+ * it. If the logo files are ever re-exported, re-measure this.
+ */
+const MARK_WIDTH_RATIO = 0.26;
+const MARK_HEIGHT = 34;
+const MARK_IMAGE_WIDTH = Math.round(MARK_HEIGHT * (INTRINSIC.width / INTRINSIC.height));
+const MARK_BOX_WIDTH = Math.round(MARK_IMAGE_WIDTH * MARK_WIDTH_RATIO);
+
 export function Logo({ className }: { className?: string }) {
   const shared = { ...INTRINSIC, alt: "AdCrypto", priority: true };
   // Sized by max-width — 120px small, 128px at `lg`, 160px from `xl` up — with
@@ -32,6 +43,41 @@ export function Logo({ className }: { className?: string }) {
     <span className="inline-flex! items-center">
       <Image {...shared} src="/assets/logo/web_logo_dark.png" className={cn(base, "dark:hidden")} />
       <Image {...shared} src="/assets/logo/web_logo.png" className={cn(base, "hidden dark:block")} />
+    </span>
+  );
+}
+
+/**
+ * The hexagon on its own, for places too narrow for the wordmark — currently the
+ * collapsed dashboard rail.
+ *
+ * There is no icon-only asset, so this crops the full logo: a fixed-size box with
+ * `overflow-hidden` over an image laid out wider than the box. `max-w-none` is
+ * required — without it Next's image styles clamp the width back to the box and
+ * the whole wordmark squeezes into 33px.
+ */
+export function LogoMark({ className }: { className?: string }) {
+  const shared = { ...INTRINSIC, alt: "AdCrypto", priority: true };
+  const base = "max-w-none";
+  const size = { height: MARK_HEIGHT, width: MARK_IMAGE_WIDTH };
+
+  return (
+    <span
+      className={cn("block shrink-0 overflow-hidden", className)}
+      style={{ height: MARK_HEIGHT, width: MARK_BOX_WIDTH }}
+    >
+      <Image
+        {...shared}
+        src="/assets/logo/web_logo_dark.png"
+        style={size}
+        className={cn(base, "dark:hidden")}
+      />
+      <Image
+        {...shared}
+        src="/assets/logo/web_logo.png"
+        style={size}
+        className={cn(base, "hidden dark:block")}
+      />
     </span>
   );
 }

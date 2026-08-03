@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Bell, ChevronDown, CircleHelp, LogOut, Menu, Search } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Bell, ChevronDown, CircleHelp, LogOut, Menu } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
 import { TOKEN_KEY } from "@/lib/axios";
@@ -12,19 +12,31 @@ import { cn } from "@/components/ui/cn";
 import { dsx } from "./ui";
 
 /**
- * Top bar of the overview: page title on the left, then search, help, bell,
- * language and the account menu. The theme control is NOT here — the reference
- * design keeps it as the sidebar's "Light Mode" row — and logout, which the old
- * bar showed as its own button, now lives in the avatar dropdown.
+ * Top bar of the overview: page title on the left, then help, bell, language
+ * and the account menu. The theme control is NOT here — the reference design
+ * keeps it as the sidebar's "Light Mode" row — and logout, which the old bar
+ * showed as its own button, now lives in the avatar dropdown.
  */
+/**
+ * Route -> nav key. Longest match wins, so a future `/dashboard/buy-crypto/xyz`
+ * still titles itself "Buy Crypto" rather than falling back to the overview.
+ */
+const TITLES: { prefix: string; key: string }[] = [
+  { prefix: "/dashboard/buy-crypto", key: "dashboard.nav.buyCrypto" },
+  { prefix: "/dashboard/sell-crypto", key: "dashboard.nav.sellCrypto" },
+  { prefix: "/dashboard/withdraw-crypto", key: "dashboard.nav.withdrawCrypto" },
+  { prefix: "/dashboard/exchange-crypto", key: "dashboard.nav.exchangeCrypto" },
+  { prefix: "/dashboard/my-cards", key: "dashboard.nav.myCards" },
+  { prefix: "/dashboard", key: "dashboard.title" },
+];
+
 export function Navbar({ onMenu }: { onMenu: () => void }) {
   const { t } = useLang();
   const router = useRouter();
+  const pathname = usePathname();
 
-  // Below `lg` the search field gives way to an icon that folds a full-width
-  // row out under the bar — the input is far too wide for a phone row that
-  // already carries five controls.
-  const [searchOpen, setSearchOpen] = useState(false);
+  const title = TITLES.find((entry) => pathname?.startsWith(entry.prefix))?.key ?? "dashboard.title";
+
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -45,20 +57,6 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
     router.replace("/login");
   }
 
-  const searchField = (
-    <div className="flex h-10 items-center gap-2.5 rounded-xl border border-border bg-card px-3.5 transition-colors focus-within:border-primary">
-      <Search size={15} className="shrink-0 text-muted" aria-hidden />
-      <input
-        type="search"
-        placeholder={t("dashboard.searchPlaceholder")}
-        className="w-full min-w-0 bg-transparent text-[13px] text-heading outline-none placeholder:text-muted"
-      />
-      <kbd className="hidden shrink-0 rounded-md border border-border bg-surface px-1.5 py-0.5 text-[11px] font-medium text-muted lg:block">
-        ⌘ + /
-      </kbd>
-    </div>
-  );
-
   return (
     <header className="border-b border-border bg-surface">
       <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
@@ -72,21 +70,10 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
         </button>
 
         <h1 className="min-w-0 truncate text-[20px]! leading-none! font-bold! tracking-[-0.01em] sm:text-[22px]!">
-          {t("dashboard.title")}
+          {t(title)}
         </h1>
 
         <div className="flex flex-1 items-center justify-end gap-1.5 sm:gap-2">
-          <div className="hidden w-72 lg:block xl:w-80">{searchField}</div>
-          <button
-            type="button"
-            onClick={() => setSearchOpen((v) => !v)}
-            className={`${dsx.iconBtn} lg:hidden`}
-            aria-expanded={searchOpen}
-            aria-label={t("dashboard.searchPlaceholder")}
-          >
-            <Search size={17} />
-          </button>
-
           <button type="button" className={cn(dsx.iconBtn, "hidden sm:inline-flex")} aria-label={t("dashboard.help")}>
             <CircleHelp size={17} />
           </button>
@@ -138,8 +125,6 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
           </div>
         </div>
       </div>
-
-      {searchOpen && <div className="px-4 pb-3 lg:hidden">{searchField}</div>}
     </header>
   );
 }

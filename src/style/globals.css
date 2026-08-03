@@ -273,6 +273,23 @@
      dark — a 5% azure wash disappears entirely against #041424. */
   --panel-open: rgb(1 148 252 / 0.05);
   --panel-shadow: 0 46px 100px rgb(1 20 40 / 0.28);
+
+  /* ---- Dashboard chart series ---------------------------------------
+     Categorical slots for the dashboard charts. The ORDER is fixed and a
+     series keeps its slot when others are filtered out — colour follows the
+     entity, never its rank.
+
+     These are not eyeballed: the trio was run through the data-viz palette
+     validator against this app's own card surfaces (#ffffff light,
+     #0f121d dark) and clears every all-pairs gate in both modes — CVD
+     separation, normal-vision separation, the lightness band, the chroma
+     floor and 3:1 contrast. Re-run the validator before changing any of
+     them; the blue is the brand primary and the other two are stepped
+     against it, so a lone tweak is what breaks the set. */
+  --chart-1: #eb6834; /* in progress */
+  --chart-2: #7c5cd6; /* pending     */
+  --chart-3: #0194fc; /* completed   */
+  --chart-grid: rgb(9 22 40 / 0.08);
 }
 
 [data-theme="dark"] {
@@ -483,6 +500,15 @@
   --panel-stat: rgb(255 255 255 / 0.04);
   --panel-open: rgb(255 255 255 / 0.06);
   --panel-shadow: 0 46px 100px rgb(1 20 40 / 0.35);
+
+  /* ---- Dashboard chart series (dark) ----------------------------------
+     Selected for the dark surface, not flipped from the light set: only the
+     orange needed a darker step to sit inside the dark lightness band. Same
+     validator, same all-pairs gates, run against #0f121d. */
+  --chart-1: #e06a30;
+  --chart-2: #7c5cd6;
+  --chart-3: #0194fc;
+  --chart-grid: rgb(255 255 255 / 0.09);
 }
 
 @theme {

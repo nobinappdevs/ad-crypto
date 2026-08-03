@@ -4,23 +4,24 @@ import Link from "next/link";
 import { useState, type ComponentType, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import {
-  BarChart3,
+  ArrowDownToLine,
+  ArrowLeftRight,
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
-  Gem,
+  CreditCard,
+  HandCoins,
   LayoutGrid,
-  Puzzle,
-  ShoppingBag,
+  ReceiptText,
+  ShoppingCart,
   Sparkles,
   Sun,
-  Truck,
-  Wallet,
   X,
 } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/components/ui/cn";
+import { Logo, LogoMark } from "@/components/share/Logo";
 
 /**
  * Only `/dashboard` is a real route; everything else in the reference design is
@@ -36,11 +37,12 @@ type NavEntry = {
 
 const NAV: NavEntry[] = [
   { key: "dashboard", icon: LayoutGrid, href: "/dashboard" },
-  { key: "sales", icon: ShoppingBag },
-  { key: "analytics", icon: BarChart3, children: ["product", "store", "visitor"] },
-  { key: "enrich", icon: Gem },
-  { key: "shipment", icon: Truck },
-  { key: "integration", icon: Puzzle },
+  { key: "buyCrypto", icon: ShoppingCart, href: "/dashboard/buy-crypto" },
+  { key: "sellCrypto", icon: HandCoins, href: "/dashboard/sell-crypto" },
+  { key: "withdrawCrypto", icon: ArrowDownToLine, href: "/dashboard/withdraw-crypto" },
+  { key: "exchangeCrypto", icon: ArrowLeftRight, href: "/dashboard/exchange-crypto" },
+  { key: "myCards", icon: CreditCard, href: "/dashboard/my-cards" },
+  { key: "transactions", icon: ReceiptText, children: ["all", "pending", "statements"] },
 ];
 
 export function Sidebar({
@@ -58,8 +60,7 @@ export function Sidebar({
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
 
-  // Analytics starts open, as in the reference design.
-  const [openGroup, setOpenGroup] = useState<string | null>("analytics");
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   /**
    * Everything textual hides wherever the rail is icon-only: md-lg always
@@ -78,11 +79,22 @@ export function Sidebar({
     >
       {/* ---- Logo row. The collapse toggle lives up here, as in the design. */}
       <div className="flex h-16 shrink-0 items-center justify-between gap-2 px-3.5">
-        <Link href="/" className="inline-flex! items-center gap-2.5 overflow-hidden">
-          <span className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-[10px] bg-primary text-white shadow-[0_6px_14px_rgb(var(--primary__color)/0.35)]">
-            <Wallet size={16} />
-          </span>
-          {label(<span className="text-[16px] font-bold text-heading">{t("brand.name")}</span>)}
+        {/* The site wordmark, dropping to the hexagon alone wherever the rail is
+            icon-only — at 56px the full lockup would render its lettering about
+            twelve pixels tall. */}
+        <Link href="/" className="inline-flex! items-center overflow-hidden">
+          {collapsed ? (
+            <LogoMark />
+          ) : (
+            <>
+              <span className="block md:hidden lg:block">
+                <Logo className="max-w-33 lg:max-w-33 xl:max-w-33" />
+              </span>
+              <span className="hidden md:block lg:hidden">
+                <LogoMark />
+              </span>
+            </>
+          )}
         </Link>
 
         {!collapsed && (

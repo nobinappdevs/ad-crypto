@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight, DollarSign } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { ease, segment, useScrollProgress } from "@/hooks/useScrollProgress";
+import { SHELL, SHELL_MAX } from "@/components/share/Container";
 import { PhoneMockup } from "./PhoneMockup";
 import { HowItWorksPanel } from "./HowItWorksPanel";
 
@@ -21,6 +22,15 @@ const PHONE_TRAVEL_X = -0.222;
 const PHONE_BOTTOM_OFFSET = 334;
 const PHONE_END_Y = 190;
 const PHONE_END_SCALE = 0.76;
+
+/**
+ * The cap on the phone's travel — `SHELL_MAX`'s 1292px, as a number, because the
+ * travel is computed rather than a class. Both halves of the composition stop
+ * spreading at the same width: on a 2560px window (or a zoomed-out one) a plain
+ * fraction of the viewport threw the phone 568px left while the copy went to the
+ * window's right edge, and the two stopped reading as one scene.
+ */
+const HERO_FRAME = 1292;
 
 const BEZEL_MASK = "linear-gradient(180deg, #000 68%, rgba(0,0,0,0.35) 88%, transparent 100%)";
 
@@ -69,17 +79,21 @@ export function HeroScene() {
       hero.style.opacity = (1 - heroOut).toFixed(3);
     }
 
-    if (panel) panel.style.transform = `translateY(${(100 * (1 - panelIn)).toFixed(2)}%)`;
+    // `translate3d`, not `translateY`: both of these run every frame alongside the
+    // phone, and the 2D form keeps them on the main thread's paint path.
+    if (panel) panel.style.transform = `translate3d(0, ${(100 * (1 - panelIn)).toFixed(2)}%, 0)`;
 
     if (panelText) {
-      panelText.style.transform = `translateY(${(44 * (1 - textIn)).toFixed(1)}px)`;
+      panelText.style.transform = `translate3d(0, ${(44 * (1 - textIn)).toFixed(1)}px, 0)`;
       panelText.style.opacity = textIn.toFixed(3);
     }
 
     if (phone) {
       const stage = stageRef.current;
-      const width = stage?.offsetWidth ?? 1440;
       const height = stage?.offsetHeight ?? 900;
+      // Capped at the design canvas: past 1440px the phone holds its offset from
+      // the centre instead of drifting further out with the window.
+      const width = Math.min(stage?.offsetWidth ?? HERO_FRAME, HERO_FRAME);
       const dx = PHONE_TRAVEL_X * width * travel;
       // Distance from the phone's start (height - PHONE_BOTTOM_OFFSET) to its
       // destination (PHONE_END_Y). Re-derived from the live stage height every
@@ -139,12 +153,12 @@ export function HeroScene() {
               className="pointer-events-none absolute -top-[90px] left-1/2 h-[480px] w-[680px] -translate-x-1/2 lg:-top-[140px] lg:h-[720px] lg:w-[1000px]"
               style={{ background: "var(--hero-vignette)" }}
             />
-            {/* Corner accents live inside a centred 1440px frame — the design's
-                canvas width. Anchoring them to the viewport instead makes them
-                drift out to the edges on wide screens. */}
+            {/* Corner accents live inside the page shell — the design's canvas
+                width. Anchoring them to the viewport instead makes them drift out
+                to the edges on wide screens. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 mx-auto hidden h-full max-w-[1440px] lg:block"
+              className={`${SHELL_MAX} pointer-events-none absolute inset-x-0 top-0 hidden h-full lg:block`}
             >
               <div
                 data-glow="left"
@@ -241,18 +255,22 @@ export function HeroScene() {
           <HowItWorksPanel panelRef={panelRef} textRef={panelTextRef} />
 
           {/* ---------------- Scroll hint ---------------- */}
+          {/* Shelled like everything else, so it starts on the same left edge as
+              the nav's first link rather than hugging the window. */}
           <div
             ref={hintRef}
-            className="absolute bottom-6 left-5 z-[8] hidden items-center gap-2.5 text-[12px] tracking-[0.14em] text-hero-fg-muted uppercase lg:flex xl:left-14"
+            className={`${SHELL} absolute bottom-6 inset-x-0 z-[8] hidden lg:block`}
           >
-            <span className="inline!">{t("hero.scroll")}</span>
-            <span
-              aria-hidden
-              className="h-px w-[34px]"
-              style={{
-                background: "linear-gradient(90deg, rgb(var(--hero-fg-muted)), transparent)",
-              }}
-            />
+            <span className="flex! items-center gap-2.5 text-[12px] tracking-[0.14em] text-hero-fg-muted uppercase">
+              <span className="inline!">{t("hero.scroll")}</span>
+              <span
+                aria-hidden
+                className="h-px w-[34px]"
+                style={{
+                  background: "linear-gradient(90deg, rgb(var(--hero-fg-muted)), transparent)",
+                }}
+              />
+            </span>
           </div>
         </div>
       </div>

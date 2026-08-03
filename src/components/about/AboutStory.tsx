@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { useLang } from "@/hooks/useLang";
 import { PromoPanel } from "@/components/promo/PromoPanel";
-import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
- * The About panel: the shared promo half on the left, the story on the right.
+ * The About story: the shared promo half on the left, the copy on the right.
  *
- * The design is a fixed 1180px composition at a 1fr / 1.08fr split. That split is
- * kept from `lg` up and the two halves stack below it — the only responsive
- * addition; every colour, radius, size and gap is the source design's.
+ * A 1fr / 1.08fr split from `lg` up, stacking below it. The two halves sit
+ * DIRECTLY in the page container rather than inside a bordered, shadowed card the
+ * way the source mock drew them: the card was narrower than the container it sat
+ * in, so the section read as a floating box on the page instead of part of it —
+ * and the FAQ below has always been laid out this way, in the same container, with
+ * no card of its own.
  *
  * The mock also carried its own logo + theme-toggle strip above the panel. That is
  * dropped here: this page renders inside the template layout, which already has
@@ -42,20 +44,20 @@ export function AboutStory() {
   const k = (name: string) => t(`aboutPanel.${name}`);
 
   return (
-    <div
-      className="grid grid-cols-1 overflow-hidden rounded-[30px] border border-panel-line lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)]"
-      style={{ background: "var(--panel-bg)", boxShadow: "var(--panel-shadow)" }}
-    >
-      <PromoPanel baseKey="aboutPanel" stats={STATS} floorClass="lg:min-h-155" />
+    <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-14">
+      {/* No inset: with the card gone there is nothing for the promo block to float
+          inside, so it fills its own column instead. */}
+      <PromoPanel baseKey="aboutPanel" stats={STATS} floorClass="lg:min-h-155" insetClass="" />
 
-      <div className="flex flex-col justify-center gap-5.5 px-5 py-10 sm:px-10 sm:py-14 lg:px-15.5 lg:py-14.5">
-        <SectionKicker textClassName="text-panel-muted">{k("badge")}</SectionKicker>
-
-        <h1 className="text-[30px]! leading-[1.1]! font-bold! tracking-[-0.035em] text-panel-fg sm:text-[36px]! lg:text-[44px]!">
+      {/* The copy's horizontal padding went with the card — it was the card's inner
+          padding, and keeping it would hold the text 62px short of the container's
+          edge on the one side that has no neighbour. */}
+      <div className="flex flex-col justify-center gap-5.5">
+        <h2 className="text-[30px]! leading-[1.1]! font-bold! tracking-[-0.035em] text-panel-fg sm:text-[36px]! lg:text-[44px]!">
           {k("headingLine1")}
           <br />
           {k("headingLine2")}
-        </h1>
+        </h2>
 
         <p className="text-[15px]! leading-[1.78]! text-panel-muted">{k("para1")}</p>
         <p className="text-[15px]! leading-[1.78]! text-panel-muted">{k("para2")}</p>

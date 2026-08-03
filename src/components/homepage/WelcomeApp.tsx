@@ -7,6 +7,7 @@ import { useRef, type CSSProperties } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useFitScale } from "@/hooks/useFitScale";
 import { useReveal } from "@/hooks/useReveal";
+import { SHELL } from "@/components/share/Container";
 
 /**
  * The design is an absolutely-positioned composition on a fixed 1180x640 canvas —
@@ -297,7 +298,7 @@ export function WelcomeApp() {
       </div>
 
       {/* ================= Stacked layout (below xl) ================= */}
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 xl:hidden">
+      <div className={`${SHELL} xl:hidden`}>
         {/* Same three rings, sized off the section instead of the 1180px canvas. */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-full">
           <span

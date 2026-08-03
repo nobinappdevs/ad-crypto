@@ -170,18 +170,7 @@ export function SecuritySystem() {
       </div>
 
       <Container className="relative">
-        <div className="mx-auto max-w-2xl text-center">
-          <SectionKicker className="justify-center" textClassName="text-muted">
-            {t("security.badge")}
-          </SectionKicker>
 
-          <h2 className="mt-4">
-            {t("security.headingLead")}{" "}
-            <span className="text-primary!">{t("security.headingAccent")}</span>
-          </h2>
-
-          <p className="mt-4">{t("security.subtitle")}</p>
-        </div>
 
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-16 xl:grid-cols-12">
           {LAYERS.map((item, i) => (

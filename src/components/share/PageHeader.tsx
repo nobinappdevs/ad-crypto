@@ -18,7 +18,7 @@ export function PageHeader({ titleKey }: { titleKey: string }) {
 
   return (
     // Top padding clears the fixed nav that overlays this section.
-    <section className="relative overflow-hidden pt-36 pb-20 sm:pt-42 sm:pb-24 lg:pt-48 lg:pb-28">
+    <section className="relative overflow-hidden pt-36 pb-20 sm:pt-42 sm:pb-20 lg:pt-48 lg:pb-20">
       <BannerBackdrop />
 
       {/* `text-end` and `ms-auto` rather than `text-right`/`ml-auto`: the title

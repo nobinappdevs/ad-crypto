@@ -11,7 +11,7 @@ export default function ServicePage() {
   return (
     <>
       <PageHeader titleKey="nav.service" />
-      <Services />
+      {/* <Services /> */}
       {/* The eight-layer grid: it reads as part of the service catalogue, and the
           home page now carries the sticky-scroll version of the same content. */}
       <SecuritySystem />

@@ -11,6 +11,7 @@ export function PromoPanel({
   statsVariant = "boxed",
   headingBaseKey,
   headingVariant = "promo",
+  insetClass = "m-3 sm:m-4.5",
 }: {
   /** i18n prefix — `aboutPanel` or `authPanel`. */
   baseKey: string;
@@ -22,6 +23,12 @@ export function PromoPanel({
   /** Defaults to `baseKey`. */
   headingBaseKey?: string;
   headingVariant?: "promo" | "descriptive";
+  /**
+   * The margin that insets this block from its parent. The default is the design's
+   * inset inside a bordered card; a caller that has no card around it passes `""`
+   * so the block sits flush in its column instead of floating inside nothing.
+   */
+  insetClass?: string;
 }) {
   const { t } = useLang();
   const k = (name: string) => t(`${baseKey}.${name}`);
@@ -30,7 +37,7 @@ export function PromoPanel({
 
   return (
     <div
-      className={`relative m-3 flex flex-col items-center justify-center gap-2 overflow-hidden rounded-[22px] px-5 pt-8 pb-7 sm:m-4.5 sm:px-10 sm:pt-11.5 sm:pb-10 ${floorClass}`}
+      className={`relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-[22px] px-5 pt-8 pb-7 sm:px-10 sm:pt-11.5 sm:pb-10 ${insetClass} ${floorClass}`}
       style={{ background: "var(--panel-promo-bg)" }}
     >
       <GiftScene />
