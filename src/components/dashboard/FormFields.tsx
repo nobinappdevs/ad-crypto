@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { ImageUp, Paperclip, TriangleAlert, X } from "lucide-react";
 import { cn } from "@/components/ui/cn";
 
@@ -230,18 +230,25 @@ export function FileField({
 }) {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
 
+  /**
+   * Derived from the file rather than mirrored into state by an effect: a preview
+   * IS the file, so an effect that sets state to match it only adds a render pass
+   * where the thumbnail is a frame behind the name beside it.
+   *
+   * The effect below owns just the cleanup, which is the part that genuinely has to
+   * happen outside render — a URL left unrevoked is a blob held for the tab's life.
+   */
+  const preview = useMemo(
+    () => (file && file.type.startsWith("image/") ? URL.createObjectURL(file) : null),
+    [file],
+  );
+
   useEffect(() => {
-    if (!file || !file.type.startsWith("image/")) {
-      setPreview(null);
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
+    if (!preview) return;
+    return () => URL.revokeObjectURL(preview);
+  }, [preview]);
 
   function pick(next: File | null) {
     onChange(next);

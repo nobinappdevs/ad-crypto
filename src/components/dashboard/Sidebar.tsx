@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ComponentType, type ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import {
   ArrowDownToLine,
   ArrowLeftRight,
-  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
   CreditCard,
@@ -24,15 +23,17 @@ import { cn } from "@/components/ui/cn";
 import { Logo, LogoMark } from "@/components/share/Logo";
 
 /**
- * Only `/dashboard` is a real route; everything else in the reference design is
- * a section that doesn't exist yet, so those rows render as buttons — same
- * look, no dead navigation. A group with `children` expands in place.
+ * Every row is one route. A row without an `href` is a section that doesn't exist
+ * yet: it renders as a button — same look, no dead navigation.
+ *
+ * Transactions used to be a group that expanded into All / Pending / Statements.
+ * Those were three views of one table, so they are now that table's own filters and
+ * the row is a plain link like every other.
  */
 type NavEntry = {
   key: string;
   icon: ComponentType<{ size?: number | string; className?: string }>;
   href?: string;
-  children?: string[];
 };
 
 const NAV: NavEntry[] = [
@@ -42,7 +43,7 @@ const NAV: NavEntry[] = [
   { key: "withdrawCrypto", icon: ArrowDownToLine, href: "/dashboard/withdraw-crypto" },
   { key: "exchangeCrypto", icon: ArrowLeftRight, href: "/dashboard/exchange-crypto" },
   { key: "myCards", icon: CreditCard, href: "/dashboard/my-cards" },
-  { key: "transactions", icon: ReceiptText, children: ["all", "pending", "statements"] },
+  { key: "transactions", icon: ReceiptText, href: "/dashboard/transactions" },
 ];
 
 export function Sidebar({
@@ -59,8 +60,6 @@ export function Sidebar({
   const { t } = useLang();
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
-
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   /**
    * Everything textual hides wherever the rail is icon-only: md-lg always
@@ -119,9 +118,8 @@ export function Sidebar({
 
       {/* ---- Nav */}
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-        {NAV.map(({ key, icon: Icon, href, children }) => {
+        {NAV.map(({ key, icon: Icon, href }) => {
           const active = href ? pathname === href : false;
-          const expanded = openGroup === key;
 
           const rowClass = cn(
             "flex! w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium transition md:justify-center md:px-2 lg:px-3",
@@ -135,13 +133,6 @@ export function Sidebar({
             <>
               <Icon size={18} className="shrink-0" />
               {label(t(`dashboard.nav.${key}`))}
-              {children &&
-                label(
-                  <ChevronDown
-                    size={14}
-                    className={cn("transition-transform", expanded && "rotate-180")}
-                  />,
-                )}
             </>
           );
 
@@ -152,30 +143,9 @@ export function Sidebar({
                   {inner}
                 </Link>
               ) : (
-                <button
-                  type="button"
-                  onClick={children ? () => setOpenGroup(expanded ? null : key) : undefined}
-                  aria-expanded={children ? expanded : undefined}
-                  className={rowClass}
-                >
+                <button type="button" className={rowClass}>
                   {inner}
                 </button>
-              )}
-
-              {/* Sub-items disappear with the labels — a 56px rail has no room
-                  for an indented text list. */}
-              {children && expanded && !collapsed && (
-                <div className="mt-1 space-y-0.5 md:hidden lg:block">
-                  {children.map((sub) => (
-                    <button
-                      key={sub}
-                      type="button"
-                      className="block w-full cursor-pointer rounded-lg py-2 pr-3 pl-11.5 text-left text-[13.5px] font-medium text-muted transition hover:text-heading"
-                    >
-                      {t(`dashboard.nav.${sub}`)}
-                    </button>
-                  ))}
-                </div>
               )}
             </div>
           );

@@ -27,6 +27,7 @@ const TITLES: { prefix: string; key: string }[] = [
   { prefix: "/dashboard/withdraw-crypto", key: "dashboard.nav.withdrawCrypto" },
   { prefix: "/dashboard/exchange-crypto", key: "dashboard.nav.exchangeCrypto" },
   { prefix: "/dashboard/my-cards", key: "dashboard.nav.myCards" },
+  { prefix: "/dashboard/transactions", key: "dashboard.nav.transactions" },
   { prefix: "/dashboard", key: "dashboard.title" },
 ];
 

@@ -534,7 +534,23 @@
       "executedBy": "Executed by",
       "selectAll": "Select all rows",
       "totalRow": "Total",
-      "selectedCount": "{selected} of {total} rows selected"
+      "selectedCount": "{selected} of {total} rows selected",
+      "newestFew": "(newest {count})",
+      "rowCount": "({count})"
+    },
+    "viewAll": "View all",
+    "filters": {
+      "all": "All",
+      "buy": "Buy",
+      "sell": "Sell",
+      "processing": "Processing",
+      "success": "Success",
+      "declined": "Declined"
+    },
+    "transactionsPage": {
+      "subtitle": "Every order on the account — buys, sells and withdrawals — with the fee charged on each.",
+      "searchPlaceholder": "Search coin, reference or email",
+      "empty": "No transactions match that filter."
     },
     "tradeSide": {
       "buy": "Buy",

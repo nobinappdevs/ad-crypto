@@ -78,6 +78,20 @@ export const toNumber = (raw: string) => {
 export const fiat = (n: number) =>
   n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+export const usd = (n: number) => `$${fiat(n)}`;
+
+/**
+ * A unit price, to four places below a dollar.
+ *
+ * Two places is not enough for a sub-dollar asset, and not merely as a matter of
+ * taste: at "$0.16" a DOGE row stops reconciling, because 8,500 x 0.16 is not the
+ * order amount that 8,500 x 0.1642 produced.
+ */
+export const price = (n: number) =>
+  n >= 1
+    ? usd(n)
+    : `$${n.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })}`;
+
 /**
  * Crypto keeps up to 8 places but drops trailing zeros — 0.02325094, not
  * 0.02325094**00**. Zero returns an empty string on purpose: these values are fed
