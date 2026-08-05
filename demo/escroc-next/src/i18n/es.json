@@ -1,0 +1,1354 @@
+{
+  "brand": {
+    "name": "Escroc"
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "services": "Servicios",
+    "features": "Funciones",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "dashboard": "Panel",
+    "menu": "Menú"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "loginTitle": "Bienvenido de nuevo",
+    "loginSubtitle": "Inicia sesión en tu cuenta Escroc",
+    "registerTitle": "Crea tu cuenta",
+    "registerSubtitle": "Únete a miles de usuarios en Escroc",
+    "fullName": "Nombre completo",
+    "fullNamePlaceholder": "Juan Pérez",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Reingresa tu contraseña",
+    "labelEmail": "Correo Electrónico",
+    "labelPassword": "Contraseña",
+    "labelFullName": "Nombre Completo",
+    "labelConfirmPassword": "Confirmar Contraseña",
+    "labelRole": "Soy un",
+    "rememberMe": "Recuérdame",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "orContinue": "o continuar con",
+    "agreeTerms": "Acepto los",
+    "terms": "Términos de servicio",
+    "and": "y la",
+    "privacyPolicy": "Política de privacidad",
+    "loginButton": "Iniciar sesión",
+    "registerButton": "Crear cuenta",
+    "role": {
+      "buyer": "Comprador",
+      "seller": "Vendedor"
+    },
+    "forgotTitle": "¿Olvidaste tu contraseña?",
+    "forgotSubtitle": "No te preocupes — ingresa tu email y te enviaremos un código.",
+    "sendResetCode": "Enviar Código",
+    "forgotSentTitle": "Revisa tu bandeja",
+    "forgotSentDesc": "Enviamos un código de 6 dígitos a tu email. Expira en 10 minutos.",
+    "continueToVerify": "Ingresar Código",
+    "otpTitle": "Verifica tu Email",
+    "otpSubtitle": "Ingresa el código de 6 dígitos que enviamos a tu email.",
+    "otpLabel": "Código de Verificación",
+    "resendIn": "Reenviar en",
+    "resendOtp": "Reenviar Código",
+    "verifyOtp": "Verificar y Continuar",
+    "backToForgot": "Volver",
+    "resetTitle": "Establecer nueva contraseña",
+    "resetSubtitle": "Elige una contraseña segura para tu cuenta.",
+    "resetButton": "Restablecer contraseña",
+    "recaptchaError": "Verifica que no eres un robot",
+    "loggingIn": "Iniciando sesión…",
+    "creatingAccount": "Creando cuenta…",
+    "sending": "Enviando…",
+    "resetting": "Restableciendo…",
+    "strengthWeak": "Débil",
+    "strengthFair": "Aceptable",
+    "strengthGood": "Buena",
+    "strengthStrong": "Fuerte",
+    "digitLabel": "Dígito",
+    "togglePassword": "Mostrar u ocultar contraseña"
+  },
+  "theme": {
+    "toggle": "Cambiar tema",
+    "light": "Modo claro",
+    "dark": "Modo oscuro"
+  },
+  "language": {
+    "select": "Seleccionar idioma"
+  },
+  "banner": {
+    "eyebrow": "La confianza financiera empieza aquí",
+    "title": "Transferencias de dinero sin complicaciones, protegidas con depósito en garantía",
+    "subtitle": "Nuestro servicio de depósito en garantía nos distingue al brindar una capa adicional de protección para compradores y vendedores.",
+    "getStarted": "Comenzar",
+    "card": {
+      "popular": "Popular",
+      "title": "Úsalo siempre al comprar o vender en línea.",
+      "subtitle": "El proceso de transferencia de dinero te permite enviar y recibir fondos sin esfuerzo."
+    },
+    "form": {
+      "im": "Estoy",
+      "selling": "Vendiendo",
+      "buying": "Comprando",
+      "itemPlaceholder": "Nombres de dominio, vehículos...",
+      "for": "por",
+      "amountPlaceholder": "1000",
+      "submit": "Crear nuevo depósito",
+      "transactionType": "Tipo de transacción",
+      "itemService": "Artículo / Servicio",
+      "amountCurrency": "Importe y moneda"
+    },
+    "currencyAria": "Moneda",
+    "trust": {
+      "secured": "Escrow inteligente 100% seguro",
+      "verified": "Transacciones verificadas",
+      "noFees": "Sin comisiones ocultas"
+    }
+  },
+  "cookie": {
+    "text": "Podemos usar cookies u otras tecnologías de seguimiento cuando visitas nuestro sitio web para personalizar la experiencia y mejorar nuestros servicios.",
+    "privacy": "Política de privacidad",
+    "allow": "Aceptar",
+    "decline": "Rechazar",
+    "title": "Usamos cookies"
+  },
+  "partners": {
+    "names": [
+      "Wisozk",
+      "Morissette",
+      "Reichel",
+      "Gleichner",
+      "Strosin",
+      "Barrows"
+    ]
+  },
+  "about": {
+    "tag": "Conócenos",
+    "title": "Transferencias de dinero seguras, servicios de garantía confiables.",
+    "desc": "Entendemos la importancia de las transacciones financieras fluidas y seguras. Nuestra misión es proporcionar una solución integral que combine la comodidad de las transferencias con la seguridad de nuestros servicios de depósito en garantía.",
+    "points": [
+      "Transferencias de dinero sin complicaciones",
+      "Fortalecido con seguridad de depósito en garantía",
+      "Envía y recibe fondos con confianza",
+      "Transacciones financieras confiables"
+    ]
+  },
+  "services": {
+    "tag": "Servicios ofrecidos",
+    "title": "Estás en un sistema seguro",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Servicios seguros",
+        "desc": "Actuamos como intermediario confiable, reteniendo fondos hasta que ambas partes cumplan sus compromisos."
+      },
+      {
+        "icon": "transfer",
+        "title": "Transferencia instantánea",
+        "desc": "Envía y recibe fondos con confianza, sabiendo que tus intercambios financieros son rápidos, confiables y respaldados."
+      },
+      {
+        "icon": "chart",
+        "title": "Consultas financieras",
+        "desc": "Nuestros asesores expertos brindan información personalizada para ayudarte a tomar decisiones informadas."
+      },
+      {
+        "icon": "shield",
+        "title": "Protección contra fraude",
+        "desc": "Nuestros sistemas de monitoreo avanzados y tecnologías de cifrado garantizan la seguridad de tu información financiera."
+      }
+    ]
+  },
+  "expertise": {
+    "tag": "Alta experiencia",
+    "title": "La solución de depósito en garantía en línea más confiable del mundo.",
+    "items": [
+      {
+        "icon": "briefcase",
+        "title": "Consultoría estratégica de élite",
+        "desc": "Accede a nuestros servicios de consultoría donde nuestros expertos ofrecen perspectivas incomparables para impulsar tu negocio."
+      },
+      {
+        "icon": "wrench",
+        "title": "Competencia técnica avanzada",
+        "desc": "Confía en nuestra competencia técnica avanzada para navegar las complejidades de la tecnología."
+      },
+      {
+        "icon": "dollar",
+        "title": "Perspicacia financiera especializada",
+        "desc": "Accede a profesionales experimentados con profundo conocimiento en planificación y gestión financiera."
+      }
+    ],
+    "badgeExperts": "Expertos de confianza",
+    "badgeGuidance": "Asesoramiento 24/7",
+    "learnMore": "Más información"
+  },
+  "testimonials": {
+    "tag": "Testimonios",
+    "title": "Lo que dicen nuestros clientes",
+    "subtitle": "Únete a miles de usuarios satisfechos que confían en Escroc para sus transacciones seguras.",
+    "items": [
+      {
+        "quote": "Como emprendedor en el comercio electrónico, encontrar un servicio de depósito en garantía confiable es fundamental. Escroc ha superado consistentemente mis expectativas. La facilidad de uso con las medidas de seguridad asegura que mis transacciones sean perfectas y protegidas.",
+        "author": "James Rodriguez",
+        "role": "Empresario de comercio electrónico",
+        "rating": 5
+      },
+      {
+        "quote": "Escroc transformó completamente cómo manejo los pagos de clientes como freelancer. No más conversaciones incómodas sobre confianza — el sistema de depósito maneja todo. La plataforma es intuitiva, rápida y confiable.",
+        "author": "Sarah Mitchell",
+        "role": "Diseñadora freelance",
+        "rating": 5
+      },
+      {
+        "quote": "Vendo coleccionables en línea y antes me han estafado. Desde que cambié a Escroc, cada trato ha salido bien. Las protecciones para compradores y vendedores son sólidas y el soporte siempre está disponible.",
+        "author": "David Park",
+        "role": "Vendedor en línea",
+        "rating": 5
+      },
+      {
+        "quote": "Gestionar pagos internacionales solía ser una pesadilla. Escroc lo hizo sin esfuerzo. Soporte multidivisa, procesamiento rápido y la capa de seguridad me permiten concentrarme en mi negocio.",
+        "author": "Amina Osei",
+        "role": "Dueña de negocio de importación/exportación",
+        "rating": 5
+      }
+    ],
+    "statAvgRating": "Valoración media",
+    "statHappy": "Clientes satisfechos",
+    "statSatisfaction": "Índice de satisfacción",
+    "featured": "Destacado",
+    "verified": "Verificado",
+    "starsLabel": "de 5 estrellas"
+  },
+  "blog": {
+    "tag": "Blog",
+    "title": "Ver nuestro blog reciente",
+    "author": "Super Admin",
+    "readMore": "Leer más",
+    "posts": [
+      {
+        "category": "Perspectivas",
+        "date": "06-02-2023",
+        "title": "Perspectivas de expertos sobre gestión financiera"
+      },
+      {
+        "category": "Historias",
+        "date": "06-02-2023",
+        "title": "Historias reales, confianza real con Escroc"
+      },
+      {
+        "category": "Seguridad",
+        "date": "06-02-2023",
+        "title": "Navegando el panorama de la seguridad financiera"
+      }
+    ]
+  },
+  "download": {
+    "tag": "Descargar app",
+    "title": "Disponible en las tiendas, descarga ahora.",
+    "appStore": {
+      "label": "Descargar en el",
+      "store": "App Store"
+    },
+    "googlePlay": {
+      "label": "DISPONIBLE EN",
+      "store": "Google Play"
+    },
+    "subtitle": "Pagos seguros con escrow, transferencias instantáneas y seguimiento en tiempo real — todo en tu bolsillo.",
+    "features": [
+      {
+        "title": "Escrow de nivel bancario",
+        "desc": "Cada pago se retiene de forma segura hasta que ambas partes confirmen."
+      },
+      {
+        "title": "Alcance global",
+        "desc": "Transferencias instantáneas en más de 190 países y en cualquier moneda."
+      },
+      {
+        "title": "Seguimiento en directo",
+        "desc": "Estado en tiempo real y alertas push en cada transacción."
+      }
+    ],
+    "statDownloads": "Descargas",
+    "statRating": "Valoración de la app",
+    "statCountries": "Países",
+    "phone": {
+      "welcome": "Bienvenido de nuevo",
+      "totalBalance": "Saldo total",
+      "recentActivity": "Actividad reciente",
+      "seeAll": "Ver todo",
+      "send": "Enviar",
+      "request": "Solicitar",
+      "topUp": "Recargar",
+      "more": "Más",
+      "instantTransfer": "Transferencia instantánea",
+      "secured": "Protegido",
+      "escrowActive": "Escrow activo",
+      "completed": "Completado",
+      "received": "Recibido"
+    }
+  },
+  "footer": {
+    "tagline": "Transferencia de dinero segura con garantía, diseñada para proteger compradores y vendedores.",
+    "madeBy": "Hecho por Escroc",
+    "navigation": "Navegación",
+    "legal": "Legal",
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados.",
+    "legalFaq": "Preguntas Frecuentes",
+    "legalPrivacy": "Política de Privacidad",
+    "legalRefund": "Política de Reembolsos",
+    "legalTerms": "Términos y Condiciones"
+  },
+  "home": {
+    "title": "Transferencias de dinero seguras con depósito en garantía",
+    "subtitle": "Envía y recibe dinero de forma segura. Escroc retiene los fondos hasta que ambas partes estén satisfechas.",
+    "cta": "Comenzar"
+  },
+  "servicesPage": {
+    "hero": {
+      "tag": "Nuestros servicios",
+      "title": "Todo lo que necesitas para transacciones seguras",
+      "subtitle": "Desde protección en garantía hasta transferencias instantáneas, proporcionamos las herramientas que mantienen tu dinero seguro."
+    },
+    "stats": [
+      {
+        "value": "10M+",
+        "label": "Transacciones aseguradas"
+      },
+      {
+        "value": "190+",
+        "label": "Países atendidos"
+      },
+      {
+        "value": "99.9%",
+        "label": "Disponibilidad garantizada"
+      },
+      {
+        "value": "24/7",
+        "label": "Soporte al cliente"
+      }
+    ],
+    "cta": {
+      "title": "¿Listo para empezar?",
+      "subtitle": "Únete a miles de usuarios que confían en Escroc para sus transacciones seguras.",
+      "button": "Crear cuenta gratis"
+    }
+  },
+  "featuresPage": {
+    "hero": {
+      "tag": "Funciones de la plataforma",
+      "title": "Construido para la seguridad, diseñado para la velocidad",
+      "subtitle": "Descubre las potentes funciones que hacen de Escroc la plataforma de garantía más confiable."
+    },
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Cifrado de extremo a extremo",
+        "desc": "Cada transacción está cifrada con seguridad de nivel militar, protegiendo siempre tus datos y fondos."
+      },
+      {
+        "icon": "shield",
+        "title": "Autenticación de dos factores",
+        "desc": "Una capa adicional de seguridad que te protege incluso si tu contraseña se ve comprometida."
+      },
+      {
+        "icon": "transfer",
+        "title": "Notificaciones en tiempo real",
+        "desc": "Mantente informado con alertas instantáneas en cada paso del ciclo de vida de tu transacción."
+      },
+      {
+        "icon": "chart",
+        "title": "Análisis de transacciones",
+        "desc": "Rastrea tu actividad financiera con informes detallados para tomar mejores decisiones."
+      },
+      {
+        "icon": "briefcase",
+        "title": "Soporte multi-moneda",
+        "desc": "Envía y recibe fondos en múltiples monedas con tipos de cambio competitivos."
+      },
+      {
+        "icon": "dollar",
+        "title": "Sin tarifas ocultas",
+        "desc": "Precios transparentes sin sorpresas. Lo que ves es exactamente lo que pagas."
+      }
+    ],
+    "cta": {
+      "title": "Experimenta la diferencia",
+      "subtitle": "Comienza a usar Escroc hoy y descubre por qué miles de usuarios confían en nosotros.",
+      "button": "Comenzar gratis"
+    }
+  },
+  "blogPage": {
+    "hero": {
+      "tag": "Nuestro blog",
+      "title": "Insights, Consejos y Noticias del sector",
+      "subtitle": "Mantente al día con las últimas tendencias en fintech, seguridad y transacciones en línea."
+    },
+    "categories": [
+      "Todos",
+      "Seguridad",
+      "Perspectivas",
+      "Historias",
+      "Actualizaciones"
+    ],
+    "posts": [
+      {
+        "category": "Perspectivas",
+        "date": "06-02-2023",
+        "title": "Perspectivas de expertos en gestión financiera",
+        "excerpt": "Obtén información exclusiva de expertos del sector sobre la gestión de tus finanzas en la era digital."
+      },
+      {
+        "category": "Historias",
+        "date": "06-02-2023",
+        "title": "Historias reales, confianza real con Escroc",
+        "excerpt": "Escucha a nuestra comunidad de usuarios que han usado Escroc con éxito en sus transacciones."
+      },
+      {
+        "category": "Seguridad",
+        "date": "06-02-2023",
+        "title": "Navegando el panorama de la seguridad financiera",
+        "excerpt": "Una guía completa para entender las prácticas modernas de seguridad financiera."
+      },
+      {
+        "category": "Actualizaciones",
+        "date": "05-15-2023",
+        "title": "Actualizaciones de la plataforma Escroc",
+        "excerpt": "Descubre las novedades de nuestra última versión y cómo mejoran tu experiencia."
+      },
+      {
+        "category": "Perspectivas",
+        "date": "04-28-2023",
+        "title": "El futuro de las transacciones en línea",
+        "excerpt": "Exploramos las tendencias emergentes en pagos digitales y lo que significan para compradores y vendedores."
+      },
+      {
+        "category": "Seguridad",
+        "date": "04-10-2023",
+        "title": "Cómo el depósito en garantía te protege del fraude",
+        "excerpt": "Aprende cómo los servicios de garantía actúan como escudo contra las estafas comunes en línea."
+      }
+    ],
+    "author": "Super Admin",
+    "readMore": "Leer más",
+    "newsletter": {
+      "tag": "Newsletter",
+      "title": "Mantente informado",
+      "subtitle": "Suscríbete para recibir los últimos artículos y actualizaciones directamente en tu bandeja de entrada.",
+      "placeholder": "Ingresa tu email",
+      "button": "Suscribirse"
+    },
+    "empty": "Aún no hay publicaciones",
+    "all": "Todos"
+  },
+  "contactPage": {
+    "hero": {
+      "tag": "Contáctanos",
+      "title": "Ponte en contacto con nuestro equipo",
+      "subtitle": "¿Tienes preguntas o necesitas soporte? Estamos aquí para ayudarte 24/7."
+    },
+    "form": {
+      "name": "Nombre completo",
+      "namePlaceholder": "Juan Pérez",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "juan@ejemplo.com",
+      "subject": "Asunto",
+      "subjectPlaceholder": "¿Cómo podemos ayudarte?",
+      "message": "Mensaje",
+      "messagePlaceholder": "Cuéntanos más sobre tu consulta...",
+      "submit": "Enviar mensaje",
+      "success": "¡Mensaje enviado! Te responderemos en 24 horas.",
+      "error": "Algo salió mal. Por favor, inténtalo de nuevo.",
+      "sending": "Enviando…"
+    },
+    "info": [
+      {
+        "icon": "mail",
+        "title": "Soporte por email",
+        "value": "support@escroc.com",
+        "desc": "Respondemos en 24 horas"
+      },
+      {
+        "icon": "phone",
+        "title": "Soporte telefónico",
+        "value": "+1 (800) 123-4567",
+        "desc": "Lun–Vie, 9am–6pm EST"
+      },
+      {
+        "icon": "mapPin",
+        "title": "Oficina",
+        "value": "123 Finance St, New York, NY",
+        "desc": "Visita con cita previa"
+      }
+    ],
+    "faq": {
+      "tag": "FAQ",
+      "title": "Preguntas frecuentes",
+      "items": [
+        {
+          "q": "¿Cómo funciona el depósito en garantía?",
+          "a": "Escroc retiene los fondos de forma segura hasta que el comprador y el vendedor cumplan sus condiciones. Una vez satisfechos, los fondos se liberan automáticamente."
+        },
+        {
+          "q": "¿Cuánto tarda una transferencia?",
+          "a": "La mayoría de las transferencias se procesan en 1–3 días hábiles, dependiendo del destino y el monto."
+        },
+        {
+          "q": "¿Es seguro usar Escroc?",
+          "a": "Absolutamente. Usamos cifrado de nivel bancario y cumplimos con las regulaciones financieras internacionales."
+        },
+        {
+          "q": "¿Cuáles son las tarifas?",
+          "a": "Nuestras tarifas son transparentes y competitivas. Visita nuestra página de precios para ver el desglose completo."
+        }
+      ]
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "tag": "Sobre nosotros",
+      "title": "La historia detrás de Escroc",
+      "subtitle": "Nuestra misión es hacer que las transacciones en línea sean más seguras y confiables para todos, en todas partes."
+    },
+    "mission": {
+      "tag": "Nuestra misión",
+      "title": "Construyendo confianza en cada transacción",
+      "desc": "Desde nuestra fundación, Escroc se ha comprometido a proporcionar una plataforma segura y transparente que conecta compradores y vendedores en todo el mundo."
+    },
+    "values": {
+      "tag": "Nuestros valores",
+      "title": "Lo que defendemos",
+      "items": [
+        {
+          "icon": "shield",
+          "title": "Seguridad primero",
+          "desc": "Cada decisión que tomamos prioriza la seguridad de tus transacciones y datos financieros."
+        },
+        {
+          "icon": "check",
+          "title": "Transparencia",
+          "desc": "Comunicación clara y honesta sin tarifas ocultas ni sorpresas."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Confiabilidad",
+          "desc": "Construido para disponibilidad y rendimiento para que puedas contar con nosotros cuando más importa."
+        },
+        {
+          "icon": "dollar",
+          "title": "Equidad",
+          "desc": "Protección igual para compradores y vendedores en cada transacción."
+        }
+      ]
+    },
+    "team": {
+      "tag": "Nuestro equipo",
+      "title": "Las personas detrás de Escroc",
+      "members": [
+        {
+          "name": "Alex Johnson",
+          "role": "CEO y Fundador"
+        },
+        {
+          "name": "Sarah Williams",
+          "role": "Directora de Tecnología"
+        },
+        {
+          "name": "Michael Chen",
+          "role": "Jefe de Seguridad"
+        },
+        {
+          "name": "Emma Davis",
+          "role": "Jefa de Éxito del Cliente"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Únete a la comunidad Escroc",
+      "subtitle": "Miles de usuarios ya confían en nosotros. ¿Listo para unirte a ellos?",
+      "button": "Comenzar hoy"
+    },
+    "statTransactions": "Transacciones",
+    "statCountries": "Países",
+    "statUptime": "Tiempo de actividad",
+    "statSupport": "Soporte"
+  },
+  "dashboard": {
+    "sidebar": {
+      "core": "Principal",
+      "finance": "Finanzas",
+      "overview": "Resumen",
+      "escrow": "Mis Depósitos",
+      "transactions": "Transacciones",
+      "addMoney": "Agregar Dinero",
+      "moneyOut": "Retirar Dinero",
+      "exchange": "Cambio",
+      "security": "Seguridad 2FA",
+      "kyc": "Verificación KYC",
+      "profile": "Configuración de Perfil",
+      "userRole": "Verificado · Comprador",
+      "logout": "Cerrar sesión",
+      "helpTitle": "Centro de Ayuda",
+      "helpSub": "¿Cómo podemos ayudarte?",
+      "helpBtn": "Obtener Soporte",
+      "collapse": "Contraer",
+      "goHome": "Ir a la página de inicio",
+      "closeMenu": "Cerrar menú",
+      "liveSupport": "Soporte en directo"
+    },
+    "support": {
+      "title": "Tickets de Soporte",
+      "addNew": "Agregar Nuevo Ticket",
+      "colTicketId": "ID del Ticket",
+      "colSubject": "Asunto",
+      "colMessage": "Mensaje",
+      "colStatus": "Estado",
+      "colLastReply": "Última Respuesta",
+      "noData": "¡No se encontraron datos!",
+      "createTitle": "Agregar Nuevo Ticket",
+      "back": "Volver a Tickets",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Ingrese el asunto...",
+      "message": "Mensaje",
+      "messagePlaceholder": "Escriba aquí...",
+      "attachments": "Adjuntos",
+      "optional": "(Opcional)",
+      "dropHint": "Arrastra y suelta archivos aquí, o haz clic para explorar",
+      "browse": "Elegir Archivos",
+      "submit": "Enviar Ticket"
+    },
+    "navbar": {
+      "subtitle": "escroc.com · Plataforma de Depósito",
+      "buyer": "Comprador",
+      "seller": "Vendedor",
+      "logout": "Cerrar Sesión",
+      "menu": "Menú",
+      "logoutTitle": "¿Cerrar sesión?",
+      "logoutDesc": "Tendrás que iniciar sesión de nuevo para acceder a tu cuenta.",
+      "cancel": "Cancelar",
+      "confirmLogout": "Sí, cerrar sesión",
+      "noNotifications": "Aún no hay notificaciones",
+      "viewAll": "Ver todo",
+      "notifications": "Notificaciones",
+      "newCount": "{n} nuevas",
+      "noNotificationsDesc": "Estás al día.",
+      "profileMenu": "Menú de perfil",
+      "viewingAs": "Viendo como"
+    },
+    "home": {
+      "vaultLabel": "Total en Depósito",
+      "vaultStatus": "Protegido de forma segura",
+      "vaultDesc": "Desplegado en 3 bóvedas de depósito activas · Seguridad multi-firma activa",
+      "origin": "Origen",
+      "youBuyer": "Tú (Comprador)",
+      "counterparties": "Contrapartes",
+      "sellers": "3 Vendedores Verificados",
+      "quickControls": "Controles Rápidos",
+      "initAddMoney": "Inicializar Agregar Dinero",
+      "withdrawal": "Retiro",
+      "convertFX": "Convertir FX",
+      "createEscrow": "Crear Depósito",
+      "securityPanel": "Panel de Seguridad",
+      "balances": "Saldos de Cuentas Locales",
+      "chartTitle": "Métrica de Volumen de Depósito",
+      "distTitle": "Perspectivas de Distribución",
+      "inbound": "Fondos Entrantes",
+      "fx": "Cambios FX",
+      "outbound": "Liquidación Saliente",
+      "txTitle": "Registros Transaccionales",
+      "export": "Exportar Estado",
+      "viewAll": "Ver Todos los Registros",
+      "txContext": "Contexto de Transacción",
+      "txStatus": "Estado",
+      "txTimestamp": "Marca de Tiempo",
+      "txFinancial": "Mapeo Financiero",
+      "buyers": "Compradores",
+      "escrowOverview": "Resumen de custodias",
+      "totalEscrow": "Custodia total",
+      "completedEscrow": "Completadas",
+      "pendingEscrow": "Pendientes",
+      "disputeEscrow": "En disputa",
+      "noTxTitle": "Aún no hay transacciones",
+      "noTxDesc": "Tus transacciones recientes aparecerán aquí.",
+      "thisMonth": "Este mes",
+      "moneyFlow": "Flujo de dinero",
+      "flowAdd": "Añadir dinero",
+      "flowOut": "Retirar dinero",
+      "flowExchange": "Cambiar divisas"
+    },
+    "addMoney": {
+      "title": "Agregar dinero",
+      "depositFunds": "Depositar fondos",
+      "exchangeRate": "Tipo de cambio:",
+      "paymentGateway": "Pasarela de pago",
+      "amount": "Monto",
+      "enterAmount": "Ingrese el monto…",
+      "limit": "Límite:",
+      "availableBalance": "Saldo disponible:",
+      "charge": "Cargo:",
+      "addMoneyBtn": "Agregar dinero",
+      "summary": "Resumen",
+      "enteredAmount": "Monto ingresado",
+      "conversionAmount": "Monto de conversión",
+      "totalFees": "Total de tarifas y cargos",
+      "totalPayable": "Monto total a pagar",
+      "infoNote": "Sus fondos depositados se reflejarán en su billetera en un plazo de 1 a 3 días hábiles según la pasarela.",
+      "logTitle": "Registro de depósitos",
+      "searchLogs": "Buscar registros…",
+      "filter": "Filtrar",
+      "colTransaction": "Transacción",
+      "colTransactionId": "ID de transacción",
+      "colExchangeRate": "Tipo de cambio",
+      "colFeesCharge": "Tarifas y cargos",
+      "colAmount": "Monto",
+      "colDate": "Fecha",
+      "addBalance": "Agregar saldo",
+      "via": "vía",
+      "status": {
+        "pending": "Pendiente",
+        "success": "Exitoso"
+      },
+      "noLogsTitle": "Aún no hay depósitos",
+      "noLogsDesc": "Tu historial de ingresos aparecerá aquí.",
+      "requestAmount": "Importe introducido",
+      "exchangeRateLabel": "Tipo de cambio",
+      "willGet": "Recibirás",
+      "manualTitle": "Pago manual",
+      "manualInstrTitle": "Instrucciones de pago",
+      "confirmPayment": "Confirmar pago",
+      "authTitle": "Autorizar datos de la tarjeta",
+      "payWithCard": "Pagar con tarjeta",
+      "cardNumber": "Número de tarjeta",
+      "expDate": "Fecha de caducidad",
+      "cvc": "Código de seguridad CVV/CVC",
+      "submitPayment": "Enviar",
+      "paymentInformation": "Datos del pago",
+      "noMatchTitle": "No hay depósitos que coincidan",
+      "noMatchDesc": "Prueba con otro término de búsqueda o filtro.",
+      "colStatus": "Estado",
+      "expDateMonthError": "Introduce un mes válido (01-12)",
+      "expDateError": "Introduce una fecha de caducidad futura válida (YY/MM)",
+      "resultSuccessTitle": "Pago exitoso",
+      "resultSuccessDesc": "Recibimos tu depósito y se está procesando. Se reflejará en tu billetera en breve.",
+      "resultCancelTitle": "Pago cancelado",
+      "resultCancelDesc": "Tu pago fue cancelado y no se te ha cobrado. Puedes volver a intentarlo cuando quieras.",
+      "resultBack": "Volver a añadir dinero",
+      "resultDashboard": "Ir al panel",
+      "resultTransactions": "Ver transacciones"
+    },
+    "common": {
+      "showing": "Mostrando",
+      "of": "de",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "optional": "(Opcional)",
+      "currency": "Moneda",
+      "logs": "registros",
+      "monthsShort": [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic"
+      ],
+      "loading": "Cargando…",
+      "loadMore": "Cargar más",
+      "allLoaded": "Todo cargado"
+    },
+    "conversation": {
+      "escrowId": "ID de depósito",
+      "backToMyEscrow": "Volver a Mis depósitos",
+      "writeSomething": "Escribe algo…",
+      "attachFile": "Adjuntar archivo",
+      "sendMessage": "Enviar mensaje",
+      "escrowDetails": "Detalles del depósito",
+      "paymentDetails": "Detalles del pago",
+      "title": "Título",
+      "myRole": "Mi rol",
+      "createdBy": "Creado por",
+      "productType": "Tipo de producto",
+      "totalPrice": "Precio total",
+      "chargePayer": "Pagador de comisiones",
+      "status": "Estado",
+      "remarks": "Observaciones",
+      "approvalPending": "Aprobación pendiente",
+      "feesCharge": "Comisiones y cargos",
+      "sellerAmount": "Importe del vendedor",
+      "noMessages": "Aún no hay mensajes",
+      "noMessagesDesc": "Inicia la conversación enviando un mensaje abajo.",
+      "payWith": "Pagar con",
+      "exchangeRate": "Tipo de cambio",
+      "buyerPaid": "Pagado por el comprador",
+      "cancel": "Cancelar",
+      "sending": "Enviando…",
+      "failedRetry": "Error — toca para reintentar",
+      "releaseRequest": "Solicitar liberación",
+      "disputePayment": "Disputar pago",
+      "releaseConfirmTitle": "¿Liberar el pago?",
+      "releaseConfirmDesc": "Esto libera los fondos en garantía al vendedor. Esta acción no se puede deshacer.",
+      "disputeConfirmTitle": "¿Disputar este pago?",
+      "disputeConfirmDesc": "Esto abre una disputa para este depósito en garantía. Nuestro equipo la revisará antes de mover los fondos.",
+      "attachment": "Adjunto",
+      "image": "imagen",
+      "releasePayment": "Liberar pago",
+      "releaseRequestConfirmTitle": "¿Solicitar liberación?",
+      "releaseRequestConfirmDesc": "Esto solicita al comprador que libere los fondos en garantía a tu favor.",
+      "secureNote": "Los mensajes están vinculados a este depósito en garantía seguro",
+      "emoji": "Emoji",
+      "close": "Cerrar"
+    },
+    "createEscrow": {
+      "backToMyEscrow": "Volver a Mis Depósitos",
+      "title": "Crear Nuevo Depósito en Garantía",
+      "securedDeal": "Trato Seguro",
+      "yourRole": "Tu Rol",
+      "roleBuyerLabel": "Soy el Comprador",
+      "roleBuyerDesc": "Envías los fondos, retenidos hasta que confirmes la entrega.",
+      "roleSellerLabel": "Soy el Vendedor",
+      "roleSellerDesc": "Entregas primero, los fondos se liberan tras la aprobación.",
+      "counterpartyName": "Nombre de la Contraparte",
+      "fullNamePlaceholder": "Nombre completo",
+      "counterpartyEmail": "Correo de la Contraparte",
+      "emailPlaceholder": "nombre@ejemplo.com",
+      "escrowTitle": "Título del Depósito",
+      "escrowTitlePlaceholder": "p. ej. Logotipo y kit de marca",
+      "category": "Categoría",
+      "categoryDigital": "Bienes y servicios digitales",
+      "categoryDomain": "Nombres de dominio",
+      "categoryPhysical": "Bienes físicos",
+      "categoryVehicle": "Vehículos",
+      "categoryOther": "Otro",
+      "amount": "Importe",
+      "amountPlaceholder": "Ingresa el importe…",
+      "termsDescription": "Términos y Descripción",
+      "termsPlaceholder": "Describe el trato, los entregables y las condiciones de liberación…",
+      "createEscrowButton": "Crear Depósito",
+      "summary": "Resumen",
+      "summaryAmount": "Importe del Depósito",
+      "summaryFee": "Comisión del Depósito ({pct}%)",
+      "summaryTotal": "Total a Pagar",
+      "infoNote": "Los fondos se mantienen de forma segura en garantía y solo se liberan una vez que ambas partes confirman que el trato está completo.",
+      "invalidUser": "Este usuario no está registrado en Escroc.",
+      "whoPays": "Quién paga la comisión",
+      "whoPaysMe": "Yo",
+      "whoPaysOther": "Paga la contraparte",
+      "paymentGateway": "Pasarela de pago",
+      "attachments": "Archivos adjuntos (opcional)",
+      "myWallet": "Mi monedero",
+      "payWith": "Pagar con",
+      "whoPaysSeller": "Vendedor",
+      "whoPays5050": "50% - 50%",
+      "pTitle": "Título",
+      "pRole": "Mi rol",
+      "pType": "Tipo de producto",
+      "pTotal": "Precio total",
+      "pCharge": "Pagador de la comisión",
+      "editDetails": "Editar detalles",
+      "escrowDetails": "Detalles de la custodia",
+      "paymentDetails": "Detalles del pago",
+      "feesCharge": "Comisiones y cargos",
+      "sellerWillGet": "El vendedor recibirá",
+      "buyerWillPay": "El comprador pagará",
+      "confirmSend": "Confirmar y enviar",
+      "exchangeRate": "Tipo de cambio",
+      "authTitle": "Autorizar datos de la tarjeta",
+      "payWithCard": "Pagar con tarjeta",
+      "cardNumber": "Número de tarjeta",
+      "expDate": "Fecha de caducidad",
+      "cvc": "Código de seguridad CVV/CVC",
+      "submitPayment": "Enviar",
+      "manualPayment": "Pago manual",
+      "manualInstrTitle": "Sigue las instrucciones que aparecen a continuación",
+      "manualInstrDesc": "Rellena todos los campos con la información correcta.",
+      "confirmPay": "Confirmar y pagar",
+      "youWillPay": "Pagarás",
+      "whoPaysBuyer": "Comprador",
+      "expDateMonthError": "Introduce un mes válido (01-12)",
+      "expDateError": "Introduce una fecha de caducidad futura válida (YY/MM)",
+      "resultSuccessTitle": "Pago exitoso",
+      "resultSuccessDesc": "Tu depósito en garantía se ha financiado y creado correctamente. Ambas partes ya pueden continuar con el acuerdo.",
+      "resultCancelTitle": "Pago cancelado",
+      "resultCancelDesc": "Tu pago del depósito en garantía fue cancelado y no se te ha cobrado. Puedes volver a intentarlo cuando quieras.",
+      "resultBack": "Volver a crear depósito en garantía",
+      "resultMyEscrow": "Ir a Mis depósitos en garantía",
+      "resultDashboard": "Ir al panel",
+      "cryptoAddressTitle": "Dirección de pago cripto",
+      "cryptoProceed": "Continuar",
+      "copyAddress": "Copiar dirección",
+      "copied": "Copiado"
+    },
+    "exchange": {
+      "title": "Cambio de divisas",
+      "currencySwap": "Intercambio de divisas",
+      "exchangeRateLabel": "Tipo de cambio",
+      "exchangeFrom": "Cambiar de",
+      "enterAmount": "Introducir importe",
+      "availableBalance": "Saldo disponible",
+      "swapCurrencies": "Intercambiar divisas",
+      "exchangeTo": "Cambiar a",
+      "limit": "Límite",
+      "charge": "Cargo",
+      "sameCurrencyWarning": "Las divisas de origen y destino son las mismas — no se realizará ninguna conversión.",
+      "exchangeMoney": "Cambiar dinero",
+      "summary": "Resumen",
+      "fromWallet": "Desde la billetera",
+      "toExchange": "Al cambio",
+      "exchangeRate": "Tipo de cambio",
+      "totalExchangeAmount": "Importe total del cambio",
+      "convertedAmount": "Importe convertido",
+      "totalCharge": "Cargo total",
+      "totalPayable": "Total a pagar",
+      "ratesInfoNote": "Los tipos de cambio se actualizan en tiempo real. El tipo final se fija en el momento de la transacción.",
+      "logTitle": "Registro de cambios de divisas",
+      "searchLogs": "Buscar registros…",
+      "filter": "Filtrar",
+      "colTransaction": "Transacción",
+      "colTransactionId": "ID de transacción",
+      "colExchangeRate": "Tipo de cambio",
+      "colFeesCharge": "Comisiones y cargos",
+      "colAmount": "Importe",
+      "colDate": "Fecha",
+      "colActions": "Acciones",
+      "moreActions": "Más acciones",
+      "logsUnit": "registros",
+      "status_success": "Exitoso",
+      "status_pending": "Pendiente",
+      "noLogsTitle": "Aún no hay cambios",
+      "noLogsDesc": "Tu historial de cambio de divisas aparecerá aquí.",
+      "colStatus": "Estado",
+      "noMatchTitle": "No hay cambios que coincidan",
+      "noMatchDesc": "Prueba con otro término de búsqueda o filtro."
+    },
+    "kyc": {
+      "title": "Verificación KYC",
+      "body": "Página de verificación KYC",
+      "submit": "Enviar para verificación",
+      "statusUnverified": "Sin verificar",
+      "statusVerified": "Verificado",
+      "statusPending": "Pendiente",
+      "statusRejected": "Rechazado",
+      "noteUnverified": "Verifica tu identidad para desbloquear el acceso completo.",
+      "noteVerified": "Tu identidad ha sido verificada.",
+      "notePending": "Tus documentos están en revisión.",
+      "noteRejected": "Tu solicitud fue rechazada. Vuelve a enviarla con los documentos correctos.",
+      "selectPrefix": "Selecciona"
+    },
+    "moneyOut": {
+      "title": "Retirar Dinero",
+      "withdrawFunds": "Retirar Fondos",
+      "exchangeRate": "Tipo de Cambio",
+      "paymentGateway": "Pasarela de Pago",
+      "amount": "Importe",
+      "amountPlaceholder": "Introduzca el importe…",
+      "limit": "Límite",
+      "availableBalance": "Saldo disponible",
+      "charge": "Cargo",
+      "moneyOut": "Retirar Dinero",
+      "summary": "Resumen",
+      "enteredAmount": "Importe Introducido",
+      "conversionAmount": "Importe de Conversión",
+      "totalFees": "Comisiones y Cargos Totales",
+      "willGet": "Recibirás",
+      "totalPayable": "Importe Total a Pagar",
+      "balanceNote": "Asegúrese de tener saldo suficiente antes de retirar. Las comisiones se deducen del importe transferido.",
+      "logsTitle": "Registros de Retiros",
+      "searchPlaceholder": "Buscar registros…",
+      "filter": "Filtrar",
+      "colTransaction": "Transacción",
+      "colTransactionId": "ID de Transacción",
+      "colExchangeRate": "Tipo de Cambio",
+      "colFees": "Comisiones y Cargo",
+      "colAmount": "Importe",
+      "colDate": "Fecha",
+      "actions": "Acciones",
+      "via": "vía",
+      "moreActions": "Más acciones",
+      "unitLogs": "registros",
+      "noLogsTitle": "Aún no hay retiros",
+      "noLogsDesc": "Tu historial de retiros aparecerá aquí.",
+      "confirm": "Confirmar",
+      "selectBankFirst": "Selecciona primero un banco",
+      "loadingBranches": "Cargando sucursales…",
+      "colStatus": "Estado",
+      "noMatchTitle": "No hay retiros que coincidan",
+      "noMatchDesc": "Prueba con otro término de búsqueda o filtro."
+    },
+    "myEscrow": {
+      "title": "Mi depósito en garantía",
+      "searchPlaceholder": "Buscar depósitos en garantía",
+      "filter": "Filtrar",
+      "newEscrow": "Nuevo depósito",
+      "new": "Nuevo",
+      "dealNeedsAction": "operación requiere tu acción",
+      "dealsNeedAction": "operaciones requieren tu acción",
+      "colEscrow": "Depósito",
+      "colCounterparty": "Contraparte",
+      "colRole": "Rol",
+      "colAmount": "Importe",
+      "colCreated": "Creado",
+      "colStatus": "Estado",
+      "colActions": "Acciones",
+      "openConversation": "Abrir conversación para",
+      "chat": "Chat",
+      "emptyTitle": "Aún no hay custodias",
+      "emptyDesc": "Crea tu primera custodia para empezar.",
+      "pay": "Pagar"
+    },
+    "profile": {
+      "changePhoto": "Cambiar foto",
+      "verified": "Verificado",
+      "buyer": "Comprador",
+      "memberSince": "Miembro desde abril de 2025 · 8 fideicomisos · 24 transacciones",
+      "deleteAccount": "Eliminar cuenta",
+      "personalInfo": "Información personal",
+      "firstName": "Nombre",
+      "firstNamePlaceholder": "Nombre",
+      "lastName": "Apellido",
+      "lastNamePlaceholder": "Apellido",
+      "country": "País",
+      "selectCountry": "Seleccionar país",
+      "phone": "Teléfono",
+      "phonePlaceholder": "Ingrese teléfono…",
+      "address": "Dirección",
+      "addressPlaceholder": "Ingrese dirección…",
+      "city": "Ciudad",
+      "cityPlaceholder": "Ciudad",
+      "state": "Estado",
+      "statePlaceholder": "Estado",
+      "zipCode": "Código postal",
+      "zipPlaceholder": "Código postal",
+      "saveChanges": "Guardar cambios",
+      "changePassword": "Cambiar contraseña",
+      "currentPassword": "Contraseña actual",
+      "currentPasswordPlaceholder": "Ingrese la contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Ingrese la nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Repita la nueva contraseña",
+      "passwordsMatch": "✓ Las contraseñas coinciden",
+      "passwordsNoMatch": "Las contraseñas no coinciden",
+      "updatePassword": "Actualizar contraseña",
+      "weak": "Débil",
+      "fair": "Aceptable",
+      "good": "Buena",
+      "strong": "Fuerte",
+      "passwordLabel": "contraseña",
+      "dangerZone": "Zona de peligro",
+      "dangerDesc": "Una vez eliminada, su cuenta y todos los datos asociados no se podrán recuperar.",
+      "deleteMyAccount": "Eliminar mi cuenta"
+    },
+    "security": {
+      "twoFactorTitle": "Autenticador de dos factores",
+      "enabledBadge": "Activado",
+      "activeBannerPre": "La autenticación de dos factores está",
+      "activeBannerWord": "activa",
+      "activeBannerPost": "en tu cuenta.",
+      "notProtectedBanner": "Tu cuenta no está protegida. Activa la 2FA para asegurarla.",
+      "secretKeyLabel": "Autenticador de dos factores",
+      "copied": "Copiado",
+      "copySecretKey": "Copiar clave secreta",
+      "secretKeyHelp": "Escanea el código QR de abajo con tu aplicación de autenticación, o introduce esta clave manualmente.",
+      "disable2fa": "Desactivar 2FA",
+      "enable": "Activar",
+      "googleAuthTitle": "Google Authenticator",
+      "googleAuthDesc": "Google Authenticator es un autenticador de Google que ejecuta servicios de verificación en dos pasos para autenticar a los usuarios de cualquier aplicación de software.",
+      "howToSetup": "¿Cómo configurarlo?",
+      "downloadAndroid": "Descargar para Android",
+      "downloadIos": "Descargar para iOS",
+      "setupSteps": "Pasos de configuración",
+      "step1": "Descarga Google Authenticator desde tu tienda de aplicaciones",
+      "step2": "Abre la aplicación y toca el botón +",
+      "step3": "Escanea el código QR o introduce la clave manualmente",
+      "step4": "Introduce el código de 6 dígitos que se muestra en la aplicación",
+      "enableTitle": "¿Activar la autenticación de dos factores?",
+      "enableDesc": "Esto añade una capa adicional de seguridad. Necesitarás tu código del autenticador cada vez que inicies sesión.",
+      "disableTitle": "¿Desactivar la autenticación de dos factores?",
+      "disableDesc": "Tu cuenta será menos segura sin la autenticación de dos factores. ¿Seguro que quieres continuar?",
+      "cancel": "Cancelar",
+      "qrAlt": "Código QR de Google Authenticator",
+      "authCodeLabel": "Código del autenticador",
+      "authCodeHelp": "Introduce el código de 6 dígitos de tu app de autenticación para confirmar."
+    },
+    "transaction": {
+      "title": "Registro de transacciones",
+      "searchPlaceholder": "Buscar transacciones",
+      "filter": "Filtrar",
+      "colTransaction": "Transacción",
+      "colTransactionId": "ID de transacción",
+      "colExchangeRate": "Tipo de cambio",
+      "colFees": "Comisiones y cargos",
+      "colAmount": "Importe",
+      "colDate": "Fecha",
+      "colActions": "Acciones",
+      "moreActions": "Más acciones",
+      "via": "vía",
+      "status_pending": "Pendiente",
+      "status_success": "Completada",
+      "unit": "transacciones",
+      "payable": "A pagar",
+      "emptyTitle": "Aún no hay transacciones",
+      "emptyDesc": "Tu historial de transacciones aparecerá aquí.",
+      "noMatchTitle": "No hay transacciones que coincidan",
+      "noMatchDesc": "Prueba con otro término de búsqueda o filtro.",
+      "matchesOnPage": "coincidencias en esta página",
+      "colStatus": "Estado"
+    },
+    "status": {
+      "all": "Todos los estados",
+      "success": "Correcto",
+      "pending": "Pendiente",
+      "waiting": "En espera",
+      "rejected": "Rechazado",
+      "hold": "En espera",
+      "failed": "Fallido"
+    },
+    "types": {
+      "all": "Todos los tipos",
+      "addMoney": "Añadir dinero",
+      "moneyOut": "Retirar dinero",
+      "exchange": "Cambio de divisa",
+      "escrow": "Escrow"
+    },
+    "escrowStatus": {
+      "ongoing": "En curso",
+      "paymentPending": "Pago pendiente",
+      "approvalPending": "Aprobación pendiente",
+      "released": "Liberado",
+      "activeDispute": "Disputa activa",
+      "disputed": "En disputa",
+      "canceled": "Cancelado",
+      "refunded": "Reembolsado",
+      "paymentWaiting": "Esperando pago",
+      "pending": "Pendiente"
+    }
+  },
+  "blogDetail": {
+    "backToBlog": "Volver al blog",
+    "author": "Administrador principal",
+    "role": "Equipo editorial",
+    "readTime": "6 min de lectura",
+    "share": "Compartir",
+    "tagsLabel": "Etiquetas",
+    "tags": [
+      "Custodia",
+      "Seguridad",
+      "Fintech",
+      "Confianza"
+    ],
+    "lead": "En la economía digital actual, la confianza es la moneda que impulsa cada transacción en línea. Entender cómo funcionan las garantías adecuadas es el primer paso para operar con total tranquilidad.",
+    "body": [
+      {
+        "heading": "Por qué esto importa ahora",
+        "paragraphs": [
+          "El comercio en línea nunca se ha movido tan rápido, y tampoco las tácticas usadas para aprovecharse de él. Ya sea que compres un coche, contrates a un profesional independiente o cierres un acuerdo de alto valor, el momento en que el dinero cambia de manos es cuando el riesgo alcanza su punto máximo.",
+          "Ahí es precisamente donde un tercero neutral cambia la ecuación. Al retener los fondos de forma segura hasta que ambas partes cumplan con sus obligaciones, una capa de custodia elimina el acto de fe del que se alimenta el fraude."
+        ]
+      },
+      {
+        "heading": "Cómo funciona la protección",
+        "paragraphs": [
+          "El proceso es sencillo por diseño. El comprador deposita los fondos, el vendedor entrega y, solo cuando el comprador confirma —o se resuelve una disputa de forma justa—, se liberan los fondos. Ninguna de las partes puede quedarse con el dinero y los bienes a la vez.",
+          "Esta estructura convierte una transacción anónima entre desconocidos en un proceso predecible y auditable respaldado por responsabilidad real."
+        ]
+      }
+    ],
+    "quote": "La confianza no debería ser una apuesta. Debería estar integrada en la propia transacción.",
+    "checklistTitle": "Lo que te ofrece una buena capa de custodia",
+    "checklist": [
+      "Fondos retenidos de forma segura hasta que se cumplan las condiciones",
+      "Hitos claros y documentados para ambas partes",
+      "Resolución justa de disputas cuando algo sale mal",
+      "Transparencia total de la transacción de principio a fin"
+    ],
+    "closing": "En resumen: proteger tu dinero en línea no consiste en evitar las transacciones, sino en estructurarlas para que ambas partes puedan avanzar con confianza.",
+    "relatedTitle": "Artículos relacionados",
+    "readMore": "Leer más",
+    "tocTitle": "En este artículo",
+    "ctaTitle": "Opera con confianza",
+    "ctaDesc": "Protege cada acuerdo con una custodia segura.",
+    "ctaButton": "Empezar",
+    "notFound": "Artículo no encontrado",
+    "notFoundDesc": "El artículo que buscas no existe o puede que se haya movido.",
+    "copyLink": "copiar enlace"
+  },
+  "common": {
+    "search": "Buscar…",
+    "noResults": "Sin coincidencias",
+    "backToTop": "Volver arriba"
+  },
+  "legalPages": {
+    "privacy": {
+      "tag": "POLÍTICA DE PRIVACIDAD",
+      "title": "Política de Privacidad",
+      "subtitle": "Cómo recopila, usa y protege Escroc tu información personal.",
+      "sections": [
+        {
+          "title": "Información que recopilamos",
+          "body": "Recopilamos la información que nos proporcionas directamente — tu nombre, correo electrónico, número de teléfono y documento de identidad durante la verificación KYC — junto con los detalles de las transacciones, direcciones de billetera y datos básicos del dispositivo/navegador recopilados automáticamente al usar Escroc."
+        },
+        {
+          "title": "Cómo usamos tu información",
+          "body": "Tu información se utiliza para procesar transacciones en garantía, verificar tu identidad, prevenir fraudes, brindar soporte al cliente y cumplir con la normativa financiera. Nunca vendemos tus datos personales a terceros."
+        },
+        {
+          "title": "Cómo protegemos tu información",
+          "body": "Los datos sensibles, incluidos los detalles de pago y los documentos KYC, se cifran tanto en tránsito como en reposo. Los pagos con tarjeta se procesan mediante pasarelas compatibles con PCI-DSS y nunca almacenamos números de tarjeta completos en nuestros servidores."
+        },
+        {
+          "title": "Compartir con terceros",
+          "body": "Solo compartimos información con las pasarelas de pago, socios bancarios y proveedores de cumplimiento necesarios para completar una transacción, o cuando la ley lo exija para prevenir fraudes o proteger los derechos y la propiedad de nuestros usuarios."
+        },
+        {
+          "title": "Retención de datos",
+          "body": "Conservamos los registros de cuentas y transacciones mientras tu cuenta esté activa, y durante un período adicional según lo exijan las regulaciones de conservación de registros financieros, tras lo cual los datos se eliminan de forma segura."
+        },
+        {
+          "title": "Tus derechos y opciones",
+          "body": "Puedes revisar, actualizar o solicitar la eliminación de tu información personal en cualquier momento desde la configuración de tu cuenta, sujeto a las obligaciones de retención descritas anteriormente. Contacta con support@escroc.com para cualquier solicitud relacionada con la privacidad."
+        },
+        {
+          "title": "Cambios en esta política",
+          "body": "Podemos actualizar esta política periódicamente. Los cambios importantes se publicarán en esta página y, cuando sea necesario, se te comunicarán directamente."
+        }
+      ]
+    },
+    "refund": {
+      "tag": "POLÍTICA DE REEMBOLSOS",
+      "title": "Política de Reembolsos",
+      "subtitle": "Cómo funcionan los reembolsos para transacciones en garantía, depósitos y pagos.",
+      "sections": [
+        {
+          "title": "Reembolsos basados en garantía (escrow)",
+          "body": "Como Escroc retiene los fondos en garantía hasta que ambas partes confirman una transacción, los reembolsos se gestionan principalmente mediante el flujo de liberación y disputa dentro de cada garantía, en lugar de una solicitud de reembolso tradicional posterior."
+        },
+        {
+          "title": "Disputas iniciadas por el comprador",
+          "body": "Si un comprador no recibe los bienes o el servicio acordado, puede abrir una disputa desde la página de conversación de la garantía. Los fondos permanecen retenidos de forma segura hasta que se revisa y resuelve la disputa."
+        },
+        {
+          "title": "Liberación iniciada por el vendedor",
+          "body": "Una vez que el vendedor ha entregado según lo acordado, el comprador aprueba la liberación de los fondos. Los vendedores también pueden enviar una solicitud de liberación cuando consideren que el comprador está satisfecho."
+        },
+        {
+          "title": "Reembolsos de la pasarela de pago",
+          "body": "Si una transacción se cancela antes de que ambas partes confirmen, o un pago falla o se duplica, cualquier monto cobrado a través de una pasarela de pago (tarjeta, banco o cripto) se reembolsa al método de pago original en un plazo de 5 a 10 días hábiles, menos cualquier comisión de procesamiento no reembolsable ya cobrada por la pasarela."
+        },
+        {
+          "title": "Comisiones no reembolsables",
+          "body": "Las comisiones de servicio de la plataforma y los cargos por cambio de divisa ya aplicados a una transacción completada no son reembolsables una vez que los fondos se han liberado al vendedor."
+        },
+        {
+          "title": "Cómo solicitar un reembolso",
+          "body": "Contacta con nuestro equipo de soporte desde la sección de Soporte de tu panel con tu ID de transacción. Revisamos cada solicitud y respondemos en un plazo de 2 días hábiles."
+        }
+      ]
+    },
+    "terms": {
+      "tag": "TÉRMINOS Y CONDICIONES",
+      "title": "Términos y Condiciones",
+      "subtitle": "Las reglas que rigen el uso de la plataforma Escroc.",
+      "sections": [
+        {
+          "title": "Aceptación de los términos",
+          "body": "Al crear una cuenta o usar Escroc, aceptas quedar sujeto a estos Términos y Condiciones y a nuestra Política de Privacidad. Si no estás de acuerdo, no uses la plataforma."
+        },
+        {
+          "title": "Elegibilidad",
+          "body": "Debes tener al menos 18 años y ser capaz de celebrar un contrato legalmente vinculante en tu jurisdicción para usar Escroc. Al registrarte, confirmas que esta información es correcta."
+        },
+        {
+          "title": "Cuenta y verificación (KYC)",
+          "body": "Eres responsable de mantener seguras tus credenciales de acceso. Ciertos límites de transacción y funciones requieren verificación de identidad, y Escroc puede solicitar documentación adicional en cualquier momento para cumplir con las obligaciones contra el fraude y el lavado de dinero."
+        },
+        {
+          "title": "Servicio de garantía (escrow)",
+          "body": "Escroc actúa como un tercero neutral que retiene los fondos hasta que tanto el comprador como el vendedor cumplen los términos acordados. No garantizamos la calidad, legalidad o entrega de los bienes y servicios intercambiados entre usuarios — nuestro papel se limita a retener y liberar fondos según los términos de la garantía."
+        },
+        {
+          "title": "Uso prohibido",
+          "body": "No puedes usar Escroc para transacciones ilegales, lavado de dinero, fraude o cualquier actividad prohibida por la ley aplicable. Nos reservamos el derecho de suspender o cancelar cuentas que infrinjan estas normas y de reportar actividad sospechosa a las autoridades pertinentes."
+        },
+        {
+          "title": "Comisiones y cambio de divisa",
+          "body": "Las comisiones por depósitos, retiros, transacciones en garantía y cambio de divisa se muestran antes de confirmar cualquier acción. Los tipos de cambio se actualizan periódicamente y pueden variar en el momento de la transacción."
+        },
+        {
+          "title": "Limitación de responsabilidad",
+          "body": "Escroc no es responsable de daños indirectos, incidentales o consecuentes derivados del uso de la plataforma, incluidas las pérdidas causadas por proveedores de pago de terceros o retrasos en la red blockchain fuera de nuestro control."
+        },
+        {
+          "title": "Cambios en estos términos",
+          "body": "Podemos revisar estos Términos periódicamente. El uso continuado de Escroc después de la publicación de cambios constituye la aceptación de los Términos actualizados."
+        }
+      ]
+    }
+  },
+  "faqPage": {
+    "tag": "PREGUNTAS FRECUENTES",
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Respuestas a las preguntas más comunes sobre garantía, pagos y seguridad en Escroc.",
+    "items": [
+      {
+        "q": "¿Cómo funciona la garantía (escrow) en Escroc?",
+        "a": "Escroc retiene el pago del comprador de forma segura hasta que ambas partes confirman que el acuerdo se ha completado, y luego libera los fondos al vendedor, protegiendo a ambas partes del fraude."
+      },
+      {
+        "q": "¿Qué monedas y métodos de pago son compatibles?",
+        "a": "Puedes recargar tu billetera con tarjetas, transferencias bancarias y criptomonedas nativas, e intercambiar entre billeteras fiat y cripto directamente desde tu panel."
+      },
+      {
+        "q": "¿Necesito completar el KYC?",
+        "a": "Algunos límites de transacción y funciones requieren verificación de identidad. Puedes enviar tus documentos desde Panel → KYC, y la mayoría de las revisiones se completan en 24 horas."
+      },
+      {
+        "q": "¿Qué pasa si hay una disputa?",
+        "a": "Cualquiera de las partes puede abrir una disputa desde la página de conversación de la garantía. Nuestro equipo revisa las pruebas y los mensajes intercambiados antes de decidir cómo se liberan los fondos."
+      },
+      {
+        "q": "¿Cuánto tarda en llegar un pago?",
+        "a": "Los pagos con tarjeta y banco suelen confirmarse en minutos u horas; los pagos en cripto se acreditan una vez que la transacción alcanza el número requerido de confirmaciones en la cadena de bloques."
+      },
+      {
+        "q": "¿Puedo usar Escroc como comprador y como vendedor?",
+        "a": "Sí — puedes cambiar entre la vista de Comprador y Vendedor en cualquier momento desde tu panel sin crear una cuenta separada."
+      },
+      {
+        "q": "¿Mi información de pago está segura?",
+        "a": "Sí. Los pagos con tarjeta se procesan mediante pasarelas compatibles con PCI-DSS, y los datos sensibles se cifran tanto en tránsito como en reposo."
+      },
+      {
+        "q": "¿Qué comisiones cobra Escroc?",
+        "a": "Las comisiones varían según la pasarela de pago y el tipo de cambio, y siempre se muestran antes de confirmar un depósito, retiro o intercambio."
+      },
+      {
+        "q": "¿Puedo cancelar una garantía después de crearla?",
+        "a": "Una garantía se puede cancelar antes de que la contraparte pague. Una vez confirmado el pago, solo se puede resolver mediante liberación o disputa."
+      },
+      {
+        "q": "¿Cómo contacto con soporte?",
+        "a": "Abre un ticket desde Panel → Soporte, o escribe a support@escroc.com — nuestro equipo suele responder en un día hábil."
+      }
+    ]
+  },
+  "notFound": {
+    "title": "Este Depósito en Garantía No Existe",
+    "subtitle": "Parece que esta transacción nunca se confirmó — la página se movió, o nunca existió.",
+    "backHome": "Volver al Inicio",
+    "quickLinks": "O prueba con uno de estos"
+  }
+}

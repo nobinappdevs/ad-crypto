@@ -20,6 +20,16 @@ export const verifyOtpRequestSchema = z.object({
 
 export type VerifyOtpRequest = z.infer<typeof verifyOtpRequestSchema>;
 
+/**
+ * Email verification after sign-up takes the same address + code pair as the
+ * reset flow's OTP step, so it shares that shape rather than restating it. It is
+ * a separate export because it hits a different endpoint, and the day either
+ * side grows a field the two can part ways without a rename.
+ */
+export const verifyEmailRequestSchema = verifyOtpRequestSchema;
+
+export type VerifyEmailRequest = VerifyOtpRequest;
+
 export const resetPasswordRequestSchema = z
   .object({
     email: z.string().email(),

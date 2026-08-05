@@ -1,0 +1,1354 @@
+{
+  "brand": {
+    "name": "Escroc"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "features": "Features",
+    "blog": "Blog",
+    "contact": "Contact",
+    "dashboard": "Dashboard",
+    "menu": "Menu"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "loginTitle": "Welcome Back",
+    "loginSubtitle": "Sign in to your Escroc account",
+    "registerTitle": "Create Your Account",
+    "registerSubtitle": "Join thousands of users on Escroc",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "email": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "labelEmail": "Email Address",
+    "labelPassword": "Password",
+    "labelFullName": "Full Name",
+    "labelConfirmPassword": "Confirm Password",
+    "labelRole": "I am a",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "orContinue": "or continue with",
+    "agreeTerms": "I agree to the",
+    "terms": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "role": {
+      "buyer": "Buyer",
+      "seller": "Seller"
+    },
+    "forgotTitle": "Forgot Password?",
+    "forgotSubtitle": "No worries — enter your email and we'll send you a reset code.",
+    "sendResetCode": "Send Reset Code",
+    "forgotSentTitle": "Check Your Inbox",
+    "forgotSentDesc": "We sent a 6-digit code to your email. It expires in 10 minutes.",
+    "continueToVerify": "Enter Verification Code",
+    "otpTitle": "Verify Your Email",
+    "otpSubtitle": "Enter the 6-digit code we sent to your email address.",
+    "otpLabel": "Verification Code",
+    "resendIn": "Resend code in",
+    "resendOtp": "Resend Code",
+    "verifyOtp": "Verify & Continue",
+    "backToForgot": "Back to forgot password",
+    "resetTitle": "Set a New Password",
+    "resetSubtitle": "Choose a strong password for your account.",
+    "resetButton": "Reset Password",
+    "recaptchaError": "Please verify that you are not a robot",
+    "loggingIn": "Logging in…",
+    "creatingAccount": "Creating account…",
+    "sending": "Sending…",
+    "resetting": "Resetting…",
+    "strengthWeak": "Weak",
+    "strengthFair": "Fair",
+    "strengthGood": "Good",
+    "strengthStrong": "Strong",
+    "digitLabel": "Digit",
+    "togglePassword": "Toggle password visibility"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light mode",
+    "dark": "Dark mode"
+  },
+  "language": {
+    "select": "Select language"
+  },
+  "banner": {
+    "eyebrow": "Financial Confidence Starts Here",
+    "title": "Seamless Money Transfer, Fortified with Escrow Security",
+    "subtitle": "Our Escrow service sets us apart by providing an extra layer of protection for both buyers and sellers.",
+    "getStarted": "Get Started",
+    "card": {
+      "popular": "Popular",
+      "title": "Always utilize it when buying or selling online.",
+      "subtitle": "The process of money transfer, allows you to send and receive funds effortlessly."
+    },
+    "form": {
+      "im": "I'm",
+      "selling": "Selling",
+      "buying": "Buying",
+      "itemPlaceholder": "Domain names, vehicles...",
+      "for": "for",
+      "amountPlaceholder": "1000",
+      "submit": "Create New Escrow",
+      "transactionType": "Transaction Type",
+      "itemService": "Item / Service",
+      "amountCurrency": "Amount & Currency"
+    },
+    "currencyAria": "Currency",
+    "trust": {
+      "secured": "100% Secured Smart Escrow",
+      "verified": "Transactions Verified",
+      "noFees": "Zero Hidden Fees"
+    }
+  },
+  "cookie": {
+    "text": "We may use cookies or any other tracking technologies when you visit our website, including any other media form, mobile website, or mobile application related or connected to help customize the Site and improve your experience.",
+    "privacy": "privacy Policy",
+    "allow": "Allow",
+    "decline": "Decline",
+    "title": "We use cookies"
+  },
+  "partners": {
+    "names": [
+      "Wisozk",
+      "Morissette",
+      "Reichel",
+      "Gleichner",
+      "Strosin",
+      "Barrows"
+    ]
+  },
+  "about": {
+    "tag": "Know About Us",
+    "title": "Secure Money Transfer, Reliable Escrow Services.",
+    "desc": "We understand the importance of seamless and secure financial transactions. Our mission is to provide a comprehensive solution that combines the convenience of money transfer with the added layer of security through our Escrow services.",
+    "points": [
+      "Seamless Money Transfer",
+      "Fortified with Escrow Security",
+      "Confidently Send and Receive Funds",
+      "Trustworthy Financial Transactions"
+    ]
+  },
+  "services": {
+    "tag": "Service Provide",
+    "title": "You're In A Secure System",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Secure Services",
+        "desc": "We act as a reliable intermediary, holding funds until both parties fulfill their commitments."
+      },
+      {
+        "icon": "transfer",
+        "title": "Instant Money Transfer",
+        "desc": "Send and receive funds with confidence, knowing that your financial exchanges are swift, reliable, and backed."
+      },
+      {
+        "icon": "chart",
+        "title": "Financial Consultations",
+        "desc": "Our expert advisors provide tailored insights, helping you make informed decisions."
+      },
+      {
+        "icon": "shield",
+        "title": "Fraud Protection",
+        "desc": "Our advanced monitoring systems and encryption technologies ensure that your financial information is secure."
+      }
+    ]
+  },
+  "expertise": {
+    "tag": "Highly Expertise",
+    "title": "The World's Most Reliable Online Escrow Solution.",
+    "items": [
+      {
+        "icon": "briefcase",
+        "title": "Elite Strategic Consulting",
+        "desc": "Tap into our Elite Strategic Consulting services, where our highly skilled experts offer unparalleled insights to drive your business forward."
+      },
+      {
+        "icon": "wrench",
+        "title": "Advanced Technical Proficiency",
+        "desc": "Rely on our Advanced Technical Proficiency to navigate the complexities of technology."
+      },
+      {
+        "icon": "dollar",
+        "title": "Specialized Financial Acumen",
+        "desc": "Gain access to seasoned professionals who bring deep insights and expertise to financial planning, analysis, and management."
+      }
+    ],
+    "badgeExperts": "Trusted Experts",
+    "badgeGuidance": "24/7 Guidance",
+    "learnMore": "Learn more"
+  },
+  "testimonials": {
+    "tag": "Testimonials",
+    "title": "What Our Customers Say",
+    "subtitle": "Join thousands of satisfied users who trust Escroc for secure transactions.",
+    "items": [
+      {
+        "quote": "As an entrepreneur in the e-commerce space, finding a trustworthy escrow service is non-negotiable. Escroc has consistently exceeded my expectations. The ease of use combined with heightened security measures ensures my transactions are seamless and protected.",
+        "author": "James Rodriguez",
+        "role": "E-commerce Entrepreneur",
+        "rating": 5
+      },
+      {
+        "quote": "Escroc completely transformed how I handle client payments as a freelancer. No more awkward conversations about trust — the escrow system handles everything. The platform is intuitive, fast, and reliable. I recommend it to every freelancer I know.",
+        "author": "Sarah Mitchell",
+        "role": "Freelance Designer",
+        "rating": 5
+      },
+      {
+        "quote": "I sell collectibles online and have been burned by scams before. Since switching to Escroc, every deal has gone smoothly. The buyer and seller protections are rock-solid and customer support is always responsive when I have questions.",
+        "author": "David Park",
+        "role": "Online Seller",
+        "rating": 5
+      },
+      {
+        "quote": "Managing international payments used to be a nightmare. Escroc made it effortless. Multi-currency support, fast processing, and the security layer let me focus on my business instead of worrying about fraud.",
+        "author": "Amina Osei",
+        "role": "Import/Export Business Owner",
+        "rating": 5
+      }
+    ],
+    "statAvgRating": "Average rating",
+    "statHappy": "Happy customers",
+    "statSatisfaction": "Satisfaction rate",
+    "featured": "Featured",
+    "verified": "Verified",
+    "starsLabel": "out of 5 stars"
+  },
+  "blog": {
+    "tag": "Blog",
+    "title": "See Our Recent Blog",
+    "author": "Super Admin",
+    "readMore": "Read More",
+    "posts": [
+      {
+        "category": "Perspectives",
+        "date": "06-02-2023",
+        "title": "Insider Insights: Expert Perspectives on Financial Management"
+      },
+      {
+        "category": "Stories",
+        "date": "06-02-2023",
+        "title": "Real Stories, Real Trust: Customer Experiences with Escroc"
+      },
+      {
+        "category": "Security",
+        "date": "06-02-2023",
+        "title": "Navigating the Landscape of Financial Security"
+      }
+    ]
+  },
+  "download": {
+    "tag": "Download App",
+    "title": "We available on store download now.",
+    "appStore": {
+      "label": "Download on the",
+      "store": "App Store"
+    },
+    "googlePlay": {
+      "label": "GET IT ON",
+      "store": "Google Play"
+    },
+    "subtitle": "Secure escrow payments, instant transfers, and real-time tracking — all in your pocket.",
+    "features": [
+      {
+        "title": "Bank-grade escrow",
+        "desc": "Every payment held safely until both sides confirm."
+      },
+      {
+        "title": "Global reach",
+        "desc": "Instant transfers across 190+ countries, any currency."
+      },
+      {
+        "title": "Live tracking",
+        "desc": "Real-time status & push alerts on every transaction."
+      }
+    ],
+    "statDownloads": "Downloads",
+    "statRating": "App rating",
+    "statCountries": "Countries",
+    "phone": {
+      "welcome": "Welcome back",
+      "totalBalance": "Total Balance",
+      "recentActivity": "Recent Activity",
+      "seeAll": "See all",
+      "send": "Send",
+      "request": "Request",
+      "topUp": "Top Up",
+      "more": "More",
+      "instantTransfer": "Instant Transfer",
+      "secured": "Secured",
+      "escrowActive": "Escrow active",
+      "completed": "Completed",
+      "received": "Received"
+    }
+  },
+  "footer": {
+    "tagline": "Secure escrow-based money transfer, built to protect both buyers and sellers.",
+    "madeBy": "Made by Escroc",
+    "navigation": "Navigation",
+    "legal": "Legal",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "legalFaq": "FAQ",
+    "legalPrivacy": "Privacy Policy",
+    "legalRefund": "Refund Policy",
+    "legalTerms": "Terms & Conditions"
+  },
+  "home": {
+    "title": "Secure Money Transfers with Escrow",
+    "subtitle": "Send and receive money safely. Escroc holds funds in escrow until both parties are satisfied.",
+    "cta": "Get Started"
+  },
+  "servicesPage": {
+    "hero": {
+      "tag": "Our Services",
+      "title": "Everything You Need for Secure Transactions",
+      "subtitle": "From escrow protection to instant transfers, we provide the tools that keep your money safe."
+    },
+    "stats": [
+      {
+        "value": "10M+",
+        "label": "Transactions Secured"
+      },
+      {
+        "value": "190+",
+        "label": "Countries Served"
+      },
+      {
+        "value": "99.9%",
+        "label": "Uptime Guaranteed"
+      },
+      {
+        "value": "24/7",
+        "label": "Customer Support"
+      }
+    ],
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Join thousands of users who trust Escroc for their secure transactions.",
+      "button": "Create Free Account"
+    }
+  },
+  "featuresPage": {
+    "hero": {
+      "tag": "Platform Features",
+      "title": "Built for Security, Designed for Speed",
+      "subtitle": "Discover the powerful features that make Escroc the most trusted escrow platform."
+    },
+    "items": [
+      {
+        "icon": "lock",
+        "title": "End-to-End Encryption",
+        "desc": "Every transaction is encrypted with military-grade security, ensuring your data and funds are always protected."
+      },
+      {
+        "icon": "shield",
+        "title": "Two-Factor Authentication",
+        "desc": "An extra layer of account security that protects you even if your password is compromised."
+      },
+      {
+        "icon": "transfer",
+        "title": "Real-Time Notifications",
+        "desc": "Stay informed with instant alerts for every step of your transaction lifecycle."
+      },
+      {
+        "icon": "chart",
+        "title": "Transaction Analytics",
+        "desc": "Track your financial activity with detailed reports and insights to help you make smarter decisions."
+      },
+      {
+        "icon": "briefcase",
+        "title": "Multi-Currency Support",
+        "desc": "Send and receive funds in multiple currencies with competitive exchange rates."
+      },
+      {
+        "icon": "dollar",
+        "title": "Zero Hidden Fees",
+        "desc": "Transparent pricing with no surprises. What you see is exactly what you pay."
+      }
+    ],
+    "cta": {
+      "title": "Experience the Difference",
+      "subtitle": "Start using Escroc today and discover why thousands of users trust us with their transactions.",
+      "button": "Get Started Free"
+    }
+  },
+  "blogPage": {
+    "hero": {
+      "tag": "Our Blog",
+      "title": "Insights, Tips & Industry News",
+      "subtitle": "Stay up to date with the latest trends in fintech, security, and online transactions."
+    },
+    "categories": [
+      "All",
+      "Security",
+      "Perspectives",
+      "Stories",
+      "Updates"
+    ],
+    "posts": [
+      {
+        "category": "Perspectives",
+        "date": "06-02-2023",
+        "title": "Insider Insights: Expert Perspectives on Financial Management",
+        "excerpt": "Get exclusive insights from industry experts on managing your finances in the digital age."
+      },
+      {
+        "category": "Stories",
+        "date": "06-02-2023",
+        "title": "Real Stories, Real Trust: Customer Experiences with Escroc",
+        "excerpt": "Hear from our community of users who have successfully used Escroc for their transactions."
+      },
+      {
+        "category": "Security",
+        "date": "06-02-2023",
+        "title": "Navigating the Landscape of Financial Security",
+        "excerpt": "A comprehensive guide to understanding modern financial security practices and how to protect yourself."
+      },
+      {
+        "category": "Updates",
+        "date": "05-15-2023",
+        "title": "Escroc Platform Updates: New Features and Improvements",
+        "excerpt": "Discover what's new in our latest platform release and how it benefits your transaction workflow."
+      },
+      {
+        "category": "Perspectives",
+        "date": "04-28-2023",
+        "title": "The Future of Online Transactions: Trends to Watch",
+        "excerpt": "We explore emerging trends in digital payments and what they mean for buyers and sellers."
+      },
+      {
+        "category": "Security",
+        "date": "04-10-2023",
+        "title": "How Escrow Services Protect You from Online Fraud",
+        "excerpt": "Learn how escrow services act as a powerful shield against common online scams and fraud tactics."
+      }
+    ],
+    "author": "Super Admin",
+    "readMore": "Read More",
+    "newsletter": {
+      "tag": "Newsletter",
+      "title": "Stay in the Loop",
+      "subtitle": "Subscribe to get the latest articles and updates delivered straight to your inbox.",
+      "placeholder": "Enter your email",
+      "button": "Subscribe"
+    },
+    "empty": "No posts yet",
+    "all": "All"
+  },
+  "blogDetail": {
+    "backToBlog": "Back to Blog",
+    "author": "Super Admin",
+    "role": "Editorial Team",
+    "readTime": "6 min read",
+    "share": "Share",
+    "tagsLabel": "Tags",
+    "tags": [
+      "Escrow",
+      "Security",
+      "Fintech",
+      "Trust"
+    ],
+    "lead": "In today's digital economy, trust is the currency that powers every online transaction. Understanding how the right safeguards work is the first step toward transacting with complete peace of mind.",
+    "body": [
+      {
+        "heading": "Why this matters now",
+        "paragraphs": [
+          "Online commerce has never moved faster — and neither have the tactics used to exploit it. Whether you're buying a car, hiring a freelancer, or closing a high-value deal, the moment money changes hands is the moment risk peaks.",
+          "That's exactly where a neutral third party changes the equation. By holding funds securely until both sides meet their obligations, an escrow layer removes the leap of faith that fraud thrives on."
+        ]
+      },
+      {
+        "heading": "How the protection works",
+        "paragraphs": [
+          "The flow is simple by design. The buyer deposits funds, the seller delivers, and only once the buyer confirms — or a dispute is fairly resolved — are the funds released. Neither party can walk away with both the money and the goods.",
+          "This structure turns an anonymous transaction between strangers into a predictable, auditable process backed by real accountability."
+        ]
+      }
+    ],
+    "quote": "Trust shouldn't be a gamble. It should be built into the transaction itself.",
+    "checklistTitle": "What a strong escrow layer gives you",
+    "checklist": [
+      "Funds held securely until conditions are met",
+      "Clear, documented milestones for both parties",
+      "Fair dispute resolution when things go wrong",
+      "Full transaction transparency from start to finish"
+    ],
+    "closing": "The bottom line: protecting your money online isn't about avoiding transactions — it's about structuring them so both sides can move forward with confidence.",
+    "relatedTitle": "Related Articles",
+    "readMore": "Read More",
+    "tocTitle": "In this article",
+    "ctaTitle": "Transact with confidence",
+    "ctaDesc": "Protect every deal with secure escrow.",
+    "ctaButton": "Get Started",
+    "notFound": "Article not found",
+    "notFoundDesc": "The article you're looking for doesn't exist or may have been moved.",
+    "copyLink": "copy link"
+  },
+  "contactPage": {
+    "hero": {
+      "tag": "Contact Us",
+      "title": "Get in Touch with Our Team",
+      "subtitle": "Have questions or need support? We're here to help you 24/7."
+    },
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us more about your inquiry...",
+      "submit": "Send Message",
+      "success": "Message sent! We'll get back to you within 24 hours.",
+      "error": "Something went wrong. Please try again.",
+      "sending": "Sending…"
+    },
+    "info": [
+      {
+        "icon": "mail",
+        "title": "Email Support",
+        "value": "support@escroc.com",
+        "desc": "We reply within 24 hours"
+      },
+      {
+        "icon": "phone",
+        "title": "Phone Support",
+        "value": "+1 (800) 123-4567",
+        "desc": "Mon–Fri, 9am–6pm EST"
+      },
+      {
+        "icon": "mapPin",
+        "title": "Office",
+        "value": "123 Finance St, New York, NY",
+        "desc": "Visit us by appointment"
+      }
+    ],
+    "faq": {
+      "tag": "FAQ",
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "q": "How does escrow work?",
+          "a": "Escroc holds funds securely until both buyer and seller fulfill their agreed terms. Once satisfied, funds are released automatically."
+        },
+        {
+          "q": "How long does a transfer take?",
+          "a": "Most transfers are processed within 1–3 business days, depending on the destination and amount."
+        },
+        {
+          "q": "Is Escroc safe to use?",
+          "a": "Absolutely. We use bank-grade encryption and comply with international financial regulations to keep your money safe."
+        },
+        {
+          "q": "What are the fees?",
+          "a": "Our fees are transparent and competitive. Visit our pricing page for a full breakdown."
+        }
+      ]
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "tag": "About Us",
+      "title": "The Story Behind Escroc",
+      "subtitle": "We're on a mission to make online transactions safer and more trustworthy for everyone, everywhere."
+    },
+    "mission": {
+      "tag": "Our Mission",
+      "title": "Building Trust in Every Transaction",
+      "desc": "Since our founding, Escroc has been committed to providing a secure, transparent platform that bridges the gap between buyers and sellers worldwide. We believe every transaction should be protected."
+    },
+    "values": {
+      "tag": "Our Values",
+      "title": "What We Stand For",
+      "items": [
+        {
+          "icon": "shield",
+          "title": "Security First",
+          "desc": "Every decision we make prioritizes the safety of your transactions and financial data."
+        },
+        {
+          "icon": "check",
+          "title": "Transparency",
+          "desc": "Honest communication with no hidden fees or surprises — ever."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Reliability",
+          "desc": "Built for uptime and performance so you can count on us when it matters most."
+        },
+        {
+          "icon": "dollar",
+          "title": "Fairness",
+          "desc": "Equal protection for both buyers and sellers in every single transaction."
+        }
+      ]
+    },
+    "team": {
+      "tag": "Our Team",
+      "title": "The People Behind Escroc",
+      "members": [
+        {
+          "name": "Alex Johnson",
+          "role": "CEO & Founder"
+        },
+        {
+          "name": "Sarah Williams",
+          "role": "Chief Technology Officer"
+        },
+        {
+          "name": "Michael Chen",
+          "role": "Head of Security"
+        },
+        {
+          "name": "Emma Davis",
+          "role": "Head of Customer Success"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Join the Escroc Community",
+      "subtitle": "Thousands of users already trust us with their transactions. Ready to join them?",
+      "button": "Get Started Today"
+    },
+    "statTransactions": "Transactions",
+    "statCountries": "Countries",
+    "statUptime": "Uptime",
+    "statSupport": "Support"
+  },
+  "dashboard": {
+    "sidebar": {
+      "core": "Core",
+      "finance": "Finance",
+      "overview": "Overview",
+      "escrow": "My Escrow",
+      "transactions": "Transactions",
+      "addMoney": "Add Money",
+      "moneyOut": "Money Out",
+      "exchange": "Exchange",
+      "security": "2FA Security",
+      "kyc": "KYC Verification",
+      "profile": "Profile Settings",
+      "userRole": "Verified · Buyer",
+      "logout": "Log out",
+      "helpTitle": "Help Center",
+      "helpSub": "How can we help you?",
+      "helpBtn": "Get Support",
+      "collapse": "Collapse",
+      "goHome": "Go to homepage",
+      "closeMenu": "Close menu",
+      "liveSupport": "Live Support"
+    },
+    "support": {
+      "title": "Support Tickets",
+      "addNew": "Add New Ticket",
+      "colTicketId": "Ticket ID",
+      "colSubject": "Subject",
+      "colMessage": "Message",
+      "colStatus": "Status",
+      "colLastReply": "Last Reply",
+      "noData": "No data found!",
+      "createTitle": "Add New Ticket",
+      "back": "Back to Tickets",
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter Subject...",
+      "message": "Message",
+      "messagePlaceholder": "Write Here...",
+      "attachments": "Attachments",
+      "optional": "(Optional)",
+      "dropHint": "Drag & drop files here, or click to browse",
+      "browse": "Choose Files",
+      "submit": "Submit Ticket"
+    },
+    "navbar": {
+      "subtitle": "escroc.com · Escrow Platform",
+      "buyer": "Buyer",
+      "seller": "Seller",
+      "logout": "Log Out",
+      "menu": "Menu",
+      "logoutTitle": "Log out?",
+      "logoutDesc": "You'll need to sign in again to access your account.",
+      "cancel": "Cancel",
+      "confirmLogout": "Yes, log out",
+      "noNotifications": "No notifications yet",
+      "viewAll": "View all",
+      "notifications": "Notifications",
+      "newCount": "{n} new",
+      "noNotificationsDesc": "You are all caught up.",
+      "profileMenu": "Profile menu",
+      "viewingAs": "Viewing as"
+    },
+    "home": {
+      "vaultLabel": "Total Held in Escrow",
+      "vaultStatus": "Protected Securely",
+      "vaultDesc": "Deployed across 3 active escrow vaults · Multi-sig security active",
+      "origin": "Origin",
+      "youBuyer": "You (Buyer)",
+      "counterparties": "Counterparties",
+      "sellers": "3 Sellers Verified",
+      "quickControls": "Quick Controls",
+      "initAddMoney": "Initialize Add Money",
+      "withdrawal": "Withdrawal Out",
+      "convertFX": "Convert FX",
+      "createEscrow": "Create Escrow",
+      "securityPanel": "Security Panel",
+      "balances": "Local Account Balances",
+      "chartTitle": "Escrow Volume Metric",
+      "distTitle": "Distribution Insights",
+      "inbound": "Inbound Funds",
+      "fx": "FX Exchanges",
+      "outbound": "Outbound Settlement",
+      "txTitle": "Transactional Records",
+      "export": "Export Statement",
+      "viewAll": "View All Logs",
+      "txContext": "Transaction Context",
+      "txStatus": "Status",
+      "txTimestamp": "Timestamp",
+      "txFinancial": "Financial Mapping",
+      "buyers": "Buyers",
+      "escrowOverview": "Escrow Overview",
+      "totalEscrow": "Total Escrow",
+      "completedEscrow": "Completed",
+      "pendingEscrow": "Pending",
+      "disputeEscrow": "Disputed",
+      "noTxTitle": "No transactions yet",
+      "noTxDesc": "Your recent transactions will appear here.",
+      "thisMonth": "This Month",
+      "moneyFlow": "Money Flow",
+      "flowAdd": "Add Money",
+      "flowOut": "Money Out",
+      "flowExchange": "Exchange Money"
+    },
+    "addMoney": {
+      "title": "Add Money",
+      "depositFunds": "Deposit Funds",
+      "exchangeRate": "Exchange Rate:",
+      "paymentGateway": "Payment Gateway",
+      "amount": "Amount",
+      "enterAmount": "Enter amount…",
+      "limit": "Limit:",
+      "availableBalance": "Available balance:",
+      "charge": "Charge:",
+      "addMoneyBtn": "Add Money",
+      "summary": "Summary",
+      "enteredAmount": "Entered Amount",
+      "conversionAmount": "Conversion Amount",
+      "totalFees": "Total Fees & Charges",
+      "totalPayable": "Total Payable Amount",
+      "infoNote": "Your deposited funds will reflect in your wallet within 1–3 business days depending on the gateway.",
+      "logTitle": "Add Money Log",
+      "searchLogs": "Search logs…",
+      "filter": "Filter",
+      "colTransaction": "Transaction",
+      "colTransactionId": "Transaction ID",
+      "colExchangeRate": "Exchange Rate",
+      "colFeesCharge": "Fees & Charge",
+      "colAmount": "Amount",
+      "colDate": "Date",
+      "addBalance": "Add Balance",
+      "via": "via",
+      "status": {
+        "pending": "Pending",
+        "success": "Success"
+      },
+      "noLogsTitle": "No deposits yet",
+      "noLogsDesc": "Your add-money history will appear here.",
+      "requestAmount": "Entered Amount",
+      "exchangeRateLabel": "Exchange Rate",
+      "willGet": "You Will Get",
+      "manualTitle": "Manual Payment",
+      "manualInstrTitle": "Payment Instructions",
+      "confirmPayment": "Confirm Payment",
+      "authTitle": "Authorize card information",
+      "payWithCard": "Pay With Card",
+      "cardNumber": "Card Number",
+      "expDate": "Expiration Date",
+      "cvc": "Security Code CVV/CVC",
+      "submitPayment": "Submit",
+      "paymentInformation": "Payment Information",
+      "noMatchTitle": "No matching deposits",
+      "noMatchDesc": "Try a different search term or filter.",
+      "colStatus": "Status",
+      "expDateMonthError": "Please enter a valid month (01-12)",
+      "expDateError": "Please enter a valid future expiration date (YY/MM)",
+      "resultSuccessTitle": "Payment Successful",
+      "resultSuccessDesc": "Your deposit was received and is being processed. It will reflect in your wallet shortly.",
+      "resultCancelTitle": "Payment Canceled",
+      "resultCancelDesc": "Your payment was canceled and you have not been charged. You can try again whenever you are ready.",
+      "resultBack": "Back to Add Money",
+      "resultDashboard": "Go to Dashboard",
+      "resultTransactions": "View Transactions"
+    },
+    "common": {
+      "showing": "Showing",
+      "of": "of",
+      "previous": "Previous",
+      "next": "Next",
+      "optional": "(Optional)",
+      "currency": "Currency",
+      "logs": "logs",
+      "monthsShort": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "loading": "Loading…",
+      "loadMore": "Load more",
+      "allLoaded": "All loaded"
+    },
+    "conversation": {
+      "escrowId": "Escrow ID",
+      "backToMyEscrow": "Back to My Escrow",
+      "writeSomething": "Write something…",
+      "attachFile": "Attach file",
+      "sendMessage": "Send message",
+      "escrowDetails": "Escrow Details",
+      "paymentDetails": "Payment Details",
+      "title": "Title",
+      "myRole": "My Role",
+      "createdBy": "Created By",
+      "productType": "Product Type",
+      "totalPrice": "Total Price",
+      "chargePayer": "Charge Payer",
+      "status": "Status",
+      "remarks": "Remarks",
+      "approvalPending": "Approval Pending",
+      "feesCharge": "Fees & Charge",
+      "sellerAmount": "Seller Amount",
+      "noMessages": "No messages yet",
+      "noMessagesDesc": "Start the conversation by sending a message below.",
+      "payWith": "Pay With",
+      "exchangeRate": "Exchange Rate",
+      "buyerPaid": "Buyer Paid",
+      "cancel": "Cancel",
+      "sending": "Sending…",
+      "failedRetry": "Failed — tap to retry",
+      "releaseRequest": "Release Request",
+      "disputePayment": "Dispute Payment",
+      "releaseConfirmTitle": "Release the payment?",
+      "releaseConfirmDesc": "This releases the escrowed funds to the seller. This action cannot be undone.",
+      "disputeConfirmTitle": "Dispute this payment?",
+      "disputeConfirmDesc": "This opens a dispute for this escrow. Our team will review it before any funds move.",
+      "attachment": "Attachment",
+      "image": "image",
+      "releasePayment": "Release Payment",
+      "releaseRequestConfirmTitle": "Request release?",
+      "releaseRequestConfirmDesc": "This asks the buyer to release the escrowed funds to you.",
+      "secureNote": "Messages are linked to this secured escrow",
+      "emoji": "Emoji",
+      "close": "Close"
+    },
+    "createEscrow": {
+      "backToMyEscrow": "Back to My Escrow",
+      "title": "Create New Escrow",
+      "securedDeal": "Secured Deal",
+      "yourRole": "Your Role",
+      "roleBuyerLabel": "I'm the Buyer",
+      "roleBuyerDesc": "You send funds, held until you confirm delivery.",
+      "roleSellerLabel": "I'm the Seller",
+      "roleSellerDesc": "You deliver first, funds release once approved.",
+      "counterpartyName": "Counterparty Name",
+      "fullNamePlaceholder": "Full name",
+      "counterpartyEmail": "Counterparty Email",
+      "emailPlaceholder": "name@example.com",
+      "escrowTitle": "Escrow Title",
+      "escrowTitlePlaceholder": "e.g. Logo & brand kit",
+      "category": "Category",
+      "categoryDigital": "Digital goods & services",
+      "categoryDomain": "Domain names",
+      "categoryPhysical": "Physical goods",
+      "categoryVehicle": "Vehicles",
+      "categoryOther": "Other",
+      "amount": "Amount",
+      "amountPlaceholder": "Enter amount…",
+      "termsDescription": "Terms & Description",
+      "termsPlaceholder": "Describe the deal, deliverables and conditions for release…",
+      "createEscrowButton": "Create Escrow",
+      "summary": "Summary",
+      "summaryAmount": "Escrow Amount",
+      "summaryFee": "Escrow Fee ({pct}%)",
+      "summaryTotal": "Total Payable",
+      "infoNote": "Funds are held securely in escrow and only released once both parties confirm the deal is complete.",
+      "invalidUser": "This user is not registered on Escroc.",
+      "whoPays": "Who Pays the Fee",
+      "whoPaysMe": "Me",
+      "whoPaysOther": "Counterparty pays",
+      "paymentGateway": "Payment Gateway",
+      "attachments": "Attachments (optional)",
+      "myWallet": "My Wallet",
+      "payWith": "Pay With",
+      "whoPaysSeller": "Seller",
+      "whoPays5050": "50% - 50%",
+      "pTitle": "Title",
+      "pRole": "My Role",
+      "pType": "Product Type",
+      "pTotal": "Total Price",
+      "pCharge": "Charge Payer",
+      "editDetails": "Edit details",
+      "escrowDetails": "Escrow Details",
+      "paymentDetails": "Payment Details",
+      "feesCharge": "Fees & Charge",
+      "sellerWillGet": "Seller Will Get",
+      "buyerWillPay": "Buyer Will Pay",
+      "confirmSend": "Confirm & Send",
+      "exchangeRate": "Exchange Rate",
+      "authTitle": "Authorize Card Information",
+      "payWithCard": "Pay With Card",
+      "cardNumber": "Card Number",
+      "expDate": "Expiration Date",
+      "cvc": "Security Code CVV/CVC",
+      "submitPayment": "Submit",
+      "manualPayment": "Manual Payment",
+      "manualInstrTitle": "Please follow the instructions below",
+      "manualInstrDesc": "Fill up all fields with correct information.",
+      "confirmPay": "Confirm & Pay",
+      "youWillPay": "You Will Pay",
+      "whoPaysBuyer": "Buyer",
+      "expDateMonthError": "Please enter a valid month (01-12)",
+      "expDateError": "Please enter a valid future expiration date (YY/MM)",
+      "resultSuccessTitle": "Payment Successful",
+      "resultSuccessDesc": "Your escrow has been funded and created successfully. Both parties can now proceed with the deal.",
+      "resultCancelTitle": "Payment Canceled",
+      "resultCancelDesc": "Your escrow payment was canceled and you have not been charged. You can try again whenever you are ready.",
+      "resultBack": "Back to Create Escrow",
+      "resultMyEscrow": "Go to My Escrow",
+      "resultDashboard": "Go to Dashboard",
+      "cryptoAddressTitle": "Crypto Payment Address",
+      "cryptoProceed": "Proceed",
+      "copyAddress": "Copy address",
+      "copied": "Copied"
+    },
+    "exchange": {
+      "title": "Money Exchange",
+      "currencySwap": "Currency Swap",
+      "exchangeRateLabel": "Exchange Rate",
+      "exchangeFrom": "Exchange From",
+      "enterAmount": "Enter Amount",
+      "availableBalance": "Available balance",
+      "swapCurrencies": "Swap currencies",
+      "exchangeTo": "Exchange To",
+      "limit": "Limit",
+      "charge": "Charge",
+      "sameCurrencyWarning": "From and To currencies are the same — no conversion will occur.",
+      "exchangeMoney": "Exchange Money",
+      "summary": "Summary",
+      "fromWallet": "From Wallet",
+      "toExchange": "To Exchange",
+      "exchangeRate": "Exchange Rate",
+      "totalExchangeAmount": "Total Exchange Amount",
+      "convertedAmount": "Converted Amount",
+      "totalCharge": "Total Charge",
+      "totalPayable": "Total Payable",
+      "ratesInfoNote": "Exchange rates update in real-time. The final rate is locked in at the time of transaction.",
+      "logTitle": "Money Exchange Log",
+      "searchLogs": "Search logs…",
+      "filter": "Filter",
+      "colTransaction": "Transaction",
+      "colTransactionId": "Transaction ID",
+      "colExchangeRate": "Exchange Rate",
+      "colFeesCharge": "Fees & Charge",
+      "colAmount": "Amount",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "moreActions": "More actions",
+      "logsUnit": "logs",
+      "noLogsTitle": "No exchanges yet",
+      "noLogsDesc": "Your currency exchange history will appear here.",
+      "status_success": "Success",
+      "status_pending": "Pending",
+      "colStatus": "Status",
+      "noMatchTitle": "No matching exchanges",
+      "noMatchDesc": "Try a different search term or filter."
+    },
+    "kyc": {
+      "title": "KYC Verification",
+      "body": "KYC Verification page",
+      "submit": "Submit for Verification",
+      "statusUnverified": "Unverified",
+      "statusVerified": "Verified",
+      "statusPending": "Pending",
+      "statusRejected": "Rejected",
+      "noteUnverified": "Verify your identity to unlock full access.",
+      "noteVerified": "Your identity has been verified.",
+      "notePending": "Your documents are under review.",
+      "noteRejected": "Your submission was rejected. Please resubmit with correct documents.",
+      "selectPrefix": "Select"
+    },
+    "moneyOut": {
+      "title": "Money Out",
+      "withdrawFunds": "Withdraw Funds",
+      "exchangeRate": "Exchange Rate",
+      "paymentGateway": "Payment Gateway",
+      "amount": "Amount",
+      "amountPlaceholder": "Enter amount…",
+      "limit": "Limit",
+      "availableBalance": "Available balance",
+      "charge": "Charge",
+      "moneyOut": "Money Out",
+      "summary": "Summary",
+      "enteredAmount": "Entered Amount",
+      "conversionAmount": "Conversion Amount",
+      "totalFees": "Total Fees & Charges",
+      "willGet": "Will Get",
+      "totalPayable": "Total Payable Amount",
+      "balanceNote": "Ensure you have sufficient balance before withdrawing. Fees are deducted from the transferred amount.",
+      "logsTitle": "Money Out Logs",
+      "searchPlaceholder": "Search logs…",
+      "filter": "Filter",
+      "colTransaction": "Transaction",
+      "colTransactionId": "Transaction ID",
+      "colExchangeRate": "Exchange Rate",
+      "colFees": "Fees & Charge",
+      "colAmount": "Amount",
+      "colDate": "Date",
+      "actions": "Actions",
+      "via": "via",
+      "moreActions": "More actions",
+      "unitLogs": "logs",
+      "noLogsTitle": "No withdrawals yet",
+      "noLogsDesc": "Your money-out history will appear here.",
+      "confirm": "Confirm",
+      "selectBankFirst": "Select a bank first",
+      "loadingBranches": "Loading branches…",
+      "colStatus": "Status",
+      "noMatchTitle": "No matching withdrawals",
+      "noMatchDesc": "Try a different search term or filter."
+    },
+    "myEscrow": {
+      "title": "My Escrow",
+      "searchPlaceholder": "Search escrows",
+      "filter": "Filter",
+      "newEscrow": "New Escrow",
+      "new": "New",
+      "dealNeedsAction": "deal needs your action",
+      "dealsNeedAction": "deals need your action",
+      "colEscrow": "Escrow",
+      "colCounterparty": "Counterparty",
+      "colRole": "Role",
+      "colAmount": "Amount",
+      "colCreated": "Created",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "openConversation": "Open conversation for",
+      "chat": "Chat",
+      "emptyTitle": "No escrows yet",
+      "emptyDesc": "Create your first escrow to get started.",
+      "pay": "Pay"
+    },
+    "profile": {
+      "changePhoto": "Change photo",
+      "verified": "Verified",
+      "buyer": "Buyer",
+      "memberSince": "Member since April 2025 · 8 escrows · 24 transactions",
+      "deleteAccount": "Delete Account",
+      "personalInfo": "Personal Information",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "First name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Last name",
+      "country": "Country",
+      "selectCountry": "Select Country",
+      "phone": "Phone",
+      "phonePlaceholder": "Enter phone…",
+      "address": "Address",
+      "addressPlaceholder": "Enter address…",
+      "city": "City",
+      "cityPlaceholder": "City",
+      "state": "State",
+      "statePlaceholder": "State",
+      "zipCode": "Zip Code",
+      "zipPlaceholder": "Zip code",
+      "saveChanges": "Save Changes",
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Repeat new password",
+      "passwordsMatch": "✓ Passwords match",
+      "passwordsNoMatch": "Passwords do not match",
+      "updatePassword": "Update Password",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "passwordLabel": "password",
+      "dangerZone": "Danger Zone",
+      "dangerDesc": "Once deleted, your account and all associated data cannot be recovered.",
+      "deleteMyAccount": "Delete My Account"
+    },
+    "security": {
+      "twoFactorTitle": "Two Factor Authenticator",
+      "enabledBadge": "Enabled",
+      "activeBannerPre": "Two-factor authentication is",
+      "activeBannerWord": "active",
+      "activeBannerPost": "on your account.",
+      "notProtectedBanner": "Your account is not protected. Enable 2FA to secure it.",
+      "secretKeyLabel": "Two Factor Authenticator",
+      "copied": "Copied",
+      "copySecretKey": "Copy secret key",
+      "secretKeyHelp": "Scan the QR code below with your authenticator app, or enter this key manually.",
+      "disable2fa": "Disable 2FA",
+      "enable": "Enable",
+      "googleAuthTitle": "Google Authenticator",
+      "googleAuthDesc": "Google Authenticator is a product based authenticator by Google that executes two-venture confirmation administrations for verifying clients of any programming applications.",
+      "howToSetup": "How to setup?",
+      "downloadAndroid": "Download For Android",
+      "downloadIos": "Download For IOS",
+      "setupSteps": "Setup Steps",
+      "step1": "Download Google Authenticator from your app store",
+      "step2": "Open the app and tap the + button",
+      "step3": "Scan the QR code or enter the key manually",
+      "step4": "Enter the 6-digit code shown in the app",
+      "enableTitle": "Enable Two-Factor Authentication?",
+      "enableDesc": "This adds an extra layer of security. You will need your authenticator code each time you sign in.",
+      "disableTitle": "Disable Two-Factor Authentication?",
+      "disableDesc": "Your account will be less secure without two-factor authentication. Are you sure?",
+      "cancel": "Cancel",
+      "qrAlt": "Google Authenticator QR",
+      "authCodeLabel": "Authenticator code",
+      "authCodeHelp": "Enter the 6-digit code from your authenticator app to confirm."
+    },
+    "transaction": {
+      "title": "Transaction Log",
+      "searchPlaceholder": "Search transactions",
+      "filter": "Filter",
+      "colTransaction": "Transaction",
+      "colTransactionId": "Transaction ID",
+      "colExchangeRate": "Exchange Rate",
+      "colFees": "Fees & Charge",
+      "colAmount": "Amount",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "moreActions": "More actions",
+      "via": "via",
+      "status_pending": "Pending",
+      "status_success": "Success",
+      "unit": "transactions",
+      "payable": "Payable",
+      "emptyTitle": "No transactions yet",
+      "emptyDesc": "Your transaction history will appear here.",
+      "noMatchTitle": "No matching transactions",
+      "noMatchDesc": "Try a different search term or filter.",
+      "matchesOnPage": "matches on this page",
+      "colStatus": "Status"
+    },
+    "status": {
+      "all": "All Status",
+      "success": "Success",
+      "pending": "Pending",
+      "waiting": "Waiting",
+      "rejected": "Rejected",
+      "hold": "Hold",
+      "failed": "Failed"
+    },
+    "types": {
+      "all": "All Types",
+      "addMoney": "Add Money",
+      "moneyOut": "Money Out",
+      "exchange": "Exchange",
+      "escrow": "Escrow"
+    },
+    "escrowStatus": {
+      "ongoing": "Ongoing",
+      "paymentPending": "Payment Pending",
+      "approvalPending": "Approval Pending",
+      "released": "Released",
+      "activeDispute": "Active Dispute",
+      "disputed": "Disputed",
+      "canceled": "Canceled",
+      "refunded": "Refunded",
+      "paymentWaiting": "Payment Waiting",
+      "pending": "Pending"
+    }
+  },
+  "common": {
+    "search": "Search…",
+    "noResults": "No matches",
+    "backToTop": "Back to top"
+  },
+  "legalPages": {
+    "privacy": {
+      "tag": "PRIVACY POLICY",
+      "title": "Privacy Policy",
+      "subtitle": "How Escroc collects, uses, and protects your personal information.",
+      "sections": [
+        {
+          "title": "Information We Collect",
+          "body": "We collect the information you give us directly — your name, email address, phone number, and government ID during KYC verification — along with transaction details, wallet addresses, and basic device/browser data collected automatically when you use Escroc."
+        },
+        {
+          "title": "How We Use Your Information",
+          "body": "Your information is used to process escrow transactions, verify your identity, prevent fraud, provide customer support, and comply with financial regulations. We never sell your personal data to third parties."
+        },
+        {
+          "title": "How We Protect Your Information",
+          "body": "Sensitive data, including payment details and KYC documents, is encrypted both in transit and at rest. Card payments are processed through PCI-DSS compliant gateways, and we never store full card numbers on our own servers."
+        },
+        {
+          "title": "Sharing With Third Parties",
+          "body": "We share information only with the payment gateways, banking partners, and compliance providers required to complete a transaction, or when required by law to prevent fraud or protect our users' rights and property."
+        },
+        {
+          "title": "Data Retention",
+          "body": "We retain account and transaction records for as long as your account is active, and for a further period afterward as required by financial record-keeping regulations, after which the data is securely deleted."
+        },
+        {
+          "title": "Your Rights & Choices",
+          "body": "You can review, update, or request deletion of your personal information at any time from your account settings, subject to the retention obligations described above. Contact support@escroc.com for any privacy request."
+        },
+        {
+          "title": "Changes to This Policy",
+          "body": "We may update this policy from time to time. Material changes will be posted on this page and, where required, communicated to you directly."
+        }
+      ]
+    },
+    "refund": {
+      "tag": "REFUND POLICY",
+      "title": "Refund Policy",
+      "subtitle": "How refunds work for escrow transactions, deposits, and payments.",
+      "sections": [
+        {
+          "title": "Escrow-Based Refunds",
+          "body": "Because Escroc holds funds in escrow until both parties confirm a transaction, refunds are primarily handled through the release and dispute flow inside each escrow, rather than a traditional after-the-fact refund request."
+        },
+        {
+          "title": "Buyer-Initiated Disputes",
+          "body": "If a buyer does not receive the agreed goods or service, they can open a dispute from the escrow's conversation page. Funds remain held securely until the dispute is reviewed and resolved."
+        },
+        {
+          "title": "Seller-Initiated Release",
+          "body": "Once a seller has delivered as agreed, the buyer approves release of the funds. Sellers may also send a release request when they believe the buyer is satisfied."
+        },
+        {
+          "title": "Payment Gateway Refunds",
+          "body": "If a transaction is cancelled before both parties confirm, or a payment fails or is duplicated, any amount charged through a payment gateway (card, bank, or crypto) is refunded to the original payment method within 5–10 business days, minus any non-refundable processing fees already charged by the gateway."
+        },
+        {
+          "title": "Non-Refundable Fees",
+          "body": "Platform service fees and currency-exchange charges already applied to a completed transaction are non-refundable once funds have been released to the seller."
+        },
+        {
+          "title": "How to Request a Refund",
+          "body": "Contact our support team from the Support section of your dashboard with your transaction ID. We review every request and respond within 2 business days."
+        }
+      ]
+    },
+    "terms": {
+      "tag": "TERMS & CONDITIONS",
+      "title": "Terms & Conditions",
+      "subtitle": "The rules that govern your use of the Escroc platform.",
+      "sections": [
+        {
+          "title": "Acceptance of Terms",
+          "body": "By creating an account or using Escroc, you agree to be bound by these Terms & Conditions and our Privacy Policy. If you do not agree, please do not use the platform."
+        },
+        {
+          "title": "Eligibility",
+          "body": "You must be at least 18 years old and able to form a legally binding contract in your jurisdiction to use Escroc. By registering, you confirm that this is accurate."
+        },
+        {
+          "title": "Account & Verification (KYC)",
+          "body": "You are responsible for keeping your login credentials secure. Certain transaction limits and features require identity verification, and Escroc may request additional documentation at any time to comply with anti-fraud and anti-money-laundering obligations."
+        },
+        {
+          "title": "Escrow Service",
+          "body": "Escroc acts as a neutral third party holding funds until both the buyer and seller fulfill the terms they agreed to. We do not guarantee the quality, legality, or delivery of goods and services exchanged between users — our role is limited to holding and releasing funds per the escrow terms."
+        },
+        {
+          "title": "Prohibited Use",
+          "body": "You may not use Escroc for illegal transactions, money laundering, fraud, or any activity prohibited by applicable law. We reserve the right to suspend or terminate accounts found in violation, and to report suspicious activity to the relevant authorities."
+        },
+        {
+          "title": "Fees & Currency Exchange",
+          "body": "Fees for deposits, withdrawals, escrow transactions, and currency exchange are displayed before you confirm any action. Exchange rates are updated periodically and may vary at the time of the transaction."
+        },
+        {
+          "title": "Limitation of Liability",
+          "body": "Escroc is not liable for indirect, incidental, or consequential damages arising from your use of the platform, including losses caused by third-party payment providers or blockchain network delays outside our control."
+        },
+        {
+          "title": "Changes to These Terms",
+          "body": "We may revise these Terms from time to time. Continued use of Escroc after changes are posted constitutes acceptance of the updated Terms."
+        }
+      ]
+    }
+  },
+  "faqPage": {
+    "tag": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to common questions about escrow, payments, and security on Escroc.",
+    "items": [
+      {
+        "q": "How does escrow work on Escroc?",
+        "a": "Escroc holds the buyer's payment securely until both sides confirm the deal is complete, then releases the funds to the seller — protecting both parties from fraud."
+      },
+      {
+        "q": "What currencies and payment methods are supported?",
+        "a": "You can fund your wallet using cards, bank transfers, and native cryptocurrencies, and exchange between fiat and crypto wallets directly from your dashboard."
+      },
+      {
+        "q": "Do I need to complete KYC?",
+        "a": "Some transaction limits and features require identity verification. You can submit your documents from Dashboard → KYC, and most reviews complete within 24 hours."
+      },
+      {
+        "q": "What happens if there's a dispute?",
+        "a": "Either party can raise a dispute from the escrow's conversation page. Our team reviews the evidence and messages exchanged before deciding how funds are released."
+      },
+      {
+        "q": "How long does a payment take to arrive?",
+        "a": "Card and bank payments are typically confirmed within minutes to a few hours; crypto payments are credited once the transaction reaches the required number of confirmations on-chain."
+      },
+      {
+        "q": "Can I use Escroc as both a buyer and a seller?",
+        "a": "Yes — you can switch between the Buyer and Seller view anytime from your dashboard without creating a separate account."
+      },
+      {
+        "q": "Is my payment information secure?",
+        "a": "Yes. Card payments are processed through PCI-DSS compliant gateways, and sensitive data is encrypted both in transit and at rest."
+      },
+      {
+        "q": "What fees does Escroc charge?",
+        "a": "Fees vary by payment gateway and currency exchange rate, and are always shown before you confirm a deposit, withdrawal, or exchange."
+      },
+      {
+        "q": "Can I cancel an escrow after creating it?",
+        "a": "An escrow can be cancelled before the counterparty pays. Once payment is confirmed, it can only be resolved through release or a dispute."
+      },
+      {
+        "q": "How do I contact support?",
+        "a": "Open a ticket from Dashboard → Support, or email support@escroc.com — our team typically responds within one business day."
+      }
+    ]
+  },
+  "notFound": {
+    "title": "This Escrow Doesn't Exist",
+    "subtitle": "Looks like this transaction never got confirmed — the page moved, or never existed at all.",
+    "backHome": "Back to Home",
+    "quickLinks": "Or try one of these"
+  }
+}

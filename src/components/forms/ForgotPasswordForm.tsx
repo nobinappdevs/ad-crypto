@@ -14,7 +14,8 @@ import {
   type VerifyOtpRequest,
 } from "@/schemas/auth.schema";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
-import { AuthInput, AuthOtpInput, AuthPasswordInput } from "@/components/auth/AuthField";
+import { AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
+import { AuthOtpBoxes } from "@/components/auth/AuthOtpBoxes";
 import toast from "react-hot-toast";
 
 /** Seconds the resend link stays disabled after a code goes out. */
@@ -238,16 +239,17 @@ function OtpStep({
         </p>
       </div>
 
+      {/* The same boxes the email-verification screen uses — one OTP design across
+          both flows, so a code screen always looks like a code screen. */}
       <Controller
         name="otp"
         control={control}
         render={({ field }) => (
-          <AuthOtpInput
-            placeholder={k("otpPlaceholder")}
-            error={errors.otp?.message}
+          <AuthOtpBoxes
             value={field.value}
-            onChange={(e) => field.onChange(e.target.value.replace(/\D/g, ""))}
-            onBlur={field.onBlur}
+            onChange={field.onChange}
+            error={errors.otp?.message}
+            disabled={mutate.isPending}
             autoFocus
           />
         )}

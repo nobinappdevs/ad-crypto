@@ -412,7 +412,28 @@
       "resetCta": "Réinitialiser le mot de passe",
       "resetting": "Réinitialisation...",
       "resetSuccessToast": "Mot de passe réinitialisé. Connectez-vous avec votre nouveau mot de passe."
-    }
+    },
+    "verifyEmail": {
+      "stepOne": "Étape 1 sur 2",
+      "stepTwo": "Étape 2 sur 2",
+      "emailTitle": "Vérifiez votre e-mail",
+      "emailBlurb": "Indiquez l’adresse à confirmer et nous vous enverrons un nouveau code à 6 chiffres.",
+      "sendCode": "Envoyer le code",
+      "sending": "Envoi...",
+      "codeSentToast": "Code de vérification envoyé à votre e-mail.",
+      "otpTitle": "Confirmez votre e-mail",
+      "otpBlurbLead": "Nous avons envoyé un code à 6 chiffres à",
+      "otpBlurbTail": "Saisissez-le ci-dessous pour activer votre compte.",
+      "changeEmail": "Mauvaise adresse ? Modifiez-la",
+      "resend": "Renvoyer le code",
+      "resendIn": "Vous pourrez demander un nouveau code dans",
+      "resendSuccessToast": "Un nouveau code est en route.",
+      "verify": "Vérifier l’e-mail",
+      "verifying": "Vérification...",
+      "verifiedToast": "E-mail vérifié. Vous pouvez vous connecter.",
+      "securityNote": "Le code expire dans 10 minutes et ne peut servir qu’une fois."
+    },
+    "digitLabel": "Chiffre {n}"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -422,7 +443,7 @@
     "closeMenu": "Fermer le menu",
     "help": "Aide",
     "notifications": "Notifications",
-    "account": "Compte",
+    "accountMenu": "Compte",
     "nav": {
       "dashboard": "Tableau de bord",
       "buyCrypto": "Acheter des cryptos",
@@ -435,6 +456,58 @@
       "pending": "En attente",
       "statements": "Relevés"
     },
+    "navGroups": {
+      "trade": "Trading",
+      "wallet": "Portefeuille"
+    },
+    "sidebar": {
+      "goHome": "Retour au site",
+      "liveSupport": "Support en direct",
+      "helpTitle": "Centre d’aide",
+      "helpSub": "Une question sur un ordre, un virement ou votre carte ? Nous répondons en quelques minutes.",
+      "helpBtn": "Obtenir de l’aide"
+    },
+    "navbar": {
+      "subtitle": "Gérez vos portefeuilles, vos ordres et vos cartes"
+    },
+    "account": {
+      "profile": "Profil",
+      "security": "Sécurité 2FA",
+      "kyc": "Vérification KYC"
+    },
+    "notificationsPanel": {
+      "title": "Notifications",
+      "newCount": "{n} nouvelles",
+      "empty": "Vous êtes à jour",
+      "emptyDesc": "Les mises à jour d’ordres et les alertes de sécurité arrivent ici.",
+      "viewAll": "Voir toute l’activité",
+      "items": {
+        "buyFilled": {
+          "title": "Ordre d’achat exécuté",
+          "body": "0,25 BTC crédités sur votre portefeuille à 43 009,00 $."
+        },
+        "sellReview": {
+          "title": "Ordre de vente en cours d’examen",
+          "body": "Votre versement de 1,5 ETH est entre les mains de notre équipe — en général sous une heure."
+        },
+        "withdrawSent": {
+          "title": "Retrait diffusé sur le réseau",
+          "body": "0,08 BTC envoyés via BNB Smart Chain, en attente de confirmations."
+        },
+        "exchangeDone": {
+          "title": "Échange terminé",
+          "body": "42 SOL échangés contre 0,09612 BTC."
+        },
+        "cardReview": {
+          "title": "Demande de carte reçue",
+          "body": "Nous vous écrirons dès que la vérification sera terminée."
+        }
+      }
+    },
+    "logoutTitle": "Se déconnecter d’AdCrypto ?",
+    "logoutDesc": "Vous devrez vous reconnecter pour accéder à vos portefeuilles et à vos ordres.",
+    "cancel": "Annuler",
+    "confirmLogout": "Se déconnecter",
     "upgradeText": "Obtenez des analyses détaillées pour vous aider, passez pro",
     "upgradeCta": "Passer pro",
     "lightMode": "Mode clair",
@@ -461,6 +534,12 @@
       "revenue": "Volume brut échangé sur la période",
       "conversion": "Visiteurs ayant approvisionné un compte"
     },
+    "myWallets": "Mes portefeuilles",
+    "viewMore": "Voir plus",
+    "viewLess": "Voir moins",
+    "last24h": "24 h",
+    "transactionsOverview": "Aperçu des transactions",
+    "buyCryptoChart": "Graphique des achats",
     "statusBreakdown": "Répartition des statuts de commande",
     "last12Months": "(12 mois)",
     "weeklyProgress": "Progression hebdomadaire des règlements",
@@ -469,6 +548,11 @@
     "month": "Mois",
     "day": "Jour",
     "series": {
+      "buyCrypto": "Acheter des cryptos",
+      "sellCrypto": "Vendre des cryptos",
+      "withdrawCrypto": "Retirer des cryptos",
+      "buyVolume": "Acheté",
+      "buyOrders": "Ordres",
       "inProgress": "En cours",
       "pending": "En attente",
       "completed": "Terminé",
@@ -523,7 +607,23 @@
       "executedBy": "Exécuté par",
       "selectAll": "Sélectionner toutes les lignes",
       "totalRow": "Total",
-      "selectedCount": "{selected} sur {total} lignes sélectionnées"
+      "selectedCount": "{selected} sur {total} lignes sélectionnées",
+      "newestFew": "({count} plus récentes)",
+      "rowCount": "({count})"
+    },
+    "viewAll": "Tout voir",
+    "filters": {
+      "all": "Toutes",
+      "buy": "Achat",
+      "sell": "Vente",
+      "processing": "En cours",
+      "success": "Réussie",
+      "declined": "Refusée"
+    },
+    "transactionsPage": {
+      "subtitle": "Tous les ordres du compte — achats, ventes et retraits — avec la commission prélevée sur chacun.",
+      "searchPlaceholder": "Rechercher une crypto, une référence ou un e-mail",
+      "empty": "Aucune transaction ne correspond à ce filtre."
     },
     "tradeSide": {
       "buy": "Achat",
@@ -700,6 +800,299 @@
     "errorMax": "L'échange maximal est de {max} {coin}.",
     "errorBalance": "Vous disposez de {balance} {coin}.",
     "submitted": "Échange de {from} vers {to} créé."
+  },
+  "cardCustomer": {
+    "title": "Créer un titulaire de carte",
+    "subtitle": "Une carte virtuelle est émise à une personne vérifiée : il nous faut donc vos informations légales et une pièce d’identité officielle avant la première carte.",
+    "statusLabel": "Profil carte",
+    "statusValue": "Non vérifié",
+    "sections": {
+      "identity": "Informations personnelles",
+      "identityHint": "Exactement comme elles figurent sur la pièce que vous allez téléverser.",
+      "document": "Pièce d’identité",
+      "documentHint": "Choisissez le type de document, puis saisissez son numéro.",
+      "scans": "Photos du document",
+      "scansHint": "PNG, JPG ou WebP, 5 Mo maximum chacune. Les quatre coins doivent être lisibles.",
+      "address": "Adresse de résidence",
+      "addressHint": "Là où vous habitez, pas une boîte postale — l’émetteur la compare à votre pièce d’identité."
+    },
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "Votre prénom",
+    "lastName": "Nom",
+    "lastNamePlaceholder": "Votre nom de famille",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "dob": "Date de naissance",
+    "dobHint": "doit correspondre à votre pièce d’identité",
+    "identityType": "Type de document",
+    "chooseOne": "Choisissez-en un",
+    "identityTypes": {
+      "passport": "Passeport",
+      "nationalId": "Carte nationale d’identité",
+      "drivingLicence": "Permis de conduire",
+      "residencePermit": "Titre de séjour"
+    },
+    "identityNumber": "Numéro du document",
+    "identityNumberPlaceholder": "Numéro imprimé sur le document",
+    "idFront": "Document (recto)",
+    "idBack": "Document (verso)",
+    "photo": "Votre photo",
+    "photoHint": "un selfie net, visage dégagé",
+    "filePlaceholder": "Aucun fichier choisi",
+    "fileBrowse": "Cliquez pour choisir, ou déposez une image ici",
+    "fileRemove": "Retirer le fichier",
+    "houseNumber": "Numéro de rue",
+    "houseNumberPlaceholder": "p. ex. 42B",
+    "country": "Pays",
+    "selectCountry": "Sélectionnez un pays",
+    "searchCountry": "Rechercher un pays",
+    "noCountry": "Aucun pays ne correspond.",
+    "city": "Ville",
+    "cityPlaceholder": "Saisissez la ville",
+    "state": "Région",
+    "statePlaceholder": "Saisissez la région ou la province",
+    "zip": "Code postal",
+    "zipPlaceholder": "Saisissez le code postal",
+    "address": "Adresse",
+    "addressPlaceholder": "Rue, bâtiment et tout ce qu’un livreur aurait besoin de savoir",
+    "checklist": "Avant d’envoyer",
+    "groups": {
+      "identity": "Informations personnelles",
+      "document": "Pièce d’identité",
+      "scans": "Photos du document",
+      "address": "Adresse de résidence"
+    },
+    "groupsHint": {
+      "identity": "Nom, e-mail et date de naissance",
+      "document": "Type et numéro",
+      "scans": "Les deux faces du document et un selfie",
+      "address": "Pays, ville, région, code postal et rue"
+    },
+    "cardKind": "Carte virtuelle",
+    "cardHolder": "Titulaire",
+    "cardHolderEmpty": "Votre nom",
+    "cardExpiry": "Expire",
+    "reviewNote": "Les demandes sont généralement examinées en un jour ouvré. Nous vous écrirons dans tous les cas, et rien n’est facturé avant l’émission de la carte.",
+    "continue": "Continuer",
+    "secured": "Vos documents sont chiffrés en transit et au repos, et lus uniquement par l’équipe de vérification de l’émetteur.",
+    "errorRequired": "Ce champ est obligatoire.",
+    "errorName": "Saisissez au moins deux caractères.",
+    "errorEmail": "Saisissez une adresse e-mail valide.",
+    "errorDobInvalid": "Saisissez une date de naissance valide.",
+    "errorDobAge": "Vous devez avoir au moins {age} ans pour détenir une carte.",
+    "errorIdentityNumber": "Saisissez le numéro du document.",
+    "errorAddress": "Saisissez votre adresse complète.",
+    "errorFileType": "Utilisez une image PNG, JPG ou WebP.",
+    "errorFileSize": "Cette image dépasse 5 Mo.",
+    "errorSummary": "{count} champs demandent encore votre attention.",
+    "submitted": "Titulaire de carte envoyé pour examen."
+  },
+  "walletDetails": {
+    "navTitle": "Portefeuille",
+    "subtitle": "Envoyez des {symbol} à l’adresse ci-dessous : ils arrivent dans ce portefeuille dès que le réseau les confirme.",
+    "marketPrice": "Prix du marché",
+    "notFoundTitle": "Ce portefeuille n’existe pas",
+    "notFoundText": "Le lien pointe vers une crypto pour laquelle nous n’avons pas de portefeuille. Choisissez-en une depuis l’aperçu.",
+    "backToOverview": "Retour à l’aperçu",
+    "receiveTitle": "Recevoir des {symbol}",
+    "receiveHint": "Choisissez le réseau utilisé par l’expéditeur — l’adresse change avec lui.",
+    "chooseNetwork": "Réseau de dépôt",
+    "networkMeta": "~{minutes} min · {confirmations} confirmations",
+    "minDeposit": "Minimum",
+    "addressLabel": "Adresse de dépôt",
+    "copy": "Copier",
+    "copyAddress": "Copier l’adresse de dépôt",
+    "copyMemo": "Copier le tag de destination",
+    "copied": "Copié",
+    "copyFailed": "Copie impossible. Sélectionnez le texte et copiez-le manuellement.",
+    "memoLabel": "Tag de destination obligatoire",
+    "memoWarning": "Ce réseau dirige tous les comptes vers une seule adresse : le tag est ce qui nous dit que le dépôt est le vôtre. Un transfert envoyé sans lui ne peut pas être crédité automatiquement.",
+    "factArrival": "Arrivée",
+    "factConfirmations": "Confirmations",
+    "factMin": "Minimum",
+    "minutes": "~{n} min",
+    "wrongNetwork": "N’envoyez que des {symbol} via {network} à cette adresse. Toute autre crypto, ou la bonne crypto sur le mauvais réseau, est perdue et irrécupérable.",
+    "holding": "Solde actuel",
+    "activityTitle": "Activité de ce portefeuille",
+    "activityEmpty": "Aucun ordre sur ce portefeuille pour l’instant.",
+    "secured": "Les adresses de dépôt sont émises pour votre compte uniquement et ne sont jamais réutilisées d’un utilisateur à l’autre."
+  },
+  "twoFa": {
+    "title": "Sécurité 2FA",
+    "subtitle": "Ajoutez une seconde étape à chaque connexion et à chaque retrait, pour qu’un mot de passe volé ne suffise pas.",
+    "statusLabel": "Double facteur",
+    "statusOn": "Activé",
+    "statusOff": "Non activé",
+    "setupTitle": "Configuration de l’authentificateur",
+    "setupHint": "Scannez le code, ou saisissez la clé dans une application incapable de scanner.",
+    "bannerOn": "L’authentification à deux facteurs est active. Les connexions et les retraits demandent un code de votre authentificateur.",
+    "bannerOff": "Votre compte n’est protégé que par un mot de passe. Activez l’authentification à deux facteurs pour le sécuriser.",
+    "secretLabel": "Clé secrète",
+    "secretHint": "pour les applications où l’on saisit la clé",
+    "copy": "Copier",
+    "copied": "Copié",
+    "copyFailed": "Impossible de copier la clé. Sélectionnez-la et copiez-la manuellement.",
+    "qrLabel": "Code QR",
+    "qrHint": "pointez votre authentificateur ici",
+    "enableCta": "Activer le double facteur",
+    "disableCta": "Désactiver le double facteur",
+    "appTitle": "Google Authenticator",
+    "appDesc": "N’importe quelle application TOTP fonctionne — Google Authenticator, Authy, 1Password. Si vous n’en avez aucune, commencez ici.",
+    "getAndroid": "Télécharger sur Android",
+    "getIos": "Télécharger sur iOS",
+    "stepsTitle": "Comment le configurer",
+    "steps": {
+      "download": {
+        "title": "Installez un authentificateur",
+        "body": "Téléchargez Google Authenticator, ou utilisez l’application TOTP à laquelle vous faites déjà confiance."
+      },
+      "scan": {
+        "title": "Ajoutez ce compte",
+        "body": "Scannez le code QR, ou choisissez « saisir une clé de configuration » et collez le secret."
+      },
+      "code": {
+        "title": "Lisez le code à 6 chiffres",
+        "body": "Votre application affiche désormais un code AdCrypto qui change toutes les 30 secondes."
+      },
+      "enable": {
+        "title": "Confirmez et activez",
+        "body": "Appuyez sur Activer, saisissez le code du moment, et le double facteur est en place."
+      }
+    },
+    "backupNote": "Conservez la clé secrète dans un endroit sûr et hors ligne. Perdre à la fois votre téléphone et la clé oblige le support à vérifier votre identité avant de vous rendre l’accès.",
+    "confirmEnableTitle": "Activer le double facteur ?",
+    "confirmEnableDesc": "Saisissez le code affiché à l’instant par votre authentificateur, pour confirmer qu’il est bien configuré.",
+    "confirmEnableCta": "Activer",
+    "confirmDisableTitle": "Désactiver le double facteur ?",
+    "confirmDisableDesc": "Votre compte ne reposera plus que sur un mot de passe. Confirmez avec le code affiché à l’instant par votre authentificateur.",
+    "confirmDisableCta": "Désactiver",
+    "codeLabel": "Code de l’authentificateur",
+    "codeHint": "Le code à 6 chiffres affiché pour AdCrypto dans votre application.",
+    "enabledToast": "Authentification à deux facteurs activée.",
+    "disabledToast": "Authentification à deux facteurs désactivée."
+  },
+  "kyc": {
+    "title": "Vérification KYC",
+    "subtitle": "Confirmez votre identité une fois, et les plafonds relevés, l’émission de cartes et les virements en monnaie fiat s’ouvrent.",
+    "statusLabel": "Vérification",
+    "status": {
+      "unverified": {
+        "label": "Non vérifiée",
+        "title": "Votre identité n’est pas encore vérifiée",
+        "note": "Envoyez les documents ci-dessous pour relever vos plafonds. L’examen se termine généralement en un jour ouvré."
+      },
+      "verified": {
+        "label": "Vérifiée",
+        "title": "Votre identité est vérifiée",
+        "note": "Toutes les fonctionnalités sont ouvertes. Contactez le support si vos documents doivent être mis à jour."
+      },
+      "pending": {
+        "label": "En cours d’examen",
+        "title": "Vos documents sont en cours d’examen",
+        "note": "Un examinateur a votre dossier. Vous recevrez un e-mail dès qu’une décision est prise — rien d’autre n’est attendu de vous."
+      },
+      "rejected": {
+        "label": "Refusée",
+        "title": "Nous n’avons pas pu vérifier vos documents",
+        "note": "Quelque chose dans le dernier envoi n’était pas conforme. Corrigez-le ci-dessous et renvoyez-le."
+      }
+    },
+    "sections": {
+      "identity": {
+        "title": "Votre identité",
+        "hint": "Exactement comme c’est imprimé sur le document que vous envoyez."
+      },
+      "document": {
+        "title": "Le document",
+        "hint": "Quelle pièce vous utilisez, et jusqu’à quand elle est valide."
+      },
+      "scans": {
+        "title": "Photos",
+        "hint": "PNG, JPG ou WebP, 5 Mo maximum chacune."
+      }
+    },
+    "fields": {
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Comme sur votre document"
+      },
+      "lastName": {
+        "label": "Nom",
+        "placeholder": "Comme sur votre document"
+      },
+      "dob": {
+        "label": "Date de naissance",
+        "hint": "vous devez avoir 18 ans ou plus"
+      },
+      "nationality": {
+        "label": "Nationalité"
+      },
+      "documentType": {
+        "label": "Type de document"
+      },
+      "documentNumber": {
+        "label": "Numéro du document",
+        "placeholder": "Numéro imprimé sur le document"
+      },
+      "issuedBy": {
+        "label": "Pays émetteur"
+      },
+      "expiry": {
+        "label": "Date d’expiration",
+        "hint": "doit être encore valide"
+      },
+      "docFront": {
+        "label": "Document — recto"
+      },
+      "docBack": {
+        "label": "Document — verso"
+      },
+      "selfie": {
+        "label": "Selfie avec le document en main",
+        "hint": "votre visage et le document lisibles sur la même photo"
+      },
+      "notes": {
+        "label": "Quelque chose à nous signaler",
+        "hint": "facultatif",
+        "placeholder": "Un changement de nom récent, une seconde nationalité, tout ce qui explique les documents."
+      }
+    },
+    "options": {
+      "documentType": {
+        "passport": "Passeport",
+        "nationalId": "Carte nationale d’identité",
+        "drivingLicence": "Permis de conduire",
+        "residencePermit": "Titre de séjour"
+      }
+    },
+    "chooseOne": "Choisissez-en un",
+    "selectCountry": "Sélectionnez un pays",
+    "searchCountry": "Rechercher un pays",
+    "noResults": "Aucun résultat",
+    "filePlaceholder": "Aucun fichier choisi",
+    "fileBrowse": "Cliquez pour parcourir, ou déposez une image ici",
+    "fileRemove": "Retirer le fichier",
+    "checklist": "Ce qui reste",
+    "checklistHint": "Chaque partie se coche à mesure que vous la remplissez.",
+    "rulesTitle": "Exigences pour les photos",
+    "rules": {
+      "legible": "Chaque ligne de texte lisible — ni flou, ni reflet.",
+      "corners": "Les quatre coins du document dans le cadre.",
+      "colour": "Photos en couleur uniquement ; scans et photocopies sont refusés.",
+      "size": "PNG, JPG ou WebP, moins de 5 Mo chacune."
+    },
+    "reviewNote": "Les documents sont stockés chiffrés, utilisés uniquement pour la vérification, et jamais partagés avec des tiers.",
+    "submitCta": "Envoyer pour vérification",
+    "secured": "Envoyés via une connexion chiffrée et visibles uniquement par notre équipe conformité.",
+    "submittedToast": "Documents envoyés. Nous vous écrirons dès la fin de l’examen.",
+    "errorRequired": "Ce champ est obligatoire.",
+    "errorTooShort": "Utilisez au moins {min} caractères.",
+    "errorDateInvalid": "Saisissez une date valide.",
+    "errorAge": "Vous devez avoir au moins {age} ans pour vous vérifier.",
+    "errorExpired": "Ce document a déjà expiré.",
+    "errorFileType": "Utilisez une image PNG, JPG ou WebP.",
+    "errorFileSize": "Cette image dépasse 5 Mo.",
+    "errorSummary": "{count} champs demandent encore votre attention."
   },
   "footer": {
     "tagline": "Gérez, achetez et vendez vos cryptos, tout en un seul portefeuille.",

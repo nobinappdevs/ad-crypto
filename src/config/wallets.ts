@@ -108,3 +108,19 @@ export const WALLETS: Wallet[] = [
 
 /** How many cards the overview shows before "View more" opens the rest. */
 export const WALLETS_PREVIEW = 4;
+
+/**
+ * Resolve a `?coin=` value to a wallet.
+ *
+ * Takes `string | null` so the details page can hand it the query param
+ * untouched: a missing param and an unknown key are the same "no wallet" answer,
+ * and that page treats it as a normal state rather than an error.
+ */
+export function findWallet(key: string | null | undefined) {
+  if (!key) return undefined;
+  const needle = key.toLowerCase();
+  return WALLETS.find((wallet) => wallet.key === needle);
+}
+
+/** The details page's URL for a wallet. One place, so no link can go stale. */
+export const walletHref = (key: string) => `/dashboard/wallet?coin=${key}`;

@@ -5,10 +5,10 @@ import Link from "next/link";
 import { ArrowRight, Download, RotateCcw, TrendingDown, TrendingUp } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
-import { EllipsisButton, Panel, PanelTitle } from "@/components/dashboard/ui";
+import { dsx, EllipsisButton, Panel, PanelTitle } from "@/components/dashboard/ui";
 import { CoinBadge } from "@/components/dashboard/CoinBadge";
 import { floor8, price, usd } from "@/config/market";
-import { WALLETS, WALLETS_PREVIEW } from "@/config/wallets";
+import { WALLETS, WALLETS_PREVIEW, walletHref } from "@/config/wallets";
 import { TRANSACTIONS, TRANSACTIONS_PREVIEW } from "@/config/transactions";
 import { TransactionsChart } from "./TransactionsChart";
 import { BuyCryptoChart } from "./BuyCryptoChart";
@@ -64,9 +64,15 @@ export function DashboardHome() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {visibleWallets.map((wallet) => (
-          <Panel
+          // The whole card is the link, not a "details" affordance tucked in a
+          // corner: the card IS the wallet, so anywhere on it is where a user aims.
+          <Link
             key={wallet.key}
-            className="flex flex-col transition-colors duration-200 hover:border-primary"
+            href={walletHref(wallet.key)}
+            className={cn(
+              dsx.card,
+              "group flex! flex-col transition-colors duration-200 hover:border-primary",
+            )}
           >
             <div className="flex items-start justify-between gap-2 px-4.5 pt-4">
               <span className="text-[12.5px]! text-muted">{wallet.name}</span>
@@ -101,8 +107,15 @@ export function DashboardHome() {
                 {wallet.change}
               </span>
               <span className="text-[12.5px]! text-muted">{k("last24h")}</span>
+              {/* Only chevron the card on hover: four static arrows in a row of four
+                  cards is noise, and the border already changes colour. */}
+              <ArrowRight
+                size={13}
+                aria-hidden
+                className="ms-auto shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100 rtl:rotate-180"
+              />
             </div>
-          </Panel>
+          </Link>
         ))}
       </div>
 

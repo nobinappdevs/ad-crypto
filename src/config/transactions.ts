@@ -1,12 +1,3 @@
-/**
- * Demo ledger for the transaction table, shared by the overview panel and the
- * Transactions page so the two can never show a different history.
- *
- * Only `quantity` and `price` are stored. The order amount and the fee are DERIVED
- * from them — a hand-written amount is a number that can quietly stop matching the
- * quantity beside it, and the previous version had to parse its own formatted
- * strings back into numbers to total the column.
- */
 export const FEE_RATE = 0.001;
 
 export type Transaction = {

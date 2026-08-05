@@ -1,25 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLang } from "@/hooks/useLang";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
 import { AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
+import { setPendingEmail } from "@/lib/pendingEmail";
 
 /**
  * The right-hand column on `/register`. There is no registration endpoint yet —
  * same as in the source design, where this CTA was never wired to a mutation
- * either — so the button is inert and the fields are uncontrolled. Wire it up the
- * same way `LoginForm` is wired once the endpoint exists.
+ * either — so the fields are uncontrolled apart from the two the next screen
+ * needs. Wire it up the same way `LoginForm` is wired once the endpoint exists.
+ *
+ * Submitting hands the address to `/verify-email`, because that IS what signing up
+ * does: the account is created unverified, and the code goes out immediately. The
+ * email is therefore the one field held in state — everything else is the missing
+ * endpoint's business.
  */
 export function RegisterForm() {
   const { t } = useLang();
+  const router = useRouter();
   const k = (name: string) => t(`authPanel.${name}`);
   const [terms, setTerms] = useState(false);
+  const [email, setEmail] = useState("");
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setPendingEmail(email.trim());
+    router.push("/verify-email");
+  }
 
   return (
     <form
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={onSubmit}
       noValidate
       className="flex flex-col gap-5.5"
       style={{ animation: "panel-rise 0.45s ease both" }}
@@ -40,7 +55,12 @@ export function RegisterForm() {
         <AuthInput type="text" placeholder={k("lastName")} />
       </div>
 
-      <AuthInput type="email" placeholder={k("registerEmail")} />
+      <AuthInput
+        type="email"
+        placeholder={k("registerEmail")}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
       <AuthPasswordInput placeholder={k("registerPassword")} />
 
       {/* onClick lives on the label, not the checkbox glyph — the glyph is the

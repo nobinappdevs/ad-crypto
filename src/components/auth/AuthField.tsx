@@ -50,30 +50,6 @@ function EyeIcon({ off }: { off: boolean }) {
   );
 }
 
-/** The 6-digit code field on the forgot-password flow: centred and letter-spaced
- *  so the digits read as a code rather than a normal line of text. */
-export function AuthOtpInput({
-  error,
-  ...props
-}: React.InputHTMLAttributes<HTMLInputElement> & { error?: string }) {
-  return (
-    <div>
-      <input
-        type="text"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        maxLength={6}
-        className={`${FIELD_CLASS} text-center text-[22px]! tracking-[0.4em]`}
-        style={FIELD_STYLE}
-        {...props}
-      />
-      {error && (
-        <span className="mt-1.5 block text-center text-[12.5px]! text-[#d4483f]">{error}</span>
-      )}
-    </div>
-  );
-}
-
 /** Password input with the show/hide toggle — the one field both forms need
  *  more than a plain `AuthInput`. */
 export function AuthPasswordInput({

@@ -1,6 +1,15 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import { Check, ChevronDown, Search } from "lucide-react";
 import { cn } from "@/components/ui/cn";
 
@@ -8,11 +17,40 @@ export type SelectOption = {
   value: string;
   /** Main line. */
   label: string;
+  /**
+   * React key, for lists where `value` is not unique across entries (a state code
+   * repeated across countries, say). Falls back to `value`.
+   */
+  id?: string;
   /** Second line under the label, in the list and optionally the trigger. */
   hint?: string;
   /** Trailing text on the row — a price, a fee. */
   meta?: string;
+  /** Short uppercase tag beside the label — a network type, a document class. */
+  badge?: string;
   icon?: ReactNode;
+  /** Extra text the search box matches, on top of label + hint. */
+  keywords?: string;
+  /** Listed but not choosable — a coin with no route, a suspended method. */
+  disabled?: boolean;
+};
+
+/** Rough menu height, used to decide whether the list opens up or down. */
+const MENU_HEIGHT = 320;
+
+/** Gap between trigger and menu. */
+const MENU_GAP = 8;
+
+const MENU_SCROLL =
+  "[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent";
+
+type Anchor = {
+  top: number;
+  bottom: number;
+  left: number;
+  width: number;
+  /** Not enough room below, and more room above — open upwards. */
+  dropUp: boolean;
 };
 
 /**
@@ -20,8 +58,18 @@ export type SelectOption = {
  * the things a native `<select>` cannot render, and which a coin or network
  * picker needs in order to be readable at a glance.
  *
- * Closes on outside pointer-down and on Escape, and returns focus to the
- * trigger so keyboard users are not dropped at the top of the document.
+ * The menu is PORTALLED to `<body>` and positioned against the trigger's own
+ * rect rather than nested in the field. A dropdown rendered in place is clipped
+ * by every scroll container and rounded panel above it — which is exactly where
+ * these live, inside `overflow-hidden` cards — and it inherits their stacking
+ * context, so a long list ends up cut off or painted under the next panel.
+ * Positioning is recomputed on scroll and resize so the menu tracks the field,
+ * and it flips above the trigger when the viewport has no room below.
+ *
+ * Full keyboard operation: the arrows move a highlight that is separate from the
+ * current selection, Home/End jump to the ends, Enter takes the highlighted row
+ * and Escape closes and returns focus to the trigger — so a keyboard user is
+ * never dropped at the top of the document.
  */
 export function SelectMenu({
   value,
@@ -34,6 +82,7 @@ export function SelectMenu({
   searchable = false,
   searchPlaceholder,
   emptyText,
+  disabled,
 }: {
   value: string;
   options: SelectOption[];
@@ -51,12 +100,19 @@ export function SelectMenu({
   searchable?: boolean;
   searchPlaceholder?: string;
   emptyText?: string;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const rootRef = useRef<HTMLDivElement>(null);
+  /** The keyboard highlight, which moves independently of the selection. */
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [anchor, setAnchor] = useState<Anchor | null>(null);
+
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const listId = useId();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const baseId = useId();
 
   const match = options.find((option) => option.value === value);
   const selected = match ?? (placeholder ? undefined : options[0]);
@@ -64,44 +120,169 @@ export function SelectMenu({
   const needle = query.trim().toLowerCase();
   const visible = needle
     ? options.filter((option) =>
-        `${option.label} ${option.hint ?? ""}`.toLowerCase().includes(needle),
+        `${option.label} ${option.hint ?? ""} ${option.keywords ?? ""}`
+          .toLowerCase()
+          .includes(needle),
       )
     : options;
 
+  const place = useCallback(() => {
+    const rect = triggerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const below = window.innerHeight - rect.bottom;
+    setAnchor({
+      top: rect.top,
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      dropUp: below < MENU_HEIGHT + 16 && rect.top > below,
+    });
+  }, []);
+
+  /**
+   * Reset the query and park the highlight on the current selection each time the
+   * menu opens. Adjusted during render rather than in an effect: an effect would
+   * paint one frame with the previous search still in the box.
+   */
+  const [wasOpen, setWasOpen] = useState(false);
+  if (wasOpen !== open) {
+    setWasOpen(open);
+    if (open) {
+      setQuery("");
+      const index = options.findIndex((option) => option.value === value);
+      setActiveIndex(index < 0 ? 0 : index);
+    }
+  }
+
+  function openMenu() {
+    if (disabled) return;
+    place();
+    setOpen(true);
+  }
+
+  function close() {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }
+
+  // Outside pointer-down closes; scroll and resize keep the menu on the field.
   useEffect(() => {
     if (!open) return;
 
     const onPointerDown = (e: PointerEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (!triggerRef.current?.contains(target) && !menuRef.current?.contains(target)) {
+        setOpen(false);
+      }
     };
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      setOpen(false);
-      triggerRef.current?.focus();
-    };
+    const reposition = () => place();
 
     document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", reposition);
+    // Capture phase: the field may sit inside a scrolling panel whose scroll
+    // events never reach `window` in the bubble phase.
+    window.addEventListener("scroll", reposition, true);
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", reposition);
+      window.removeEventListener("scroll", reposition, true);
     };
-  }, [open]);
+  }, [open, place]);
+
+  // With a search box the keyboard lives in the input, so focus it on open.
+  useEffect(() => {
+    if (open && searchable) searchRef.current?.focus();
+  }, [open, searchable]);
+
+  // Keep the highlighted row in view while arrowing through a long list.
+  useEffect(() => {
+    if (open) rowRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" });
+  }, [open, activeIndex]);
+
+  function choose(option: SelectOption) {
+    if (option.disabled) return;
+    onChange(option.value);
+    close();
+  }
+
+  /** Step the highlight, skipping disabled rows and wrapping at the ends. */
+  function move(delta: number) {
+    if (visible.length === 0) return;
+    setActiveIndex((current) => {
+      let next = current;
+      for (let step = 0; step < visible.length; step++) {
+        next = (next + delta + visible.length) % visible.length;
+        if (!visible[next]?.disabled) break;
+      }
+      return next;
+    });
+  }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (!open) {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openMenu();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        move(1);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        move(-1);
+        break;
+      case "Home":
+        e.preventDefault();
+        setActiveIndex(0);
+        break;
+      case "End":
+        e.preventDefault();
+        setActiveIndex(visible.length - 1);
+        break;
+      case "Enter": {
+        e.preventDefault();
+        const option = visible[activeIndex];
+        if (option) choose(option);
+        break;
+      }
+      case "Escape":
+        e.preventDefault();
+        close();
+        break;
+      case "Tab":
+        setOpen(false);
+        break;
+    }
+  }
+
+  const listId = `${baseId}-list`;
+  const activeId = open && visible[activeIndex] ? `${baseId}-opt-${activeIndex}` : undefined;
 
   return (
-    <div ref={rootRef} className={cn("relative", className)}>
+    // The wrapper carries the caller's sizing (`w-38 shrink-0` beside an amount
+    // field) so it never collides with the trigger's own `w-full`.
+    <div className={cn("min-w-0", className)}>
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => {
-          setQuery("");
-          setOpen((v) => !v);
-        }}
+        disabled={disabled}
+        onClick={() => (open ? setOpen(false) : openMenu())}
+        onKeyDown={onKeyDown}
+        role="combobox"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls={open ? listId : undefined}
+        // With a search box the input owns the highlight, so the trigger must not
+        // also claim it — two active descendants is one too many for a reader.
+        aria-activedescendant={searchable ? undefined : activeId}
         aria-label={label}
         className={cn(
-          "flex h-13 w-full cursor-pointer items-center gap-3 rounded-xl border bg-surface px-3 text-left transition",
+          "flex h-13 w-full cursor-pointer items-center gap-3 rounded-xl border bg-surface px-3 text-left transition disabled:cursor-not-allowed disabled:opacity-60",
           open ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/60",
         )}
       >
@@ -129,72 +310,119 @@ export function SelectMenu({
         />
       </button>
 
-      {open && (
-        <div
-          id={listId}
-          role="listbox"
-          aria-label={label}
-          className="absolute z-30 mt-2 flex max-h-72 w-full flex-col overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-[0_20px_50px_rgb(2_10_22/0.18)]"
-        >
-          {searchable && (
-            // Sticky rather than scrolling away: with 240 countries the box the
-            // user is typing into has to stay in view.
-            <div className="mb-1 flex shrink-0 items-center gap-2 rounded-lg bg-surface px-2.5">
-              <Search size={14} aria-hidden className="shrink-0 text-muted" />
-              <input
-                autoFocus
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={searchPlaceholder}
-                aria-label={searchPlaceholder ?? label}
-                className="h-9 min-w-0 flex-1 bg-transparent text-[13px] text-heading outline-none placeholder:text-muted"
-              />
-            </div>
-          )}
-
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            {visible.length === 0 && (
-              <p className="px-2.5 py-3 text-[12.5px]! text-muted">{emptyText}</p>
-            )}
-            {visible.map((option) => {
-              const active = option.value === value;
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  role="option"
-                  aria-selected={active}
-                  onClick={() => {
-                    onChange(option.value);
-                    setOpen(false);
-                    triggerRef.current?.focus();
+      {open &&
+        anchor &&
+        createPortal(
+          <div
+            ref={menuRef}
+            style={{
+              position: "fixed",
+              left: anchor.left,
+              width: anchor.width,
+              ...(anchor.dropUp
+                ? { bottom: window.innerHeight - anchor.top + MENU_GAP }
+                : { top: anchor.bottom + MENU_GAP }),
+            }}
+            className="z-100 flex max-h-72 max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-[0_20px_50px_rgb(2_10_22/0.18)]"
+          >
+            {searchable && (
+              // Outside the scroll area, not inside it: with 240 countries the box
+              // the user is typing into has to stay in view.
+              <div className="mb-1 flex shrink-0 items-center gap-2 rounded-lg bg-surface px-2.5">
+                <Search size={14} aria-hidden className="shrink-0 text-muted" />
+                <input
+                  ref={searchRef}
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setActiveIndex(0);
                   }}
-                  className={cn(
-                    "flex w-full cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2.5 text-left transition",
-                    active ? "bg-primary/10" : "hover:bg-black/4 dark:hover:bg-white/6",
-                  )}
-                >
-                  {option.icon}
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[13.5px] font-semibold text-heading">
-                      {option.label}
-                    </span>
-                    {option.hint && (
-                      <span className="block truncate text-[11.5px] text-muted">{option.hint}</span>
-                    )}
-                  </span>
-                  {option.meta && (
-                    <span className="shrink-0 text-[12.5px] tabular-nums text-muted">
-                      {option.meta}
-                    </span>
-                  )}
-                  {active && <Check size={15} className="shrink-0 text-primary" aria-hidden />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
+                  onKeyDown={onKeyDown}
+                  placeholder={searchPlaceholder}
+                  aria-label={searchPlaceholder ?? label}
+                  aria-controls={listId}
+                  aria-activedescendant={activeId}
+                  className="h-9 min-w-0 flex-1 bg-transparent text-[13px] text-heading outline-none placeholder:text-muted"
+                />
+              </div>
+            )}
+
+            <ul
+              id={listId}
+              role="listbox"
+              aria-label={label}
+              className={cn("min-h-0 flex-1 overflow-y-auto", MENU_SCROLL)}
+            >
+              {visible.length === 0 && (
+                <li className="px-2.5 py-3 text-[12.5px] text-muted">{emptyText}</li>
+              )}
+              {visible.map((option, index) => {
+                const active = option.value === value;
+                const highlighted = index === activeIndex;
+                return (
+                  <li
+                    key={option.id ?? option.value}
+                    role="option"
+                    aria-selected={active}
+                    id={`${baseId}-opt-${index}`}
+                  >
+                    <button
+                      ref={(el) => {
+                        rowRefs.current[index] = el;
+                      }}
+                      type="button"
+                      disabled={option.disabled}
+                      tabIndex={-1}
+                      onClick={() => choose(option)}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      className={cn(
+                        "flex w-full cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-50",
+                        active
+                          ? "bg-primary/10"
+                          : highlighted
+                            ? "bg-black/4 dark:bg-white/6"
+                            : "",
+                      )}
+                    >
+                      {option.icon}
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-1.5">
+                          <span
+                            className={cn(
+                              "truncate text-[13.5px] font-semibold",
+                              active ? "text-primary" : "text-heading",
+                            )}
+                          >
+                            {option.label}
+                          </span>
+                          {option.badge && (
+                            <span className="shrink-0 rounded bg-black/5 px-1.5 text-[10px]! font-semibold! tracking-wide text-muted uppercase dark:bg-white/10">
+                              {option.badge}
+                            </span>
+                          )}
+                        </span>
+                        {option.hint && (
+                          <span className="block truncate text-[11.5px] text-muted">
+                            {option.hint}
+                          </span>
+                        )}
+                      </span>
+                      {option.meta && (
+                        <span className="shrink-0 text-[12.5px] tabular-nums text-muted">
+                          {option.meta}
+                        </span>
+                      )}
+                      {active && (
+                        <Check size={15} strokeWidth={3} className="shrink-0 text-primary" aria-hidden />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

@@ -1,0 +1,1354 @@
+{
+  "brand": {
+    "name": "Escroc"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "about": "حول",
+    "services": "الخدمات",
+    "features": "المميزات",
+    "blog": "المدونة",
+    "contact": "اتصل بنا",
+    "dashboard": "لوحة التحكم",
+    "menu": "القائمة"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "التسجيل",
+    "loginTitle": "مرحبًا بعودتك",
+    "loginSubtitle": "سجّل الدخول إلى حساب Escroc الخاص بك",
+    "registerTitle": "إنشاء حسابك",
+    "registerSubtitle": "انضم إلى آلاف المستخدمين على Escroc",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "محمد أحمد",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@example.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "labelEmail": "البريد الإلكتروني",
+    "labelPassword": "كلمة المرور",
+    "labelFullName": "الاسم الكامل",
+    "labelConfirmPassword": "تأكيد كلمة المرور",
+    "labelRole": "أنا",
+    "rememberMe": "تذكّرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "orContinue": "أو تابع باستخدام",
+    "agreeTerms": "أوافق على",
+    "terms": "شروط الخدمة",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية",
+    "loginButton": "تسجيل الدخول",
+    "registerButton": "إنشاء حساب",
+    "role": {
+      "buyer": "مشتري",
+      "seller": "بائع"
+    },
+    "forgotTitle": "نسيت كلمة المرور؟",
+    "forgotSubtitle": "لا تقلق — أدخل بريدك الإلكتروني وسنرسل لك رمزاً.",
+    "sendResetCode": "إرسال الرمز",
+    "forgotSentTitle": "تحقق من بريدك",
+    "forgotSentDesc": "أرسلنا رمزاً مكوناً من 6 أرقام إلى بريدك. ينتهي خلال 10 دقائق.",
+    "continueToVerify": "إدخال الرمز",
+    "otpTitle": "تحقق من بريدك الإلكتروني",
+    "otpSubtitle": "أدخل الرمز المكون من 6 أرقام الذي أرسلناه.",
+    "otpLabel": "رمز التحقق",
+    "resendIn": "إعادة الإرسال خلال",
+    "resendOtp": "إعادة إرسال الرمز",
+    "verifyOtp": "تحقق وتابع",
+    "backToForgot": "رجوع",
+    "resetTitle": "تعيين كلمة مرور جديدة",
+    "resetSubtitle": "اختر كلمة مرور قوية لحسابك.",
+    "resetButton": "إعادة تعيين كلمة المرور",
+    "recaptchaError": "الرجاء التأكد من أنك لست روبوتاً",
+    "loggingIn": "جارٍ تسجيل الدخول…",
+    "creatingAccount": "جارٍ إنشاء الحساب…",
+    "sending": "جارٍ الإرسال…",
+    "resetting": "جارٍ إعادة التعيين…",
+    "strengthWeak": "ضعيفة",
+    "strengthFair": "مقبولة",
+    "strengthGood": "جيدة",
+    "strengthStrong": "قوية",
+    "digitLabel": "رقم",
+    "togglePassword": "إظهار أو إخفاء كلمة المرور"
+  },
+  "theme": {
+    "toggle": "تبديل السمة",
+    "light": "الوضع الفاتح",
+    "dark": "الوضع الداكن"
+  },
+  "language": {
+    "select": "اختر اللغة"
+  },
+  "banner": {
+    "eyebrow": "تبدأ الثقة المالية من هنا",
+    "title": "تحويلات أموال سلسة، محمية بضمان الوساطة",
+    "subtitle": "تتميّز خدمة الضمان لدينا بتوفير طبقة حماية إضافية لكل من المشترين والبائعين.",
+    "getStarted": "ابدأ الآن",
+    "card": {
+      "popular": "شائع",
+      "title": "استخدمه دائمًا عند الشراء أو البيع عبر الإنترنت.",
+      "subtitle": "تتيح لك عملية تحويل الأموال إرسال واستقبال الأموال بسهولة."
+    },
+    "form": {
+      "im": "أنا",
+      "selling": "أبيع",
+      "buying": "أشتري",
+      "itemPlaceholder": "أسماء النطاقات، المركبات...",
+      "for": "مقابل",
+      "amountPlaceholder": "1000",
+      "submit": "إنشاء ضمان جديد",
+      "transactionType": "نوع المعاملة",
+      "itemService": "السلعة / الخدمة",
+      "amountCurrency": "المبلغ والعملة"
+    },
+    "currencyAria": "العملة",
+    "trust": {
+      "secured": "ضمان ذكي آمن 100%",
+      "verified": "معاملات موثّقة",
+      "noFees": "بلا رسوم خفية"
+    }
+  },
+  "cookie": {
+    "text": "قد نستخدم ملفات تعريف الارتباط أو أي تقنيات تتبع أخرى عند زيارتك لموقعنا لتخصيص التجربة وتحسين خدماتنا.",
+    "privacy": "سياسة الخصوصية",
+    "allow": "قبول",
+    "decline": "رفض",
+    "title": "نستخدم ملفات تعريف الارتباط"
+  },
+  "partners": {
+    "names": [
+      "Wisozk",
+      "Morissette",
+      "Reichel",
+      "Gleichner",
+      "Strosin",
+      "Barrows"
+    ]
+  },
+  "about": {
+    "tag": "تعرّف علينا",
+    "title": "تحويل آمن للأموال، خدمات ضمان موثوقة.",
+    "desc": "نحن ندرك أهمية المعاملات المالية السلسة والآمنة. مهمتنا هي توفير حل شامل يجمع بين سهولة تحويل الأموال والأمان الإضافي من خلال خدمات الضمان لدينا.",
+    "points": [
+      "تحويل أموال سلس",
+      "محمي بأمان الضمان",
+      "إرسال واستقبال الأموال بثقة",
+      "معاملات مالية جديرة بالثقة"
+    ]
+  },
+  "services": {
+    "tag": "الخدمات المقدمة",
+    "title": "أنت في نظام آمن",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "خدمات آمنة",
+        "desc": "نعمل كوسيط موثوق، نحتفظ بالأموال حتى يفي الطرفان بالتزاماتهما."
+      },
+      {
+        "icon": "transfer",
+        "title": "تحويل فوري للأموال",
+        "desc": "أرسل واستقبل الأموال بثقة، مع العلم أن معاملاتك المالية سريعة وموثوقة ومحمية."
+      },
+      {
+        "icon": "chart",
+        "title": "استشارات مالية",
+        "desc": "يقدم مستشارونا الخبراء رؤى مخصصة لمساعدتك على اتخاذ قرارات مستنيرة."
+      },
+      {
+        "icon": "shield",
+        "title": "الحماية من الاحتيال",
+        "desc": "تضمن أنظمة المراقبة المتقدمة وتقنيات التشفير لدينا أمان معلوماتك المالية."
+      }
+    ]
+  },
+  "expertise": {
+    "tag": "خبرة عالية",
+    "title": "الحل الأكثر موثوقية للضمان الإلكتروني في العالم.",
+    "items": [
+      {
+        "icon": "briefcase",
+        "title": "استشارة استراتيجية نخبوية",
+        "desc": "استفد من خدمات الاستشارة الاستراتيجية النخبوية لدينا حيث يقدم خبراؤنا رؤى لا مثيل لها."
+      },
+      {
+        "icon": "wrench",
+        "title": "كفاءة تقنية متقدمة",
+        "desc": "اعتمد على كفاءتنا التقنية المتقدمة للتنقل في تعقيدات التكنولوجيا."
+      },
+      {
+        "icon": "dollar",
+        "title": "فطنة مالية متخصصة",
+        "desc": "احصل على محترفين متمرسين يجلبون رؤى عميقة في التخطيط والتحليل المالي."
+      }
+    ],
+    "badgeExperts": "خبراء موثوقون",
+    "badgeGuidance": "إرشاد على مدار الساعة",
+    "learnMore": "اعرف المزيد"
+  },
+  "testimonials": {
+    "tag": "شهادات العملاء",
+    "title": "ماذا يقول عملاؤنا",
+    "subtitle": "انضم إلى آلاف المستخدمين الراضين الذين يثقون بـ Escroc.",
+    "items": [
+      {
+        "quote": "بصفتي رائد أعمال في مجال التجارة الإلكترونية، إيجاد خدمة ضمان موثوقة أمر لا غنى عنه. تجاوزت Escroc توقعاتي باستمرار. سهولة الاستخدام مع إجراءات الأمان العالية تضمن أن معاملاتي سلسة ومحمية.",
+        "author": "James Rodriguez",
+        "role": "رائد أعمال في التجارة الإلكترونية",
+        "rating": 5
+      },
+      {
+        "quote": "غيّرت Escroc تمامًا طريقة تعاملي مع مدفوعات العملاء كمستقل. لا مزيد من المحادثات المحرجة حول الثقة — نظام الضمان يتولى كل شيء. المنصة سهلة الاستخدام وسريعة وموثوقة.",
+        "author": "Sarah Mitchell",
+        "role": "مصممة مستقلة",
+        "rating": 5
+      },
+      {
+        "quote": "أبيع المقتنيات عبر الإنترنت وتعرضت للاحتيال من قبل. منذ انتقلت إلى Escroc، سارت كل صفقة بسلاسة. الحماية للمشترين والبائعين متينة ودعم العملاء دائمًا متجاوب.",
+        "author": "David Park",
+        "role": "بائع عبر الإنترنت",
+        "rating": 5
+      },
+      {
+        "quote": "كانت إدارة المدفوعات الدولية كابوسًا. Escroc جعل الأمر سهلاً. دعم متعدد العملات ومعالجة سريعة وطبقة الأمان تتيح لي التركيز على عملي بدلاً من القلق من الاحتيال.",
+        "author": "Amina Osei",
+        "role": "صاحبة عمل في الاستيراد والتصدير",
+        "rating": 5
+      }
+    ],
+    "statAvgRating": "متوسط التقييم",
+    "statHappy": "عملاء راضون",
+    "statSatisfaction": "معدل الرضا",
+    "featured": "مميّز",
+    "verified": "موثّق",
+    "starsLabel": "من 5 نجوم"
+  },
+  "blog": {
+    "tag": "المدونة",
+    "title": "اطلع على أحدث مقالاتنا",
+    "author": "المدير العام",
+    "readMore": "اقرأ المزيد",
+    "posts": [
+      {
+        "category": "وجهات نظر",
+        "date": "06-02-2023",
+        "title": "رؤى الخبراء في الإدارة المالية"
+      },
+      {
+        "category": "قصص",
+        "date": "06-02-2023",
+        "title": "قصص حقيقية، ثقة حقيقية مع Escroc"
+      },
+      {
+        "category": "الأمن",
+        "date": "06-02-2023",
+        "title": "التنقل في مشهد الأمن المالي"
+      }
+    ]
+  },
+  "download": {
+    "tag": "تحميل التطبيق",
+    "title": "متوفر في المتاجر، حمّله الآن.",
+    "appStore": {
+      "label": "تحميل من",
+      "store": "App Store"
+    },
+    "googlePlay": {
+      "label": "احصل عليه من",
+      "store": "Google Play"
+    },
+    "subtitle": "مدفوعات ضمان آمنة وتحويلات فورية وتتبّع لحظي — كل ذلك في جيبك.",
+    "features": [
+      {
+        "title": "ضمان بمستوى البنوك",
+        "desc": "كل دفعة محفوظة بأمان حتى يؤكّد الطرفان."
+      },
+      {
+        "title": "وصول عالمي",
+        "desc": "تحويلات فورية عبر أكثر من 190+ دولة وبأي عملة."
+      },
+      {
+        "title": "تتبّع مباشر",
+        "desc": "حالة لحظية وتنبيهات فورية على كل معاملة."
+      }
+    ],
+    "statDownloads": "التنزيلات",
+    "statRating": "تقييم التطبيق",
+    "statCountries": "الدول",
+    "phone": {
+      "welcome": "مرحبًا بعودتك",
+      "totalBalance": "الرصيد الإجمالي",
+      "recentActivity": "النشاط الأخير",
+      "seeAll": "عرض الكل",
+      "send": "إرسال",
+      "request": "طلب",
+      "topUp": "شحن الرصيد",
+      "more": "المزيد",
+      "instantTransfer": "تحويل فوري",
+      "secured": "مؤمّن",
+      "escrowActive": "ضمان نشط",
+      "completed": "مكتمل",
+      "received": "مستلَم"
+    }
+  },
+  "footer": {
+    "tagline": "تحويل أموال آمن يعتمد على الضمان، مصمم لحماية المشترين والبائعين.",
+    "madeBy": "صنعه Escroc",
+    "navigation": "التنقّل",
+    "legal": "الشؤون القانونية",
+    "contact": "التواصل",
+    "rights": "جميع الحقوق محفوظة.",
+    "legalFaq": "الأسئلة الشائعة",
+    "legalPrivacy": "سياسة الخصوصية",
+    "legalRefund": "سياسة الاسترداد",
+    "legalTerms": "الشروط والأحكام"
+  },
+  "home": {
+    "title": "تحويلات أموال آمنة مع الضمان",
+    "subtitle": "أرسل واستقبل الأموال بأمان. تحتفظ Escroc بالأموال في الضمان حتى يكون الطرفان راضيين.",
+    "cta": "ابدأ الآن"
+  },
+  "servicesPage": {
+    "hero": {
+      "tag": "خدماتنا",
+      "title": "كل ما تحتاجه لمعاملات آمنة",
+      "subtitle": "من حماية الضمان إلى التحويلات الفورية، نوفر الأدوات التي تحافظ على أمان أموالك."
+    },
+    "stats": [
+      {
+        "value": "10M+",
+        "label": "معاملة مؤمّنة"
+      },
+      {
+        "value": "190+",
+        "label": "دولة نخدمها"
+      },
+      {
+        "value": "99.9%",
+        "label": "وقت تشغيل مضمون"
+      },
+      {
+        "value": "24/7",
+        "label": "دعم العملاء"
+      }
+    ],
+    "cta": {
+      "title": "هل أنت مستعد للبدء؟",
+      "subtitle": "انضم إلى آلاف المستخدمين الذين يثقون بـ Escroc لمعاملاتهم الآمنة.",
+      "button": "إنشاء حساب مجاني"
+    }
+  },
+  "featuresPage": {
+    "hero": {
+      "tag": "مميزات المنصة",
+      "title": "مُصمَّم للأمان، مُحسَّن للسرعة",
+      "subtitle": "اكتشف المميزات القوية التي تجعل Escroc منصة الضمان الأكثر موثوقية."
+    },
+    "items": [
+      {
+        "icon": "lock",
+        "title": "تشفير من طرف إلى طرف",
+        "desc": "كل معاملة مشفرة بأمان عسكري المستوى لضمان حماية بياناتك وأموالك دائمًا."
+      },
+      {
+        "icon": "shield",
+        "title": "المصادقة الثنائية",
+        "desc": "طبقة إضافية من الأمان تحميك حتى في حال تعرض كلمة مرورك للاختراق."
+      },
+      {
+        "icon": "transfer",
+        "title": "إشعارات فورية",
+        "desc": "ابقَ على اطلاع بتنبيهات فورية في كل خطوة من دورة حياة معاملتك."
+      },
+      {
+        "icon": "chart",
+        "title": "تحليلات المعاملات",
+        "desc": "تتبع نشاطك المالي بتقارير مفصلة للمساعدة في اتخاذ قرارات أذكى."
+      },
+      {
+        "icon": "briefcase",
+        "title": "دعم متعدد العملات",
+        "desc": "أرسل واستقبل الأموال بعملات متعددة بأسعار صرف تنافسية."
+      },
+      {
+        "icon": "dollar",
+        "title": "لا رسوم مخفية",
+        "desc": "تسعير شفاف بدون مفاجآت. ما تراه هو بالضبط ما تدفعه."
+      }
+    ],
+    "cta": {
+      "title": "اختبر الفرق",
+      "subtitle": "ابدأ باستخدام Escroc اليوم واكتشف لماذا يثق بنا آلاف المستخدمين.",
+      "button": "ابدأ مجانًا"
+    }
+  },
+  "blogPage": {
+    "hero": {
+      "tag": "مدونتنا",
+      "title": "رؤى، نصائح وأخبار الصناعة",
+      "subtitle": "ابقَ على اطلاع بأحدث الاتجاهات في التكنولوجيا المالية والأمن والمعاملات الإلكترونية."
+    },
+    "categories": [
+      "الكل",
+      "الأمن",
+      "وجهات نظر",
+      "قصص",
+      "تحديثات"
+    ],
+    "posts": [
+      {
+        "category": "وجهات نظر",
+        "date": "06-02-2023",
+        "title": "رؤى الخبراء حول إدارة الأموال",
+        "excerpt": "احصل على رؤى حصرية من خبراء الصناعة حول إدارة أموالك في العصر الرقمي."
+      },
+      {
+        "category": "قصص",
+        "date": "06-02-2023",
+        "title": "قصص حقيقية، ثقة حقيقية مع Escroc",
+        "excerpt": "استمع إلى مجتمعنا من المستخدمين الذين استخدموا Escroc بنجاح في معاملاتهم."
+      },
+      {
+        "category": "الأمن",
+        "date": "06-02-2023",
+        "title": "التنقل في مشهد الأمن المالي",
+        "excerpt": "دليل شامل لفهم ممارسات الأمن المالي الحديثة وكيفية حماية نفسك."
+      },
+      {
+        "category": "تحديثات",
+        "date": "05-15-2023",
+        "title": "تحديثات منصة Escroc",
+        "excerpt": "اكتشف المستجدات في أحدث إصدار وكيف يفيد سير عمل معاملاتك."
+      },
+      {
+        "category": "وجهات نظر",
+        "date": "04-28-2023",
+        "title": "مستقبل المعاملات الإلكترونية",
+        "excerpt": "نستكشف الاتجاهات الناشئة في المدفوعات الرقمية وما تعنيه للمشترين والبائعين."
+      },
+      {
+        "category": "الأمن",
+        "date": "04-10-2023",
+        "title": "كيف تحميك خدمات الضمان من الاحتيال",
+        "excerpt": "تعلم كيف تعمل خدمات الضمان كدرع قوي ضد عمليات الاحتيال الشائعة."
+      }
+    ],
+    "author": "المدير العام",
+    "readMore": "اقرأ المزيد",
+    "newsletter": {
+      "tag": "النشرة الإخبارية",
+      "title": "ابقَ على اطلاع",
+      "subtitle": "اشترك لتلقي أحدث المقالات والتحديثات مباشرة في بريدك الإلكتروني.",
+      "placeholder": "أدخل بريدك الإلكتروني",
+      "button": "اشترك"
+    },
+    "empty": "لا توجد منشورات بعد",
+    "all": "الكل"
+  },
+  "contactPage": {
+    "hero": {
+      "tag": "اتصل بنا",
+      "title": "تواصل مع فريقنا",
+      "subtitle": "هل لديك أسئلة أو تحتاج إلى دعم؟ نحن هنا لمساعدتك على مدار الساعة."
+    },
+    "form": {
+      "name": "الاسم الكامل",
+      "namePlaceholder": "محمد أحمد",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "mohammed@example.com",
+      "subject": "الموضوع",
+      "subjectPlaceholder": "كيف يمكننا مساعدتك؟",
+      "message": "الرسالة",
+      "messagePlaceholder": "أخبرنا المزيد عن استفسارك...",
+      "submit": "إرسال الرسالة",
+      "success": "تم إرسال الرسالة! سنرد عليك خلال 24 ساعة.",
+      "error": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      "sending": "جارٍ الإرسال…"
+    },
+    "info": [
+      {
+        "icon": "mail",
+        "title": "الدعم عبر البريد",
+        "value": "support@escroc.com",
+        "desc": "نرد خلال 24 ساعة"
+      },
+      {
+        "icon": "phone",
+        "title": "الدعم الهاتفي",
+        "value": "+1 (800) 123-4567",
+        "desc": "الإثنين–الجمعة، 9ص–6م EST"
+      },
+      {
+        "icon": "mapPin",
+        "title": "المكتب",
+        "value": "123 Finance St, New York, NY",
+        "desc": "الزيارة بموعد مسبق"
+      }
+    ],
+    "faq": {
+      "tag": "الأسئلة الشائعة",
+      "title": "الأسئلة الأكثر تداولاً",
+      "items": [
+        {
+          "q": "كيف يعمل نظام الضمان؟",
+          "a": "تحتفظ Escroc بالأموال بأمان حتى يفي المشتري والبائع بشروطهما المتفق عليها. بعد الرضا، تُطلق الأموال تلقائيًا."
+        },
+        {
+          "q": "كم يستغرق التحويل؟",
+          "a": "تُعالج معظم التحويلات في غضون 1–3 أيام عمل، حسب الوجهة والمبلغ."
+        },
+        {
+          "q": "هل Escroc آمن للاستخدام؟",
+          "a": "بالتأكيد. نستخدم تشفيرًا بمستوى بنكي ونلتزم باللوائح المالية الدولية."
+        },
+        {
+          "q": "ما هي الرسوم؟",
+          "a": "رسومنا شفافة وتنافسية. قم بزيارة صفحة التسعير للاطلاع على التفاصيل الكاملة."
+        }
+      ]
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "tag": "من نحن",
+      "title": "القصة وراء Escroc",
+      "subtitle": "مهمتنا جعل المعاملات الإلكترونية أكثر أمانًا وموثوقية للجميع، في كل مكان."
+    },
+    "mission": {
+      "tag": "مهمتنا",
+      "title": "بناء الثقة في كل معاملة",
+      "desc": "منذ تأسيسها، التزمت Escroc بتوفير منصة آمنة وشفافة تجسر الهوة بين المشترين والبائعين حول العالم. نؤمن بأن كل معاملة يجب أن تكون محمية."
+    },
+    "values": {
+      "tag": "قيمنا",
+      "title": "ما نؤمن به",
+      "items": [
+        {
+          "icon": "shield",
+          "title": "الأمان أولاً",
+          "desc": "كل قرار نتخذه يُعطي الأولوية لأمان معاملاتك وبياناتك المالية."
+        },
+        {
+          "icon": "check",
+          "title": "الشفافية",
+          "desc": "تواصل صريح وصادق بدون رسوم مخفية أو مفاجآت."
+        },
+        {
+          "icon": "briefcase",
+          "title": "الموثوقية",
+          "desc": "مبني للاستمرارية والأداء حتى تتمكن من الاعتماد علينا عند الحاجة."
+        },
+        {
+          "icon": "dollar",
+          "title": "العدالة",
+          "desc": "حماية متساوية للمشترين والبائعين في كل معاملة."
+        }
+      ]
+    },
+    "team": {
+      "tag": "فريقنا",
+      "title": "الأشخاص وراء Escroc",
+      "members": [
+        {
+          "name": "Alex Johnson",
+          "role": "الرئيس التنفيذي والمؤسس"
+        },
+        {
+          "name": "Sarah Williams",
+          "role": "مديرة التكنولوجيا"
+        },
+        {
+          "name": "Michael Chen",
+          "role": "رئيس قسم الأمن"
+        },
+        {
+          "name": "Emma Davis",
+          "role": "رئيسة نجاح العملاء"
+        }
+      ]
+    },
+    "cta": {
+      "title": "انضم إلى مجتمع Escroc",
+      "subtitle": "آلاف المستخدمين يثقون بنا بالفعل. هل أنت مستعد للانضمام إليهم؟",
+      "button": "ابدأ اليوم"
+    },
+    "statTransactions": "المعاملات",
+    "statCountries": "الدول",
+    "statUptime": "زمن التشغيل",
+    "statSupport": "الدعم"
+  },
+  "dashboard": {
+    "sidebar": {
+      "core": "الأساسية",
+      "finance": "المالية",
+      "overview": "نظرة عامة",
+      "escrow": "ضماناتي",
+      "transactions": "المعاملات",
+      "addMoney": "إضافة أموال",
+      "moneyOut": "سحب أموال",
+      "exchange": "تبادل",
+      "security": "أمان 2FA",
+      "kyc": "التحقق من KYC",
+      "profile": "إعدادات الملف الشخصي",
+      "userRole": "موثق · مشتري",
+      "logout": "تسجيل الخروج",
+      "helpTitle": "مركز المساعدة",
+      "helpSub": "كيف يمكننا مساعدتك؟",
+      "helpBtn": "احصل على الدعم",
+      "collapse": "طي",
+      "goHome": "الانتقال إلى الصفحة الرئيسية",
+      "closeMenu": "إغلاق القائمة",
+      "liveSupport": "الدعم المباشر"
+    },
+    "support": {
+      "title": "تذاكر الدعم",
+      "addNew": "إضافة تذكرة جديدة",
+      "colTicketId": "رقم التذكرة",
+      "colSubject": "الموضوع",
+      "colMessage": "الرسالة",
+      "colStatus": "الحالة",
+      "colLastReply": "آخر رد",
+      "noData": "لا توجد بيانات!",
+      "createTitle": "إضافة تذكرة جديدة",
+      "back": "العودة إلى التذاكر",
+      "subject": "الموضوع",
+      "subjectPlaceholder": "أدخل الموضوع...",
+      "message": "الرسالة",
+      "messagePlaceholder": "اكتب هنا...",
+      "attachments": "المرفقات",
+      "optional": "(اختياري)",
+      "dropHint": "اسحب وأفلت الملفات هنا، أو انقر للتصفح",
+      "browse": "اختر الملفات",
+      "submit": "إرسال التذكرة"
+    },
+    "navbar": {
+      "subtitle": "escroc.com · منصة الضمان",
+      "buyer": "مشتري",
+      "seller": "بائع",
+      "logout": "تسجيل الخروج",
+      "menu": "القائمة",
+      "logoutTitle": "تسجيل الخروج؟",
+      "logoutDesc": "ستحتاج إلى تسجيل الدخول مرة أخرى للوصول إلى حسابك.",
+      "cancel": "إلغاء",
+      "confirmLogout": "نعم، تسجيل الخروج",
+      "noNotifications": "لا توجد إشعارات بعد",
+      "viewAll": "عرض الكل",
+      "notifications": "الإشعارات",
+      "newCount": "{n} جديدة",
+      "noNotificationsDesc": "لقد اطّلعت على كل شيء.",
+      "profileMenu": "قائمة الملف الشخصي",
+      "viewingAs": "العرض بصفة"
+    },
+    "home": {
+      "vaultLabel": "إجمالي المحتجز في الضمان",
+      "vaultStatus": "محمي بأمان",
+      "vaultDesc": "موزع عبر 3 خزائن ضمان نشطة · أمان التوقيع المتعدد نشط",
+      "origin": "المصدر",
+      "youBuyer": "أنت (مشتري)",
+      "counterparties": "الأطراف المقابلة",
+      "sellers": "3 بائعين موثقين",
+      "quickControls": "التحكم السريع",
+      "initAddMoney": "تهيئة إضافة الأموال",
+      "withdrawal": "سحب",
+      "convertFX": "تحويل العملات",
+      "createEscrow": "إنشاء ضمان",
+      "securityPanel": "لوحة الأمان",
+      "balances": "أرصدة الحسابات المحلية",
+      "chartTitle": "مقياس حجم الضمان",
+      "distTitle": "رؤى التوزيع",
+      "inbound": "الأموال الواردة",
+      "fx": "تبادلات العملات",
+      "outbound": "التسوية الصادرة",
+      "txTitle": "السجلات المعاملاتية",
+      "export": "تصدير الكشف",
+      "viewAll": "عرض جميع السجلات",
+      "txContext": "سياق المعاملة",
+      "txStatus": "الحالة",
+      "txTimestamp": "الطابع الزمني",
+      "txFinancial": "الرسم البياني المالي",
+      "buyers": "المشترون",
+      "escrowOverview": "نظرة عامة على الضمان",
+      "totalEscrow": "إجمالي الضمان",
+      "completedEscrow": "مكتمل",
+      "pendingEscrow": "قيد الانتظار",
+      "disputeEscrow": "متنازع عليه",
+      "noTxTitle": "لا توجد معاملات بعد",
+      "noTxDesc": "ستظهر معاملاتك الأخيرة هنا.",
+      "thisMonth": "هذا الشهر",
+      "moneyFlow": "تدفق الأموال",
+      "flowAdd": "إضافة أموال",
+      "flowOut": "سحب الأموال",
+      "flowExchange": "صرف العملات"
+    },
+    "addMoney": {
+      "title": "إضافة أموال",
+      "depositFunds": "إيداع الأموال",
+      "exchangeRate": "سعر الصرف:",
+      "paymentGateway": "بوابة الدفع",
+      "amount": "المبلغ",
+      "enterAmount": "أدخل المبلغ…",
+      "limit": "الحد:",
+      "availableBalance": "الرصيد المتاح:",
+      "charge": "الرسوم:",
+      "addMoneyBtn": "إضافة أموال",
+      "summary": "الملخص",
+      "enteredAmount": "المبلغ المُدخل",
+      "conversionAmount": "مبلغ التحويل",
+      "totalFees": "إجمالي الرسوم والمصاريف",
+      "totalPayable": "إجمالي المبلغ المستحق",
+      "infoNote": "ستظهر أموالك المودعة في محفظتك خلال 1 إلى 3 أيام عمل حسب البوابة.",
+      "logTitle": "سجل إضافة الأموال",
+      "searchLogs": "البحث في السجلات…",
+      "filter": "تصفية",
+      "colTransaction": "المعاملة",
+      "colTransactionId": "معرف المعاملة",
+      "colExchangeRate": "سعر الصرف",
+      "colFeesCharge": "الرسوم والمصاريف",
+      "colAmount": "المبلغ",
+      "colDate": "التاريخ",
+      "addBalance": "إضافة رصيد",
+      "via": "عبر",
+      "status": {
+        "pending": "قيد الانتظار",
+        "success": "ناجح"
+      },
+      "noLogsTitle": "لا توجد إيداعات بعد",
+      "noLogsDesc": "سيظهر سجل إضافة الأموال هنا.",
+      "requestAmount": "المبلغ المُدخل",
+      "exchangeRateLabel": "سعر الصرف",
+      "willGet": "ستحصل على",
+      "manualTitle": "الدفع اليدوي",
+      "manualInstrTitle": "تعليمات الدفع",
+      "confirmPayment": "تأكيد الدفع",
+      "authTitle": "تفويض معلومات البطاقة",
+      "payWithCard": "الدفع بالبطاقة",
+      "cardNumber": "رقم البطاقة",
+      "expDate": "تاريخ الانتهاء",
+      "cvc": "رمز الأمان CVV/CVC",
+      "submitPayment": "إرسال",
+      "paymentInformation": "معلومات الدفع",
+      "noMatchTitle": "لا توجد إيداعات مطابقة",
+      "noMatchDesc": "جرّب كلمة بحث أو عامل تصفية مختلفاً.",
+      "colStatus": "الحالة",
+      "expDateMonthError": "الرجاء إدخال شهر صالح (01-12)",
+      "expDateError": "الرجاء إدخال تاريخ انتهاء مستقبلي صالح (YY/MM)",
+      "resultSuccessTitle": "تم الدفع بنجاح",
+      "resultSuccessDesc": "تم استلام إيداعك وجارٍ معالجته. سيظهر في محفظتك قريبًا.",
+      "resultCancelTitle": "تم إلغاء الدفع",
+      "resultCancelDesc": "تم إلغاء الدفع ولم يتم خصم أي مبلغ منك. يمكنك المحاولة مرة أخرى وقتما تشاء.",
+      "resultBack": "العودة إلى إضافة الأموال",
+      "resultDashboard": "الذهاب إلى لوحة التحكم",
+      "resultTransactions": "عرض المعاملات"
+    },
+    "common": {
+      "showing": "عرض",
+      "of": "من",
+      "previous": "السابق",
+      "next": "التالي",
+      "optional": "(اختياري)",
+      "currency": "العملة",
+      "logs": "سجلات",
+      "monthsShort": [
+        "يناير",
+        "فبراير",
+        "مارس",
+        "أبريل",
+        "مايو",
+        "يونيو",
+        "يوليو",
+        "أغسطس",
+        "سبتمبر",
+        "أكتوبر",
+        "نوفمبر",
+        "ديسمبر"
+      ],
+      "loading": "جارٍ التحميل…",
+      "loadMore": "تحميل المزيد",
+      "allLoaded": "تم تحميل الكل"
+    },
+    "conversation": {
+      "escrowId": "معرّف الضمان",
+      "backToMyEscrow": "العودة إلى ضماناتي",
+      "writeSomething": "اكتب شيئًا…",
+      "attachFile": "إرفاق ملف",
+      "sendMessage": "إرسال الرسالة",
+      "escrowDetails": "تفاصيل الضمان",
+      "paymentDetails": "تفاصيل الدفع",
+      "title": "العنوان",
+      "myRole": "دوري",
+      "createdBy": "أنشأه",
+      "productType": "نوع المنتج",
+      "totalPrice": "السعر الإجمالي",
+      "chargePayer": "دافع الرسوم",
+      "status": "الحالة",
+      "remarks": "ملاحظات",
+      "approvalPending": "في انتظار الموافقة",
+      "feesCharge": "الرسوم والمصاريف",
+      "sellerAmount": "مبلغ البائع",
+      "noMessages": "لا توجد رسائل بعد",
+      "noMessagesDesc": "ابدأ المحادثة بإرسال رسالة أدناه.",
+      "payWith": "الدفع عبر",
+      "exchangeRate": "سعر الصرف",
+      "buyerPaid": "دفع المشتري",
+      "cancel": "إلغاء",
+      "sending": "جارٍ الإرسال…",
+      "failedRetry": "فشل — اضغط لإعادة المحاولة",
+      "releaseRequest": "طلب الإفراج",
+      "disputePayment": "الاعتراض على الدفع",
+      "releaseConfirmTitle": "الإفراج عن الدفعة؟",
+      "releaseConfirmDesc": "سيؤدي هذا إلى الإفراج عن الأموال المحجوزة للبائع. لا يمكن التراجع عن هذا الإجراء.",
+      "disputeConfirmTitle": "الاعتراض على هذه الدفعة؟",
+      "disputeConfirmDesc": "سيؤدي هذا إلى فتح نزاع لهذا الضمان. سيراجعه فريقنا قبل تحويل أي أموال.",
+      "attachment": "المرفق",
+      "image": "صورة",
+      "releasePayment": "الإفراج عن الدفعة",
+      "releaseRequestConfirmTitle": "طلب الإفراج؟",
+      "releaseRequestConfirmDesc": "يطلب هذا من المشتري الإفراج عن الأموال المحجوزة لصالحك.",
+      "secureNote": "الرسائل مرتبطة بهذا الضمان الآمن",
+      "emoji": "رمز تعبيري",
+      "close": "إغلاق"
+    },
+    "createEscrow": {
+      "backToMyEscrow": "العودة إلى ضماناتي",
+      "title": "إنشاء ضمان جديد",
+      "securedDeal": "صفقة مؤمَّنة",
+      "yourRole": "دورك",
+      "roleBuyerLabel": "أنا المشتري",
+      "roleBuyerDesc": "ترسل الأموال وتُحتجز حتى تؤكد استلام التسليم.",
+      "roleSellerLabel": "أنا البائع",
+      "roleSellerDesc": "تسلّم أولاً، وتُحرَّر الأموال بعد الموافقة.",
+      "counterpartyName": "اسم الطرف المقابل",
+      "fullNamePlaceholder": "الاسم الكامل",
+      "counterpartyEmail": "بريد الطرف المقابل",
+      "emailPlaceholder": "name@example.com",
+      "escrowTitle": "عنوان الضمان",
+      "escrowTitlePlaceholder": "مثال: شعار ومجموعة هوية العلامة",
+      "category": "الفئة",
+      "categoryDigital": "السلع والخدمات الرقمية",
+      "categoryDomain": "أسماء النطاقات",
+      "categoryPhysical": "السلع المادية",
+      "categoryVehicle": "المركبات",
+      "categoryOther": "أخرى",
+      "amount": "المبلغ",
+      "amountPlaceholder": "أدخل المبلغ…",
+      "termsDescription": "الشروط والوصف",
+      "termsPlaceholder": "صِف الصفقة والمخرجات وشروط الإفراج…",
+      "createEscrowButton": "إنشاء الضمان",
+      "summary": "الملخص",
+      "summaryAmount": "مبلغ الضمان",
+      "summaryFee": "رسوم الضمان ({pct}%)",
+      "summaryTotal": "الإجمالي المستحق",
+      "infoNote": "تُحفظ الأموال بأمان في الضمان ولا يتم الإفراج عنها إلا بعد أن يؤكد الطرفان اكتمال الصفقة.",
+      "invalidUser": "هذا المستخدم غير مسجّل في Escroc.",
+      "whoPays": "من يدفع الرسوم",
+      "whoPaysMe": "أنا",
+      "whoPaysOther": "الطرف الآخر يدفع",
+      "paymentGateway": "بوابة الدفع",
+      "attachments": "المرفقات (اختياري)",
+      "myWallet": "محفظتي",
+      "payWith": "الدفع عبر",
+      "whoPaysSeller": "البائع",
+      "whoPays5050": "50% - 50%",
+      "pTitle": "العنوان",
+      "pRole": "دوري",
+      "pType": "نوع المنتج",
+      "pTotal": "السعر الإجمالي",
+      "pCharge": "دافع الرسوم",
+      "editDetails": "تعديل التفاصيل",
+      "escrowDetails": "تفاصيل الضمان",
+      "paymentDetails": "تفاصيل الدفع",
+      "feesCharge": "الرسوم والعمولات",
+      "sellerWillGet": "سيحصل البائع على",
+      "buyerWillPay": "سيدفع المشتري",
+      "confirmSend": "تأكيد وإرسال",
+      "exchangeRate": "سعر الصرف",
+      "authTitle": "تفويض معلومات البطاقة",
+      "payWithCard": "الدفع بالبطاقة",
+      "cardNumber": "رقم البطاقة",
+      "expDate": "تاريخ الانتهاء",
+      "cvc": "رمز الأمان CVV/CVC",
+      "submitPayment": "إرسال",
+      "manualPayment": "الدفع اليدوي",
+      "manualInstrTitle": "الرجاء اتباع التعليمات أدناه",
+      "manualInstrDesc": "املأ جميع الحقول بمعلومات صحيحة.",
+      "confirmPay": "تأكيد والدفع",
+      "youWillPay": "ستدفع",
+      "whoPaysBuyer": "المشتري",
+      "expDateMonthError": "الرجاء إدخال شهر صالح (01-12)",
+      "expDateError": "الرجاء إدخال تاريخ انتهاء مستقبلي صالح (YY/MM)",
+      "resultSuccessTitle": "تم الدفع بنجاح",
+      "resultSuccessDesc": "تم تمويل الضمان وإنشاؤه بنجاح. يمكن الآن لكلا الطرفين متابعة الصفقة.",
+      "resultCancelTitle": "تم إلغاء الدفع",
+      "resultCancelDesc": "تم إلغاء دفعة الضمان ولم يتم خصم أي مبلغ منك. يمكنك المحاولة مرة أخرى وقتما تشاء.",
+      "resultBack": "العودة إلى إنشاء ضمان",
+      "resultMyEscrow": "الذهاب إلى ضماناتي",
+      "resultDashboard": "الذهاب إلى لوحة التحكم",
+      "cryptoAddressTitle": "عنوان الدفع بالعملة المشفرة",
+      "cryptoProceed": "متابعة",
+      "copyAddress": "نسخ العنوان",
+      "copied": "تم النسخ"
+    },
+    "exchange": {
+      "title": "تبادل العملات",
+      "currencySwap": "تبديل العملة",
+      "exchangeRateLabel": "سعر الصرف",
+      "exchangeFrom": "التحويل من",
+      "enterAmount": "أدخل المبلغ",
+      "availableBalance": "الرصيد المتاح",
+      "swapCurrencies": "تبديل العملات",
+      "exchangeTo": "التحويل إلى",
+      "limit": "الحد",
+      "charge": "الرسوم",
+      "sameCurrencyWarning": "عملتا المصدر والوجهة متطابقتان — لن يتم أي تحويل.",
+      "exchangeMoney": "تبادل الأموال",
+      "summary": "الملخص",
+      "fromWallet": "من المحفظة",
+      "toExchange": "إلى الصرف",
+      "exchangeRate": "سعر الصرف",
+      "totalExchangeAmount": "إجمالي مبلغ الصرف",
+      "convertedAmount": "المبلغ المحوّل",
+      "totalCharge": "إجمالي الرسوم",
+      "totalPayable": "إجمالي المبلغ المستحق",
+      "ratesInfoNote": "تُحدَّث أسعار الصرف في الوقت الفعلي. يتم تثبيت السعر النهائي وقت إجراء المعاملة.",
+      "logTitle": "سجل تبادل العملات",
+      "searchLogs": "البحث في السجلات…",
+      "filter": "تصفية",
+      "colTransaction": "المعاملة",
+      "colTransactionId": "معرّف المعاملة",
+      "colExchangeRate": "سعر الصرف",
+      "colFeesCharge": "الرسوم والمصاريف",
+      "colAmount": "المبلغ",
+      "colDate": "التاريخ",
+      "colActions": "الإجراءات",
+      "moreActions": "مزيد من الإجراءات",
+      "logsUnit": "سجلات",
+      "status_success": "ناجح",
+      "status_pending": "قيد الانتظار",
+      "noLogsTitle": "لا توجد عمليات صرف بعد",
+      "noLogsDesc": "سيظهر سجل صرف العملات هنا.",
+      "colStatus": "الحالة",
+      "noMatchTitle": "لا توجد عمليات صرف مطابقة",
+      "noMatchDesc": "جرّب كلمة بحث أو عامل تصفية مختلفاً."
+    },
+    "kyc": {
+      "title": "التحقق من الهوية (KYC)",
+      "body": "صفحة التحقق من الهوية (KYC)",
+      "submit": "إرسال للتحقق",
+      "statusUnverified": "غير موثّق",
+      "statusVerified": "موثّق",
+      "statusPending": "قيد المراجعة",
+      "statusRejected": "مرفوض",
+      "noteUnverified": "وثّق هويتك للحصول على وصول كامل.",
+      "noteVerified": "تم توثيق هويتك.",
+      "notePending": "مستنداتك قيد المراجعة.",
+      "noteRejected": "تم رفض طلبك. يرجى إعادة الإرسال بمستندات صحيحة.",
+      "selectPrefix": "اختر"
+    },
+    "moneyOut": {
+      "title": "سحب الأموال",
+      "withdrawFunds": "سحب الأموال",
+      "exchangeRate": "سعر الصرف",
+      "paymentGateway": "بوابة الدفع",
+      "amount": "المبلغ",
+      "amountPlaceholder": "أدخل المبلغ…",
+      "limit": "الحد",
+      "availableBalance": "الرصيد المتاح",
+      "charge": "الرسوم",
+      "moneyOut": "سحب الأموال",
+      "summary": "الملخص",
+      "enteredAmount": "المبلغ المُدخَل",
+      "conversionAmount": "مبلغ التحويل",
+      "totalFees": "إجمالي الرسوم والمصاريف",
+      "willGet": "ستحصل على",
+      "totalPayable": "إجمالي المبلغ المستحق",
+      "balanceNote": "تأكد من وجود رصيد كافٍ قبل السحب. تُخصم الرسوم من المبلغ المحوّل.",
+      "logsTitle": "سجلات السحب",
+      "searchPlaceholder": "البحث في السجلات…",
+      "filter": "تصفية",
+      "colTransaction": "المعاملة",
+      "colTransactionId": "معرّف المعاملة",
+      "colExchangeRate": "سعر الصرف",
+      "colFees": "الرسوم والمصاريف",
+      "colAmount": "المبلغ",
+      "colDate": "التاريخ",
+      "actions": "الإجراءات",
+      "via": "عبر",
+      "moreActions": "المزيد من الإجراءات",
+      "unitLogs": "سجلات",
+      "noLogsTitle": "لا توجد عمليات سحب بعد",
+      "noLogsDesc": "سيظهر سجل سحب الأموال هنا.",
+      "confirm": "تأكيد",
+      "selectBankFirst": "اختر بنكاً أولاً",
+      "loadingBranches": "جارٍ تحميل الفروع…",
+      "colStatus": "الحالة",
+      "noMatchTitle": "لا توجد عمليات سحب مطابقة",
+      "noMatchDesc": "جرّب كلمة بحث أو عامل تصفية مختلفاً."
+    },
+    "myEscrow": {
+      "title": "الضمان الخاص بي",
+      "searchPlaceholder": "البحث في الضمانات",
+      "filter": "تصفية",
+      "newEscrow": "ضمان جديد",
+      "new": "جديد",
+      "dealNeedsAction": "صفقة تحتاج إلى إجرائك",
+      "dealsNeedAction": "صفقات تحتاج إلى إجرائك",
+      "colEscrow": "الضمان",
+      "colCounterparty": "الطرف المقابل",
+      "colRole": "الدور",
+      "colAmount": "المبلغ",
+      "colCreated": "تاريخ الإنشاء",
+      "colStatus": "الحالة",
+      "colActions": "الإجراءات",
+      "openConversation": "فتح المحادثة لـ",
+      "chat": "محادثة",
+      "emptyTitle": "لا توجد ضمانات بعد",
+      "emptyDesc": "أنشئ أول ضمان لك للبدء.",
+      "pay": "دفع"
+    },
+    "profile": {
+      "changePhoto": "تغيير الصورة",
+      "verified": "موثَّق",
+      "buyer": "مشترٍ",
+      "memberSince": "عضو منذ أبريل 2025 · 8 ضمانات · 24 معاملة",
+      "deleteAccount": "حذف الحساب",
+      "personalInfo": "المعلومات الشخصية",
+      "firstName": "الاسم الأول",
+      "firstNamePlaceholder": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "lastNamePlaceholder": "اسم العائلة",
+      "country": "الدولة",
+      "selectCountry": "اختر الدولة",
+      "phone": "الهاتف",
+      "phonePlaceholder": "أدخل الهاتف…",
+      "address": "العنوان",
+      "addressPlaceholder": "أدخل العنوان…",
+      "city": "المدينة",
+      "cityPlaceholder": "المدينة",
+      "state": "الولاية",
+      "statePlaceholder": "الولاية",
+      "zipCode": "الرمز البريدي",
+      "zipPlaceholder": "الرمز البريدي",
+      "saveChanges": "حفظ التغييرات",
+      "changePassword": "تغيير كلمة المرور",
+      "currentPassword": "كلمة المرور الحالية",
+      "currentPasswordPlaceholder": "أدخل كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+      "passwordsMatch": "✓ كلمتا المرور متطابقتان",
+      "passwordsNoMatch": "كلمتا المرور غير متطابقتين",
+      "updatePassword": "تحديث كلمة المرور",
+      "weak": "ضعيفة",
+      "fair": "مقبولة",
+      "good": "جيدة",
+      "strong": "قوية",
+      "passwordLabel": "كلمة المرور",
+      "dangerZone": "منطقة الخطر",
+      "dangerDesc": "بمجرد الحذف، لا يمكن استرداد حسابك وجميع البيانات المرتبطة به.",
+      "deleteMyAccount": "حذف حسابي"
+    },
+    "security": {
+      "twoFactorTitle": "المصادقة الثنائية",
+      "enabledBadge": "مُفعّلة",
+      "activeBannerPre": "المصادقة الثنائية",
+      "activeBannerWord": "نشطة",
+      "activeBannerPost": "على حسابك.",
+      "notProtectedBanner": "حسابك غير محمي. فعّل المصادقة الثنائية لتأمينه.",
+      "secretKeyLabel": "المصادقة الثنائية",
+      "copied": "تم النسخ",
+      "copySecretKey": "نسخ المفتاح السري",
+      "secretKeyHelp": "امسح رمز الاستجابة السريعة أدناه باستخدام تطبيق المصادقة، أو أدخل هذا المفتاح يدويًا.",
+      "disable2fa": "تعطيل المصادقة الثنائية",
+      "enable": "تفعيل",
+      "googleAuthTitle": "Google Authenticator",
+      "googleAuthDesc": "تطبيق Google Authenticator هو أداة مصادقة من Google تقدم خدمات التحقق بخطوتين للتحقق من هوية مستخدمي أي تطبيقات برمجية.",
+      "howToSetup": "كيفية الإعداد؟",
+      "downloadAndroid": "التنزيل لنظام Android",
+      "downloadIos": "التنزيل لنظام iOS",
+      "setupSteps": "خطوات الإعداد",
+      "step1": "نزّل تطبيق Google Authenticator من متجر التطبيقات لديك",
+      "step2": "افتح التطبيق واضغط على زر +",
+      "step3": "امسح رمز الاستجابة السريعة أو أدخل المفتاح يدويًا",
+      "step4": "أدخل الرمز المكوّن من 6 أرقام الظاهر في التطبيق",
+      "enableTitle": "تفعيل المصادقة الثنائية؟",
+      "enableDesc": "يضيف هذا طبقة حماية إضافية. ستحتاج إلى رمز تطبيق المصادقة في كل مرة تسجّل فيها الدخول.",
+      "disableTitle": "تعطيل المصادقة الثنائية؟",
+      "disableDesc": "سيصبح حسابك أقل أماناً بدون المصادقة الثنائية. هل أنت متأكد؟",
+      "cancel": "إلغاء",
+      "qrAlt": "رمز QR لتطبيق Google Authenticator",
+      "authCodeLabel": "رمز المصادقة",
+      "authCodeHelp": "أدخل الرمز المكوّن من 6 أرقام من تطبيق المصادقة للتأكيد."
+    },
+    "transaction": {
+      "title": "سجل المعاملات",
+      "searchPlaceholder": "البحث في المعاملات",
+      "filter": "تصفية",
+      "colTransaction": "المعاملة",
+      "colTransactionId": "معرّف المعاملة",
+      "colExchangeRate": "سعر الصرف",
+      "colFees": "الرسوم والمصاريف",
+      "colAmount": "المبلغ",
+      "colDate": "التاريخ",
+      "colActions": "الإجراءات",
+      "moreActions": "المزيد من الإجراءات",
+      "via": "عبر",
+      "status_pending": "قيد الانتظار",
+      "status_success": "ناجحة",
+      "unit": "معاملة",
+      "payable": "المبلغ المستحق",
+      "emptyTitle": "لا توجد معاملات بعد",
+      "emptyDesc": "سيظهر سجل معاملاتك هنا.",
+      "noMatchTitle": "لا توجد معاملات مطابقة",
+      "noMatchDesc": "جرّب كلمة بحث أو عامل تصفية مختلفاً.",
+      "matchesOnPage": "نتيجة مطابقة في هذه الصفحة",
+      "colStatus": "الحالة"
+    },
+    "status": {
+      "all": "كل الحالات",
+      "success": "ناجحة",
+      "pending": "قيد الانتظار",
+      "waiting": "بالانتظار",
+      "rejected": "مرفوضة",
+      "hold": "معلّق",
+      "failed": "فشل"
+    },
+    "types": {
+      "all": "كل الأنواع",
+      "addMoney": "إيداع أموال",
+      "moneyOut": "سحب أموال",
+      "exchange": "صرف عملات",
+      "escrow": "ضمان"
+    },
+    "escrowStatus": {
+      "ongoing": "جارية",
+      "paymentPending": "بانتظار الدفع",
+      "approvalPending": "بانتظار الموافقة",
+      "released": "مُفرَج عنها",
+      "activeDispute": "نزاع نشط",
+      "disputed": "متنازَع عليها",
+      "canceled": "ملغاة",
+      "refunded": "مُستردَّة",
+      "paymentWaiting": "بانتظار الدفع",
+      "pending": "قيد الانتظار"
+    }
+  },
+  "blogDetail": {
+    "backToBlog": "العودة إلى المدونة",
+    "author": "المدير العام",
+    "role": "فريق التحرير",
+    "readTime": "6 دقائق للقراءة",
+    "share": "مشاركة",
+    "tagsLabel": "الوسوم",
+    "tags": [
+      "الضمان",
+      "الأمان",
+      "التقنية المالية",
+      "الثقة"
+    ],
+    "lead": "في اقتصاد اليوم الرقمي، الثقة هي العملة التي تُحرّك كل معاملة عبر الإنترنت. وفهم كيفية عمل وسائل الحماية المناسبة هو الخطوة الأولى نحو إجراء معاملاتك براحة بال تامة.",
+    "body": [
+      {
+        "heading": "لماذا يهمّ هذا الآن",
+        "paragraphs": [
+          "لم تكن التجارة عبر الإنترنت أسرع مما هي عليه اليوم — وكذلك الأساليب المستخدمة لاستغلالها. سواء كنت تشتري سيارة، أو تستعين بمستقل، أو تُبرم صفقة عالية القيمة، فإن لحظة انتقال المال من يد إلى أخرى هي اللحظة التي تبلغ فيها المخاطر ذروتها.",
+          "وهنا تحديداً يُغيّر طرفٌ ثالثٌ محايد قواعد اللعبة. فمن خلال الاحتفاظ بالأموال بأمان حتى يفي الطرفان بالتزاماتهما، تُلغي طبقة الضمان قفزة الثقة العمياء التي يزدهر عليها الاحتيال."
+        ]
+      },
+      {
+        "heading": "كيف تعمل الحماية",
+        "paragraphs": [
+          "العملية بسيطة بحكم تصميمها. يُودِع المشتري الأموال، ويُسلّم البائع، ولا يُفرَج عن الأموال إلا بعد أن يؤكّد المشتري — أو يُحلّ النزاع بعدالة. ولا يمكن لأي طرف أن يستحوذ على المال والبضاعة معاً.",
+          "يُحوّل هذا النظام معاملةً مجهولةً بين غرباء إلى عملية يمكن التنبؤ بها ومراجعتها، مدعومةً بمساءلة حقيقية."
+        ]
+      }
+    ],
+    "quote": "لا ينبغي أن تكون الثقة مقامرة، بل يجب أن تكون جزءاً أصيلاً من المعاملة نفسها.",
+    "checklistTitle": "ما توفّره لك طبقة ضمان قوية",
+    "checklist": [
+      "الاحتفاظ بالأموال بأمان حتى استيفاء الشروط",
+      "مراحل واضحة وموثّقة لكلا الطرفين",
+      "حلّ عادل للنزاعات عند حدوث أي خلل",
+      "شفافية كاملة للمعاملة من البداية إلى النهاية"
+    ],
+    "closing": "الخلاصة: حماية أموالك عبر الإنترنت لا تعني تجنّب المعاملات — بل تنظيمها بحيث يستطيع الطرفان المضيّ قُدُماً بثقة.",
+    "relatedTitle": "مقالات ذات صلة",
+    "readMore": "اقرأ المزيد",
+    "tocTitle": "في هذا المقال",
+    "ctaTitle": "تعامل بثقة",
+    "ctaDesc": "احمِ كل صفقة بضمان آمن.",
+    "ctaButton": "ابدأ الآن",
+    "notFound": "المقال غير موجود",
+    "notFoundDesc": "المقال الذي تبحث عنه غير موجود أو ربما تم نقله.",
+    "copyLink": "نسخ الرابط"
+  },
+  "common": {
+    "search": "بحث…",
+    "noResults": "لا توجد نتائج",
+    "backToTop": "العودة إلى الأعلى"
+  },
+  "legalPages": {
+    "privacy": {
+      "tag": "سياسة الخصوصية",
+      "title": "سياسة الخصوصية",
+      "subtitle": "كيف تجمع Escroc معلوماتك الشخصية وتستخدمها وتحميها.",
+      "sections": [
+        {
+          "title": "المعلومات التي نجمعها",
+          "body": "نجمع المعلومات التي تقدمها لنا مباشرة — اسمك وبريدك الإلكتروني ورقم هاتفك وهويتك الحكومية أثناء التحقق من الهوية (KYC) — إلى جانب تفاصيل المعاملات وعناوين المحفظة وبيانات الجهاز/المتصفح الأساسية التي تُجمع تلقائيًا عند استخدامك لـ Escroc."
+        },
+        {
+          "title": "كيف نستخدم معلوماتك",
+          "body": "تُستخدم معلوماتك لمعالجة معاملات الضمان، والتحقق من هويتك، ومنع الاحتيال، وتقديم دعم العملاء، والامتثال للوائح المالية. نحن لا نبيع بياناتك الشخصية لأطراف ثالثة أبدًا."
+        },
+        {
+          "title": "كيف نحمي معلوماتك",
+          "body": "يتم تشفير البيانات الحساسة، بما في ذلك تفاصيل الدفع ومستندات التحقق من الهوية، أثناء النقل وأثناء التخزين. تتم معالجة مدفوعات البطاقات عبر بوابات متوافقة مع معيار PCI-DSS، ولا نخزّن أبدًا أرقام البطاقات الكاملة على خوادمنا."
+        },
+        {
+          "title": "المشاركة مع أطراف ثالثة",
+          "body": "لا نشارك المعلومات إلا مع بوابات الدفع والشركاء المصرفيين ومزودي الامتثال اللازمين لإتمام المعاملة، أو عندما يقتضي القانون ذلك لمنع الاحتيال أو حماية حقوق وممتلكات مستخدمينا."
+        },
+        {
+          "title": "الاحتفاظ بالبيانات",
+          "body": "نحتفظ بسجلات الحساب والمعاملات طوال فترة نشاط حسابك، ولفترة إضافية بعد ذلك وفقًا لما تتطلبه لوائح الاحتفاظ بالسجلات المالية، وبعدها يتم حذف البيانات بشكل آمن."
+        },
+        {
+          "title": "حقوقك وخياراتك",
+          "body": "يمكنك مراجعة معلوماتك الشخصية أو تحديثها أو طلب حذفها في أي وقت من إعدادات حسابك، وفقًا لالتزامات الاحتفاظ بالبيانات الموضحة أعلاه. تواصل مع support@escroc.com لأي طلب متعلق بالخصوصية."
+        },
+        {
+          "title": "التغييرات على هذه السياسة",
+          "body": "قد نقوم بتحديث هذه السياسة من وقت لآخر. سيتم نشر التغييرات الجوهرية على هذه الصفحة، وإبلاغك بها مباشرة عند الحاجة."
+        }
+      ]
+    },
+    "refund": {
+      "tag": "سياسة الاسترداد",
+      "title": "سياسة الاسترداد",
+      "subtitle": "كيف تعمل عمليات الاسترداد لمعاملات الضمان والإيداعات والمدفوعات.",
+      "sections": [
+        {
+          "title": "الاسترداد القائم على الضمان",
+          "body": "نظرًا لأن Escroc يحتفظ بالأموال في الضمان حتى يؤكد الطرفان المعاملة، تتم معالجة عمليات الاسترداد بشكل أساسي من خلال تدفق الإفراج والنزاع داخل كل عملية ضمان، بدلاً من طلب استرداد تقليدي بعد إتمام المعاملة."
+        },
+        {
+          "title": "النزاعات التي يبدأها المشتري",
+          "body": "إذا لم يستلم المشتري السلعة أو الخدمة المتفق عليها، يمكنه فتح نزاع من صفحة محادثة الضمان. تظل الأموال محتجزة بأمان حتى تتم مراجعة النزاع وحله."
+        },
+        {
+          "title": "الإفراج الذي يبدأه البائع",
+          "body": "بمجرد أن يقوم البائع بالتسليم كما هو متفق عليه، يوافق المشتري على الإفراج عن الأموال. يمكن للبائعين أيضًا إرسال طلب إفراج عندما يعتقدون أن المشتري راضٍ."
+        },
+        {
+          "title": "استرداد بوابة الدفع",
+          "body": "إذا تم إلغاء معاملة قبل تأكيد الطرفين، أو فشل الدفع أو تكرر، يتم استرداد أي مبلغ تم تحصيله عبر بوابة الدفع (بطاقة أو بنك أو عملة رقمية) إلى وسيلة الدفع الأصلية خلال 5 إلى 10 أيام عمل، مطروحًا منها أي رسوم معالجة غير قابلة للاسترداد سبق أن حصّلتها البوابة."
+        },
+        {
+          "title": "الرسوم غير القابلة للاسترداد",
+          "body": "رسوم خدمة المنصة ورسوم تحويل العملات المطبقة بالفعل على معاملة مكتملة غير قابلة للاسترداد بمجرد الإفراج عن الأموال للبائع."
+        },
+        {
+          "title": "كيفية طلب استرداد",
+          "body": "تواصل مع فريق الدعم لدينا من قسم الدعم في لوحة التحكم الخاصة بك مع رقم معاملتك. نراجع كل طلب ونرد خلال يومي عمل."
+        }
+      ]
+    },
+    "terms": {
+      "tag": "الشروط والأحكام",
+      "title": "الشروط والأحكام",
+      "subtitle": "القواعد التي تحكم استخدامك لمنصة Escroc.",
+      "sections": [
+        {
+          "title": "قبول الشروط",
+          "body": "بإنشائك لحساب أو استخدامك لـ Escroc، فإنك توافق على الالتزام بهذه الشروط والأحكام وسياسة الخصوصية الخاصة بنا. إذا كنت لا توافق، يرجى عدم استخدام المنصة."
+        },
+        {
+          "title": "الأهلية",
+          "body": "يجب أن يكون عمرك 18 عامًا على الأقل وقادرًا على إبرام عقد ملزم قانونًا في نطاق ولايتك القضائية لاستخدام Escroc. بتسجيلك، فإنك تؤكد صحة هذه المعلومات."
+        },
+        {
+          "title": "الحساب والتحقق (KYC)",
+          "body": "أنت مسؤول عن الحفاظ على أمان بيانات تسجيل الدخول الخاصة بك. تتطلب بعض حدود المعاملات والميزات التحقق من الهوية، ويجوز لـ Escroc طلب مستندات إضافية في أي وقت للامتثال لالتزامات مكافحة الاحتيال وغسل الأموال."
+        },
+        {
+          "title": "خدمة الضمان",
+          "body": "تعمل Escroc كطرف ثالث محايد يحتفظ بالأموال حتى يفي كل من المشتري والبائع بالشروط المتفق عليها. نحن لا نضمن جودة أو قانونية أو تسليم السلع والخدمات المتبادلة بين المستخدمين — يقتصر دورنا على الاحتفاظ بالأموال والإفراج عنها وفقًا لشروط الضمان."
+        },
+        {
+          "title": "الاستخدام المحظور",
+          "body": "لا يجوز لك استخدام Escroc في معاملات غير قانونية، أو غسل أموال، أو احتيال، أو أي نشاط يحظره القانون المعمول به. نحتفظ بالحق في تعليق أو إنهاء الحسابات المخالفة، والإبلاغ عن أي نشاط مشبوه للسلطات المختصة."
+        },
+        {
+          "title": "الرسوم وتحويل العملات",
+          "body": "تُعرض رسوم الإيداعات والسحوبات ومعاملات الضمان وتحويل العملات قبل تأكيدك لأي إجراء. يتم تحديث أسعار الصرف بشكل دوري وقد تختلف وقت المعاملة."
+        },
+        {
+          "title": "حدود المسؤولية",
+          "body": "لا تتحمل Escroc المسؤولية عن أي أضرار غير مباشرة أو عرضية أو تبعية ناتجة عن استخدامك للمنصة، بما في ذلك الخسائر الناجمة عن مزودي دفع تابعين لجهات خارجية أو تأخيرات شبكة البلوكتشين الخارجة عن سيطرتنا."
+        },
+        {
+          "title": "التغييرات على هذه الشروط",
+          "body": "يجوز لنا مراجعة هذه الشروط من وقت لآخر. يشكّل استمرار استخدامك لـ Escroc بعد نشر التغييرات قبولًا للشروط المحدّثة."
+        }
+      ]
+    }
+  },
+  "faqPage": {
+    "tag": "الأسئلة الشائعة",
+    "title": "الأسئلة الشائعة",
+    "subtitle": "إجابات عن الأسئلة الشائعة حول الضمان والمدفوعات والأمان على Escroc.",
+    "items": [
+      {
+        "q": "كيف يعمل الضمان في Escroc؟",
+        "a": "تحتفظ Escroc بدفعة المشتري بأمان حتى يؤكد الطرفان اكتمال الصفقة، ثم تُفرج عن الأموال للبائع — مما يحمي الطرفين من الاحتيال."
+      },
+      {
+        "q": "ما هي العملات وطرق الدفع المدعومة؟",
+        "a": "يمكنك تمويل محفظتك باستخدام البطاقات والتحويلات المصرفية والعملات الرقمية الأصلية، والتبديل بين المحافظ التقليدية ومحافظ العملات الرقمية مباشرة من لوحة التحكم الخاصة بك."
+      },
+      {
+        "q": "هل أحتاج إلى إكمال التحقق من الهوية (KYC)؟",
+        "a": "تتطلب بعض حدود المعاملات والميزات التحقق من الهوية. يمكنك إرسال مستنداتك من لوحة التحكم ← KYC، وتكتمل معظم المراجعات خلال 24 ساعة."
+      },
+      {
+        "q": "ماذا يحدث في حال وجود نزاع؟",
+        "a": "يمكن لأي من الطرفين رفع نزاع من صفحة محادثة الضمان. يراجع فريقنا الأدلة والرسائل المتبادلة قبل تحديد كيفية الإفراج عن الأموال."
+      },
+      {
+        "q": "كم من الوقت يستغرق وصول الدفعة؟",
+        "a": "عادةً ما تُؤكَّد مدفوعات البطاقات والبنوك خلال دقائق إلى ساعات قليلة؛ وتُقيَّد مدفوعات العملات الرقمية بمجرد وصول المعاملة إلى العدد المطلوب من التأكيدات على السلسلة."
+      },
+      {
+        "q": "هل يمكنني استخدام Escroc كمشترٍ وبائع في آن واحد؟",
+        "a": "نعم — يمكنك التبديل بين عرض المشتري والبائع في أي وقت من لوحة التحكم دون إنشاء حساب منفصل."
+      },
+      {
+        "q": "هل معلومات الدفع الخاصة بي آمنة؟",
+        "a": "نعم. تُعالج مدفوعات البطاقات عبر بوابات متوافقة مع معيار PCI-DSS، وتُشفَّر البيانات الحساسة أثناء النقل وأثناء التخزين."
+      },
+      {
+        "q": "ما هي الرسوم التي تفرضها Escroc؟",
+        "a": "تختلف الرسوم حسب بوابة الدفع وسعر صرف العملة، وتُعرض دائمًا قبل تأكيدك لأي إيداع أو سحب أو تبادل."
+      },
+      {
+        "q": "هل يمكنني إلغاء الضمان بعد إنشائه؟",
+        "a": "يمكن إلغاء الضمان قبل أن يدفع الطرف الآخر. بمجرد تأكيد الدفع، لا يمكن حله إلا عبر الإفراج أو النزاع."
+      },
+      {
+        "q": "كيف أتواصل مع الدعم؟",
+        "a": "افتح تذكرة من لوحة التحكم ← الدعم، أو راسلنا على support@escroc.com — يرد فريقنا عادةً خلال يوم عمل واحد."
+      }
+    ]
+  },
+  "notFound": {
+    "title": "هذا الضمان غير موجود",
+    "subtitle": "يبدو أن هذه المعاملة لم تُؤكَّد أبدًا — إما أن الصفحة انتقلت، أو أنها لم تكن موجودة أصلًا.",
+    "backHome": "العودة إلى الرئيسية",
+    "quickLinks": "أو جرّب أحد هذه الروابط"
+  }
+}

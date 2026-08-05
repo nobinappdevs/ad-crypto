@@ -1,0 +1,373 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+
+  --primary__color: 68, 160, 141;
+
+  --bg: 255, 255, 255;
+  --surface: 247, 249, 250;
+  --card: 255, 255, 255;
+
+  --heading: 13, 17, 23;
+  --text: 51, 65, 85;
+  --muted: 100, 116, 139;
+
+  --border: 229, 231, 235;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: 13, 17, 23;
+  --surface: 22, 27, 34;
+  --card: 17, 24, 39;
+
+  --heading: 255, 255, 255;
+  --text: 209, 213, 219;
+  --muted: 156, 163, 175;
+
+  --border: 45, 51, 59;
+}
+
+@theme {
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand */
+  --color-primary: rgb(var(--primary__color));
+
+  /* Surfaces */
+  --color-bg: rgb(var(--bg));
+  --color-surface: rgb(var(--surface));
+  --color-card: rgb(var(--card));
+
+  /* Typography */
+  --color-heading: rgb(var(--heading));
+  --color-body: rgb(var(--text));
+  --color-muted: rgb(var(--muted));
+
+  /* Lines */
+  --color-border: rgb(var(--border));
+
+  /* Elevation */
+  --shadow-card: 0 12px 32px -12px rgb(13 17 23 / 0.18);
+}
+
+@keyframes progress-fill {
+  from { width: 0% }
+  to   { width: 100% }
+}
+
+/* 404 page — slow decorative orbit ring + gentle icon float */
+@keyframes spin-slow {
+  from { transform: rotate(0deg) }
+  to   { transform: rotate(360deg) }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0) }
+  50%      { transform: translateY(-6px) }
+}
+
+@layer base {
+  h1 {
+    @apply text-heading
+    font-bold
+    leading-[36px]
+    text-[30px]
+    sm:leading-[44px]
+    sm:text-[38px]
+    md:leading-[56px]
+    md:text-[48px]
+    lg:leading-[64px]
+    lg:text-[55px];
+  }
+
+  h2 {
+    @apply text-heading
+    font-bold
+    leading-[30px]
+    text-[24px]
+    sm:leading-[36px]
+    sm:text-[30px]
+    md:leading-[44px]
+    md:text-[36px]
+    lg:leading-[50px]
+    lg:text-[40px];
+  }
+
+  h3 {
+    @apply text-heading
+    font-bold
+    leading-[28px]
+    text-[22px]
+    sm:leading-[32px]
+    sm:text-[26px]
+    md:leading-[38px]
+    md:text-[28px]
+    lg:leading-[42px]
+    lg:text-[30px];
+  }
+
+  h4 {
+    @apply text-heading
+    font-semibold
+    leading-[22px]
+    text-[18px]
+    sm:leading-[24px]
+    sm:text-[20px]
+    md:leading-[28px]
+    md:text-[22px]
+    lg:leading-[32px]
+    lg:text-[24px];
+  }
+
+  h5 {
+    @apply text-heading
+    font-semibold
+    leading-[20px]
+    text-[16px]
+    md:leading-[24px]
+    md:text-[18px]
+    lg:leading-[28px]
+    lg:text-[20px];
+  }
+
+  h6 {
+    @apply text-heading
+    font-semibold
+    leading-[18px]
+    text-[14px]
+    md:leading-[20px]
+    md:text-[16px];
+  }
+  p {
+    @apply font-normal
+    text-body
+    leading-[20px] text-[12px]
+    sm:leading-[20px] sm:text-[13px]
+    md:leading-[22px] md:text-[14px]
+    lg:leading-[24px] lg:text-[16px]
+    xl:leading-[26px] xl:text-[18px];
+  }
+  span {
+    @apply block
+      leading-tight
+      text-body
+      font-medium
+      text-[12px]
+      md:text-[14px]
+      xl:text-[16px];
+  }
+
+  a {
+    @apply inline-block
+      transition-all 
+      duration-300 
+      hover:text-primary 
+      cursor-pointer
+      leading-[20px] text-[12px]
+      md:leading-[22px] md:text-[14px]
+      xl:leading-[26px] xl:text-[16px];
+  }
+  table {
+    @apply w-full 
+      text-left 
+      border-collapse;
+  }
+
+  table thead tr {
+    @apply bg-gray-50 
+      border-b 
+      border-gray-200;
+  }
+
+  table th {
+    @apply p-4 
+      font-bold 
+      text-heading 
+      text-[14px] 
+      md:text-[16px];
+  }
+
+  table td {
+    @apply p-4 
+      border-b 
+      border-gray-100 
+      text-body 
+      text-[13px] 
+      md:text-[15px];
+  }
+
+  table tr:last-child td {
+    @apply border-b-0;
+  }
+  li {
+    @apply list-none
+      font-normal
+      text-body
+      leading-[18px] text-[12px]
+      sm:leading-[20px] sm:text-[13px]
+      md:leading-[22px] md:text-[14px]
+      lg:leading-[24px] lg:text-[15px]
+      xl:leading-[26px] xl:text-[16px];
+  }
+}
+
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: rgb(var(--bg));
+  overflow-x: hidden;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/*--------------------------------------------------------------
+    # Motion (used by the redesigned home page sections)
+--------------------------------------------------------------*/
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); -webkit-transform: translateX(-100%); -moz-transform: translateX(-100%); -ms-transform: translateX(-100%); -o-transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+@keyframes grow-line {
+  from { width: 0; opacity: 0; }
+  to   { width: 4rem; opacity: 1; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ring-progress {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+.pause-on-hover:hover [data-marquee] {
+  animation-play-state: paused;
+}
+
+/*--------------------------------------------------------------
+    # Selection Color
+--------------------------------------------------------------*/
+::selection {
+  @apply bg-primary text-white;
+}
+
+/*--------------------------------------------------------------
+    # Number input – arrows off
+--------------------------------------------------------------*/
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+
+
+
+
+/* BrandSlider — edge fade mask */
+.brand-slider-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+/* BrandSlider — Swiper marquee linear timing */
+.brand-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+/*--------------------------------------------------------------
+    # Dashboard tables — horizontal scroll + slim themed scrollbar
+--------------------------------------------------------------*/
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--primary__color), 0.55) transparent;
+}
+.scroll-x::-webkit-scrollbar { height: 8px; }
+.scroll-x::-webkit-scrollbar-track { background: transparent; }
+.scroll-x::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--primary__color), 0.5);
+  border-radius: 9999px;
+}
+.scroll-x::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--primary__color));
+}
+
+/* Keep every column visible on small screens — scroll horizontally instead of
+   hiding columns (overrides Tailwind's `hidden … :table-cell` utilities). */
+.dash-table :is(th, td) { display: table-cell !important; }
+
+/* Headers are short labels — never let auto table-layout wrap them onto two
+   lines. Spanning cells (empty states) keep normal wrapping. */
+.dash-table th:not([colspan]) { white-space: nowrap; }
+
+/*--------------------------------------------------------------
+    # Glassmorphism — frosted panel (auth pages)
+--------------------------------------------------------------*/
+.glass-card {
+  background: rgba(255, 255, 255, 0.42);
+  /* Border token, not a white tint — the light theme's page background is white
+     too, so a white border would be invisible. */
+  border: 1px solid rgb(var(--border));
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  /* drop shadow + a hairline highlight along the top edge */
+  box-shadow:
+    0 24px 60px -24px rgba(13, 17, 23, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+[data-theme="dark"] .glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 24px 60px -24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+/* Fields inside a glass panel go translucent too, so the frost reads through
+   them instead of stopping at a solid `bg-surface` box. Checkboxes/radios are
+   left alone — they aren't wrapped in a filled container. */
+.glass-fields div:has(> input:not([type="checkbox"]):not([type="radio"])) {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+[data-theme="dark"] .glass-fields div:has(> input:not([type="checkbox"]):not([type="radio"])) {
+  background: rgba(255, 255, 255, 0.05);
+}

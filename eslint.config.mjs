@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // A second Next app kept in-tree for reference. Its `@/` imports resolve
+    // against ITS own src, so linting or type-checking it from here reports
+    // hundreds of phantom unresolved modules. Excluded in tsconfig.json too.
+    "demo/**",
   ]),
 ]);
 

@@ -412,7 +412,28 @@
       "resetCta": "Reset Password",
       "resetting": "Resetting...",
       "resetSuccessToast": "Password reset successfully. Log in with your new password."
-    }
+    },
+    "verifyEmail": {
+      "stepOne": "Step 1 of 2",
+      "stepTwo": "Step 2 of 2",
+      "emailTitle": "Verify Your Email",
+      "emailBlurb": "Tell us which address to confirm and we'll send a fresh 6-digit code to it.",
+      "sendCode": "Send Code",
+      "sending": "Sending...",
+      "codeSentToast": "Verification code sent to your email.",
+      "otpTitle": "Confirm Your Email",
+      "otpBlurbLead": "We've sent a 6-digit code to",
+      "otpBlurbTail": "Enter it below to activate your account.",
+      "changeEmail": "Wrong email? Change it",
+      "resend": "Resend code",
+      "resendIn": "You can request a new code in",
+      "resendSuccessToast": "A new code is on its way.",
+      "verify": "Verify Email",
+      "verifying": "Verifying...",
+      "verifiedToast": "Email verified. You can log in now.",
+      "securityNote": "The code expires in 10 minutes and can only be used once."
+    },
+    "digitLabel": "Digit {n}"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -422,7 +443,7 @@
     "closeMenu": "Close menu",
     "help": "Help",
     "notifications": "Notifications",
-    "account": "Account",
+    "accountMenu": "Account",
     "nav": {
       "dashboard": "Dashboard",
       "buyCrypto": "Buy Crypto",
@@ -435,6 +456,58 @@
       "pending": "Pending",
       "statements": "Statements"
     },
+    "navGroups": {
+      "trade": "Trade",
+      "wallet": "Wallet"
+    },
+    "sidebar": {
+      "goHome": "Back to the website",
+      "liveSupport": "Live support",
+      "helpTitle": "Help Center",
+      "helpSub": "Questions about an order, a payout or your card? We answer in minutes.",
+      "helpBtn": "Get support"
+    },
+    "navbar": {
+      "subtitle": "Manage your wallets, orders and cards"
+    },
+    "account": {
+      "profile": "Profile",
+      "security": "2FA Security",
+      "kyc": "KYC Verification"
+    },
+    "notificationsPanel": {
+      "title": "Notifications",
+      "newCount": "{n} new",
+      "empty": "You are all caught up",
+      "emptyDesc": "Order updates and security alerts land here.",
+      "viewAll": "View all activity",
+      "items": {
+        "buyFilled": {
+          "title": "Buy order filled",
+          "body": "0.25 BTC credited to your wallet at $43,009.00."
+        },
+        "sellReview": {
+          "title": "Sell order under review",
+          "body": "Your 1.5 ETH payout is with our team — usually within the hour."
+        },
+        "withdrawSent": {
+          "title": "Withdrawal broadcast",
+          "body": "0.08 BTC sent over BNB Smart Chain, waiting on confirmations."
+        },
+        "exchangeDone": {
+          "title": "Swap completed",
+          "body": "42 SOL exchanged for 0.09612 BTC."
+        },
+        "cardReview": {
+          "title": "Card application received",
+          "body": "We will email you as soon as verification finishes."
+        }
+      }
+    },
+    "logoutTitle": "Log out of AdCrypto?",
+    "logoutDesc": "You will need to sign in again to reach your wallets and orders.",
+    "cancel": "Cancel",
+    "confirmLogout": "Log out",
     "upgradeText": "Get detailed analytics for help you, upgrade pro",
     "upgradeCta": "Upgrade Now",
     "lightMode": "Light Mode",
@@ -813,6 +886,213 @@
     "errorFileSize": "That image is over 5 MB.",
     "errorSummary": "{count} fields still need attention.",
     "submitted": "Card customer submitted for review."
+  },
+  "walletDetails": {
+    "navTitle": "Wallet",
+    "subtitle": "Send {symbol} to the address below and it lands in this wallet once the network confirms it.",
+    "marketPrice": "Market price",
+    "notFoundTitle": "That wallet does not exist",
+    "notFoundText": "The link points to a coin we do not hold a wallet for. Pick one from the overview instead.",
+    "backToOverview": "Back to overview",
+    "receiveTitle": "Receive {symbol}",
+    "receiveHint": "Pick the network your sender is using — the address changes with it.",
+    "chooseNetwork": "Deposit network",
+    "networkMeta": "~{minutes} min · {confirmations} confirmations",
+    "minDeposit": "Minimum",
+    "addressLabel": "Deposit address",
+    "copy": "Copy",
+    "copyAddress": "Copy the deposit address",
+    "copyMemo": "Copy the destination tag",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the text and copy manually.",
+    "memoLabel": "Destination tag required",
+    "memoWarning": "This network routes every account to one address, so the tag is what tells us the deposit is yours. A transfer sent without it cannot be credited automatically.",
+    "factArrival": "Arrival",
+    "factConfirmations": "Confirmations",
+    "factMin": "Minimum",
+    "minutes": "~{n} min",
+    "wrongNetwork": "Send only {symbol} on {network} to this address. Any other coin, or the right coin on the wrong network, is lost and cannot be recovered.",
+    "holding": "Current balance",
+    "activityTitle": "This wallet's activity",
+    "activityEmpty": "No orders on this wallet yet.",
+    "secured": "Deposit addresses are issued to your account only and never reused across users."
+  },
+  "twoFa": {
+    "title": "2FA Security",
+    "subtitle": "Add a second step to every sign-in and withdrawal, so a stolen password is not enough on its own.",
+    "statusLabel": "Two-factor",
+    "statusOn": "Enabled",
+    "statusOff": "Not enabled",
+    "setupTitle": "Authenticator setup",
+    "setupHint": "Scan the code, or type the key into an app that cannot scan.",
+    "bannerOn": "Two-factor authentication is active. Sign-ins and withdrawals ask for a code from your authenticator.",
+    "bannerOff": "Your account is protected by a password alone. Enable two-factor authentication to secure it.",
+    "secretLabel": "Secret key",
+    "secretHint": "for apps you type into",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Could not copy the key. Select it and copy manually.",
+    "qrLabel": "QR code",
+    "qrHint": "point your authenticator at this",
+    "enableCta": "Enable Two-Factor",
+    "disableCta": "Disable Two-Factor",
+    "appTitle": "Google Authenticator",
+    "appDesc": "Any TOTP app works — Google Authenticator, Authy, 1Password. If you have none yet, start here.",
+    "getAndroid": "Get it on Android",
+    "getIos": "Get it on iOS",
+    "stepsTitle": "How to set it up",
+    "steps": {
+      "download": {
+        "title": "Install an authenticator",
+        "body": "Download Google Authenticator, or use any TOTP app you already trust."
+      },
+      "scan": {
+        "title": "Add this account",
+        "body": "Scan the QR code, or choose \"enter a setup key\" and paste the secret."
+      },
+      "code": {
+        "title": "Read the 6-digit code",
+        "body": "Your app now shows a code for AdCrypto that changes every 30 seconds."
+      },
+      "enable": {
+        "title": "Confirm and enable",
+        "body": "Press Enable, type the current code, and two-factor is on."
+      }
+    },
+    "backupNote": "Keep the secret key somewhere safe and offline. Losing both your phone and the key means support has to verify your identity before you can get back in.",
+    "confirmEnableTitle": "Enable two-factor?",
+    "confirmEnableDesc": "Enter the code your authenticator shows right now, so we know it was set up correctly.",
+    "confirmEnableCta": "Enable",
+    "confirmDisableTitle": "Disable two-factor?",
+    "confirmDisableDesc": "Your account will fall back to a password alone. Confirm with the code your authenticator shows right now.",
+    "confirmDisableCta": "Disable",
+    "codeLabel": "Authenticator code",
+    "codeHint": "The 6-digit code shown for AdCrypto in your app.",
+    "enabledToast": "Two-factor authentication enabled.",
+    "disabledToast": "Two-factor authentication disabled."
+  },
+  "kyc": {
+    "title": "KYC Verification",
+    "subtitle": "Confirm who you are once, and higher limits, card issuing and fiat payouts open up.",
+    "statusLabel": "Verification",
+    "status": {
+      "unverified": {
+        "label": "Unverified",
+        "title": "Your identity is not verified yet",
+        "note": "Submit the documents below to lift your limits. A review usually finishes within one business day."
+      },
+      "verified": {
+        "label": "Verified",
+        "title": "Your identity is verified",
+        "note": "Every feature is unlocked. Contact support if your documents need updating."
+      },
+      "pending": {
+        "label": "In review",
+        "title": "Your documents are being reviewed",
+        "note": "A reviewer has your submission. You'll get an email as soon as there is a decision — nothing else is needed from you."
+      },
+      "rejected": {
+        "label": "Rejected",
+        "title": "We could not verify your documents",
+        "note": "Something about the last submission did not check out. Correct it below and send it again."
+      }
+    },
+    "sections": {
+      "identity": {
+        "title": "Your identity",
+        "hint": "Exactly as printed on the document you are submitting."
+      },
+      "document": {
+        "title": "The document",
+        "hint": "Which ID you are using, and how long it is valid for."
+      },
+      "scans": {
+        "title": "Photos",
+        "hint": "PNG, JPG or WebP, up to 5 MB each."
+      }
+    },
+    "fields": {
+      "firstName": {
+        "label": "First name",
+        "placeholder": "As on your document"
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "As on your document"
+      },
+      "dob": {
+        "label": "Date of birth",
+        "hint": "you must be 18 or over"
+      },
+      "nationality": {
+        "label": "Nationality"
+      },
+      "documentType": {
+        "label": "Document type"
+      },
+      "documentNumber": {
+        "label": "Document number",
+        "placeholder": "Number printed on the document"
+      },
+      "issuedBy": {
+        "label": "Issuing country"
+      },
+      "expiry": {
+        "label": "Expiry date",
+        "hint": "must still be valid"
+      },
+      "docFront": {
+        "label": "Document — front"
+      },
+      "docBack": {
+        "label": "Document — back"
+      },
+      "selfie": {
+        "label": "Selfie holding the document",
+        "hint": "your face and the document both readable in one shot"
+      },
+      "notes": {
+        "label": "Anything we should know",
+        "hint": "optional",
+        "placeholder": "A recent name change, a second nationality, anything that explains the documents."
+      }
+    },
+    "options": {
+      "documentType": {
+        "passport": "Passport",
+        "nationalId": "National ID card",
+        "drivingLicence": "Driving licence",
+        "residencePermit": "Residence permit"
+      }
+    },
+    "chooseOne": "Choose one",
+    "selectCountry": "Select a country",
+    "searchCountry": "Search countries",
+    "noResults": "No matches",
+    "filePlaceholder": "No file chosen",
+    "fileBrowse": "Click to browse, or drop an image here",
+    "fileRemove": "Remove file",
+    "checklist": "What is left",
+    "checklistHint": "Each part ticks off as you fill it in.",
+    "rulesTitle": "Photo requirements",
+    "rules": {
+      "legible": "Every line of text readable — no blur, no glare.",
+      "corners": "All four corners of the document in frame.",
+      "colour": "Colour photos only; scans and photocopies are rejected.",
+      "size": "PNG, JPG or WebP, under 5 MB each."
+    },
+    "reviewNote": "Documents are stored encrypted, used only for verification, and never shared with third parties.",
+    "submitCta": "Submit for Verification",
+    "secured": "Sent over an encrypted connection and visible only to our compliance reviewers.",
+    "submittedToast": "Documents submitted. We'll email you when the review is done.",
+    "errorRequired": "This field is required.",
+    "errorTooShort": "Use at least {min} characters.",
+    "errorDateInvalid": "Enter a valid date.",
+    "errorAge": "You must be at least {age} to verify.",
+    "errorExpired": "That document has already expired.",
+    "errorFileType": "Use a PNG, JPG or WebP image.",
+    "errorFileSize": "That image is over 5 MB.",
+    "errorSummary": "{count} fields still need attention."
   },
   "footer": {
     "tagline": "Manage, buy and sell crypto — all in one wallet.",

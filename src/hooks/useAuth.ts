@@ -10,6 +10,7 @@ import type {
   ForgotPasswordRequest,
   LoginRequest,
   ResetPasswordRequest,
+  VerifyEmailRequest,
   VerifyOtpRequest,
 } from "@/schemas/auth.schema";
 
@@ -126,6 +127,46 @@ export function useResetPassword(successMessage: string) {
       toast.success(getApiSuccessMessage(res, successMessage));
       router.push("/login");
     },
+    onError: (err) => toast.error(getApiErrorMessage(err)),
+  });
+}
+
+/* -------------------------------------------------------------------------- */
+/* Email verification (after sign-up)                                          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Confirms the address a new account signed up with, then sends them to log in.
+ *
+ * The account exists at this point but is unverified, so there is no session to
+ * put them into — verification ends at `/login`, not `/dashboard`. In demo mode
+ * any six digits pass; there is no code to compare against.
+ */
+export function useVerifyEmail(successMessage: string) {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (payload: VerifyEmailRequest) =>
+      demoOr(
+        () => ({ message: { success: [`Email verified ${DEMO_NOTE}`] } }),
+        () => authService.verifyEmail(payload),
+      ),
+    onSuccess: (res) => {
+      toast.success(getApiSuccessMessage(res, successMessage));
+      router.push("/login");
+    },
+    onError: (err) => toast.error(getApiErrorMessage(err)),
+  });
+}
+
+/** Sends a fresh verification code to the same address. */
+export function useResendEmailOtp() {
+  return useMutation({
+    mutationFn: (payload: ForgotPasswordRequest) =>
+      demoOr(
+        () => ({ message: { success: [`Code sent ${DEMO_NOTE}`] } }),
+        () => authService.resendEmailOtp(payload),
+      ),
     onError: (err) => toast.error(getApiErrorMessage(err)),
   });
 }

@@ -1,0 +1,1354 @@
+{
+  "brand": {
+    "name": "Escroc"
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "features": "Fonctionnalités",
+    "blog": "Blog",
+    "contact": "Contact",
+    "dashboard": "Tableau de bord",
+    "menu": "Menu"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "loginTitle": "Bon retour",
+    "loginSubtitle": "Connectez-vous à votre compte Escroc",
+    "registerTitle": "Créez votre compte",
+    "registerSubtitle": "Rejoignez des milliers d'utilisateurs sur Escroc",
+    "fullName": "Nom complet",
+    "fullNamePlaceholder": "Jean Dupont",
+    "email": "Adresse email",
+    "emailPlaceholder": "vous@exemple.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Ressaisissez votre mot de passe",
+    "labelEmail": "Adresse E-mail",
+    "labelPassword": "Mot de passe",
+    "labelFullName": "Nom Complet",
+    "labelConfirmPassword": "Confirmer le mot de passe",
+    "labelRole": "Je suis un",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "hasAccount": "Vous avez déjà un compte ?",
+    "orContinue": "ou continuer avec",
+    "agreeTerms": "J'accepte les",
+    "terms": "Conditions d'utilisation",
+    "and": "et la",
+    "privacyPolicy": "Politique de confidentialité",
+    "loginButton": "Se connecter",
+    "registerButton": "Créer un compte",
+    "role": {
+      "buyer": "Acheteur",
+      "seller": "Vendeur"
+    },
+    "forgotTitle": "Mot de passe oublié ?",
+    "forgotSubtitle": "Pas de souci — entrez votre email et nous vous enverrons un code.",
+    "sendResetCode": "Envoyer le code",
+    "forgotSentTitle": "Vérifiez votre boîte mail",
+    "forgotSentDesc": "Nous avons envoyé un code à 6 chiffres à votre email. Il expire dans 10 minutes.",
+    "continueToVerify": "Entrer le code",
+    "otpTitle": "Vérifiez votre email",
+    "otpSubtitle": "Entrez le code à 6 chiffres envoyé à votre email.",
+    "otpLabel": "Code de vérification",
+    "resendIn": "Renvoyer dans",
+    "resendOtp": "Renvoyer le code",
+    "verifyOtp": "Vérifier et continuer",
+    "backToForgot": "Retour",
+    "resetTitle": "Définir un nouveau mot de passe",
+    "resetSubtitle": "Choisissez un mot de passe fort pour votre compte.",
+    "resetButton": "Réinitialiser le mot de passe",
+    "recaptchaError": "Veuillez confirmer que vous n'êtes pas un robot",
+    "loggingIn": "Connexion…",
+    "creatingAccount": "Création du compte…",
+    "sending": "Envoi…",
+    "resetting": "Réinitialisation…",
+    "strengthWeak": "Faible",
+    "strengthFair": "Moyen",
+    "strengthGood": "Bon",
+    "strengthStrong": "Fort",
+    "digitLabel": "Chiffre",
+    "togglePassword": "Afficher/masquer le mot de passe"
+  },
+  "theme": {
+    "toggle": "Changer de thème",
+    "light": "Mode clair",
+    "dark": "Mode sombre"
+  },
+  "language": {
+    "select": "Choisir la langue"
+  },
+  "banner": {
+    "eyebrow": "La confiance financière commence ici",
+    "title": "Transferts d'argent fluides, renforcés par la sécurité du séquestre",
+    "subtitle": "Notre service de séquestre nous distingue en offrant une couche de protection supplémentaire pour les acheteurs comme pour les vendeurs.",
+    "getStarted": "Commencer",
+    "card": {
+      "popular": "Populaire",
+      "title": "Utilisez-le toujours lors de vos achats ou ventes en ligne.",
+      "subtitle": "Le processus de transfert d'argent vous permet d'envoyer et de recevoir des fonds sans effort."
+    },
+    "form": {
+      "im": "Je",
+      "selling": "vends",
+      "buying": "achète",
+      "itemPlaceholder": "Noms de domaine, véhicules...",
+      "for": "pour",
+      "amountPlaceholder": "1000",
+      "submit": "Créer un nouveau séquestre",
+      "transactionType": "Type de transaction",
+      "itemService": "Article / Service",
+      "amountCurrency": "Montant et devise"
+    },
+    "currencyAria": "Devise",
+    "trust": {
+      "secured": "Séquestre intelligent 100% sécurisé",
+      "verified": "Transactions vérifiées",
+      "noFees": "Aucuns frais cachés"
+    }
+  },
+  "cookie": {
+    "text": "Nous pouvons utiliser des cookies ou toute autre technologie de suivi lorsque vous visitez notre site web pour personnaliser l'expérience et améliorer nos services.",
+    "privacy": "Politique de confidentialité",
+    "allow": "Accepter",
+    "decline": "Refuser",
+    "title": "Nous utilisons des cookies"
+  },
+  "partners": {
+    "names": [
+      "Wisozk",
+      "Morissette",
+      "Reichel",
+      "Gleichner",
+      "Strosin",
+      "Barrows"
+    ]
+  },
+  "about": {
+    "tag": "À notre sujet",
+    "title": "Transferts d'argent sécurisés, services d'entiercement fiables.",
+    "desc": "Nous comprenons l'importance des transactions financières fluides et sécurisées. Notre mission est de fournir une solution complète combinant la commodité des transferts d'argent avec la sécurité supplémentaire de nos services d'entiercement.",
+    "points": [
+      "Transferts d'argent fluides",
+      "Renforcé par la sécurité de l'entiercement",
+      "Envoyez et recevez des fonds en toute confiance",
+      "Transactions financières fiables"
+    ]
+  },
+  "services": {
+    "tag": "Services proposés",
+    "title": "Vous êtes dans un système sécurisé",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Services sécurisés",
+        "desc": "Nous agissons comme intermédiaire fiable, conservant les fonds jusqu'à ce que les deux parties remplissent leurs engagements."
+      },
+      {
+        "icon": "transfer",
+        "title": "Transfert instantané",
+        "desc": "Envoyez et recevez des fonds en toute confiance, sachant que vos échanges financiers sont rapides et protégés."
+      },
+      {
+        "icon": "chart",
+        "title": "Consultations financières",
+        "desc": "Nos conseillers experts fournissent des informations personnalisées pour vous aider à prendre des décisions éclairées."
+      },
+      {
+        "icon": "shield",
+        "title": "Protection contre la fraude",
+        "desc": "Nos systèmes de surveillance avancés et nos technologies de chiffrement assurent la sécurité de vos informations financières."
+      }
+    ]
+  },
+  "expertise": {
+    "tag": "Haute expertise",
+    "title": "La solution d'entiercement en ligne la plus fiable au monde.",
+    "items": [
+      {
+        "icon": "briefcase",
+        "title": "Conseil stratégique d'élite",
+        "desc": "Accédez à nos services de conseil où nos experts hautement qualifiés offrent des perspectives inégalées pour faire avancer votre entreprise."
+      },
+      {
+        "icon": "wrench",
+        "title": "Compétence technique avancée",
+        "desc": "Faites confiance à notre compétence technique avancée pour naviguer dans les complexités de la technologie."
+      },
+      {
+        "icon": "dollar",
+        "title": "Acuité financière spécialisée",
+        "desc": "Accédez à des professionnels chevronnés apportant des connaissances approfondies en planification et gestion financière."
+      }
+    ],
+    "badgeExperts": "Experts de confiance",
+    "badgeGuidance": "Accompagnement 24/7",
+    "learnMore": "En savoir plus"
+  },
+  "testimonials": {
+    "tag": "Témoignages",
+    "title": "Ce que disent nos clients",
+    "subtitle": "Rejoignez des milliers d'utilisateurs satisfaits qui font confiance à Escroc.",
+    "items": [
+      {
+        "quote": "En tant qu'entrepreneur dans le commerce électronique, trouver un service d'entiercement fiable est indispensable. Escroc a constamment dépassé mes attentes. La facilité d'utilisation combinée aux mesures de sécurité renforcées garantit que mes transactions sont fluides et protégées.",
+        "author": "James Rodriguez",
+        "role": "Entrepreneur e-commerce",
+        "rating": 5
+      },
+      {
+        "quote": "Escroc a complètement transformé la façon dont je gère les paiements de mes clients en tant que freelance. Plus de discussions gênantes sur la confiance — le système d'entiercement gère tout. La plateforme est intuitive, rapide et fiable.",
+        "author": "Sarah Mitchell",
+        "role": "Designer freelance",
+        "rating": 5
+      },
+      {
+        "quote": "Je vends des objets de collection en ligne et j'ai déjà été victime d'arnaques. Depuis que j'utilise Escroc, toutes mes transactions se déroulent sans problème. Les protections pour acheteurs et vendeurs sont solides.",
+        "author": "David Park",
+        "role": "Vendeur en ligne",
+        "rating": 5
+      },
+      {
+        "quote": "Gérer les paiements internationaux était un cauchemar. Escroc l'a rendu facile. Support multidevises, traitement rapide et couche de sécurité me permettent de me concentrer sur mon activité.",
+        "author": "Amina Osei",
+        "role": "Propriétaire d'entreprise import/export",
+        "rating": 5
+      }
+    ],
+    "statAvgRating": "Note moyenne",
+    "statHappy": "Clients satisfaits",
+    "statSatisfaction": "Taux de satisfaction",
+    "featured": "À la une",
+    "verified": "Vérifié",
+    "starsLabel": "sur 5 étoiles"
+  },
+  "blog": {
+    "tag": "Blog",
+    "title": "Voir notre blog récent",
+    "author": "Super Admin",
+    "readMore": "Lire la suite",
+    "posts": [
+      {
+        "category": "Perspectives",
+        "date": "06-02-2023",
+        "title": "Perspectives d'experts sur la gestion financière"
+      },
+      {
+        "category": "Témoignages",
+        "date": "06-02-2023",
+        "title": "Histoires vraies, vraie confiance avec Escroc"
+      },
+      {
+        "category": "Sécurité",
+        "date": "06-02-2023",
+        "title": "Naviguer dans le paysage de la sécurité financière"
+      }
+    ]
+  },
+  "download": {
+    "tag": "Télécharger l'app",
+    "title": "Disponible sur les stores, téléchargez maintenant.",
+    "appStore": {
+      "label": "Télécharger sur l'",
+      "store": "App Store"
+    },
+    "googlePlay": {
+      "label": "DISPONIBLE SUR",
+      "store": "Google Play"
+    },
+    "subtitle": "Paiements sous séquestre sécurisés, transferts instantanés et suivi en temps réel — le tout dans votre poche.",
+    "features": [
+      {
+        "title": "Séquestre de niveau bancaire",
+        "desc": "Chaque paiement est conservé en sécurité jusqu'à confirmation des deux parties."
+      },
+      {
+        "title": "Portée mondiale",
+        "desc": "Transferts instantanés dans plus de 190 pays, dans toutes les devises."
+      },
+      {
+        "title": "Suivi en direct",
+        "desc": "Statut en temps réel et alertes push sur chaque transaction."
+      }
+    ],
+    "statDownloads": "Téléchargements",
+    "statRating": "Note de l'application",
+    "statCountries": "Pays",
+    "phone": {
+      "welcome": "Bon retour",
+      "totalBalance": "Solde total",
+      "recentActivity": "Activité récente",
+      "seeAll": "Tout voir",
+      "send": "Envoyer",
+      "request": "Demander",
+      "topUp": "Recharger",
+      "more": "Plus",
+      "instantTransfer": "Transfert instantané",
+      "secured": "Sécurisé",
+      "escrowActive": "Séquestre actif",
+      "completed": "Terminé",
+      "received": "Reçu"
+    }
+  },
+  "footer": {
+    "tagline": "Transfert d'argent sécurisé par entiercement, conçu pour protéger acheteurs et vendeurs.",
+    "madeBy": "Fait par Escroc",
+    "navigation": "Navigation",
+    "legal": "Mentions légales",
+    "contact": "Contact",
+    "rights": "Tous droits réservés.",
+    "legalFaq": "FAQ",
+    "legalPrivacy": "Politique de Confidentialité",
+    "legalRefund": "Politique de Remboursement",
+    "legalTerms": "Conditions Générales"
+  },
+  "home": {
+    "title": "Transferts d'argent sécurisés sous séquestre",
+    "subtitle": "Envoyez et recevez de l'argent en toute sécurité. Escroc conserve les fonds jusqu'à ce que les deux parties soient satisfaites.",
+    "cta": "Commencer"
+  },
+  "servicesPage": {
+    "hero": {
+      "tag": "Nos services",
+      "title": "Tout ce dont vous avez besoin pour des transactions sécurisées",
+      "subtitle": "De la protection par entiercement aux transferts instantanés, nous fournissons les outils qui protègent votre argent."
+    },
+    "stats": [
+      {
+        "value": "10M+",
+        "label": "Transactions sécurisées"
+      },
+      {
+        "value": "190+",
+        "label": "Pays desservis"
+      },
+      {
+        "value": "99.9%",
+        "label": "Disponibilité garantie"
+      },
+      {
+        "value": "24/7",
+        "label": "Support client"
+      }
+    ],
+    "cta": {
+      "title": "Prêt à commencer ?",
+      "subtitle": "Rejoignez des milliers d'utilisateurs qui font confiance à Escroc pour leurs transactions sécurisées.",
+      "button": "Créer un compte gratuit"
+    }
+  },
+  "featuresPage": {
+    "hero": {
+      "tag": "Fonctionnalités",
+      "title": "Conçu pour la sécurité, optimisé pour la rapidité",
+      "subtitle": "Découvrez les fonctionnalités puissantes qui font d'Escroc la plateforme d'entiercement la plus fiable."
+    },
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Chiffrement de bout en bout",
+        "desc": "Chaque transaction est chiffrée avec une sécurité de niveau militaire pour protéger vos données et fonds."
+      },
+      {
+        "icon": "shield",
+        "title": "Authentification à deux facteurs",
+        "desc": "Une couche de sécurité supplémentaire qui vous protège même si votre mot de passe est compromis."
+      },
+      {
+        "icon": "transfer",
+        "title": "Notifications en temps réel",
+        "desc": "Restez informé avec des alertes instantanées à chaque étape de votre transaction."
+      },
+      {
+        "icon": "chart",
+        "title": "Analyse des transactions",
+        "desc": "Suivez votre activité financière avec des rapports détaillés pour prendre de meilleures décisions."
+      },
+      {
+        "icon": "briefcase",
+        "title": "Multi-devises",
+        "desc": "Envoyez et recevez des fonds en plusieurs devises avec des taux de change compétitifs."
+      },
+      {
+        "icon": "dollar",
+        "title": "Zéro frais cachés",
+        "desc": "Tarification transparente sans surprises. Ce que vous voyez est exactement ce que vous payez."
+      }
+    ],
+    "cta": {
+      "title": "Vivez la différence",
+      "subtitle": "Commencez à utiliser Escroc aujourd'hui et découvrez pourquoi des milliers d'utilisateurs nous font confiance.",
+      "button": "Commencer gratuitement"
+    }
+  },
+  "blogPage": {
+    "hero": {
+      "tag": "Notre blog",
+      "title": "Insights, Conseils & Actualités",
+      "subtitle": "Restez à jour avec les dernières tendances en fintech, sécurité et transactions en ligne."
+    },
+    "categories": [
+      "Tout",
+      "Sécurité",
+      "Perspectives",
+      "Témoignages",
+      "Mises à jour"
+    ],
+    "posts": [
+      {
+        "category": "Perspectives",
+        "date": "06-02-2023",
+        "title": "Perspectives d'experts sur la gestion financière",
+        "excerpt": "Obtenez des informations exclusives d'experts du secteur sur la gestion de vos finances à l'ère numérique."
+      },
+      {
+        "category": "Témoignages",
+        "date": "06-02-2023",
+        "title": "Histoires vraies, vraie confiance avec Escroc",
+        "excerpt": "Écoutez notre communauté d'utilisateurs qui ont utilisé Escroc avec succès pour leurs transactions."
+      },
+      {
+        "category": "Sécurité",
+        "date": "06-02-2023",
+        "title": "Naviguer dans le paysage de la sécurité financière",
+        "excerpt": "Un guide complet pour comprendre les pratiques de sécurité financière modernes et vous protéger."
+      },
+      {
+        "category": "Mises à jour",
+        "date": "05-15-2023",
+        "title": "Mises à jour de la plateforme Escroc",
+        "excerpt": "Découvrez les nouveautés de notre dernière version et comment elles améliorent votre expérience."
+      },
+      {
+        "category": "Perspectives",
+        "date": "04-28-2023",
+        "title": "L'avenir des transactions en ligne : tendances à surveiller",
+        "excerpt": "Nous explorons les tendances émergentes des paiements numériques et ce qu'elles signifient."
+      },
+      {
+        "category": "Sécurité",
+        "date": "04-10-2023",
+        "title": "Comment l'entiercement vous protège de la fraude en ligne",
+        "excerpt": "Apprenez comment les services d'entiercement constituent un bouclier contre les escroqueries courantes."
+      }
+    ],
+    "author": "Super Admin",
+    "readMore": "Lire la suite",
+    "newsletter": {
+      "tag": "Newsletter",
+      "title": "Restez informé",
+      "subtitle": "Abonnez-vous pour recevoir les derniers articles et mises à jour directement dans votre boîte mail.",
+      "placeholder": "Entrez votre email",
+      "button": "S'abonner"
+    },
+    "empty": "Aucun article pour le moment",
+    "all": "Tout"
+  },
+  "contactPage": {
+    "hero": {
+      "tag": "Contactez-nous",
+      "title": "Prenez contact avec notre équipe",
+      "subtitle": "Des questions ou besoin d'aide ? Nous sommes disponibles 24h/24, 7j/7."
+    },
+    "form": {
+      "name": "Nom complet",
+      "namePlaceholder": "Jean Dupont",
+      "email": "Adresse email",
+      "emailPlaceholder": "jean@exemple.com",
+      "subject": "Objet",
+      "subjectPlaceholder": "Comment pouvons-nous vous aider ?",
+      "message": "Message",
+      "messagePlaceholder": "Dites-nous en plus sur votre demande...",
+      "submit": "Envoyer le message",
+      "success": "Message envoyé ! Nous vous répondrons dans les 24 heures.",
+      "error": "Une erreur s'est produite. Veuillez réessayer.",
+      "sending": "Envoi en cours…"
+    },
+    "info": [
+      {
+        "icon": "mail",
+        "title": "Support par email",
+        "value": "support@escroc.com",
+        "desc": "Nous répondons dans les 24 heures"
+      },
+      {
+        "icon": "phone",
+        "title": "Support téléphonique",
+        "value": "+1 (800) 123-4567",
+        "desc": "Lun–Ven, 9h–18h EST"
+      },
+      {
+        "icon": "mapPin",
+        "title": "Bureau",
+        "value": "123 Finance St, New York, NY",
+        "desc": "Visite sur rendez-vous"
+      }
+    ],
+    "faq": {
+      "tag": "FAQ",
+      "title": "Questions fréquemment posées",
+      "items": [
+        {
+          "q": "Comment fonctionne l'entiercement ?",
+          "a": "Escroc conserve les fonds en toute sécurité jusqu'à ce que l'acheteur et le vendeur remplissent leurs conditions convenues. Les fonds sont ensuite libérés automatiquement."
+        },
+        {
+          "q": "Combien de temps prend un transfert ?",
+          "a": "La plupart des transferts sont traités dans un délai de 1 à 3 jours ouvrables, selon la destination et le montant."
+        },
+        {
+          "q": "Escroc est-il sûr ?",
+          "a": "Absolument. Nous utilisons un chiffrement de niveau bancaire et respectons les réglementations financières internationales."
+        },
+        {
+          "q": "Quels sont les frais ?",
+          "a": "Nos frais sont transparents et compétitifs. Consultez notre page de tarification pour un aperçu complet."
+        }
+      ]
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "tag": "À propos",
+      "title": "L'histoire derrière Escroc",
+      "subtitle": "Notre mission est de rendre les transactions en ligne plus sûres et plus fiables pour tous, partout."
+    },
+    "mission": {
+      "tag": "Notre mission",
+      "title": "Créer de la confiance dans chaque transaction",
+      "desc": "Depuis notre fondation, Escroc s'est engagé à fournir une plateforme sécurisée et transparente qui fait le pont entre acheteurs et vendeurs dans le monde entier."
+    },
+    "values": {
+      "tag": "Nos valeurs",
+      "title": "Ce pour quoi nous nous battons",
+      "items": [
+        {
+          "icon": "shield",
+          "title": "La sécurité avant tout",
+          "desc": "Chaque décision que nous prenons privilégie la sécurité de vos transactions et données financières."
+        },
+        {
+          "icon": "check",
+          "title": "Transparence",
+          "desc": "Communication claire et honnête, sans frais cachés ni mauvaises surprises."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Fiabilité",
+          "desc": "Notre plateforme est conçue pour la disponibilité et la performance quand vous en avez le plus besoin."
+        },
+        {
+          "icon": "dollar",
+          "title": "Équité",
+          "desc": "Protection égale pour les acheteurs et les vendeurs dans chaque transaction."
+        }
+      ]
+    },
+    "team": {
+      "tag": "Notre équipe",
+      "title": "Les personnes derrière Escroc",
+      "members": [
+        {
+          "name": "Alex Johnson",
+          "role": "PDG & Fondateur"
+        },
+        {
+          "name": "Sarah Williams",
+          "role": "Directrice technique"
+        },
+        {
+          "name": "Michael Chen",
+          "role": "Responsable Sécurité"
+        },
+        {
+          "name": "Emma Davis",
+          "role": "Responsable Succès Client"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Rejoignez la communauté Escroc",
+      "subtitle": "Des milliers d'utilisateurs nous font déjà confiance. Prêt à les rejoindre ?",
+      "button": "Commencer aujourd'hui"
+    },
+    "statTransactions": "Transactions",
+    "statCountries": "Pays",
+    "statUptime": "Disponibilité",
+    "statSupport": "Assistance"
+  },
+  "dashboard": {
+    "sidebar": {
+      "core": "Noyau",
+      "finance": "Finance",
+      "overview": "Aperçu",
+      "escrow": "Mes Fiducies",
+      "transactions": "Transactions",
+      "addMoney": "Ajouter de l'Argent",
+      "moneyOut": "Retirer de l'Argent",
+      "exchange": "Échange",
+      "security": "Sécurité 2FA",
+      "kyc": "Vérification KYC",
+      "profile": "Paramètres du Profil",
+      "userRole": "Vérifié · Acheteur",
+      "logout": "Se déconnecter",
+      "helpTitle": "Centre d'Aide",
+      "helpSub": "Comment pouvons-nous vous aider ?",
+      "helpBtn": "Obtenir de l'Aide",
+      "collapse": "Réduire",
+      "goHome": "Aller à l'accueil",
+      "closeMenu": "Fermer le menu",
+      "liveSupport": "Assistance en direct"
+    },
+    "support": {
+      "title": "Tickets de Support",
+      "addNew": "Ajouter un Ticket",
+      "colTicketId": "ID du Ticket",
+      "colSubject": "Sujet",
+      "colMessage": "Message",
+      "colStatus": "Statut",
+      "colLastReply": "Dernière Réponse",
+      "noData": "Aucune donnée trouvée !",
+      "createTitle": "Ajouter un Ticket",
+      "back": "Retour aux Tickets",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Entrez le sujet...",
+      "message": "Message",
+      "messagePlaceholder": "Écrivez ici...",
+      "attachments": "Pièces jointes",
+      "optional": "(Optionnel)",
+      "dropHint": "Glissez-déposez des fichiers ici, ou cliquez pour parcourir",
+      "browse": "Choisir des Fichiers",
+      "submit": "Envoyer le Ticket"
+    },
+    "navbar": {
+      "subtitle": "escroc.com · Plateforme de Séquestre",
+      "buyer": "Acheteur",
+      "seller": "Vendeur",
+      "logout": "Se Déconnecter",
+      "menu": "Menu",
+      "logoutTitle": "Se déconnecter ?",
+      "logoutDesc": "Vous devrez vous reconnecter pour accéder à votre compte.",
+      "cancel": "Annuler",
+      "confirmLogout": "Oui, se déconnecter",
+      "noNotifications": "Aucune notification pour le moment",
+      "viewAll": "Tout voir",
+      "notifications": "Notifications",
+      "newCount": "{n} nouvelles",
+      "noNotificationsDesc": "Vous êtes à jour.",
+      "profileMenu": "Menu du profil",
+      "viewingAs": "Affiché en tant que"
+    },
+    "home": {
+      "vaultLabel": "Total en Séquestre",
+      "vaultStatus": "Protégé en toute sécurité",
+      "vaultDesc": "Déployé dans 3 coffres-forts de séquestre actifs · Sécurité multi-signature active",
+      "origin": "Origine",
+      "youBuyer": "Vous (Acheteur)",
+      "counterparties": "Contreparties",
+      "sellers": "3 Vendeurs Vérifiés",
+      "quickControls": "Contrôles Rapides",
+      "initAddMoney": "Initialiser l'Ajout d'Argent",
+      "withdrawal": "Retrait",
+      "convertFX": "Convertir FX",
+      "createEscrow": "Créer un Séquestre",
+      "securityPanel": "Panneau de Sécurité",
+      "balances": "Soldes de Comptes Locaux",
+      "chartTitle": "Métrique du Volume de Séquestre",
+      "distTitle": "Aperçus de Distribution",
+      "inbound": "Fonds Entrants",
+      "fx": "Échanges FX",
+      "outbound": "Règlement Sortant",
+      "txTitle": "Registres Transactionnels",
+      "export": "Exporter le Relevé",
+      "viewAll": "Voir Tous les Journaux",
+      "txContext": "Contexte de Transaction",
+      "txStatus": "Statut",
+      "txTimestamp": "Horodatage",
+      "txFinancial": "Cartographie Financière",
+      "buyers": "Acheteurs",
+      "escrowOverview": "Aperçu des séquestres",
+      "totalEscrow": "Total des séquestres",
+      "completedEscrow": "Terminés",
+      "pendingEscrow": "En attente",
+      "disputeEscrow": "En litige",
+      "noTxTitle": "Aucune transaction pour le moment",
+      "noTxDesc": "Vos transactions récentes apparaîtront ici.",
+      "thisMonth": "Ce mois-ci",
+      "moneyFlow": "Flux de trésorerie",
+      "flowAdd": "Ajouter de l'argent",
+      "flowOut": "Retirer de l'argent",
+      "flowExchange": "Convertir des devises"
+    },
+    "addMoney": {
+      "title": "Ajouter de l'argent",
+      "depositFunds": "Déposer des fonds",
+      "exchangeRate": "Taux de change :",
+      "paymentGateway": "Passerelle de paiement",
+      "amount": "Montant",
+      "enterAmount": "Saisir le montant…",
+      "limit": "Limite :",
+      "availableBalance": "Solde disponible :",
+      "charge": "Frais :",
+      "addMoneyBtn": "Ajouter de l'argent",
+      "summary": "Récapitulatif",
+      "enteredAmount": "Montant saisi",
+      "conversionAmount": "Montant converti",
+      "totalFees": "Total des frais et charges",
+      "totalPayable": "Montant total à payer",
+      "infoNote": "Vos fonds déposés apparaîtront dans votre portefeuille sous 1 à 3 jours ouvrables selon la passerelle.",
+      "logTitle": "Journal des dépôts",
+      "searchLogs": "Rechercher des journaux…",
+      "filter": "Filtrer",
+      "colTransaction": "Transaction",
+      "colTransactionId": "ID de transaction",
+      "colExchangeRate": "Taux de change",
+      "colFeesCharge": "Frais et charges",
+      "colAmount": "Montant",
+      "colDate": "Date",
+      "addBalance": "Ajouter au solde",
+      "via": "via",
+      "status": {
+        "pending": "En attente",
+        "success": "Réussi"
+      },
+      "noLogsTitle": "Aucun dépôt pour le moment",
+      "noLogsDesc": "Votre historique d'ajout d'argent apparaîtra ici.",
+      "requestAmount": "Montant saisi",
+      "exchangeRateLabel": "Taux de change",
+      "willGet": "Vous recevrez",
+      "manualTitle": "Paiement manuel",
+      "manualInstrTitle": "Instructions de paiement",
+      "confirmPayment": "Confirmer le paiement",
+      "authTitle": "Autoriser les informations de carte",
+      "payWithCard": "Payer par carte",
+      "cardNumber": "Numéro de carte",
+      "expDate": "Date d'expiration",
+      "cvc": "Cryptogramme CVV/CVC",
+      "submitPayment": "Valider",
+      "paymentInformation": "Informations de paiement",
+      "noMatchTitle": "Aucun dépôt correspondant",
+      "noMatchDesc": "Essayez un autre terme de recherche ou filtre.",
+      "colStatus": "Statut",
+      "expDateMonthError": "Veuillez saisir un mois valide (01-12)",
+      "expDateError": "Veuillez saisir une date d'expiration future valide (YY/MM)",
+      "resultSuccessTitle": "Paiement réussi",
+      "resultSuccessDesc": "Votre dépôt a été reçu et est en cours de traitement. Il apparaîtra bientôt dans votre portefeuille.",
+      "resultCancelTitle": "Paiement annulé",
+      "resultCancelDesc": "Votre paiement a été annulé et vous n'avez pas été débité. Vous pouvez réessayer quand vous le souhaitez.",
+      "resultBack": "Retour à l'ajout de fonds",
+      "resultDashboard": "Aller au tableau de bord",
+      "resultTransactions": "Voir les transactions"
+    },
+    "common": {
+      "showing": "Affichage",
+      "of": "sur",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "optional": "(Facultatif)",
+      "currency": "Devise",
+      "logs": "journaux",
+      "monthsShort": [
+        "janv.",
+        "févr.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "août",
+        "sept.",
+        "oct.",
+        "nov.",
+        "déc."
+      ],
+      "loading": "Chargement…",
+      "loadMore": "Charger plus",
+      "allLoaded": "Tout chargé"
+    },
+    "conversation": {
+      "escrowId": "ID de séquestre",
+      "backToMyEscrow": "Retour à Mes séquestres",
+      "writeSomething": "Écrivez quelque chose…",
+      "attachFile": "Joindre un fichier",
+      "sendMessage": "Envoyer le message",
+      "escrowDetails": "Détails du séquestre",
+      "paymentDetails": "Détails du paiement",
+      "title": "Titre",
+      "myRole": "Mon rôle",
+      "createdBy": "Créé par",
+      "productType": "Type de produit",
+      "totalPrice": "Prix total",
+      "chargePayer": "Payeur des frais",
+      "status": "Statut",
+      "remarks": "Remarques",
+      "approvalPending": "Approbation en attente",
+      "feesCharge": "Frais et charges",
+      "sellerAmount": "Montant du vendeur",
+      "noMessages": "Aucun message pour le moment",
+      "noMessagesDesc": "Démarrez la conversation en envoyant un message ci-dessous.",
+      "payWith": "Payer avec",
+      "exchangeRate": "Taux de change",
+      "buyerPaid": "Payé par l'acheteur",
+      "cancel": "Annuler",
+      "sending": "Envoi…",
+      "failedRetry": "Échec — appuyez pour réessayer",
+      "releaseRequest": "Demande de libération",
+      "disputePayment": "Contester le paiement",
+      "releaseConfirmTitle": "Libérer le paiement ?",
+      "releaseConfirmDesc": "Cela libère les fonds sous séquestre au vendeur. Cette action est irréversible.",
+      "disputeConfirmTitle": "Contester ce paiement ?",
+      "disputeConfirmDesc": "Cela ouvre un litige pour ce séquestre. Notre équipe l'examinera avant tout mouvement de fonds.",
+      "attachment": "Pièce jointe",
+      "image": "image",
+      "releasePayment": "Libérer le paiement",
+      "releaseRequestConfirmTitle": "Demander la libération ?",
+      "releaseRequestConfirmDesc": "Cela demande à l'acheteur de vous libérer les fonds sous séquestre.",
+      "secureNote": "Les messages sont liés à ce séquestre sécurisé",
+      "emoji": "Émoji",
+      "close": "Fermer"
+    },
+    "createEscrow": {
+      "backToMyEscrow": "Retour à Mes Séquestres",
+      "title": "Créer un Nouveau Séquestre",
+      "securedDeal": "Transaction Sécurisée",
+      "yourRole": "Votre Rôle",
+      "roleBuyerLabel": "Je suis l'Acheteur",
+      "roleBuyerDesc": "Vous envoyez les fonds, conservés jusqu'à confirmation de la livraison.",
+      "roleSellerLabel": "Je suis le Vendeur",
+      "roleSellerDesc": "Vous livrez d'abord, les fonds sont libérés après approbation.",
+      "counterpartyName": "Nom de la Contrepartie",
+      "fullNamePlaceholder": "Nom complet",
+      "counterpartyEmail": "E-mail de la Contrepartie",
+      "emailPlaceholder": "nom@exemple.com",
+      "escrowTitle": "Titre du Séquestre",
+      "escrowTitlePlaceholder": "ex. Logo et kit de marque",
+      "category": "Catégorie",
+      "categoryDigital": "Biens et services numériques",
+      "categoryDomain": "Noms de domaine",
+      "categoryPhysical": "Biens physiques",
+      "categoryVehicle": "Véhicules",
+      "categoryOther": "Autre",
+      "amount": "Montant",
+      "amountPlaceholder": "Saisissez le montant…",
+      "termsDescription": "Conditions et Description",
+      "termsPlaceholder": "Décrivez la transaction, les livrables et les conditions de libération…",
+      "createEscrowButton": "Créer le Séquestre",
+      "summary": "Récapitulatif",
+      "summaryAmount": "Montant du Séquestre",
+      "summaryFee": "Frais de Séquestre ({pct}%)",
+      "summaryTotal": "Total à Payer",
+      "infoNote": "Les fonds sont conservés en toute sécurité sous séquestre et ne sont libérés qu'une fois que les deux parties confirment que la transaction est terminée.",
+      "invalidUser": "Cet utilisateur n'est pas inscrit sur Escroc.",
+      "whoPays": "Qui paie les frais",
+      "whoPaysMe": "Moi",
+      "whoPaysOther": "La contrepartie paie",
+      "paymentGateway": "Passerelle de paiement",
+      "attachments": "Pièces jointes (facultatif)",
+      "myWallet": "Mon portefeuille",
+      "payWith": "Payer avec",
+      "whoPaysSeller": "Vendeur",
+      "whoPays5050": "50 % - 50 %",
+      "pTitle": "Titre",
+      "pRole": "Mon rôle",
+      "pType": "Type de produit",
+      "pTotal": "Prix total",
+      "pCharge": "Payeur des frais",
+      "editDetails": "Modifier les détails",
+      "escrowDetails": "Détails du séquestre",
+      "paymentDetails": "Détails du paiement",
+      "feesCharge": "Frais et commissions",
+      "sellerWillGet": "Le vendeur recevra",
+      "buyerWillPay": "L'acheteur paiera",
+      "confirmSend": "Confirmer et envoyer",
+      "exchangeRate": "Taux de change",
+      "authTitle": "Autoriser les informations de carte",
+      "payWithCard": "Payer par carte",
+      "cardNumber": "Numéro de carte",
+      "expDate": "Date d'expiration",
+      "cvc": "Cryptogramme CVV/CVC",
+      "submitPayment": "Valider",
+      "manualPayment": "Paiement manuel",
+      "manualInstrTitle": "Veuillez suivre les instructions ci-dessous",
+      "manualInstrDesc": "Remplissez tous les champs avec des informations correctes.",
+      "confirmPay": "Confirmer et payer",
+      "youWillPay": "Vous paierez",
+      "whoPaysBuyer": "Acheteur",
+      "expDateMonthError": "Veuillez saisir un mois valide (01-12)",
+      "expDateError": "Veuillez saisir une date d'expiration future valide (YY/MM)",
+      "resultSuccessTitle": "Paiement réussi",
+      "resultSuccessDesc": "Votre séquestre a été approvisionné et créé avec succès. Les deux parties peuvent maintenant poursuivre la transaction.",
+      "resultCancelTitle": "Paiement annulé",
+      "resultCancelDesc": "Votre paiement de séquestre a été annulé et vous n'avez pas été débité. Vous pouvez réessayer quand vous le souhaitez.",
+      "resultBack": "Retour à la création de séquestre",
+      "resultMyEscrow": "Aller à Mes séquestres",
+      "resultDashboard": "Aller au tableau de bord",
+      "cryptoAddressTitle": "Adresse de paiement crypto",
+      "cryptoProceed": "Continuer",
+      "copyAddress": "Copier l'adresse",
+      "copied": "Copié"
+    },
+    "exchange": {
+      "title": "Change de devises",
+      "currencySwap": "Échange de devises",
+      "exchangeRateLabel": "Taux de change",
+      "exchangeFrom": "Convertir de",
+      "enterAmount": "Saisir le montant",
+      "availableBalance": "Solde disponible",
+      "swapCurrencies": "Échanger les devises",
+      "exchangeTo": "Convertir en",
+      "limit": "Limite",
+      "charge": "Frais",
+      "sameCurrencyWarning": "Les devises source et cible sont identiques — aucune conversion n'aura lieu.",
+      "exchangeMoney": "Échanger de l'argent",
+      "summary": "Récapitulatif",
+      "fromWallet": "Depuis le portefeuille",
+      "toExchange": "Vers le change",
+      "exchangeRate": "Taux de change",
+      "totalExchangeAmount": "Montant total du change",
+      "convertedAmount": "Montant converti",
+      "totalCharge": "Frais totaux",
+      "totalPayable": "Total à payer",
+      "ratesInfoNote": "Les taux de change sont mis à jour en temps réel. Le taux final est verrouillé au moment de la transaction.",
+      "logTitle": "Journal des changes de devises",
+      "searchLogs": "Rechercher dans les journaux…",
+      "filter": "Filtrer",
+      "colTransaction": "Transaction",
+      "colTransactionId": "ID de transaction",
+      "colExchangeRate": "Taux de change",
+      "colFeesCharge": "Frais et charges",
+      "colAmount": "Montant",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "moreActions": "Plus d'actions",
+      "logsUnit": "journaux",
+      "status_success": "Réussi",
+      "status_pending": "En attente",
+      "noLogsTitle": "Aucune conversion pour le moment",
+      "noLogsDesc": "Votre historique de conversion de devises apparaîtra ici.",
+      "colStatus": "Statut",
+      "noMatchTitle": "Aucune conversion correspondante",
+      "noMatchDesc": "Essayez un autre terme de recherche ou filtre."
+    },
+    "kyc": {
+      "title": "Vérification KYC",
+      "body": "Page de vérification KYC",
+      "submit": "Soumettre pour vérification",
+      "statusUnverified": "Non vérifié",
+      "statusVerified": "Vérifié",
+      "statusPending": "En attente",
+      "statusRejected": "Rejeté",
+      "noteUnverified": "Vérifiez votre identité pour débloquer un accès complet.",
+      "noteVerified": "Votre identité a été vérifiée.",
+      "notePending": "Vos documents sont en cours d'examen.",
+      "noteRejected": "Votre demande a été rejetée. Veuillez la soumettre à nouveau avec les documents corrects.",
+      "selectPrefix": "Sélectionner"
+    },
+    "moneyOut": {
+      "title": "Retrait d'Argent",
+      "withdrawFunds": "Retirer des Fonds",
+      "exchangeRate": "Taux de Change",
+      "paymentGateway": "Passerelle de Paiement",
+      "amount": "Montant",
+      "amountPlaceholder": "Saisissez le montant…",
+      "limit": "Limite",
+      "availableBalance": "Solde disponible",
+      "charge": "Frais",
+      "moneyOut": "Retrait d'Argent",
+      "summary": "Résumé",
+      "enteredAmount": "Montant Saisi",
+      "conversionAmount": "Montant de Conversion",
+      "totalFees": "Frais et Charges Totaux",
+      "willGet": "Vous Recevrez",
+      "totalPayable": "Montant Total à Payer",
+      "balanceNote": "Assurez-vous d'avoir un solde suffisant avant de retirer. Les frais sont déduits du montant transféré.",
+      "logsTitle": "Journaux de Retraits",
+      "searchPlaceholder": "Rechercher des journaux…",
+      "filter": "Filtrer",
+      "colTransaction": "Transaction",
+      "colTransactionId": "ID de Transaction",
+      "colExchangeRate": "Taux de Change",
+      "colFees": "Frais et Charge",
+      "colAmount": "Montant",
+      "colDate": "Date",
+      "actions": "Actions",
+      "via": "via",
+      "moreActions": "Plus d'actions",
+      "unitLogs": "journaux",
+      "noLogsTitle": "Aucun retrait pour le moment",
+      "noLogsDesc": "Votre historique de retraits apparaîtra ici.",
+      "confirm": "Confirmer",
+      "selectBankFirst": "Sélectionnez d'abord une banque",
+      "loadingBranches": "Chargement des agences…",
+      "colStatus": "Statut",
+      "noMatchTitle": "Aucun retrait correspondant",
+      "noMatchDesc": "Essayez un autre terme de recherche ou filtre."
+    },
+    "myEscrow": {
+      "title": "Mon dépôt fiduciaire",
+      "searchPlaceholder": "Rechercher des dépôts fiduciaires",
+      "filter": "Filtrer",
+      "newEscrow": "Nouveau dépôt",
+      "new": "Nouveau",
+      "dealNeedsAction": "transaction nécessite votre action",
+      "dealsNeedAction": "transactions nécessitent votre action",
+      "colEscrow": "Dépôt fiduciaire",
+      "colCounterparty": "Contrepartie",
+      "colRole": "Rôle",
+      "colAmount": "Montant",
+      "colCreated": "Créé",
+      "colStatus": "Statut",
+      "colActions": "Actions",
+      "openConversation": "Ouvrir la conversation pour",
+      "chat": "Discuter",
+      "emptyTitle": "Aucun séquestre pour le moment",
+      "emptyDesc": "Créez votre premier séquestre pour commencer.",
+      "pay": "Payer"
+    },
+    "profile": {
+      "changePhoto": "Changer la photo",
+      "verified": "Vérifié",
+      "buyer": "Acheteur",
+      "memberSince": "Membre depuis avril 2025 · 8 entiercements · 24 transactions",
+      "deleteAccount": "Supprimer le compte",
+      "personalInfo": "Informations personnelles",
+      "firstName": "Prénom",
+      "firstNamePlaceholder": "Prénom",
+      "lastName": "Nom",
+      "lastNamePlaceholder": "Nom",
+      "country": "Pays",
+      "selectCountry": "Sélectionner un pays",
+      "phone": "Téléphone",
+      "phonePlaceholder": "Saisir le téléphone…",
+      "address": "Adresse",
+      "addressPlaceholder": "Saisir l'adresse…",
+      "city": "Ville",
+      "cityPlaceholder": "Ville",
+      "state": "État",
+      "statePlaceholder": "État",
+      "zipCode": "Code postal",
+      "zipPlaceholder": "Code postal",
+      "saveChanges": "Enregistrer les modifications",
+      "changePassword": "Changer le mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "currentPasswordPlaceholder": "Saisir le mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "Saisir le nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Répéter le nouveau mot de passe",
+      "passwordsMatch": "✓ Les mots de passe correspondent",
+      "passwordsNoMatch": "Les mots de passe ne correspondent pas",
+      "updatePassword": "Mettre à jour le mot de passe",
+      "weak": "Faible",
+      "fair": "Moyen",
+      "good": "Bon",
+      "strong": "Fort",
+      "passwordLabel": "mot de passe",
+      "dangerZone": "Zone dangereuse",
+      "dangerDesc": "Une fois supprimé, votre compte et toutes les données associées ne pourront pas être récupérés.",
+      "deleteMyAccount": "Supprimer mon compte"
+    },
+    "security": {
+      "twoFactorTitle": "Authentificateur à deux facteurs",
+      "enabledBadge": "Activé",
+      "activeBannerPre": "L'authentification à deux facteurs est",
+      "activeBannerWord": "active",
+      "activeBannerPost": "sur votre compte.",
+      "notProtectedBanner": "Votre compte n'est pas protégé. Activez la 2FA pour le sécuriser.",
+      "secretKeyLabel": "Authentificateur à deux facteurs",
+      "copied": "Copié",
+      "copySecretKey": "Copier la clé secrète",
+      "secretKeyHelp": "Scannez le code QR ci-dessous avec votre application d'authentification, ou saisissez cette clé manuellement.",
+      "disable2fa": "Désactiver la 2FA",
+      "enable": "Activer",
+      "googleAuthTitle": "Google Authenticator",
+      "googleAuthDesc": "Google Authenticator est un authentificateur de Google qui exécute des services de vérification en deux étapes pour authentifier les utilisateurs de toute application logicielle.",
+      "howToSetup": "Comment configurer ?",
+      "downloadAndroid": "Télécharger pour Android",
+      "downloadIos": "Télécharger pour iOS",
+      "setupSteps": "Étapes de configuration",
+      "step1": "Téléchargez Google Authenticator depuis votre boutique d'applications",
+      "step2": "Ouvrez l'application et appuyez sur le bouton +",
+      "step3": "Scannez le code QR ou saisissez la clé manuellement",
+      "step4": "Saisissez le code à 6 chiffres affiché dans l'application",
+      "enableTitle": "Activer l'authentification à deux facteurs ?",
+      "enableDesc": "Cela ajoute une couche de sécurité supplémentaire. Vous devrez saisir votre code d'authentification à chaque connexion.",
+      "disableTitle": "Désactiver l'authentification à deux facteurs ?",
+      "disableDesc": "Votre compte sera moins sécurisé sans l'authentification à deux facteurs. Êtes-vous sûr ?",
+      "cancel": "Annuler",
+      "qrAlt": "QR Google Authenticator",
+      "authCodeLabel": "Code d'authentification",
+      "authCodeHelp": "Saisissez le code à 6 chiffres de votre application d'authentification pour confirmer."
+    },
+    "transaction": {
+      "title": "Journal des transactions",
+      "searchPlaceholder": "Rechercher des transactions",
+      "filter": "Filtrer",
+      "colTransaction": "Transaction",
+      "colTransactionId": "ID de transaction",
+      "colExchangeRate": "Taux de change",
+      "colFees": "Frais et charges",
+      "colAmount": "Montant",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "moreActions": "Plus d'actions",
+      "via": "via",
+      "status_pending": "En attente",
+      "status_success": "Réussie",
+      "unit": "transactions",
+      "payable": "À payer",
+      "emptyTitle": "Aucune transaction pour le moment",
+      "emptyDesc": "Votre historique de transactions apparaîtra ici.",
+      "noMatchTitle": "Aucune transaction correspondante",
+      "noMatchDesc": "Essayez un autre terme de recherche ou filtre.",
+      "matchesOnPage": "correspondances sur cette page",
+      "colStatus": "Statut"
+    },
+    "status": {
+      "all": "Tous les statuts",
+      "success": "Réussi",
+      "pending": "En attente",
+      "waiting": "En attente",
+      "rejected": "Rejeté",
+      "hold": "En attente",
+      "failed": "Échoué"
+    },
+    "types": {
+      "all": "Tous les types",
+      "addMoney": "Ajouter des fonds",
+      "moneyOut": "Retrait",
+      "exchange": "Change",
+      "escrow": "Séquestre"
+    },
+    "escrowStatus": {
+      "ongoing": "En cours",
+      "paymentPending": "Paiement en attente",
+      "approvalPending": "Approbation en attente",
+      "released": "Libéré",
+      "activeDispute": "Litige actif",
+      "disputed": "En litige",
+      "canceled": "Annulé",
+      "refunded": "Remboursé",
+      "paymentWaiting": "En attente de paiement",
+      "pending": "En attente"
+    }
+  },
+  "blogDetail": {
+    "backToBlog": "Retour au blog",
+    "author": "Super administrateur",
+    "role": "Équipe éditoriale",
+    "readTime": "6 min de lecture",
+    "share": "Partager",
+    "tagsLabel": "Étiquettes",
+    "tags": [
+      "Séquestre",
+      "Sécurité",
+      "Fintech",
+      "Confiance"
+    ],
+    "lead": "Dans l'économie numérique d'aujourd'hui, la confiance est la monnaie qui alimente chaque transaction en ligne. Comprendre le fonctionnement des bonnes protections est la première étape pour effectuer ses transactions en toute sérénité.",
+    "body": [
+      {
+        "heading": "Pourquoi c'est essentiel aujourd'hui",
+        "paragraphs": [
+          "Le commerce en ligne n'a jamais été aussi rapide — et les techniques utilisées pour l'exploiter non plus. Que vous achetiez une voiture, engagiez un freelance ou concluiez une affaire à forte valeur, le moment où l'argent change de mains est celui où le risque atteint son maximum.",
+          "C'est précisément là qu'un tiers neutre change la donne. En conservant les fonds en toute sécurité jusqu'à ce que les deux parties remplissent leurs obligations, une couche de séquestre élimine le pari sur la confiance dont se nourrit la fraude."
+        ]
+      },
+      {
+        "heading": "Comment fonctionne la protection",
+        "paragraphs": [
+          "Le processus est simple par conception. L'acheteur dépose les fonds, le vendeur livre, et ce n'est qu'une fois que l'acheteur confirme — ou qu'un litige est résolu équitablement — que les fonds sont libérés. Aucune des parties ne peut repartir à la fois avec l'argent et la marchandise.",
+          "Cette structure transforme une transaction anonyme entre inconnus en un processus prévisible et vérifiable, appuyé par une véritable responsabilité."
+        ]
+      }
+    ],
+    "quote": "La confiance ne devrait pas être un pari. Elle devrait être intégrée à la transaction elle-même.",
+    "checklistTitle": "Ce qu'une solide couche de séquestre vous apporte",
+    "checklist": [
+      "Des fonds conservés en sécurité jusqu'au respect des conditions",
+      "Des étapes claires et documentées pour les deux parties",
+      "Une résolution équitable des litiges en cas de problème",
+      "Une transparence totale de la transaction, du début à la fin"
+    ],
+    "closing": "En résumé : protéger votre argent en ligne ne consiste pas à éviter les transactions — mais à les structurer pour que les deux parties puissent avancer en toute confiance.",
+    "relatedTitle": "Articles similaires",
+    "readMore": "Lire la suite",
+    "tocTitle": "Dans cet article",
+    "ctaTitle": "Effectuez vos transactions en toute confiance",
+    "ctaDesc": "Protégez chaque transaction grâce à un séquestre sécurisé.",
+    "ctaButton": "Commencer",
+    "notFound": "Article introuvable",
+    "notFoundDesc": "L'article que vous recherchez n'existe pas ou a peut-être été déplacé.",
+    "copyLink": "copier le lien"
+  },
+  "common": {
+    "search": "Rechercher…",
+    "noResults": "Aucun résultat",
+    "backToTop": "Retour en haut"
+  },
+  "legalPages": {
+    "privacy": {
+      "tag": "POLITIQUE DE CONFIDENTIALITÉ",
+      "title": "Politique de Confidentialité",
+      "subtitle": "Comment Escroc collecte, utilise et protège vos informations personnelles.",
+      "sections": [
+        {
+          "title": "Informations que nous collectons",
+          "body": "Nous collectons les informations que vous nous fournissez directement — votre nom, votre adresse e-mail, votre numéro de téléphone et votre pièce d'identité lors de la vérification KYC — ainsi que les détails des transactions, les adresses de portefeuille et les données de base de l'appareil/navigateur collectées automatiquement lorsque vous utilisez Escroc."
+        },
+        {
+          "title": "Comment nous utilisons vos informations",
+          "body": "Vos informations sont utilisées pour traiter les transactions séquestrées, vérifier votre identité, prévenir la fraude, fournir une assistance client et respecter la réglementation financière. Nous ne vendons jamais vos données personnelles à des tiers."
+        },
+        {
+          "title": "Comment nous protégeons vos informations",
+          "body": "Les données sensibles, y compris les détails de paiement et les documents KYC, sont chiffrées en transit et au repos. Les paiements par carte sont traités via des passerelles conformes à la norme PCI-DSS, et nous ne stockons jamais les numéros de carte complets sur nos serveurs."
+        },
+        {
+          "title": "Partage avec des tiers",
+          "body": "Nous ne partageons des informations qu'avec les passerelles de paiement, les partenaires bancaires et les prestataires de conformité nécessaires à la réalisation d'une transaction, ou lorsque la loi l'exige pour prévenir la fraude ou protéger les droits et la propriété de nos utilisateurs."
+        },
+        {
+          "title": "Conservation des données",
+          "body": "Nous conservons les registres de compte et de transaction tant que votre compte est actif, puis pendant une période supplémentaire exigée par la réglementation sur la conservation des documents financiers, après quoi les données sont supprimées en toute sécurité."
+        },
+        {
+          "title": "Vos droits et choix",
+          "body": "Vous pouvez consulter, modifier ou demander la suppression de vos informations personnelles à tout moment depuis les paramètres de votre compte, sous réserve des obligations de conservation décrites ci-dessus. Contactez support@escroc.com pour toute demande relative à la confidentialité."
+        },
+        {
+          "title": "Modifications de cette politique",
+          "body": "Nous pouvons mettre à jour cette politique de temps à autre. Les modifications importantes seront publiées sur cette page et, si nécessaire, vous seront communiquées directement."
+        }
+      ]
+    },
+    "refund": {
+      "tag": "POLITIQUE DE REMBOURSEMENT",
+      "title": "Politique de Remboursement",
+      "subtitle": "Comment fonctionnent les remboursements pour les transactions séquestrées, les dépôts et les paiements.",
+      "sections": [
+        {
+          "title": "Remboursements basés sur le séquestre",
+          "body": "Comme Escroc conserve les fonds sous séquestre jusqu'à ce que les deux parties confirment une transaction, les remboursements sont principalement gérés via le processus de libération et de litige au sein de chaque séquestre, plutôt que par une demande de remboursement classique après coup."
+        },
+        {
+          "title": "Litiges initiés par l'acheteur",
+          "body": "Si un acheteur ne reçoit pas les biens ou le service convenu, il peut ouvrir un litige depuis la page de conversation du séquestre. Les fonds restent bloqués en toute sécurité jusqu'à ce que le litige soit examiné et résolu."
+        },
+        {
+          "title": "Libération initiée par le vendeur",
+          "body": "Une fois que le vendeur a livré comme convenu, l'acheteur approuve la libération des fonds. Les vendeurs peuvent également envoyer une demande de libération lorsqu'ils estiment que l'acheteur est satisfait."
+        },
+        {
+          "title": "Remboursements via la passerelle de paiement",
+          "body": "Si une transaction est annulée avant que les deux parties ne confirment, ou si un paiement échoue ou est dupliqué, tout montant débité via une passerelle de paiement (carte, banque ou crypto) est remboursé sur le moyen de paiement d'origine sous 5 à 10 jours ouvrés, moins les frais de traitement non remboursables déjà facturés par la passerelle."
+        },
+        {
+          "title": "Frais non remboursables",
+          "body": "Les frais de service de la plateforme et les frais de change déjà appliqués à une transaction terminée ne sont pas remboursables une fois les fonds libérés au vendeur."
+        },
+        {
+          "title": "Comment demander un remboursement",
+          "body": "Contactez notre équipe d'assistance depuis la section Support de votre tableau de bord avec votre identifiant de transaction. Nous examinons chaque demande et répondons sous 2 jours ouvrés."
+        }
+      ]
+    },
+    "terms": {
+      "tag": "CONDITIONS GÉNÉRALES",
+      "title": "Conditions Générales",
+      "subtitle": "Les règles qui régissent votre utilisation de la plateforme Escroc.",
+      "sections": [
+        {
+          "title": "Acceptation des conditions",
+          "body": "En créant un compte ou en utilisant Escroc, vous acceptez d'être lié par ces Conditions Générales et notre Politique de Confidentialité. Si vous n'êtes pas d'accord, veuillez ne pas utiliser la plateforme."
+        },
+        {
+          "title": "Éligibilité",
+          "body": "Vous devez avoir au moins 18 ans et être capable de conclure un contrat juridiquement contraignant dans votre juridiction pour utiliser Escroc. En vous inscrivant, vous confirmez l'exactitude de ces informations."
+        },
+        {
+          "title": "Compte et vérification (KYC)",
+          "body": "Vous êtes responsable de la sécurité de vos identifiants de connexion. Certaines limites de transaction et fonctionnalités nécessitent une vérification d'identité, et Escroc peut demander des documents supplémentaires à tout moment afin de respecter les obligations de lutte contre la fraude et le blanchiment d'argent."
+        },
+        {
+          "title": "Service de séquestre",
+          "body": "Escroc agit en tant que tiers neutre conservant les fonds jusqu'à ce que l'acheteur et le vendeur respectent les termes convenus. Nous ne garantissons pas la qualité, la légalité ou la livraison des biens et services échangés entre utilisateurs — notre rôle se limite à la conservation et à la libération des fonds selon les termes du séquestre."
+        },
+        {
+          "title": "Utilisation interdite",
+          "body": "Vous ne pouvez pas utiliser Escroc pour des transactions illégales, du blanchiment d'argent, de la fraude ou toute activité interdite par la loi applicable. Nous nous réservons le droit de suspendre ou de résilier les comptes en infraction et de signaler toute activité suspecte aux autorités compétentes."
+        },
+        {
+          "title": "Frais et change de devises",
+          "body": "Les frais de dépôt, de retrait, de transaction séquestrée et de change de devises sont affichés avant que vous ne confirmiez toute action. Les taux de change sont mis à jour périodiquement et peuvent varier au moment de la transaction."
+        },
+        {
+          "title": "Limitation de responsabilité",
+          "body": "Escroc n'est pas responsable des dommages indirects, accessoires ou consécutifs résultant de votre utilisation de la plateforme, y compris les pertes causées par des prestataires de paiement tiers ou des retards du réseau blockchain indépendants de notre volonté."
+        },
+        {
+          "title": "Modifications de ces conditions",
+          "body": "Nous pouvons réviser ces Conditions de temps à autre. La poursuite de l'utilisation d'Escroc après la publication de modifications vaut acceptation des Conditions mises à jour."
+        }
+      ]
+    }
+  },
+  "faqPage": {
+    "tag": "FAQ",
+    "title": "Questions Fréquentes",
+    "subtitle": "Réponses aux questions courantes sur le séquestre, les paiements et la sécurité sur Escroc.",
+    "items": [
+      {
+        "q": "Comment fonctionne le séquestre sur Escroc ?",
+        "a": "Escroc conserve le paiement de l'acheteur en toute sécurité jusqu'à ce que les deux parties confirment que l'accord est terminé, puis libère les fonds au vendeur — protégeant ainsi les deux parties contre la fraude."
+      },
+      {
+        "q": "Quelles devises et méthodes de paiement sont prises en charge ?",
+        "a": "Vous pouvez alimenter votre portefeuille par carte, virement bancaire et cryptomonnaies natives, et échanger entre portefeuilles fiat et crypto directement depuis votre tableau de bord."
+      },
+      {
+        "q": "Dois-je compléter le KYC ?",
+        "a": "Certaines limites de transaction et fonctionnalités nécessitent une vérification d'identité. Vous pouvez soumettre vos documents depuis Tableau de bord → KYC ; la plupart des vérifications sont terminées en 24 heures."
+      },
+      {
+        "q": "Que se passe-t-il en cas de litige ?",
+        "a": "L'une ou l'autre des parties peut ouvrir un litige depuis la page de conversation du séquestre. Notre équipe examine les preuves et les messages échangés avant de décider comment les fonds seront libérés."
+      },
+      {
+        "q": "Combien de temps met un paiement à arriver ?",
+        "a": "Les paiements par carte et virement sont généralement confirmés en quelques minutes à quelques heures ; les paiements en crypto sont crédités une fois que la transaction atteint le nombre de confirmations requis sur la blockchain."
+      },
+      {
+        "q": "Puis-je utiliser Escroc en tant qu'acheteur et vendeur ?",
+        "a": "Oui — vous pouvez basculer entre la vue Acheteur et Vendeur à tout moment depuis votre tableau de bord, sans créer de compte séparé."
+      },
+      {
+        "q": "Mes informations de paiement sont-elles sécurisées ?",
+        "a": "Oui. Les paiements par carte sont traités via des passerelles conformes à la norme PCI-DSS, et les données sensibles sont chiffrées en transit et au repos."
+      },
+      {
+        "q": "Quels frais Escroc facture-t-il ?",
+        "a": "Les frais varient selon la passerelle de paiement et le taux de change, et sont toujours affichés avant que vous ne confirmiez un dépôt, un retrait ou un échange."
+      },
+      {
+        "q": "Puis-je annuler un séquestre après l'avoir créé ?",
+        "a": "Un séquestre peut être annulé avant que la contrepartie ne paie. Une fois le paiement confirmé, il ne peut être résolu que par une libération ou un litige."
+      },
+      {
+        "q": "Comment contacter le support ?",
+        "a": "Ouvrez un ticket depuis Tableau de bord → Support, ou écrivez à support@escroc.com — notre équipe répond généralement sous un jour ouvré."
+      }
+    ]
+  },
+  "notFound": {
+    "title": "Ce Séquestre N'existe Pas",
+    "subtitle": "Il semble que cette transaction n'a jamais été confirmée — la page a été déplacée, ou n'a jamais existé.",
+    "backHome": "Retour à l'Accueil",
+    "quickLinks": "Ou essayez l'un de ceux-ci"
+  }
+}
