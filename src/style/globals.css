@@ -737,6 +737,99 @@ input[type="number"] {
   white-space: nowrap;
 }
 
+/* ---- The call-to-action hover --------------------------------------------
+   One effect, defined once, for every solid call to action in the app: the
+   button lifts off the page, its brand glow deepens, and a single band of light
+   sweeps across it. Every CTA used to carry its own mix of `hover:-translate-y`,
+   `hover:opacity-90/95` and a hand-written shadow, which is why no two of them
+   behaved quite the same.
+
+   Deliberately NOT applied to icon buttons, chips, table cells or listbox rows.
+   A 36px square that jumps 2px on hover reads as a twitch, and a row that lifts
+   out of a list is worse — at that size a tint or a border change IS the right
+   answer, and those already have one.
+
+   `--btn-glow` is the glow colour as a bare `r, g, b` triple, so the alpha can be
+   varied here. A destructive button sets `[--btn-glow:var(--hero-neg)]` and gets
+   the same motion in red; the hero CTA sets its own, and so on.
+
+   The brand blue is a `var()` FALLBACK rather than a `--btn-glow:` declaration on
+   this class. These rules are unlayered, and unlayered declarations outrank every
+   @layer — including the `utilities` layer Tailwind puts `[--btn-glow:…]` in — so
+   a default declared here would silently win and every button would glow blue no
+   matter what it asked for. With no declaration to beat, there is nothing to lose. */
+.btn-lift {
+  /* `relative` is load-bearing: without it the sheen below would position
+     against the nearest positioned ancestor and wash over the whole panel. */
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgb(var(--btn-glow, var(--primary__color)) / 0.3);
+  transition:
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* A pseudo-element, not a real <span>, so a button gets the sheen by adding one
+   class. `pointer-events: none` keeps it from ever swallowing the click. */
+.btn-lift::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgb(255 255 255 / 0.22) 50%,
+    transparent 62%
+  );
+  translate: -140% 0;
+}
+
+/* Gated on a real pointer. On a touch screen `:hover` sticks after the tap, and
+   a button left hovering — lifted, mid-sheen — after you press it looks broken. */
+@media (hover: hover) {
+  .btn-lift:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgb(var(--btn-glow, var(--primary__color)) / 0.45);
+  }
+  /* The sweep's transition lives on the hover state ONLY, so the light travels
+     across on the way in and is simply gone on the way out. Transitioning both
+     ways would drag the band backwards across the button, which reads as a
+     mistake rather than as a highlight. */
+  .btn-lift:hover:not(:disabled)::after {
+    translate: 140% 0;
+    transition: translate 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* Press returns it to the resting plane, quickly, so the click is acknowledged
+   even on the tap-and-hold that never produces a hover at all. */
+.btn-lift:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgb(var(--btn-glow, var(--primary__color)) / 0.32);
+  transition-duration: 90ms;
+}
+
+/* A disabled CTA must not look raised — it is not going anywhere. */
+.btn-lift:disabled {
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-lift {
+    transition: box-shadow 260ms ease;
+  }
+  /* The glow still deepens: it is a colour change, not motion. Only the lift and
+     the sweep are dropped. */
+  .btn-lift:hover:not(:disabled) {
+    transform: none;
+  }
+  .btn-lift:hover:not(:disabled)::after {
+    translate: -140% 0;
+    transition: none;
+  }
+}
+
 .glass-card {
   background: rgb(var(--card) / 0.6);
   backdrop-filter: blur(22px) saturate(170%);

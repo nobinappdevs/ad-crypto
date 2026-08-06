@@ -242,10 +242,10 @@ export function Security() {
               setConfirmOpen(true);
             }}
             className={cn(
-              "mt-6 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-bold text-white transition hover:-translate-y-0.5 hover:opacity-95",
-              enabled
-                ? "bg-hero-neg shadow-[0_12px_28px_rgb(var(--hero-neg)/0.32)]"
-                : "bg-primary shadow-[0_12px_28px_rgb(var(--primary__color)/0.35)]",
+              "btn-lift mt-6 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-bold text-white",
+              // Same lift and sheen either way; only the glow's colour changes, so
+              // turning 2FA off feels as considered as turning it on.
+              enabled ? "bg-hero-neg [--btn-glow:var(--hero-neg)]" : "bg-primary",
             )}
           >
             {enabled ? <Shield size={16} aria-hidden /> : <ShieldCheck size={16} aria-hidden />}
@@ -280,7 +280,7 @@ export function Security() {
                 href={AUTHENTICATOR_APPS.android}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex! h-12 items-center justify-center gap-2.5 rounded-xl bg-primary text-[14px] font-bold text-white! transition hover:opacity-90"
+                className="btn-lift flex! h-12 items-center justify-center gap-2.5 rounded-xl bg-primary text-[14px] font-bold text-white!"
               >
                 {/* Play store triangle — lucide has no store marks. */}
                 <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden>
@@ -401,8 +401,8 @@ export function Security() {
                   onClick={confirmToggle}
                   disabled={code.length < CODE_LENGTH}
                   className={cn(
-                    "flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-[13px] font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50",
-                    enabled ? "bg-hero-neg hover:opacity-90" : "bg-primary hover:opacity-90",
+                    "btn-lift flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-[13px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-50",
+                    enabled ? "bg-hero-neg [--btn-glow:var(--hero-neg)]" : "bg-primary",
                   )}
                 >
                   {k(enabled ? "confirmDisableCta" : "confirmEnableCta")}

@@ -30,7 +30,10 @@ const GLYPH_WIDTH_RATIO = GLYPH.right - GLYPH.left;
 const ASPECT = INTRINSIC.width / INTRINSIC.height;
 
 export function Logo({ className }: { className?: string }) {
-  const shared = { ...INTRINSIC, alt: "AdCrypto", priority: true };
+  // `alt` is written on each <Image> rather than spread in with the rest: the
+  // jsx-a11y rule reads the JSX, not the object, so a spread `alt` looks to it
+  // like no alt at all.
+  const shared = { ...INTRINSIC, priority: true };
   // Sized by max-width — 120px small, 128px at `lg`, 160px from `xl` up — with
   // `h-auto` so the 3.74:1 ratio drives the height. The `lg` step is smaller than
   // `xl` on purpose: between 1024 and 1280 the nav bar is carrying five links, a
@@ -44,8 +47,21 @@ export function Logo({ className }: { className?: string }) {
 
   return (
     <span className="inline-flex! items-center">
-      <Image {...shared} src="/assets/logo/web_logo_dark.png" className={cn(base, "dark:hidden")} />
-      <Image {...shared} src="/assets/logo/web_logo.png" className={cn(base, "hidden dark:block")} />
+      <Image
+        {...shared}
+        alt="AdCrypto"
+        src="/assets/logo/web_logo_dark.png"
+        className={cn(base, "dark:hidden")}
+      />
+      {/* Both carry the same alt, not one real and one empty: `display: none` takes
+          the inactive one out of the accessibility tree entirely, so whichever theme
+          is on, exactly one "AdCrypto" is announced. */}
+      <Image
+        {...shared}
+        alt="AdCrypto"
+        src="/assets/logo/web_logo.png"
+        className={cn(base, "hidden dark:block")}
+      />
     </span>
   );
 }
@@ -65,7 +81,8 @@ export function Logo({ className }: { className?: string }) {
  * measured ratio, so callers size it in one number and it can never be stretched.
  */
 export function LogoMark({ height = 26, className }: { height?: number; className?: string }) {
-  const shared = { ...INTRINSIC, alt: "AdCrypto", priority: true };
+  // `alt` written per <Image>, for the same reason as in `Logo` above.
+  const shared = { ...INTRINSIC, priority: true };
   const imageWidth = height * ASPECT;
   const size = { height, width: imageWidth, marginLeft: -imageWidth * GLYPH.left };
 
@@ -76,12 +93,14 @@ export function LogoMark({ height = 26, className }: { height?: number; classNam
     >
       <Image
         {...shared}
+        alt="AdCrypto"
         src="/assets/logo/web_logo_dark.png"
         style={size}
         className={cn("max-w-none", "dark:hidden")}
       />
       <Image
         {...shared}
+        alt="AdCrypto"
         src="/assets/logo/web_logo.png"
         style={size}
         className={cn("max-w-none", "hidden dark:block")}

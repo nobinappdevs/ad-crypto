@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
-import { SectionKicker } from "@/components/ui/SectionKicker";
 import { cn } from "@/components/ui/cn";
 
 /**
@@ -142,9 +141,11 @@ function LayerCard({ item, index }: { item: (typeof LAYERS)[number]; index: numb
   );
 }
 
+// The section header this used to open with was dropped: on /service the page's
+// own PageHeader already names the section, and two headings in a row read as a
+// mistake. Only the cards below translate anything, and each one does its own
+// `useLang` — so nothing is looked up at this level.
 export function SecuritySystem() {
-  const { t } = useLang();
-
   return (
     <section className="relative overflow-hidden py-20 sm:py-24 lg:py-28">
       {/* Concentric rings + a soft bloom behind the header — the "layers" concept
@@ -170,8 +171,6 @@ export function SecuritySystem() {
       </div>
 
       <Container className="relative">
-
-
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-16 xl:grid-cols-12">
           {LAYERS.map((item, i) => (
             <LayerCard key={item.key} item={item} index={i} />

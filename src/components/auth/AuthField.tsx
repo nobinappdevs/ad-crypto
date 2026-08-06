@@ -8,6 +8,19 @@ export const FIELD_CLASS =
 
 export const FIELD_STYLE = { background: "var(--panel-field)" };
 
+/**
+ * The pill submit every auth form ends with — log in, register, all three steps of
+ * the reset flow, both steps of email verification.
+ *
+ * One constant rather than six copies: they had already drifted (two carried a
+ * `disabled:` rule the others did not), and the hover treatment now has exactly one
+ * place to live. Elevation, lift, sheen and press all come from `btn-lift` (see
+ * globals.css), which replaced the hand-written shadow pair these used to set
+ * through `className` AND an inline `style` at the same time.
+ */
+export const AUTH_SUBMIT_CLASS =
+  "btn-lift mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white disabled:cursor-default";
+
 /** Plain text input in the panel's field style, with an optional error line. */
 export function AuthInput({
   error,

@@ -13,7 +13,6 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
-import Link from "next/link";
 import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
 import { cn } from "@/components/ui/cn";

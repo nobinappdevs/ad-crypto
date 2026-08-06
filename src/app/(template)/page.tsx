@@ -1,7 +1,6 @@
 import { HeroScene } from "@/components/homepage/hero/HeroScene";
 import { SecuritySuite } from "@/components/homepage/SecuritySuite";
 import { Overview } from "@/components/homepage/Overview";
-import { Features } from "@/components/homepage/Features";
 import { WelcomeApp } from "@/components/homepage/WelcomeApp";
 
 export const metadata = {
@@ -22,7 +21,8 @@ export default function HomePage() {
       {/* Overview's dome is anchored to its own top edge, so it has to sit
           directly under the scroll scene for the curve to read as a horizon. */}
       <Overview />
-      {/* <Features /> */}
+      {/* `Features` is deliberately not here: SecuritySuite above covers the same
+          ground, and the two together read as the page saying it twice. */}
       <WelcomeApp />
     </>
   );

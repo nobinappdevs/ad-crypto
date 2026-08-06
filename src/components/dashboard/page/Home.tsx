@@ -55,7 +55,7 @@ export function DashboardHome() {
             type="button"
             onClick={() => setAllWallets((v) => !v)}
             aria-expanded={allWallets}
-            className="inline-flex h-9 cursor-pointer items-center rounded-full bg-primary px-4 text-[12.5px] font-semibold text-white shadow-[0_8px_18px_rgb(var(--primary__color)/0.3)] transition hover:opacity-90"
+            className="btn-lift inline-flex h-9 cursor-pointer items-center rounded-full bg-primary px-4 text-[12.5px] font-semibold text-white"
           >
             {k(allWallets ? "viewLess" : "viewMore")}
           </button>
@@ -162,7 +162,7 @@ export function DashboardHome() {
               </button>
               <button
                 type="button"
-                className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-primary px-3.5 text-[12.5px] font-semibold text-white shadow-[0_8px_18px_rgb(var(--primary__color)/0.3)] transition hover:opacity-90"
+                className="btn-lift inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-primary px-3.5 text-[12.5px] font-semibold text-white"
               >
                 <RotateCcw size={14} />
                 {k("reIssue")}

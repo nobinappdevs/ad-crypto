@@ -143,7 +143,7 @@ export function DownloadApp() {
                       href={store.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex! items-center gap-3 rounded-full bg-hero-badge px-6 py-3.5 text-white transition duration-200 hover:-translate-y-0.5 hover:text-white"
+                      className="btn-lift inline-flex! items-center gap-3 rounded-full bg-hero-badge px-6 py-3.5 text-white [--btn-glow:var(--hero-badge-bg)] hover:text-white"
                     >
                       <span className="shrink-0">{store.mark(22)}</span>
                       <span className="block!">

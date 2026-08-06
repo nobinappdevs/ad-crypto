@@ -93,7 +93,7 @@ export function WalletDetails() {
           </p>
           <Link
             href="/dashboard"
-            className="mt-6 inline-flex! h-11 items-center gap-2 rounded-xl bg-primary px-5 text-[13.5px] font-bold text-white! transition hover:opacity-90"
+            className="btn-lift mt-6 inline-flex! h-11 items-center gap-2 rounded-xl bg-primary px-5 text-[13.5px] font-bold text-white!"
           >
             <ArrowLeft size={15} aria-hidden className="rtl:rotate-180" />
             {k("backToOverview")}

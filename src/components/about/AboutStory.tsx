@@ -82,8 +82,7 @@ export function AboutStory() {
         <div className="flex flex-wrap gap-3 pt-2">
           <Link
             href="#faq"
-            className="rounded-full bg-primary px-6.5 py-3.5 text-[14.5px]! font-bold! text-white! transition-transform duration-[250ms] hover:-translate-y-0.5"
-            style={{ boxShadow: "0 16px 32px rgb(1 148 252 / 0.32)" }}
+            className="btn-lift rounded-full bg-primary px-6.5 py-3.5 text-[14.5px]! font-bold! text-white!"
           >
             {k("ctaFaq")}
           </Link>

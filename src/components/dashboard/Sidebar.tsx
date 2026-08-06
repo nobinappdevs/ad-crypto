@@ -321,7 +321,7 @@ export function Sidebar({
 
               <Link
                 href="/contact"
-                className="mt-3 flex! w-full items-center justify-center gap-2 rounded-xl bg-primary px-3.5 py-2.5 text-[12px] font-semibold text-white! transition hover:opacity-90"
+                className="btn-lift mt-3 flex! w-full items-center justify-center gap-2 rounded-xl bg-primary px-3.5 py-2.5 text-[12px] font-semibold text-white!"
               >
                 <Headphones size={13} strokeWidth={2.5} aria-hidden />
                 {k("sidebar.helpBtn")}

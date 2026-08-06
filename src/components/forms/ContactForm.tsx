@@ -40,23 +40,20 @@ function Field({
   );
 }
 
-const CONTROL = `
-block w-full rounded-2xl
-border border-hero-border
-bg-white/3
-backdrop-blur-sm
-px-5
-text-[15px]
-text-hero-fg
-outline-none
-transition-all
-duration-300
-placeholder:text-hero-fg-muted/60
-hover:border-primary/40
-focus:border-primary
-focus:bg-white/5
-focus:shadow-[0_0_0_4px_rgba(var(--primary-rgb),0.12)]
-`;
+/**
+ * The shared field surface.
+ *
+ * One flat string, NOT a multi-line template literal: a class list with newlines in
+ * it ends up in the DOM's `class` attribute verbatim, and the same list written as a
+ * multi-line JSX string literal gets its whitespace collapsed — which is what made
+ * the submit button below hydrate with a mismatch. Keeping every class list on one
+ * line means the server and the client can only ever produce the same string.
+ *
+ * `--primary__color` is the project's token; the earlier `--primary-rgb` here did
+ * not exist, so the focus ring silently rendered nothing.
+ */
+const CONTROL =
+  "block w-full rounded-2xl border border-hero-border bg-white/3 px-5 text-[15px] text-hero-fg outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-hero-fg-muted/60 hover:border-primary/40 focus:border-primary focus:bg-white/5 focus:shadow-[0_0_0_4px_rgb(var(--primary__color)/0.12)]";
 
 export function ContactForm() {
   const { t } = useLang();
@@ -83,7 +80,7 @@ export function ContactForm() {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-[32px]  p-6 shadow-2xl backdrop-blur-xl sm:p-8 lg:p-10">
+    <div className="relative overflow-hidden rounded-[32px]  p-6 dark:shadow-2xl backdrop-blur-xl sm:p-8 lg:p-10">
       {/* glow */}
       <div className="pointer-events-none absolute -right-24 -top-24 h-60 w-60 rounded-full bg-primary/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-primary/5 blur-3xl" />
@@ -174,33 +171,10 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="
-            group
-            relative
-            mt-2
-            inline-flex
-            h-14
-            w-full
-            items-center
-            justify-center
-            overflow-hidden
-          rounded-2xl
-            bg-primary
-            px-8
-            text-[15px]
-            font-semibold
-            text-white
-            transition-all
-            duration-300
-            hover:-translate-y-0.5
-            hover:shadow-[0_18px_40px_rgba(0,0,0,.22)]
-            active:translate-y-0
-            disabled:pointer-events-none
-            disabled:opacity-60
-          "
+          // `btn-lift` brings the sheen with it as a pseudo-element, which replaced
+          // the hand-rolled sweeping <span> this button used to render.
+          className="btn-lift mt-2 inline-flex h-14 w-full cursor-pointer items-center justify-center rounded-2xl bg-primary px-8 text-[15px] font-semibold text-white disabled:pointer-events-none disabled:opacity-60"
         >
-          <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full transition-transform duration-700 group-hover:translate-x-full" />
-
           <span className="relative flex items-center gap-2">
             {isSubmitting ? (
               <>

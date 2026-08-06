@@ -14,7 +14,7 @@ import {
   type VerifyOtpRequest,
 } from "@/schemas/auth.schema";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
-import { AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
+import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
 import { AuthOtpBoxes } from "@/components/auth/AuthOtpBoxes";
 import toast from "react-hot-toast";
 
@@ -171,8 +171,7 @@ function EmailStep({
       <button
         type="submit"
         disabled={mutate.isPending}
-        className="mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(1_148_252/0.44)] disabled:cursor-default disabled:hover:translate-y-0"
-        style={{ boxShadow: "0 16px 34px rgb(1 148 252 / 0.34)" }}
+        className={AUTH_SUBMIT_CLASS}
       >
         {mutate.isPending ? k("sending") : k("sendOtp")}
       </button>
@@ -269,8 +268,7 @@ function OtpStep({
       <button
         type="submit"
         disabled={mutate.isPending}
-        className="mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(1_148_252/0.44)] disabled:cursor-default disabled:hover:translate-y-0"
-        style={{ boxShadow: "0 16px 34px rgb(1 148 252 / 0.34)" }}
+        className={AUTH_SUBMIT_CLASS}
       >
         {mutate.isPending ? k("verifying") : k("verify")}
       </button>
@@ -350,8 +348,7 @@ function ResetStep({
       <button
         type="submit"
         disabled={mutate.isPending}
-        className="mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(1_148_252/0.44)] disabled:cursor-default disabled:hover:translate-y-0"
-        style={{ boxShadow: "0 16px 34px rgb(1 148 252 / 0.34)" }}
+        className={AUTH_SUBMIT_CLASS}
       >
         {mutate.isPending ? k("resetting") : k("resetCta")}
       </button>

@@ -14,17 +14,12 @@ import {
   type VerifyEmailRequest,
 } from "@/schemas/auth.schema";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
-import { AuthInput } from "@/components/auth/AuthField";
+import { AUTH_SUBMIT_CLASS, AuthInput } from "@/components/auth/AuthField";
 import { AuthOtpBoxes, OTP_LENGTH } from "@/components/auth/AuthOtpBoxes";
 import { clearPendingEmail, getPendingEmail, setPendingEmail } from "@/lib/pendingEmail";
 
 /** Seconds the resend link stays disabled after a code goes out. */
 const RESEND_COOLDOWN = 60;
-
-const SUBMIT_CLASS =
-  "mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(1_148_252/0.44)] disabled:cursor-default disabled:hover:translate-y-0";
-
-const SUBMIT_STYLE = { boxShadow: "0 16px 34px rgb(1 148 252 / 0.34)" };
 
 /**
  * Email verification for a freshly registered account: confirm the address with
@@ -154,7 +149,7 @@ function EmailStep({
         )}
       />
 
-      <button type="submit" disabled={mutate.isPending} className={SUBMIT_CLASS} style={SUBMIT_STYLE}>
+      <button type="submit" disabled={mutate.isPending} className={AUTH_SUBMIT_CLASS}>
         {mutate.isPending ? k("sending") : k("sendCode")}
       </button>
     </form>
@@ -271,8 +266,7 @@ function CodeStep({
       <button
         type="submit"
         disabled={verify.isPending || code.length < OTP_LENGTH}
-        className={SUBMIT_CLASS}
-        style={SUBMIT_STYLE}
+        className={AUTH_SUBMIT_CLASS}
       >
         {verify.isPending ? k("verifying") : k("verify")}
       </button>

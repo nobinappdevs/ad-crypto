@@ -355,7 +355,7 @@ export function Kyc() {
             <button
               type="button"
               onClick={submit}
-              className="mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white shadow-[0_12px_28px_rgb(var(--primary__color)/0.35)] transition hover:-translate-y-0.5 hover:opacity-95"
+              className="btn-lift mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white"
             >
               <Lock size={15} aria-hidden />
               {k("submitCta")}

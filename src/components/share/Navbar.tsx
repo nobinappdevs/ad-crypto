@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -9,7 +9,7 @@ import { useIsClient } from "@/hooks/useIsClient";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import { TOKEN_KEY } from "@/lib/axios";
 import { cn } from "@/components/ui/cn";
-import { NAV_LINKS } from "@/config/nav";
+import { NAV_LINKS, isNavActive } from "@/config/nav";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { Logo } from "./Logo";
@@ -27,8 +27,22 @@ export function Navbar() {
   const { hidden, scrolled } = useHideOnScroll();
   const [open, setOpen] = useState(false);
 
-  // A route change should never leave the mobile sheet hanging open.
-  useEffect(() => setOpen(false), [pathname]);
+  /** `usePathname` is typed nullable; normalised once so `isNavActive` stays simple. */
+  const path = pathname ?? "";
+
+  /**
+   * A route change should never leave the mobile sheet hanging open.
+   *
+   * Adjusted DURING render by comparing against the path the sheet was last drawn
+   * under, not in an effect. An effect would paint the new route with the sheet
+   * still open and then close it on a second pass — a visible flash on a slow
+   * phone, which is the only place this sheet exists at all.
+   */
+  const [renderedPath, setRenderedPath] = useState(pathname);
+  if (renderedPath !== pathname) {
+    setRenderedPath(pathname);
+    setOpen(false);
+  }
 
   return (
     <header
@@ -54,19 +68,40 @@ export function Navbar() {
           </Link>
           {/* Five links, so the row runs tighter than the original four. */}
           <div className="hidden items-center gap-5 lg:flex xl:gap-7">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.key}
-                href={link.href}
-                aria-current={pathname === link.href ? "page" : undefined}
-                className={cn(
-                  "flex! h-11 items-center whitespace-nowrap text-[15px] font-medium transition-colors duration-200 hover:text-hero-fg",
-                  pathname === link.href ? "text-hero-fg" : "text-hero-fg/88",
-                )}
-              >
-                {t(link.key)}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isNavActive(path, link.href);
+              return (
+                <Link
+                  key={link.key}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "group/nav flex! h-11 items-center whitespace-nowrap text-[15px] transition-colors duration-200 hover:text-hero-fg",
+                    active ? "font-semibold text-hero-fg" : "font-medium text-hero-fg/75",
+                  )}
+                >
+                  {/* The rule is anchored to this span, not to the 44px link box, so
+                      it underlines the WORD rather than floating below it. */}
+                  <span className="relative">
+                    {t(link.key)}
+                    {/* Active and hover share one mechanism: a rule that scales in
+                        from the centre. Active holds it open in the brand colour
+                        with a soft bloom; any other link grows a dim one under the
+                        pointer. Two states, one visual language — and because it is
+                        a `scale-x` on a pseudo-layer, nothing in the row reflows. */}
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "pointer-events-none absolute -bottom-1.5 left-0 h-0.5 w-full rounded-full transition-transform duration-300 ease-out",
+                        active
+                          ? "scale-x-100 bg-hero-accent shadow-[0_0_10px_rgb(var(--hero-accent)/0.55)]"
+                          : "scale-x-0 bg-hero-fg/35 group-hover/nav:scale-x-100",
+                      )}
+                    />
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
 
@@ -109,25 +144,43 @@ export function Navbar() {
       {open && (
         <div className="border-t border-hero-border bg-hero-bg/95 backdrop-blur-md lg:hidden">
           <nav className="flex flex-col px-4 py-2 sm:px-8">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.key}
-                href={link.href}
-                aria-current={pathname === link.href ? "page" : undefined}
-                className={cn(
-                  "py-3 text-[15px]!",
-                  pathname === link.href ? "text-hero-fg" : "text-hero-fg/88",
-                )}
-              >
-                {t(link.key)}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isNavActive(path, link.href);
+              return (
+                <Link
+                  key={link.key}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  // A left rule and a tint, not an underline: in a stacked list a
+                  // rule under one row reads as a divider between two of them. This
+                  // is also what the dashboard rail does, so "you are here" looks
+                  // the same on both sides of the product.
+                  //
+                  // Every row carries the same padding whether it is active or not,
+                  // so the marker appearing never shifts the label sideways.
+                  className={cn(
+                    "relative rounded-lg py-3 ps-3.5 text-[15px]! transition-colors",
+                    active
+                      ? "bg-hero-accent/8 font-semibold! text-hero-fg"
+                      : "text-hero-fg/75",
+                  )}
+                >
+                  {active && (
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-hero-accent"
+                    />
+                  )}
+                  {t(link.key)}
+                </Link>
+              );
+            })}
             {/* Stands in for the header CTA below `sm`, so it has to cover the
                 authed case too — otherwise a signed-in visitor on a phone has no
                 route to the dashboard at all. */}
             <Link
               href={authed ? "/dashboard" : "/login"}
-              className="py-3 text-[15px]! text-hero-fg/88 sm:hidden!"
+              className="py-3 ps-3.5 text-[15px]! text-hero-fg/75 sm:hidden!"
             >
               {authed ? t("nav.dashboard") : t("nav.login")}
             </Link>

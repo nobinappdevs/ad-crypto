@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLang } from "@/hooks/useLang";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
-import { AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
+import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
 import { setPendingEmail } from "@/lib/pendingEmail";
 
 /**
@@ -108,8 +108,7 @@ export function RegisterForm() {
 
       <button
         type="submit"
-        className="mt-1 cursor-pointer rounded-full bg-primary py-4.25 text-[15.5px] font-bold text-white transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(1_148_252/0.44)]"
-        style={{ boxShadow: "0 16px 34px rgb(1 148 252 / 0.34)" }}
+        className={AUTH_SUBMIT_CLASS}
       >
         {k("registerCta")}
       </button>

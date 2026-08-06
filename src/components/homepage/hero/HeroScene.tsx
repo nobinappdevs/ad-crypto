@@ -2,7 +2,7 @@
 
 import { useCallback, useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight, DollarSign } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { ease, segment, useScrollProgress } from "@/hooks/useScrollProgress";
 import { SHELL, SHELL_MAX } from "@/components/share/Container";
@@ -33,8 +33,6 @@ const PHONE_END_SCALE = 0.76;
 const HERO_FRAME = 1292;
 
 const BEZEL_MASK = "linear-gradient(180deg, #000 68%, rgba(0,0,0,0.35) 88%, transparent 100%)";
-
-const META_KEYS = ["hero.metaNoCard", "hero.metaWithdraw", "hero.metaFee"];
 
 export function HeroScene() {
   const { t } = useLang();
@@ -205,7 +203,7 @@ export function HeroScene() {
               <div className="mt-7 flex items-center gap-2.5 lg:mt-8">
                 <Link
                   href="/login"
-                  className="inline-flex! h-11 items-center rounded-full bg-hero-cta-bg px-6 text-[14px] font-semibold text-hero-cta-fg shadow-[0_10px_26px_var(--hero-cta-glow)] transition duration-200 hover:-translate-y-0.5 hover:text-hero-cta-fg sm:h-12 sm:px-7 sm:text-[15px]"
+                  className="btn-lift inline-flex! h-11 items-center rounded-full bg-hero-cta-bg px-6 text-[14px] font-semibold text-hero-cta-fg [--btn-glow:var(--hero-cta-bg)] hover:text-hero-cta-fg sm:h-12 sm:px-7 sm:text-[15px]"
                 >
                   {t("hero.ctaPrimary")}
                 </Link>
