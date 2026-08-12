@@ -47,7 +47,7 @@ export function AboutStory() {
     <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-14">
       {/* No inset: with the card gone there is nothing for the promo block to float
           inside, so it fills its own column instead. */}
-      <PromoPanel baseKey="aboutPanel" stats={STATS} floorClass="lg:min-h-155" insetClass="" />
+      <PromoPanel baseKey="aboutPanel" stats={STATS} className="lg:min-h-155" insetClass="" />
 
       {/* The copy's horizontal padding went with the card — it was the card's inner
           padding, and keeping it would hold the text 62px short of the container's

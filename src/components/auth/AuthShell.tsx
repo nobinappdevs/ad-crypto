@@ -34,6 +34,24 @@ export function AuthShell({ children }: { children: ReactNode }) {
       </div>
 
       <div className="grid flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.06fr)]">
+        {/* The form is FIRST in the DOM and second only from `lg`, where there are
+            two columns and "first" stops meaning "above".
+
+            Source order rather than a pure CSS swap, because it is right on both
+            axes: on a phone the visitor lands on the field they came to fill, and
+            for a keyboard or screen-reader user the first thing in the document is
+            the form rather than a panel of marketing copy. Reordering is safe here
+            precisely because the promo holds no interactive elements — there is no
+            tab stop for the visual order to disagree with. */}
+        <div className="flex flex-col justify-center px-5 pt-2 pb-10 sm:px-10 sm:pb-14 lg:order-2 lg:px-20 lg:py-12">
+          <div className="mx-auto w-full max-w-125">{children}</div>
+        </div>
+
+        {/* Below `lg` this is no longer the headline act, so it drops the 330px
+            animated scene and keeps only what a stranger to the brand actually
+            gains from: the promise and the three numbers behind it. The scene was
+            the single biggest thing standing between a phone visitor and the
+            email field. */}
         <PromoPanel
           baseKey="authPanel"
           headingBaseKey="overview"
@@ -41,15 +59,9 @@ export function AuthShell({ children }: { children: ReactNode }) {
           stats={STATS}
           statsBaseKey="overview.stats"
           statsVariant="descriptive"
-          floorClass=""
+          className="lg:order-1"
+          sceneClass="hidden lg:flex"
         />
-
-        {/* The column stretches full-bleed with the page; the form itself is
-            capped at a normal reading measure so inputs don't stretch edge to
-            edge on a wide monitor. */}
-        <div className="flex flex-col justify-center px-5 pt-2 pb-10 sm:px-10 sm:pb-14 lg:px-20 lg:py-12">
-          <div className="mx-auto w-full max-w-125">{children}</div>
-        </div>
       </div>
     </div>
   );

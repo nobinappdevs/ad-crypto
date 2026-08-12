@@ -34,6 +34,7 @@ import { Input } from "@/components/ui/Input";
 import { Select, type SelectOption } from "@/components/ui/Select";
 import { useLang } from "@/hooks/useLang";
 import { useEscrowCreateInfo, useUserCheck, useSubmitEscrow, useConfirmEscrow, useAuthorizePayment, useManualPaymentConfirm, useEscrowCryptoConfirm } from "@/hooks/useEscrow";
+import { useKycGate } from "@/hooks/useKyc";
 import { formatExpiry, expiryIssue } from "@/lib/cardExpiry";
 
 const FEE_PCT = 2; // display-only estimate
@@ -186,6 +187,7 @@ export function CreateEscrow() {
   };
 
   const router = useRouter();
+  const kycGate = useKycGate();
   const submit = useSubmitEscrow();
   const confirm = useConfirmEscrow();
   const authorize = useAuthorizePayment();
@@ -304,7 +306,8 @@ export function CreateEscrow() {
 
   const canSubmit = title.trim() && category && email.includes("@") && amount > 0 && currency && (role !== "buyer" || payWith);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    if (!(await kycGate())) return;
     // Hosted (WEB) gateways redirect the browser back to these pages after payment.
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     submit.mutate(

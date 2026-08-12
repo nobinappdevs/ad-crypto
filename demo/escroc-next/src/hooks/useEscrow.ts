@@ -6,11 +6,22 @@ import toast from "react-hot-toast";
 import { escrowService, type EscrowSubmitPayload } from "@/services/escrow.service";
 import { getApiErrorMessage, getApiSuccessMessage } from "@/hooks/useAuth";
 
-/** GET /user/my-escrow/index — escrow list. */
+/**
+ * GET /user/my-escrow/index — escrow list.
+ *
+ * Always refetches when the page mounts. The row's `unread_status` and status
+ * badge go stale the moment either party opens a thread or pays, and the global
+ * `staleTime` of 60s would otherwise re-show a cached list — with a chat dot
+ * that is already wrong — every time the user navigates back here. React Query
+ * serves the cached rows while the refetch runs, so this costs a request, not a
+ * skeleton flash.
+ */
 export function useEscrowIndex() {
   return useQuery({
     queryKey: ["escrow", "index"],
     queryFn: () => escrowService.index(),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 }
 
@@ -50,14 +61,23 @@ export function useConfirmEscrow() {
   });
 }
 
-/** GET /user/api-escrow-action/conversation/{id} — escrow chat thread. Polls for near-realtime. */
+/**
+ * GET /user/api-escrow-action/conversation/{id} — escrow chat thread.
+ *
+ * NO polling: there is deliberately no `refetchInterval`. New messages arrive
+ * over Pusher, and the component refetches on a broadcast event (see
+ * `Conversation.tsx`). The two refetch flags below are event-driven, not
+ * timers — they only fire when the tab regains focus or the network comes
+ * back, which is what keeps the thread correct after the socket was asleep.
+ */
 export function useEscrowConversation(id: string | null) {
   return useQuery({
     queryKey: ["escrow", "conversation", id],
     queryFn: () => escrowService.conversation(id!),
     enabled: !!id,
-    refetchInterval: 6000,        // fallback realtime — new messages appear within ~6s
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    staleTime: 0,
   });
 }
 

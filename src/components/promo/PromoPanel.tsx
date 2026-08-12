@@ -6,7 +6,8 @@ import { GiftScene } from "./GiftScene";
 export function PromoPanel({
   baseKey,
   stats,
-  floorClass,
+  className = "",
+  sceneClass = "",
   statsBaseKey,
   statsVariant = "boxed",
   headingBaseKey,
@@ -16,7 +17,17 @@ export function PromoPanel({
   /** i18n prefix — `aboutPanel` or `authPanel`. */
   baseKey: string;
   stats: readonly string[];
-  floorClass: string;
+  /** Extra classes on the panel root — its floor height, its grid order. */
+  className?: string;
+  /**
+   * Classes on the illustration's wrapper.
+   *
+   * The scene is a 330px-tall decoration. On a layout where it sits between the
+   * visitor and the thing they came to do, a caller passes `hidden lg:block` and
+   * gets the panel's words without its weight. `useFitScale` ignores a zero
+   * width, so hiding it never leaves a collapsed scale behind.
+   */
+  sceneClass?: string;
   /** Defaults to `${baseKey}.stats`. */
   statsBaseKey?: string;
   statsVariant?: "boxed" | "descriptive";
@@ -37,10 +48,12 @@ export function PromoPanel({
 
   return (
     <div
-      className={`relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-[22px] px-5 pt-8 pb-7 sm:px-10 sm:pt-11.5 sm:pb-10 ${insetClass} ${floorClass}`}
+      className={`relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-[22px] px-5 pt-8 pb-7 sm:px-10 sm:pt-11.5 sm:pb-10 ${insetClass} ${className}`}
       style={{ background: "var(--panel-promo-bg)" }}
     >
-      <GiftScene />
+      <div className={`flex w-full justify-center ${sceneClass}`}>
+        <GiftScene />
+      </div>
 
       {headingVariant === "descriptive" ? (
         <div className="mt-3.5 flex flex-col items-center gap-2.5 text-center">

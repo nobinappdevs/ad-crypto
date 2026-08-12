@@ -2,26 +2,35 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { RotateCcw } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
+import { useIsClient } from "@/hooks/useIsClient";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { AuthSubmit } from "@/components/auth/AuthSubmit";
 import { useEmailVerify, useForgotVerifyOtp, useResendEmail, useForgotSendOtp } from "@/hooks/useAuth";
+import { readOtpEmail, readOtpOrigin, clearAuthState } from "@/lib/authState";
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
 
 export function OtpForm() {
   const { t } = useLang();
+  const router = useRouter();
+  // Anything read from sessionStorage is client-only; gate what we *render* on
+  // this so SSR and the hydration paint stay identical.
+  const isClient = useIsClient();
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [seconds, setSeconds] = useState(RESEND_SECONDS);
-  // Flow is picked up once from the previous screen. It's never rendered (only
-  // read in submit/resend), so a lazy initializer avoids a setState-in-effect.
+  // Flow/origin/email are picked up once from the previous screen — lazy
+  // initializers avoid a setState-in-effect.
   const [flow] = useState<"email" | "reset">(() =>
     typeof window !== "undefined" && sessionStorage.getItem("escroc_otp_flow") === "reset"
       ? "reset"
       : "email",
   );
+  const [origin] = useState(() => readOtpOrigin());
+  const [sentTo] = useState(() => readOtpEmail());
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const emailVerify = useEmailVerify();
@@ -85,17 +94,58 @@ export function OtpForm() {
     }
   }
 
+  /**
+   * Escape hatch for a mistyped email. The half-finished signup still holds a
+   * real token, so it has to go — otherwise GuestGuard sees "logged in" and
+   * throws the user right back to this screen.
+   */
+  function handleStartOver() {
+    clearAuthState();
+    router.replace(origin === "register" ? "/register" : "/login");
+  }
+
   const filled = otp.join("").length;
+  const linkClass = "cursor-pointer font-semibold text-primary hover:underline";
+
+  // The reset flow came from /forgot-password and can just go back there. The
+  // email flow has no way back at all without this — a typo in the signup
+  // address would otherwise strand the user on a code they can never receive.
+  const emailFooter =
+    origin === "register" ? (
+      <>
+        {t("auth.wrongEmail")}{" "}
+        <button type="button" onClick={handleStartOver} className={linkClass}>
+          {t("auth.useDifferentEmail")}
+        </button>
+      </>
+    ) : (
+      <button type="button" onClick={handleStartOver} className={linkClass}>
+        ← {t("auth.backToLogin")}
+      </button>
+    );
 
   return (
     <AuthShell
       title={t("auth.otpTitle")}
-      subtitle={t("auth.otpSubtitle")}
+      subtitle={
+        isClient && sentTo ? (
+          <>
+            {t("auth.otpSentTo")}{" "}
+            <strong className="font-semibold text-heading">{sentTo}</strong>
+          </>
+        ) : (
+          t("auth.otpSubtitle")
+        )
+      }
       cardLabel={t("auth.otpLabel")}
       footer={
-        <Link href="/forgot-password" className="font-semibold text-primary hover:underline">
-          ← {t("auth.backToForgot")}
-        </Link>
+        isClient && flow === "email" ? (
+          emailFooter
+        ) : (
+          <Link href="/forgot-password" className="font-semibold text-primary hover:underline">
+            ← {t("auth.backToForgot")}
+          </Link>
+        )
       }
     >
       <form onSubmit={handleSubmit} className="space-y-6" noValidate>

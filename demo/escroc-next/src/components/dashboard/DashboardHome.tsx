@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, ArrowUpRight, ArrowDownLeft, ArrowLeftRight, ShieldCheck } from "lucide-react";
+import { Plus, ArrowUpRight, ArrowDownLeft, ArrowLeftRight, ShieldCheck, BadgeCheck, Lock, Zap, Scale } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { StatusBadge, dsx } from "@/components/dashboard/ui";
@@ -116,6 +116,14 @@ function ChartLegend({ items }: { items: { label: string; color: string }[] }) {
   );
 }
 
+/* Hero card is a trust panel, not a balance readout — deliberately money-free so
+   no single wallet's figure can be mistaken for the account total. */
+const VAULT_HIGHLIGHTS = [
+  { key: "escrowLock",  labelKey: "dashboard.home.highlightLock",   Icon: Lock },
+  { key: "release",     labelKey: "dashboard.home.highlightRelease", Icon: Zap },
+  { key: "dispute",     labelKey: "dashboard.home.highlightDispute", Icon: Scale },
+];
+
 /* transaction-type → icon + readable label (matches the Transactions page) */
 function txMeta(type: string) {
   const s = (type ?? "").toUpperCase();
@@ -185,7 +193,8 @@ export function DashboardHome() {
   })();
   const flagUrl = (w: any) => (storageBase && w?.flag ? `${storageBase}${w.image_path}/${w.flag}` : "");
 
-  const mainWallet = wallets[0];
+  const kycStatus = user?.kycStringStatus?.value as string | undefined;
+  const kycOk = /verif|approv|success/i.test(kycStatus ?? "");
 
   const totalEscrow = Number(d?.total_escrow ?? 0);
   const ESCROW_STATS = [
@@ -226,30 +235,56 @@ export function DashboardHome() {
         <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-slate-900 to-slate-800 p-5 text-slate-50 shadow-xl sm:p-8 dark:border-white/5 dark:from-[#070a0e] dark:to-[#111823]">
           <div aria-hidden className="pointer-events-none absolute right-[-20%] -top-1/2 h-75 w-75 rounded-full bg-[radial-gradient(circle,rgba(68,160,141,0.15)_0%,transparent_70%)]" />
 
-          <div className="relative flex items-center justify-between">
+          {/* soft grid texture — keeps the large empty area from reading as flat */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:38px_38px] [mask-image:radial-gradient(ellipse_at_top_right,#000,transparent_70%)]"
+          />
+
+          <div className="relative flex items-center justify-between gap-3">
             <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 [&>svg]:size-4 [&>svg]:text-primary">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4Z"/></svg>
               {t("dashboard.home.vaultLabel")}
             </span>
-            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/6 px-3.5 py-1.5 text-xs text-slate-50">
+            <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/6 px-3.5 py-1.5 text-xs text-slate-50">
               <i className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]" />
               {t("dashboard.home.vaultStatus")}
             </span>
           </div>
 
-          <div className="relative my-6 sm:my-7">
-            {/* balance scales down on narrow screens so long figures never overflow the card */}
-            <div className="wrap-break-word font-mono text-3xl font-bold leading-none tracking-tighter tabular-nums sm:text-4xl lg:text-5xl">
-              <span className="mr-1 inline text-xl font-medium text-slate-400 sm:text-2xl lg:text-3xl">{mainWallet?.currency_symbol ?? "$"}</span>
-              {fmtMoney(mainWallet?.balance)}
+          <div className="relative my-6 flex items-start gap-4 sm:my-7 sm:gap-5">
+            {/* emblem */}
+            <span className="grid h-13 w-13 shrink-0 place-items-center rounded-2xl border border-primary/25 bg-primary/12 text-primary shadow-[0_0_25px_-6px_var(--color-primary)] sm:h-15 sm:w-15 [&>svg]:size-6.5 sm:[&>svg]:size-7.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4Z" />
+                <path d="m9 12 2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div className="min-w-0">
+              <h2 className="text-xl font-bold leading-snug tracking-tight text-slate-50 sm:text-2xl">
+                {t("dashboard.home.vaultTitle")}
+              </h2>
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-400">{t("dashboard.home.vaultDesc")}</p>
             </div>
-            <p className="mt-2 text-sm text-slate-400">{t("dashboard.home.vaultDesc")}</p>
+          </div>
+
+          {/* trust highlights */}
+          <div className="relative mb-6 flex flex-wrap gap-2">
+            {VAULT_HIGHLIGHTS.map((h) => (
+              <span
+                key={h.key}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-300 transition-colors hover:border-primary/40 hover:text-slate-50"
+              >
+                <h.Icon size={14} strokeWidth={2.2} className="shrink-0 text-primary" aria-hidden />
+                {t(h.labelKey)}
+              </span>
+            ))}
           </div>
 
           <div className="relative mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-5 sm:pt-6">
             <div className="flex min-w-0 flex-col gap-1">
               <span className="text-xs uppercase tracking-wide text-slate-400">{t("dashboard.home.origin")}</span>
-              <span className="truncate text-sm text-slate-500 font-semibold capitalize">
+              <span className="truncate text-sm font-semibold capitalize text-slate-300">
                 {`${user?.fullname ?? "You"} (${role})`}
               </span>
             </div>
@@ -260,10 +295,11 @@ export function DashboardHome() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
               </div>
             </div>
-            <div className="flex min-w-0 flex-col gap-1 text-right">
-              <span className="text-xs uppercase tracking-wide text-slate-400">{t("dashboard.home.counterparties")}</span>
-              <span className="truncate text-sm font-semibold text-slate-500">
-                {role === "seller" ? t("dashboard.home.buyers") : t("dashboard.home.sellers")}
+            <div className="flex min-w-0 flex-col items-end gap-1 text-right">
+              <span className="text-xs uppercase tracking-wide text-slate-400">{t("dashboard.home.verification")}</span>
+              <span className={`flex min-w-0 items-center gap-1.5 text-sm font-semibold ${kycOk ? "text-primary" : "text-amber-400"}`}>
+                <BadgeCheck size={15} strokeWidth={2.2} className="shrink-0" aria-hidden />
+                <span className="truncate">{kycStatus ?? t("dashboard.home.kycUnknown")}</span>
               </span>
             </div>
           </div>
@@ -319,7 +355,6 @@ export function DashboardHome() {
               {wallets.map((w) => {
                 const usd = Number(w.rate) > 0 ? Number(w.balance) / Number(w.rate) : 0;
                 const isCrypto = w.currency_type === "CRYPTO";
-                const accent = isCrypto ? "amber" : "primary";
                 return (
                   <SwiperSlide key={w.currency_code} className="py-2!">
                     <div

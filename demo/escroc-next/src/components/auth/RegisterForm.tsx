@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { User, Mail } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { Input } from "@/components/ui/Input";
@@ -12,7 +13,7 @@ import { AuthSubmit } from "@/components/auth/AuthSubmit";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { Recaptcha } from "@/components/share/Recaptcha";
 import { useRegister } from "@/hooks/useAuth";
-import { useRecaptcha } from "@/hooks/useBasicSettings";
+import { useRecaptcha, useRegistrationEnabled } from "@/hooks/useBasicSettings";
 import { registerRequestSchema, type RegisterRequest } from "@/schemas/auth.schema";
 
 function getStrength(pw: string) {
@@ -33,6 +34,7 @@ export function RegisterForm() {
   const { t } = useLang();
   const register = useRegister();
   const { enabled: recaptchaEnabled, siteKey } = useRecaptcha();
+  const { enabled: registrationEnabled } = useRegistrationEnabled();
 
   const [captchaToken, setCaptchaToken] = useState("");
   const [captchaError, setCaptchaError] = useState("");
@@ -85,6 +87,17 @@ export function RegisterForm() {
     );
   };
 
+  // Gate the whole submit — not just `onSubmit` — so the "signups are closed"
+  // toast fires even when the fields haven't passed validation yet.
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!registrationEnabled) {
+      e.preventDefault();
+      toast.error(t("auth.registrationDisabled"));
+      return;
+    }
+    handleSubmit(onSubmit)(e);
+  };
+
   return (
     <AuthShell
       title={t("auth.registerTitle")}
@@ -99,7 +112,7 @@ export function RegisterForm() {
         </>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <form onSubmit={onFormSubmit} className="space-y-4" noValidate>
         {/* Role toggle */}
         <Controller
           name="type"

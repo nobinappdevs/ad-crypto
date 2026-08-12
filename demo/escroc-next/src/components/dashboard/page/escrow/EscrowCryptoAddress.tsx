@@ -10,6 +10,7 @@ import { Panel, PanelHeader } from "@/components/dashboard/ui";
 import { Button } from "@/components/ui/Button";
 import { useLang } from "@/hooks/useLang";
 import { useEscrowCryptoAddress, useEscrowCryptoConfirm } from "@/hooks/useEscrow";
+import { useKycGate } from "@/hooks/useKyc";
 
 /* escrow status enum → i18n key + dot colour */
 const STATUS_META: Record<number, { key: string; dot: string; text: string }> = {
@@ -96,14 +97,17 @@ export function EscrowCryptoAddress() {
   const esc = d?.escrow_data ?? {};
   const addr = d?.address_info ?? {};
   const cryptoConfirm = useEscrowCryptoConfirm();
+  const kycGate = useKycGate();
 
   const [fields, setFields] = useState<Record<string, any>>({});
   const [copied, setCopied] = useState(false);
 
   const setField = (name: string, v: any) => setFields((p) => ({ ...p, [name]: v }));
   const valid = (addr.input_fields ?? []).every((f: any) => !f.required || fields[f.name]);
-  const proceed = () => {
-    if (addr.submit_url) cryptoConfirm.mutate({ submitUrl: addr.submit_url, fields });
+  const proceed = async () => {
+    if (!addr.submit_url) return;
+    if (!(await kycGate())) return;
+    cryptoConfirm.mutate({ submitUrl: addr.submit_url, fields });
   };
   const copyAddress = () => {
     navigator.clipboard?.writeText(addr.address ?? "");

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { env } from "@/config/env";
+import { TOKEN_KEY, clearAuthState } from "@/lib/authState";
 
-/** localStorage key for the bearer token (shared by the service + hooks). */
-export const TOKEN_KEY = "escroc_token";
+/** Re-exported so the existing `from "@/lib/axios"` imports keep working. */
+export { TOKEN_KEY };
 
 const commonHeaders = {
   "Content-Type": "application/json",
@@ -39,7 +40,7 @@ privateApi.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 && typeof window !== "undefined") {
-      window.localStorage.removeItem(TOKEN_KEY);
+      clearAuthState();
       window.location.href = "/login";
     }
     return Promise.reject(error);

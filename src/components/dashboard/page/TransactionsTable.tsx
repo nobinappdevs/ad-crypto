@@ -53,7 +53,7 @@ function CheckBox({
       aria-label={label}
       onClick={onClick}
       className={cn(
-        "grid h-4.5 w-4.5 cursor-pointer place-items-center rounded-[5px] border transition-colors",
+        "grid h-4.5 w-4.5 cursor-pointer place-items-center rounded-[5px]-PLACEHOLDER border transition-colors",
         state === "off"
           ? "border-border bg-transparent hover:border-primary"
           : "border-primary bg-primary text-white",

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/Button";
 import { Select, type SelectOption } from "@/components/ui/Select";
 import { useLang } from "@/hooks/useLang";
 import { useMoneyOut, useSubmitMoneyOut, useConfirmMoneyOut, useFlutterwaveBanks, useFlutterwaveBranches } from "@/hooks/useMoneyOut";
+import { useKycGate } from "@/hooks/useKyc";
 
 const fmtRate = (r: number) =>
   r >= 1 ? r.toFixed(3) : r >= 0.001 ? r.toFixed(4) : r.toPrecision(3);
@@ -335,6 +336,7 @@ export function MoneyOut() {
 
   // ── step-2 withdraw flow ──
   const submit = useSubmitMoneyOut();
+  const kycGate = useKycGate();
   const [step2, setStep2] = useState<any | null>(null);
   const [fieldValues, setFieldValues] = useState<Record<string, any>>({});
 
@@ -349,8 +351,9 @@ export function MoneyOut() {
   const minSender = rate ? min / rate : min;
   const maxSender = rate ? max / rate : max;
 
-  const onMoneyOut = () => {
+  const onMoneyOut = async () => {
     if (!gw) return;
+    if (!(await kycGate())) return;
     submit.mutate(
       { gateway_currency: gw.alias, sender_currency: fromCur, amount },
       {

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useLang } from "@/hooks/useLang";
+import { LogoutDialog } from "@/components/dashboard/LogoutDialog";
 import {
   LayoutDashboard,
   ShieldCheck,
@@ -11,7 +13,7 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   ArrowLeftRight,
-  Headphones,
+  LogOut,
   ChevronsLeft,
   ChevronsRight,
   X,
@@ -34,6 +36,7 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const { t } = useLang();
+  const [confirmLogout, setConfirmLogout] = useState(false);
 
   /* When collapsed, we drop the `lg:` overrides so the `md:` rail styles
      take effect on large screens too — turning the full sidebar into a rail. */
@@ -146,59 +149,38 @@ export function Sidebar({
           </div>
         ))}
 
-        {/* Bottom — support access */}
+        {/* Bottom — end the session (same confirmation as the navbar) */}
         <div className="mt-auto">
-          {/* Compact support icon — shown in rail mode (md, or collapsed lg) */}
+          {/* Compact logout icon — shown in rail mode (md, or collapsed lg) */}
           <div className={`hidden px-2 pb-4 md:flex md:justify-center ${lg("lg:hidden")}`}>
-            <Link
-              href="/dashboard/support"
-              onClick={onClose}
-              aria-label={t("dashboard.sidebar.helpBtn")}
-              className="group relative grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary transition hover:bg-primary hover:text-white"
+            <button
+              type="button"
+              onClick={() => setConfirmLogout(true)}
+              aria-label={t("dashboard.sidebar.logout")}
+              className="group relative grid h-10 w-10 cursor-pointer place-items-center rounded-xl bg-red-500/10 text-red-500 transition hover:bg-red-500 hover:text-white"
             >
-              <Headphones size={18} strokeWidth={2} aria-hidden />
+              <LogOut size={18} strokeWidth={2} aria-hidden />
               <span className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-heading opacity-0 shadow-lg transition-opacity group-hover:opacity-100 md:block">
-                {t("dashboard.sidebar.helpBtn")}
+                {t("dashboard.sidebar.logout")}
               </span>
-            </Link>
+            </button>
           </div>
 
-          {/* Full help card — drawer + expanded sidebar */}
+          {/* Full logout button — drawer + expanded sidebar */}
           <div className={`px-3 pb-4 md:hidden ${lg("lg:block")}`}>
-            <div className="relative overflow-hidden rounded-2xl p-4"
-              style={{ backgroundImage: "url('/assets/dashboard/sidbar/side-bg.webp')", backgroundSize: "cover", backgroundPosition: "center" }}>
-              <div aria-hidden className="absolute inset-0 bg-black/58" />
-
-              <div className="relative space-y-3">
-                {/* live indicator */}
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">{t("dashboard.sidebar.liveSupport")}</span>
-                </div>
-
-                {/* text */}
-                <div>
-                  <p className="text-base font-bold leading-tight text-white">{t("dashboard.sidebar.helpTitle")}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-white/50">{t("dashboard.sidebar.helpSub")}</p>
-                </div>
-
-                {/* ghost button */}
-                <Link
-                  href="/dashboard/support"
-                  onClick={onClose}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/8 px-3.5 py-2.5 text-xs font-semibold text-white transition hover:border-primary hover:bg-primary"
-                >
-                  <Headphones size={13} strokeWidth={2.5} aria-hidden />
-                  {t("dashboard.sidebar.helpBtn")}
-                </Link>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setConfirmLogout(true)}
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm font-semibold text-muted transition hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-500"
+            >
+              <LogOut size={15} strokeWidth={2.5} aria-hidden />
+              {t("dashboard.sidebar.logout")}
+            </button>
           </div>
         </div>
       </nav>
+
+      <LogoutDialog open={confirmLogout} onClose={() => setConfirmLogout(false)} />
     </aside>
   );
 }

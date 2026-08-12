@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { Select, type SelectOption } from "@/components/ui/Select";
 import { useLang } from "@/hooks/useLang";
 import { useMoneyExchange, useSubmitExchange } from "@/hooks/useExchange";
+import { useKycGate } from "@/hooks/useKyc";
 
 /* Map a wallet to a shared-Select option (flag, code, type badge, balance). */
 function walletOption(w: any, flagUrl: (w: any) => string): SelectOption {
@@ -226,10 +227,12 @@ export function Exchange() {
   const isSameCurrency = fromCur === toCur;
 
   const submitExchange = useSubmitExchange();
+  const kycGate = useKycGate();
   const canSubmit =
     amount > 0 && !isSameCurrency && amount >= limitMinFrom && amount <= limitMaxFrom;
 
-  const onExchange = () => {
+  const onExchange = async () => {
+    if (!(await kycGate())) return;
     submitExchange.mutate(
       {
         exchange_from_amount: amount,

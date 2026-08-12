@@ -28,6 +28,13 @@ function GALogo() {
   );
 }
 
+/* The endpoint returns the QR as a full SVG document (it used to return a URL).
+   Wrapping the markup in a data URI keeps it an <img>: an SVG loaded that way is
+   rendered without scripting, so response markup can't execute anything. A plain
+   URL is passed through untouched. */
+const qrSrcFrom = (qr: string) =>
+  qr.trimStart().startsWith("<") ? `data:image/svg+xml;utf8,${encodeURIComponent(qr)}` : qr;
+
 /* ───────────────────────── loading skeleton ───────────────────────── */
 
 function SkLine({ className = "" }: { className?: string }) {
@@ -81,6 +88,7 @@ export function Security() {
   const twoFa = (res as any)?.data;
   const secret: string = twoFa?.qr_secrete ?? "";
   const qrCode: string = twoFa?.qr_code ?? "";
+  const qrSrc = qrCode ? qrSrcFrom(qrCode) : "";
   const enabled = twoFa?.qr_status === 1;
 
   const update2fa = useUpdate2faStatus();
@@ -135,7 +143,7 @@ export function Security() {
           {enabled ? (
             <div className="mb-6 flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3.5">
               <ShieldCheck size={18} strokeWidth={2} className="shrink-0 text-primary" aria-hidden />
-              <p className="text-sm font-medium text-primary">
+              <p className="text-sm flex items-center gap-x-1.5 font-medium text-primary">
                 {t("dashboard.security.activeBannerPre")}{" "}
                 <span className="font-bold">{t("dashboard.security.activeBannerWord")}</span>{" "}
                 {t("dashboard.security.activeBannerPost")}
@@ -181,9 +189,9 @@ export function Security() {
           {/* QR code */}
           <div className="mb-6 flex justify-center">
             <div className="overflow-hidden rounded-2xl border border-border bg-white p-4 shadow-sm">
-              {qrCode ? (
-                // eslint-disable-next-line @next/next/no-img-element -- remote QR image in a static-export app
-                <img src={qrCode} alt={t("dashboard.security.qrAlt")} width={252} height={252} className="max-w-full" />
+              {qrSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element -- data-URI QR in a static-export app
+                <img src={qrSrc} alt={t("dashboard.security.qrAlt")} width={252} height={252} className="h-63 w-63 max-w-full" />
               ) : (
                 <div className="h-63 w-63 animate-pulse rounded-lg bg-border" />
               )}

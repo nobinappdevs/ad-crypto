@@ -79,6 +79,22 @@ export const authService = {
     return res.data;
   },
 
+  /**
+   * POST /user/verify/google-2fa — the 6-digit authenticator code.
+   *
+   * Sent as form-data (`otp`), matching the other verify endpoints. Succeeds
+   * only while the session still owes a code; the backend flips
+   * `two_factor_verified` to 1 on the way out.
+   */
+  async verifyGoogle2fa(otp: string) {
+    const form = new FormData();
+    form.append("otp", otp);
+    const res = await privateApi.post("/user/verify/google-2fa", form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  },
+
   /** POST /user/email/resend/code */
   async resendEmailCode() {
     const res = await privateApi.post("/user/email/resend/code");

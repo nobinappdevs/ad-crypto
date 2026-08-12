@@ -10,10 +10,13 @@ import { useSearchParams } from "next/navigation";
 import {
   ArrowLeft, Paperclip, Send, Loader2, X, RotateCw, ShieldCheck, AlertTriangle,
   Download, FileText, ImageIcon, Wallet, ScrollText, CreditCard, Plus, Smile, Info,
+  Check, CheckCheck,
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLang } from "@/hooks/useLang";
+import { usePusherBroadcastConfig } from "@/hooks/useBasicSettings";
 import { env } from "@/config/env";
+import { TOKEN_KEY } from "@/lib/axios";
 import {
   useEscrowConversation,
   useSendEscrowMessage,
@@ -103,6 +106,42 @@ type Pending = {
 
 const initials = (s: string) =>
   (s || "").replace(/[^a-zA-Z ]/g, "").trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase() || "?";
+
+/* ── who wrote a message ─────────────────────────────────────────────────────
+   The API tags every row with `sender_type` ("USER" | "ADMIN") and
+   `message_sender` ("own" | "opposite" | "admin"):
+
+     { sender: 3, sender_type: "USER",  message_sender: "own"      }  → me
+     { sender: 5, sender_type: "USER",  message_sender: "opposite" }  → counterparty
+     { sender: 1, sender_type: "ADMIN", message_sender: "admin"    }  → support
+
+   Only a USER row flagged "own" is the viewer's own message and goes on the
+   RIGHT. Everything else — the counterparty and any admin/support row — sits on
+   the LEFT, each labelled with its sender so the thread is unambiguous. */
+const isMine = (m: any) =>
+  String(m?.sender_type ?? "USER").toUpperCase() === "USER" && m?.message_sender === "own";
+
+const isAdminMsg = (m: any) =>
+  String(m?.sender_type ?? "").toUpperCase() === "ADMIN" || m?.message_sender === "admin";
+
+/** Identity used to group consecutive bubbles from the same person. */
+const senderKey = (m: any) => `${m?.sender_type ?? ""}|${m?.message_sender ?? ""}|${m?.sender ?? ""}`;
+
+/* ── realtime transport ──────────────────────────────────────────────────────
+   The thread is fed by Pusher alone — there is no polling interval anywhere.
+   That makes the socket's health part of the UI: if it drops, the user must be
+   able to see it and pull manually, so we surface the connection state. */
+type LiveState = "connecting" | "connected" | "offline";
+
+const LIVE_META: Record<LiveState, { key: string; dot: string; text: string }> = {
+  connected:  { key: "live",       dot: "bg-emerald-500",              text: "text-emerald-600 dark:text-emerald-400" },
+  connecting: { key: "connecting", dot: "bg-amber-500 animate-pulse",  text: "text-amber-600 dark:text-amber-400" },
+  offline:    { key: "offline",    dot: "bg-rose-500",                 text: "text-rose-600 dark:text-rose-400" },
+};
+
+/** Resolve the backend's channel template (e.g. `escrow.conversation.{escrow_id}`). */
+const resolveChannelName = (template: string, id: string) =>
+  template.trim().replace(/\{escrow_id\}|\{id\}/g, id);
 
 /* Full emoji picker — lazy, client-only (keeps its chunk out of the initial load). */
 const EmojiPickerPopover = dynamic(() => import("./EmojiPickerPopover"), {
@@ -211,7 +250,9 @@ export function Conversation() {
   const params = useSearchParams();
   const id = params.get("id");
 
-  const { data: convRes, isLoading } = useEscrowConversation(id);
+  const { data: convRes, isLoading, isFetching, refetch } = useEscrowConversation(id);
+  // Pusher credentials + channel/event names, served by the backend.
+  const pusherCfg = usePusherBroadcastConfig();
   const conv = (convRes as { data?: any } | undefined)?.data;
   const apiMessages: any[] = conv?.escrow_conversations ?? [];
 
@@ -228,6 +269,20 @@ export function Conversation() {
   // Below lg the details column is a slide-over, so its escrow info and the
   // release/dispute actions stay reachable on phones.
   const [detailsOpen, setDetailsOpen] = useState(false);
+  // Realtime socket health — the thread has no polling, so this is the user's
+  // only signal that messages are still flowing.
+  //
+  // State holds what the *socket* reported; whether realtime is possible at all
+  // is derived from the config rather than stored. Without that split the effect
+  // had to push "offline" into state on every config miss, which is a render
+  // cascade for a value the config already tells us.
+  const [socketState, setSocketState] = useState<LiveState>("connecting");
+  const live: LiveState = pusherCfg.isLoading
+    ? "connecting"
+    : pusherCfg.ready
+      ? socketState
+      : "offline";
+  const connectedOnceRef = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textInputRef = useRef<HTMLTextAreaElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -267,6 +322,23 @@ export function Conversation() {
   const showReleaseRequest = isOngoing && viewerRole === "seller";
   const showReleasePayment = isOngoing && viewerRole === "buyer";
 
+  // The counterparty is whichever side the viewer is not; when the role is
+  // unknown, fall back to a neutral "Other Party".
+  const oppositeLabel =
+    viewerRole === "buyer"
+      ? t("dashboard.conversation.senderSeller")
+      : viewerRole === "seller"
+        ? t("dashboard.conversation.senderBuyer")
+        : t("dashboard.conversation.senderOther");
+
+  /** Display name shown above each message bubble. */
+  const senderName = (m: any) =>
+    isMine(m)
+      ? t("dashboard.conversation.senderYou")
+      : isAdminMsg(m)
+        ? t("dashboard.conversation.senderAdmin")
+        : oppositeLabel;
+
   const escrowId = pick(src, "escrow_id", "trx", "id") ?? id;
   const currency = pick(src, "escrow_currency", "currency_code", "currency") ?? "";
   const details = {
@@ -292,25 +364,83 @@ export function Conversation() {
 
   const title = details.title ?? t("dashboard.conversation.escrowDetails");
 
-  // ── Realtime: Pusher Channels (instant) + the query's polling as fallback ──
+  // ── Realtime: Pusher Channels, and nothing else ───────────────────────────
+  // There is no polling fallback: every new message or status change reaches
+  // this screen because the backend broadcast fired. The broadcast only tells
+  // us "something changed", so we invalidate and let React Query pull the
+  // thread — one request per real event instead of one every few seconds.
+  //
+  // Credentials, channel and event name all come from the backend at runtime
+  // (`pusher_broadcast_config`), so nothing here is hardcoded.
   useEffect(() => {
     if (!id) return;
+    if (pusherCfg.isLoading) return;          // config still loading — stay "connecting"
+    // `live` already reads "offline" from the config alone — nothing to set here.
+    if (!pusherCfg.ready) {
+      console.warn("[chat] no Pusher config from the backend — realtime is off");
+      return;
+    }
+
     let pusher: any;
-    let channel: any;
     let cancelled = false;
-    const channelName = `escrow-conversation.${id}`;
+    const channelName = resolveChannelName(pusherCfg.channelTemplate, id);
+    const eventName = pusherCfg.event;
+    let channel: any;
+    const pull = () => qc.invalidateQueries({ queryKey: ["escrow", "conversation", id] });
+
     (async () => {
       try {
         const Pusher = (await import("pusher-js")).default;
-        if (cancelled || !env.pusherKey) return;
-        pusher = new Pusher(env.pusherKey, { cluster: env.pusherCluster });
-        channel = pusher.subscribe(channelName);
-        channel.bind_global((eventName: string) => {
-          if (typeof eventName === "string" && eventName.startsWith("pusher:")) return;
-          qc.invalidateQueries({ queryKey: ["escrow", "conversation", id] });
+        if (cancelled) return;
+
+        const token = typeof window !== "undefined" ? window.localStorage.getItem(TOKEN_KEY) ?? "" : "";
+        pusher = new Pusher(pusherCfg.key, {
+          cluster: pusherCfg.cluster,
+          // Used only when the channel name starts with `private-`.
+          authEndpoint: env.pusherAuthEndpoint,
+          auth: { headers: { Authorization: `Bearer ${token}`, Accept: "application/json" } },
         });
-      } catch { /* polling still delivers */ }
+
+        pusher.connection.bind("state_change", ({ current }: { current: string }) => {
+          if (cancelled) return;
+          setSocketState(
+            current === "connected" ? "connected"
+              : current === "connecting" || current === "initialized" ? "connecting"
+                : "offline",
+          );
+          // Re-connected after a drop → pull whatever was missed while offline.
+          // (Event-driven catch-up, not a timer.)
+          if (current === "connected") {
+            if (connectedOnceRef.current) pull();
+            connectedOnceRef.current = true;
+          }
+        });
+
+        channel = pusher.subscribe(channelName);
+
+        // The configured event…
+        if (eventName) channel.bind(eventName, () => pull());
+        // …plus anything else on this channel (status changes, or a slightly
+        // different event name than configured). React Query de-dupes the
+        // refetch, so a double fire costs nothing.
+        channel.bind_global((name: string) => {
+          if (typeof name !== "string" || name.startsWith("pusher:") || name === eventName) return;
+          pull();
+        });
+
+        // Without polling, a silent subscription failure would just look like
+        // "chat is broken" — make it loud in the console instead.
+        channel.bind("pusher:subscription_error", (err: unknown) =>
+          console.warn(`[chat] could not subscribe to "${channelName}" — check the backend channel name / auth`, err),
+        );
+      } catch (err) {
+        if (!cancelled) {
+          setSocketState("offline");
+          console.warn("[chat] realtime transport failed to start", err);
+        }
+      }
     })();
+
     return () => {
       cancelled = true;
       try {
@@ -319,13 +449,25 @@ export function Conversation() {
         pusher?.disconnect();
       } catch { /* ignore */ }
     };
-  }, [id, qc]);
+  }, [id, qc, pusherCfg.isLoading, pusherCfg.ready, pusherCfg.key, pusherCfg.cluster, pusherCfg.channelTemplate, pusherCfg.event]);
 
   // Keep the thread scrolled to the newest message.
   useEffect(() => {
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [apiMessages.length, pending.length]);
+
+  // Land in the composer on arrival, so a reply can be typed without clicking.
+  //
+  // Keyed on `id` rather than done with the `autoFocus` attribute: opening a
+  // different thread keeps the same route, so React reuses this component and an
+  // attribute would only ever fire on the first mount. `preventScroll` stops the
+  // focus from yanking the page while the thread scrolls itself to the newest
+  // message. Touch browsers ignore focus without a gesture, so this doesn't
+  // throw a keyboard over the conversation on phones.
+  useEffect(() => {
+    textInputRef.current?.focus({ preventScroll: true });
+  }, [id]);
 
   // Facebook-style auto-growing composer: grow with content up to ~5 lines.
   useEffect(() => {
@@ -421,6 +563,24 @@ export function Conversation() {
               {statusLabel}
             </span>
           )}
+
+          {/* realtime health — click to pull the thread by hand (no auto-polling) */}
+          <button
+            type="button"
+            onClick={() => refetch()}
+            title={t(`dashboard.conversation.${LIVE_META[live].key}`)}
+            aria-label={t("dashboard.conversation.refresh")}
+            className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full border border-border px-2.5 py-1 text-[11px] font-medium transition hover:bg-black/5 dark:hover:bg-white/10 ${LIVE_META[live].text}`}
+          >
+            {isFetching ? (
+              <Loader2 size={11} strokeWidth={2.5} className="animate-spin" aria-hidden />
+            ) : (
+              <i className={`h-1.5 w-1.5 rounded-full ${LIVE_META[live].dot}`} />
+            )}
+            <span className="hidden text-[11px] font-medium sm:block">
+              {t(`dashboard.conversation.${LIVE_META[live].key}`)}
+            </span>
+          </button>
           {/* details / actions — the side column is a slide-over below lg */}
           <button
             type="button"
@@ -463,36 +623,83 @@ export function Conversation() {
               </div>
 
               {apiMessages.map((m, i) => {
-                const mine = m.message_sender === "own";
+                const mine = isMine(m);          // USER + "own"  → right side
+                const admin = isAdminMsg(m);     // ADMIN/support → left side, tinted
                 const prev = apiMessages[i - 1];
                 const next = apiMessages[i + 1];
-                const groupStart = !prev || prev.message_sender !== m.message_sender;
-                const groupEnd = !next || next.message_sender !== m.message_sender;
+                // Group by the actual person, not just the "own/opposite/admin"
+                // flag — two different admins must not merge into one run.
+                const groupStart = !prev || senderKey(prev) !== senderKey(m);
+                const groupEnd = !next || senderKey(next) !== senderKey(m);
                 const attachments: any[] = m.attachments ?? [];
                 const time = fmtMsgTime(m);
+                const name = senderName(m);
+                // `seen` arrives as 1 / 0 (sometimes stringified) — 1 means the
+                // other party has opened it.
+                const seen = String(m?.seen) === "1";
                 return (
                   <div key={i} className={`flex min-w-0 items-end gap-2.5 ${mine ? "flex-row-reverse" : ""} ${groupStart && i > 0 ? "mt-3" : ""}`}>
                     {groupEnd ? (
-                      <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-black/5 text-[11px] font-bold text-muted ring-1 ring-border dark:bg-white/10">
-                        {m.profile_img ? <img src={m.profile_img} alt="" className="h-full w-full object-cover" /> : initials(mine ? "You" : "U")}
+                      <span
+                        className={`grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full text-[11px] font-bold ring-1 ${
+                          admin
+                            ? "bg-indigo-500/10 text-indigo-500 ring-indigo-500/30 dark:text-indigo-400"
+                            : "bg-black/5 text-muted ring-border dark:bg-white/10"
+                        }`}
+                      >
+                        {m.profile_img ? (
+                          <img src={m.profile_img} alt={name} className="h-full w-full object-cover" />
+                        ) : admin ? (
+                          <ShieldCheck size={15} strokeWidth={2} aria-hidden />
+                        ) : (
+                          initials(name)
+                        )}
                       </span>
                     ) : (
                       <span className="w-9 shrink-0" aria-hidden />
                     )}
                     <div className={`flex min-w-0 max-w-[78%] flex-col gap-1 ${mine ? "items-end" : "items-start"}`}>
+                      {/* who sent it — printed once per run of messages */}
+                      {groupStart && (
+                        <span
+                          className={`flex items-center gap-1 px-1 text-[11px] font-semibold ${
+                            admin ? "text-indigo-500 dark:text-indigo-400" : mine ? "text-primary" : "text-muted"
+                          }`}
+                        >
+                          {admin && <ShieldCheck size={11} strokeWidth={2.5} aria-hidden />}
+                          {name}
+                        </span>
+                      )}
                       {m.message && (
                         <div
                           className={`whitespace-pre-wrap wrap-break-word rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${
                             mine
                               ? `bg-primary text-white ${groupEnd ? "rounded-br-md" : ""}`
-                              : `border border-border bg-card text-body ${groupEnd ? "rounded-bl-md" : ""}`
+                              : admin
+                                ? `border border-indigo-500/25 bg-indigo-500/[0.07] text-body ${groupEnd ? "rounded-bl-md" : ""}`
+                                : `border border-border bg-card text-body ${groupEnd ? "rounded-bl-md" : ""}`
                           }`}
                         >
                           {m.message}
                         </div>
                       )}
                       {attachments.map((a, ai) => <ChatAttachment key={ai} a={a} mine={mine} />)}
-                      {groupEnd && time && <span className="px-1 text-[10px] text-muted">{time}</span>}
+                      {groupEnd && (time || mine) && (
+                        <span className="flex items-center gap-1 px-1 text-[10px] text-muted">
+                          {time}
+                          {/* Read receipt — only on my own messages: `seen` says
+                              whether the counterparty has opened it, which is
+                              meaningless to show on a message they sent me. */}
+                          {mine && (
+                            <span className={`flex items-center gap-0.5 ${seen ? "text-primary" : ""}`}>
+                              {seen
+                                ? <CheckCheck size={12} strokeWidth={2.5} aria-hidden />
+                                : <Check size={12} strokeWidth={2.5} aria-hidden />}
+                              {t(seen ? "dashboard.conversation.seen" : "dashboard.conversation.sent")}
+                            </span>
+                          )}
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
@@ -502,9 +709,12 @@ export function Conversation() {
               {pending.map((p) => (
                 <div key={`p-${p.tempId}`} className="mt-3 flex min-w-0 flex-row-reverse items-end gap-2.5">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/10 text-[11px] font-bold text-primary ring-1 ring-border">
-                    {initials("You")}
+                    {initials(t("dashboard.conversation.senderYou"))}
                   </span>
                   <div className={`flex min-w-0 max-w-[78%] flex-col items-end gap-1 ${p.status === "sending" ? "opacity-70" : ""}`}>
+                    <span className="px-1 text-[11px] font-semibold text-primary">
+                      {t("dashboard.conversation.senderYou")}
+                    </span>
                     {p.message && (
                       <div className="whitespace-pre-wrap wrap-break-word rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-relaxed text-white shadow-sm">
                         {p.message}

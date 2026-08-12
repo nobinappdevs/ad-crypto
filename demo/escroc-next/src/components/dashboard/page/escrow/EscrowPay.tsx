@@ -13,6 +13,7 @@ import { Select, type SelectOption } from "@/components/ui/Select";
 import { useLang } from "@/hooks/useLang";
 import { formatExpiry, expiryIssue } from "@/lib/cardExpiry";
 import { useApprovalPending, useApprovalSubmit, useApprovalManualConfirm, useApprovalAuthorize, useEscrowCryptoConfirm } from "@/hooks/useEscrow";
+import { useKycGate } from "@/hooks/useKyc";
 
 /* payment-details panel used by the manual + card steps */
 function PaymentDetails({ ci }: { ci: any }) {
@@ -106,6 +107,7 @@ export function EscrowPay() {
   const id = params.get("id");
 
   const { data: res, isLoading } = useApprovalPending(id);
+  const kycGate = useKycGate();
   const submit = useApprovalSubmit();
   const manualPay = useApprovalManualConfirm();
   const authorize = useApprovalAuthorize();
@@ -153,8 +155,9 @@ export function EscrowPay() {
     { label: t("dashboard.createEscrow.youWillPay"), value: info.payable_amount ?? info.buyer_amount ?? info.amount, Icon: BadgeDollarSign, strong: true },
   ];
 
-  const onPay = () => {
+  const onPay = async () => {
     if (!id) return;
+    if (!(await kycGate())) return;
     // Hosted (WEB) gateways redirect the browser back to these pages after payment.
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     submit.mutate(
