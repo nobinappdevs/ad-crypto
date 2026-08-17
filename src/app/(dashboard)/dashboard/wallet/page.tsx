@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { WalletDetails } from "@/components/dashboard/page/WalletDetails";
+import { WalletSkeleton } from "@/components/dashboard/Skeletons";
 
 export const metadata = {
   title: "Wallet — AdCrypto",
@@ -17,7 +18,7 @@ export const metadata = {
  */
 export default function WalletPage() {
   return (
-    <Suspense fallback={<div className="min-h-[60vh]" />}>
+    <Suspense fallback={<WalletSkeleton />}>
       <WalletDetails />
     </Suspense>
   );

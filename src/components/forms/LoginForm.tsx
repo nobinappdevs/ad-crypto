@@ -23,30 +23,17 @@ export function LoginForm() {
   const {
     control,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<LoginRequest>({
     resolver: zodResolver(loginRequestSchema),
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = (data: LoginRequest) => {
-    login.mutate(data, {
-      onError: (err) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const fieldErrors = (err as any)?.response?.data?.errors;
-        if (!fieldErrors) return;
-        (["email", "password"] as const).forEach((field) => {
-          const msg = fieldErrors[field]?.[0];
-          if (msg) setError(field, { type: "server", message: msg });
-        });
-      },
-    });
-  };
-
+  // "The credentials does not match" is one message about the pair, not about
+  // either field, so it belongs in the toast rather than under an input.
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit((data) => login.mutate(data))}
       noValidate
       className="flex flex-col gap-5.5"
       style={{ animation: "panel-rise 0.45s ease both" }}

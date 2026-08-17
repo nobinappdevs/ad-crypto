@@ -38,16 +38,26 @@ export function AmountField({
   selector,
   footer,
   error,
+  readOnly,
+  disabled,
   className,
 }: {
   label: string;
   value: string;
-  onChange: (value: string) => void;
+  /** Omitted on a read-only field, which has nothing to report. */
+  onChange?: (value: string) => void;
   onBlur?: () => void;
   suffix?: string;
   selector?: ReactNode;
   footer?: ReactNode;
   error?: boolean;
+  /**
+   * A derived side the user cannot type into — the receiving half of a swap,
+   * where the endpoint prices the SEND amount and anything typed here would be
+   * reverse-engineered and then contradicted by the server's own quote.
+   */
+  readOnly?: boolean;
+  disabled?: boolean;
   className?: string;
 }) {
   return (
@@ -64,12 +74,17 @@ export function AmountField({
       <div className="mt-1.5 flex items-center gap-3">
         <input
           value={value}
-          onChange={(e) => onChange(e.target.value.replace(/[^\d.,]/g, ""))}
+          onChange={(e) => onChange?.(e.target.value.replace(/[^\d.,]/g, ""))}
           onBlur={onBlur}
+          readOnly={readOnly}
+          disabled={disabled}
           inputMode="decimal"
           placeholder="0.00"
           aria-label={label}
-          className="min-w-0 flex-1 bg-transparent text-[26px] font-bold tracking-[-0.02em] tabular-nums text-heading outline-none placeholder:text-muted/60"
+          className={cn(
+            "min-w-0 flex-1 bg-transparent text-[26px] font-bold tracking-[-0.02em] tabular-nums text-heading outline-none placeholder:text-muted/60 disabled:opacity-60",
+            readOnly && "cursor-default",
+          )}
         />
         {selector}
         {suffix && (

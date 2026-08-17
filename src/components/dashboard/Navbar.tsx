@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   ArrowDownToLine,
   ArrowLeftRight,
@@ -20,14 +19,23 @@ import {
   UserCog,
   WalletCards,
 } from "lucide-react";
-import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
 import { useTheme } from "@/hooks/useTheme";
-import { TOKEN_KEY } from "@/lib/axios";
+import { useLogout } from "@/hooks/useAuth";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useAccountIdentity } from "@/hooks/useProfile";
 import { LanguageSwitcher } from "@/components/share/LanguageSwitcher";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/components/ui/cn";
-import { DEMO_USER, NOTIFICATIONS, type NotificationKind } from "@/config/account";
+import {
+  isUnseen,
+  markNotificationsSeen,
+  notificationBody,
+  notificationKind,
+  readNotificationsSeenAt,
+  type NotificationKind,
+} from "@/config/notifications";
+import { relativeTime } from "@/config/txlog";
 
 /**
  * The dashboard's top bar: which page you are on, on the left; everything about
@@ -48,14 +56,15 @@ const TITLES: { prefix: string; key: string }[] = [
   { prefix: "/dashboard/my-cards", key: "dashboard.nav.myCards" },
   { prefix: "/dashboard/transactions", key: "dashboard.nav.transactions" },
   { prefix: "/dashboard/wallet", key: "walletDetails.navTitle" },
+  { prefix: "/dashboard/profile", key: "dashboard.account.profile" },
   { prefix: "/dashboard/security", key: "dashboard.account.security" },
   { prefix: "/dashboard/kyc", key: "dashboard.account.kyc" },
   { prefix: "/dashboard", key: "dashboard.title" },
 ];
 
-/** Account rows in the profile menu. Profile has no `href` yet — that one comes later. */
+/** Account rows in the profile menu. */
 const ACCOUNT_LINKS = [
-  { key: "profile", icon: UserCog },
+  { key: "profile", icon: UserCog, href: "/dashboard/profile" },
   { key: "security", icon: ShieldCheck, href: "/dashboard/security" },
   // An ID document, not a payment card — `CreditCard` here read as a billing row.
   { key: "kyc", icon: IdCard, href: "/dashboard/kyc" },
@@ -64,10 +73,7 @@ const ACCOUNT_LINKS = [
 const ACCOUNT_ROW_CLASS =
   "flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-heading/80 transition hover:bg-black/4 hover:text-heading dark:hover:bg-white/5";
 
-const NOTIF_META: Record<
-  NotificationKind,
-  { icon: typeof Bell; tone: string; href: string }
-> = {
+const NOTIF_META: Record<NotificationKind, { icon: typeof Bell; tone: string; href: string }> = {
   buy: { icon: ShoppingCart, tone: "bg-primary/10 text-primary", href: "/dashboard/buy-crypto" },
   sell: {
     icon: HandCoins,
@@ -84,20 +90,57 @@ const NOTIF_META: Record<
     tone: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
     href: "/dashboard/exchange-crypto",
   },
+  receive: {
+    icon: ArrowDownToLine,
+    tone: "bg-hero-mint/12 text-hero-mint",
+    href: "/dashboard/transactions",
+  },
   card: { icon: WalletCards, tone: "bg-primary/10 text-primary", href: "/dashboard/my-cards" },
+  // Nothing to infer from the title, so it goes where every event is listed.
+  other: { icon: Bell, tone: "bg-primary/10 text-primary", href: "/dashboard/transactions" },
 };
 
 /**
- * "2 hours ago", in the active language, from an age in minutes.
+ * The account's picture, or its initials when there is none.
  *
- * `Intl` rather than stored strings: a feed carries a dozen of these, and none of
- * them would survive a language switch as literal copy.
+ * A plain `<img>` rather than `next/image`: the upload is served from the API host,
+ * which comes from an env var — declaring it in next.config's `remotePatterns`
+ * would break the day the backend moves — and images are unoptimized in this
+ * static export regardless, so there is nothing to give up.
+ *
+ * `broken` covers the case the URL resolves to nothing; without it a deleted
+ * upload leaves an empty box where a face should be.
  */
-function timeAgo(minutes: number, locale: string) {
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
-  if (minutes < 60) return rtf.format(-minutes, "minute");
-  if (minutes < 1440) return rtf.format(-Math.round(minutes / 60), "hour");
-  return rtf.format(-Math.round(minutes / 1440), "day");
+function Avatar({
+  identity,
+  className,
+}: {
+  identity: ReturnType<typeof useAccountIdentity>;
+  className?: string;
+}) {
+  const [broken, setBroken] = useState(false);
+  const showImage = Boolean(identity.avatar) && !broken;
+
+  return (
+    <span
+      className={cn(
+        "grid! shrink-0 place-items-center overflow-hidden rounded-full bg-primary/10 text-[11px]! font-bold! text-primary",
+        className,
+      )}
+    >
+      {showImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={identity.avatar}
+          alt=""
+          onError={() => setBroken(true)}
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <span aria-hidden>{identity.initials}</span>
+      )}
+    </span>
+  );
 }
 
 /** The bordered square icon button the header's controls are all built from. */
@@ -133,9 +176,10 @@ function NavBtn({
 export function Navbar({ onMenu }: { onMenu: () => void }) {
   const { t, lang } = useLang();
   const { theme, toggleTheme } = useTheme();
-  const router = useRouter();
   const pathname = usePathname() ?? "";
   const k = (name: string) => t(`dashboard.${name}`);
+  // POST /user/logout — the hook clears the token, the cache and the route.
+  const logout = useLogout(k("loggedOut"));
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -145,7 +189,27 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
   const notifRef = useRef<HTMLDivElement>(null);
 
   const title = TITLES.find((entry) => pathname.startsWith(entry.prefix))?.key ?? "dashboard.title";
-  const unseen = NOTIFICATIONS.filter((n) => !n.seen).length;
+
+  const { data: notifications = [] } = useNotifications();
+  const identity = useAccountIdentity();
+
+  /**
+   * Read once at mount, not on every render: opening the panel updates the stored
+   * timestamp, and re-reading it live would clear the "new" highlight out from
+   * under the rows the user is still looking at.
+   */
+  const [seenAt, setSeenAt] = useState(0);
+  useEffect(() => setSeenAt(readNotificationsSeenAt()), []);
+  const unseen = notifications.filter((n) => isUnseen(n, seenAt)).length;
+
+  /** Opening the panel is what "seeing" them means — record it, keep the highlight. */
+  function toggleNotifications() {
+    setNotifOpen((open) => {
+      if (!open) markNotificationsSeen();
+      return !open;
+    });
+    setMenuOpen(false);
+  }
 
   // One listener for both panels: whichever the pointer landed outside of closes.
   useEffect(() => {
@@ -168,14 +232,6 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [menuOpen, notifOpen]);
-
-  function handleLogout() {
-    try {
-      window.localStorage.removeItem(TOKEN_KEY);
-    } catch {}
-    toast.success(k("logout"));
-    router.replace("/login");
-  }
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-border bg-card px-4 sm:gap-4 sm:px-6">
@@ -215,14 +271,7 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
 
         {/* ---- Notifications */}
         <div ref={notifRef} className="relative">
-          <NavBtn
-            label={k("notifications")}
-            badge={unseen > 0}
-            onClick={() => {
-              setNotifOpen((v) => !v);
-              setMenuOpen(false);
-            }}
-          >
+          <NavBtn label={k("notifications")} badge={unseen > 0} onClick={toggleNotifications}>
             <Bell size={16} />
           </NavBtn>
 
@@ -236,12 +285,12 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
                     {k("notificationsPanel.newCount").replace("{n}", String(unseen))}
                   </span>
                 ) : (
-                  <span className="text-[11.5px]! text-muted">{NOTIFICATIONS.length}</span>
+                  <span className="text-[11.5px]! text-muted">{notifications.length}</span>
                 )}
               </div>
 
               <div className="max-h-96 overflow-y-auto">
-                {NOTIFICATIONS.length === 0 ? (
+                {notifications.length === 0 ? (
                   <div className="px-4 py-12 text-center">
                     <span
                       aria-hidden
@@ -257,20 +306,22 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
                     </p>
                   </div>
                 ) : (
-                  NOTIFICATIONS.map((notification) => {
-                    const { icon: Icon, tone, href } = NOTIF_META[notification.kind];
-                    const base = `notificationsPanel.items.${notification.key}`;
+                  notifications.map((notification, i) => {
+                    const kind = notificationKind(notification.message?.title);
+                    const { icon: Icon, tone, href } = NOTIF_META[kind];
+                    const fresh = isUnseen(notification, seenAt);
+                    const body = notificationBody(notification);
                     return (
                       <Link
-                        key={notification.id}
+                        key={notification.id ?? i}
                         href={href}
                         onClick={() => setNotifOpen(false)}
                         className={cn(
                           "group relative flex! gap-3 border-b border-border px-4 py-3 transition last:border-b-0 hover:bg-black/4 dark:hover:bg-white/5",
-                          !notification.seen && "bg-primary/4",
+                          fresh && "bg-primary/4",
                         )}
                       >
-                        {!notification.seen && (
+                        {fresh && (
                           <span aria-hidden className="absolute inset-y-0 start-0 w-0.5 bg-primary" />
                         )}
                         <span
@@ -284,24 +335,29 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="flex items-baseline justify-between gap-2">
+                            {/* The server's own title. Not a translation key —
+                                these are per-event sentences it composed, and
+                                there is no dictionary that could cover them. */}
                             <span
                               className={cn(
                                 "truncate text-[13px]!",
-                                notification.seen ? "font-semibold! text-muted" : "font-bold!",
+                                fresh ? "font-bold!" : "font-semibold! text-muted",
                               )}
                             >
-                              {k(`${base}.title`)}
+                              {notification.message?.title || k("notificationsPanel.untitled")}
                             </span>
                             <span className="shrink-0 text-[11px]! whitespace-nowrap text-muted">
-                              {timeAgo(notification.minutesAgo, lang)}
+                              {relativeTime(notification.created_at, lang)}
                             </span>
                           </span>
                           {/* No `block` alongside `line-clamp-2`: the clamp needs
                               `display:-webkit-box`, and a competing display
                               utility is a coin toss over which one wins. */}
-                          <span className="mt-0.5 line-clamp-2 text-[11.5px]! leading-relaxed! text-muted">
-                            {k(`${base}.body`)}
-                          </span>
+                          {body && (
+                            <span className="mt-0.5 line-clamp-2 text-[11.5px]! leading-relaxed! text-muted">
+                              {body}
+                            </span>
+                          )}
                         </span>
                       </Link>
                     );
@@ -332,13 +388,7 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
             aria-label={k("accountMenu")}
             className="relative grid h-9 w-9 cursor-pointer place-items-center overflow-hidden rounded-full bg-primary/10 text-[12px] font-bold text-primary ring-2 ring-primary/20 transition hover:ring-primary/50"
           >
-            <Image
-              src={DEMO_USER.avatar}
-              alt=""
-              width={700}
-              height={966}
-              className="h-full w-full object-cover"
-            />
+            <Avatar identity={identity} className="h-full w-full" />
             <span
               aria-hidden
               className="absolute end-0 bottom-0 h-2.5 w-2.5 rounded-full border-2 border-card bg-hero-mint"
@@ -348,46 +398,37 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
           {menuOpen && (
             <div className="absolute end-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
               <div className="flex items-center gap-3 border-b border-border px-4 py-3">
-                <Image
-                  src={DEMO_USER.avatar}
-                  alt=""
-                  width={700}
-                  height={966}
-                  className="h-9 w-9 shrink-0 rounded-full object-cover"
-                />
+                <Avatar identity={identity} className="h-9 w-9 shrink-0" />
                 <div className="min-w-0">
-                  <p className="truncate text-[13px]! font-bold!">{DEMO_USER.name}</p>
-                  <p className="truncate text-[11.5px]! text-muted">{DEMO_USER.email}</p>
+                  {/* Skeletons rather than empty lines: the panel is fixed-width,
+                      so a blank header reads as a broken menu while the profile
+                      request is still out. */}
+                  {identity.isPending ? (
+                    <>
+                      <span className="block h-3.5 w-24 animate-pulse rounded bg-black/8 dark:bg-white/10" />
+                      <span className="mt-1.5 block h-2.5 w-32 animate-pulse rounded bg-black/6 dark:bg-white/8" />
+                    </>
+                  ) : (
+                    <>
+                      <p className="truncate text-[13px]! font-bold!">{identity.name || "—"}</p>
+                      <p className="truncate text-[11.5px]! text-muted">{identity.email}</p>
+                    </>
+                  )}
                 </div>
               </div>
 
               <nav className="py-1">
-                {ACCOUNT_LINKS.map((link) => {
-                  const Icon = link.icon;
-                  const row = (
-                    <>
-                      <Icon size={15} className="shrink-0 text-muted" aria-hidden />
-                      {k(`account.${link.key}`)}
-                    </>
-                  );
-
-                  // A section that does not exist yet stays a button: same row, no
-                  // dead navigation.
-                  return "href" in link ? (
-                    <Link
-                      key={link.key}
-                      href={link.href}
-                      onClick={() => setMenuOpen(false)}
-                      className={cn(ACCOUNT_ROW_CLASS, "flex!")}
-                    >
-                      {row}
-                    </Link>
-                  ) : (
-                    <button key={link.key} type="button" className={ACCOUNT_ROW_CLASS}>
-                      {row}
-                    </button>
-                  );
-                })}
+                {ACCOUNT_LINKS.map(({ key: name, icon: Icon, href }) => (
+                  <Link
+                    key={name}
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    className={cn(ACCOUNT_ROW_CLASS, "flex!")}
+                  >
+                    <Icon size={15} className="shrink-0 text-muted" aria-hidden />
+                    {k(`account.${name}`)}
+                  </Link>
+                ))}
               </nav>
 
               <div className="border-t border-border py-1">
@@ -439,7 +480,14 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
                 >
                   {k("cancel")}
                 </button>
-                <Button variant="danger" size="md" fullWidth onClick={handleLogout} className="flex-1">
+                <Button
+                  variant="danger"
+                  size="md"
+                  fullWidth
+                  loading={logout.isPending}
+                  onClick={() => logout.mutate()}
+                  className="flex-1"
+                >
                   {k("confirmLogout")}
                 </Button>
               </div>

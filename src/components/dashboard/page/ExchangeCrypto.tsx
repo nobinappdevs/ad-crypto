@@ -1,138 +1,289 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ArrowUpDown, Clock, Lock, ShieldCheck, TriangleAlert, Zap } from "lucide-react";
-import toast from "react-hot-toast";
+import { useState } from "react";
+import {
+  ArrowRight,
+  ArrowUpDown,
+  Clock,
+  Loader2,
+  RotateCcw,
+  ShieldCheck,
+  TriangleAlert,
+  Wallet,
+} from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
 import { Panel } from "@/components/dashboard/ui";
 import { DashPageHeader } from "@/components/dashboard/PageHeader";
 import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
 import { CoinBadge } from "@/components/dashboard/CoinBadge";
+import { AmountField, LiveRatePill, PercentChips, Row } from "@/components/dashboard/TradeFields";
+import { ExchangeSkeleton } from "@/components/dashboard/Skeletons";
+import { getApiErrorMessage } from "@/hooks/useAuth";
+import { useConfirmExchange, useExchangeIndex, useStoreExchange } from "@/hooks/useExchange";
+import { coinBrand, imageUrl } from "@/config/media";
+import { coinAmount, num } from "@/config/txlog";
+import { PERCENTS, crypto, floor8, toNumber } from "@/config/market";
 import {
-  AmountField,
-  LiveRatePill,
-  PercentChips,
-  Row,
-} from "@/components/dashboard/TradeFields";
-import { COINS, PAY_SYMBOL, PERCENTS, crypto, fiat, floor8, toNumber } from "@/config/market";
+  currencyKey,
+  defaultPair,
+  exchangeFees,
+  exchangeLimits,
+  exchangeQuote,
+  maxSendable,
+  ownWallet,
+  walletBalance,
+} from "@/config/exchange";
+import type { ImagePaths } from "@/services/dashboard.service";
+import type { ExchangeCurrency, ExchangeDraft } from "@/services/exchange.service";
 
 /**
- * Conversion spread, as a fraction of the destination amount. An internal swap
- * never touches a chain, so there is no network fee to charge — this is the only
- * cost, and it comes out of what lands in the destination coin.
+ * Exchange Crypto — the same shape as Buy, Sell and Withdraw, on live data.
+ *
+ * The form carries exactly what the old exchange screen carried: the pair's rate,
+ * the two amounts, a Max fill, the available balance, the order limits and the
+ * network fee. What is new is where those figures come from — `GET
+ * /user/exchange-crypto/index` rather than demo constants — and the step that
+ * follows.
+ *
+ * The API prices a swap in two calls: `store` quotes and drafts it, `confirm`
+ * executes it. So the page previews the order locally while the user types (by
+ * the same rules the backend uses), and on submit turns over to the SERVER's
+ * quote. Only the button under those numbers spends anything.
  */
-const FEE_RATE = 0.001;
-
-/** How long the quoted rate is held once the order is placed. */
-const RATE_LOCK_SECONDS = 30;
 
 export function ExchangeCrypto() {
   const { t } = useLang();
   const k = (name: string) => t(`exchangeCrypto.${name}`);
 
-  const [fromKey, setFromKey] = useState<string>(COINS[0].key);
-  const [toKey, setToKey] = useState<string>(COINS[1].key);
+  const { data, isPending, isError, error, refetch } = useExchangeIndex();
+  const store = useStoreExchange();
+  const confirm = useConfirmExchange(k("success"));
+
+  const currencies = data?.currencies ?? [];
+  const paths = data?.currency_image_paths;
+  const fees = exchangeFees(data?.transaction_fees);
+
+  const [pair, setPair] = useState<{ from: string; to: string } | null>(null);
+  const [amountRaw, setAmountRaw] = useState("");
   const [touched, setTouched] = useState(false);
+  /** The server's quote, once there is one. Its presence IS the review step. */
+  const [draft, setDraft] = useState<ExchangeDraft | null>(null);
 
-  // One side is the raw input, the other is derived from it. Tracking WHICH was
-  // last typed in is what keeps a half-typed "0.0" from being rewritten into
-  // "0" by its own round-trip through the cross rate.
-  const [side, setSide] = useState<"from" | "to">("from");
-  const [fromRaw, setFromRaw] = useState("");
-  const [toRaw, setToRaw] = useState("");
+  // The opening pair depends on which wallets have a balance, so it can only be
+  // decided once the payload is here. Set during render rather than in an effect:
+  // an effect would paint one frame with no pair and the fields empty.
+  if (currencies.length > 0 && !pair) setPair(defaultPair(currencies));
 
-  const from = COINS.find((c) => c.key === fromKey) ?? COINS[0];
-  const to = COINS.find((c) => c.key === toKey) ?? COINS[1];
+  const from = currencies.find((c) => currencyKey(c) === pair?.from) ?? currencies[0];
+  const to =
+    currencies.find((c) => currencyKey(c) === pair?.to) ??
+    currencies.find((c) => currencyKey(c) !== currencyKey(from));
 
-  /** Both coins are priced in the settlement currency, so the pair is their ratio. */
-  const crossRate = from.rate / to.rate;
+  const fromCode = (from?.code ?? "").toUpperCase();
+  const toCode = (to?.code ?? "").toUpperCase();
 
-  const fromValue = side === "from" ? fromRaw : crypto(toNumber(toRaw) / crossRate);
-  const toValue = side === "to" ? toRaw : crypto(toNumber(fromRaw) * crossRate);
+  const senderWallet = ownWallet(from);
+  const senderRate = num(from?.rate);
+  const balance = walletBalance(from);
+  const sending = toNumber(amountRaw);
 
-  const fromNum = toNumber(fromValue);
-  const grossTo = fromNum * crossRate;
-  const fee = grossTo * FEE_RATE;
-  const receive = Math.max(0, grossTo - fee);
-
-  /** An internal swap is bounded by the balance and by the pair's order limit. */
-  const sellable = floor8(Math.min(from.balance, from.max));
-
-  const error = useMemo(() => {
-    if (!touched) return null;
-    if (fromNum <= 0) return k("errorAmount");
-    if (fromNum < from.min)
-      return k("errorMin").replace("{min}", crypto(from.min)).replace("{coin}", from.symbol);
-    if (fromNum > from.max)
-      return k("errorMax").replace("{max}", crypto(from.max)).replace("{coin}", from.symbol);
-    if (fromNum > from.balance)
-      return k("errorBalance")
-        .replace("{balance}", crypto(from.balance))
-        .replace("{coin}", from.symbol);
-    return null;
-  }, [touched, fromNum, from]); // eslint-disable-line react-hooks/exhaustive-deps
+  const figures = exchangeQuote({ sending, senderRate, receiverRate: num(to?.rate), fees });
+  const limits = exchangeLimits(fees, senderRate);
+  /** What the balance can cover once the fee is added on top of the amount. */
+  const sendable = maxSendable({ balance, senderRate, fees });
 
   /**
-   * Flips the pair and carries the amounts across with it, so the number the
-   * user was looking at on one side is the one they get on the other.
+   * The first thing standing between this form and a swap, or null.
+   *
+   * Pair problems show immediately — they are the state of the account, not
+   * something the user typed. Amount problems wait for a blur, so the field does
+   * not go red on the first keystroke.
    */
+  const problem = (() => {
+    if (!from || !to) return null;
+    if (!senderWallet) return k("errorNoWallet").replace("{coin}", fromCode);
+    if (currencyKey(from) === currencyKey(to)) return k("errorSamePair");
+    if (!touched) return null;
+    if (sending <= 0) return k("errorAmount");
+    if (limits.min > 0 && sending < limits.min)
+      return k("errorMin").replace("{min}", coinAmount(limits.min)).replace("{coin}", fromCode);
+    if (limits.max > 0 && sending > limits.max)
+      return k("errorMax").replace("{max}", coinAmount(limits.max)).replace("{coin}", fromCode);
+    if (figures.payable > balance)
+      return k("errorBalance")
+        .replace("{payable}", coinAmount(figures.payable))
+        .replace("{balance}", coinAmount(balance))
+        .replace("{coin}", fromCode);
+    return null;
+  })();
+
+  function pick(side: "from" | "to", next: string) {
+    setPair((current) => {
+      if (!current) return current;
+      // Picking the coin already on the other side flips the pair rather than
+      // blocking the choice — the user asked for that coin, and there is only one
+      // sensible place to put the one it displaced.
+      const other = side === "from" ? current.to : current.from;
+      const swapped = next === other;
+      if (side === "from") return { from: next, to: swapped ? current.from : current.to };
+      return { from: swapped ? current.to : current.from, to: next };
+    });
+  }
+
   function swapPair() {
-    setFromKey(toKey);
-    setToKey(fromKey);
-    setSide("from");
-    setFromRaw(toValue);
-    setToRaw("");
+    setPair((current) => (current ? { from: current.to, to: current.from } : current));
+    // The amount was denominated in the coin that is now on the receiving side,
+    // so carrying it across would silently mean something else.
+    setAmountRaw("");
+    setTouched(false);
   }
 
-  /** A pair needs two different coins — picking the twin swaps rather than blocks. */
-  function pickFrom(next: string) {
-    if (next === toKey) setToKey(fromKey);
-    setFromKey(next);
+  function setPercent(pct: number) {
+    // Divided out of the SENDABLE figure, not the balance: the fee is charged on
+    // top, so a Max taken from the balance itself could only ever be rejected.
+    setAmountRaw(crypto(floor8((sendable * pct) / 100)));
+    setTouched(true);
   }
-
-  function pickTo(next: string) {
-    if (next === fromKey) setFromKey(toKey);
-    setToKey(next);
-  }
-
-  const setPercent = (pct: number) => {
-    setSide("from");
-    setFromRaw(crypto(floor8((sellable * pct) / 100)));
-  };
 
   function submit() {
     setTouched(true);
-    // `error` is memoised against the pre-click state, so re-check the conditions
-    // a first-time click can trip.
-    if (fromNum <= 0 || fromNum < from.min || fromNum > from.max) return;
-    if (fromNum > from.balance) return;
-    toast.success(
-      k("submitted")
-        .replace("{from}", `${crypto(fromNum)} ${from.symbol}`)
-        .replace("{to}", `${crypto(receive)} ${to.symbol}`),
+    if (!senderWallet?.id || !to?.id) return;
+    if (sending <= 0 || figures.payable > balance) return;
+    if (limits.min > 0 && sending < limits.min) return;
+    if (limits.max > 0 && sending > limits.max) return;
+    if (currencyKey(from) === currencyKey(to)) return;
+
+    store.mutate(
+      { send_amount: sending, sender_wallet: senderWallet.id, receiver_currency: to.id },
+      { onSuccess: setDraft },
     );
   }
 
-  const coinOption = (c: (typeof COINS)[number]): SelectOption => ({
-    value: c.key,
-    label: c.symbol,
-    hint: c.name,
-    meta: `$${fiat(c.rate)}`,
-    icon: <CoinBadge color={c.color} glyph={c.glyph} />,
+  function confirmSwap() {
+    if (!draft?.identifier) return;
+    confirm.mutate(draft.identifier, {
+      onSuccess: () => {
+        setDraft(null);
+        setAmountRaw("");
+        setTouched(false);
+      },
+    });
+  }
+
+  const header = (
+    <DashPageHeader
+      title={k("title")}
+      subtitle={k("subtitle")}
+      action={
+        from && to && figures.rate > 0 ? (
+          <LiveRatePill label={k("liveRate")}>
+            1 {fromCode} = {coinAmount(figures.rate)} {toCode}
+          </LiveRatePill>
+        ) : undefined
+      }
+    />
+  );
+
+  if (isPending) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <ExchangeSkeleton header={false} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <Panel className="mx-auto mt-6 max-w-[560px] p-6 text-center">
+          <span
+            aria-hidden
+            className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-hero-neg/10 text-hero-neg"
+          >
+            <TriangleAlert size={20} />
+          </span>
+          <h2 className="mt-4 text-[16px]! font-bold!">{k("loadFailed")}</h2>
+          <p className="mx-auto mt-1.5 max-w-100 text-[13px]! leading-relaxed! text-muted">
+            {getApiErrorMessage(error)}
+          </p>
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="btn-lift mt-5 inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-5 text-[14px] font-bold text-white"
+          >
+            <RotateCcw size={15} aria-hidden />
+            {k("retry")}
+          </button>
+        </Panel>
+      </div>
+    );
+  }
+
+  if (!from || !to) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <Panel className="mx-auto mt-6 max-w-[560px] p-6 text-center">
+          <span
+            aria-hidden
+            className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary"
+          >
+            <Wallet size={20} />
+          </span>
+          <h2 className="mt-4 text-[16px]! font-bold!">{k("noWallets")}</h2>
+          <p className="mx-auto mt-1.5 max-w-100 text-[13px]! leading-relaxed! text-muted">
+            {k("noWalletsDesc")}
+          </p>
+        </Panel>
+      </div>
+    );
+  }
+
+  // The review step takes the whole page rather than sitting beside a form that
+  // is no longer what will run.
+  if (draft) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <div className="mx-auto mt-6 w-full max-w-[560px]">
+          <Panel className="p-4 sm:p-6">
+            <ConfirmStep
+              draft={draft}
+              paths={paths}
+              busy={confirm.isPending}
+              onBack={() => setDraft(null)}
+              onConfirm={confirmSwap}
+            />
+          </Panel>
+        </div>
+      </div>
+    );
+  }
+
+  const option = (currency: ExchangeCurrency, sending?: boolean): SelectOption => ({
+    value: currencyKey(currency),
+    label: (currency.code ?? "").toUpperCase(),
+    hint: currency.name,
+    // On the sending side the balance is the deciding fact — and it is also what
+    // tells the user a coin has no wallet behind it yet.
+    meta: sending
+      ? ownWallet(currency)
+        ? coinAmount(walletBalance(currency))
+        : k("noWallet")
+      : undefined,
+    icon: <CoinArt currency={currency} paths={paths} size={30} />,
+    keywords: currency.name,
+    disabled: sending ? !ownWallet(currency) : false,
   });
+
+  const busy = store.isPending;
 
   return (
     <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
-      <DashPageHeader
-        title={k("title")}
-        subtitle={k("subtitle")}
-        action={
-          <LiveRatePill label={k("liveRate")}>
-            1 {from.symbol} = {crypto(crossRate)} {to.symbol}
-          </LiveRatePill>
-        }
-      />
+      {header}
 
       <div className="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
         {/* ------------------------- Form ------------------------- */}
@@ -140,20 +291,19 @@ export function ExchangeCrypto() {
           <div className="relative">
             <AmountField
               label={k("from")}
-              value={fromValue}
-              onChange={(v) => {
-                setSide("from");
-                setFromRaw(v);
-              }}
+              value={amountRaw}
+              onChange={setAmountRaw}
               onBlur={() => setTouched(true)}
-              error={Boolean(error)}
+              error={Boolean(problem)}
+              disabled={busy}
               selector={
                 <SelectMenu
                   label={k("selectFrom")}
-                  value={fromKey}
-                  options={COINS.map(coinOption)}
-                  onChange={pickFrom}
+                  value={currencyKey(from)}
+                  options={currencies.map((c) => option(c, true))}
+                  onChange={(next) => pick("from", next)}
                   showHintInTrigger={false}
+                  disabled={busy}
                   className="w-38 shrink-0"
                 />
               }
@@ -162,7 +312,7 @@ export function ExchangeCrypto() {
                   <span className="text-[12px]! text-muted">
                     {k("balance")}:{" "}
                     <span className="font-semibold tabular-nums text-heading">
-                      {crypto(sellable) || "0"} {from.symbol}
+                      {coinAmount(balance)} {fromCode}
                     </span>
                   </span>
                   <PercentChips percents={PERCENTS} maxLabel={k("max")} onPick={setPercent} />
@@ -177,9 +327,10 @@ export function ExchangeCrypto() {
               <button
                 type="button"
                 onClick={swapPair}
+                disabled={busy}
                 aria-label={k("swap")}
                 title={k("swap")}
-                className="grid! h-10 w-10 cursor-pointer place-items-center rounded-full border-4 border-card bg-primary text-white shadow-[0_8px_18px_rgb(var(--primary__color)/0.35)] transition hover:rotate-180 hover:opacity-95"
+                className="grid! h-10 w-10 cursor-pointer place-items-center rounded-full border-4 border-card bg-primary text-white shadow-[0_8px_18px_rgb(var(--primary__color)/0.35)] transition hover:rotate-180 hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <ArrowUpDown size={16} aria-hidden />
               </button>
@@ -188,33 +339,31 @@ export function ExchangeCrypto() {
             <AmountField
               className="mt-2"
               label={k("to")}
-              value={toValue}
-              onChange={(v) => {
-                setSide("to");
-                setToRaw(v);
-              }}
+              value={figures.receive > 0 ? coinAmount(figures.receive) : ""}
+              readOnly
               selector={
                 <SelectMenu
                   label={k("selectTo")}
-                  value={toKey}
-                  options={COINS.map(coinOption)}
-                  onChange={pickTo}
+                  value={currencyKey(to)}
+                  options={currencies.map((c) => option(c))}
+                  onChange={(next) => pick("to", next)}
                   showHintInTrigger={false}
+                  disabled={busy}
                   className="w-38 shrink-0"
                 />
               }
               footer={
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px]! text-muted">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[12px]! text-muted">
                   <span>
-                    {k("minAmount")}:{" "}
+                    {k("limit")}:{" "}
                     <span className="tabular-nums">
-                      {crypto(from.min)} {from.symbol}
+                      {coinAmount(limits.min)} – {coinAmount(limits.max)} {fromCode}
                     </span>
                   </span>
                   <span>
-                    {k("maxAmount")}:{" "}
+                    {k("networkFees")}:{" "}
                     <span className="tabular-nums">
-                      {crypto(from.max)} {from.symbol}
+                      {coinAmount(figures.totalCharge)} {fromCode}
                     </span>
                   </span>
                 </div>
@@ -222,23 +371,12 @@ export function ExchangeCrypto() {
             />
           </div>
 
-          {error && (
-            <p className="mt-3 flex items-center gap-1.5 text-[12.5px]! text-hero-neg">
-              <TriangleAlert size={13} aria-hidden className="shrink-0" />
-              {error}
+          {problem && (
+            <p className="mt-3 flex items-start gap-1.5 text-[12.5px]! leading-snug! text-hero-neg">
+              <TriangleAlert size={13} aria-hidden className="mt-0.5 shrink-0" />
+              {problem}
             </p>
           )}
-
-          {/* ---- Pair overview ---- */}
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <PairCard coin={from} label={k("youConvert")} amount={crypto(fromNum) || "0"} />
-            <PairCard coin={to} label={k("youReceive")} amount={crypto(receive) || "0"} />
-          </div>
-
-          <p className="mt-4 flex items-start gap-2 rounded-xl bg-primary/8 px-3 py-2.5 text-[12px]! leading-relaxed! text-muted">
-            <Zap size={14} aria-hidden className="mt-0.5 shrink-0 text-primary" />
-            {k("instantNote")}
-          </p>
         </Panel>
 
         {/* ------------------------- Summary ------------------------- */}
@@ -248,38 +386,31 @@ export function ExchangeCrypto() {
 
             {/* The pair, read left to right, so the whole order is one glance. */}
             <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface p-3">
-              <CoinBadge color={from.color} glyph={from.glyph} size={34} />
+              <CoinArt currency={from} paths={paths} size={34} />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px]! font-bold!">{from.symbol}</div>
+                <div className="truncate text-[13px]! font-bold!">{fromCode}</div>
                 <div className="truncate text-[11.5px]! text-muted">{from.name}</div>
               </div>
-              <ArrowUpDown
-                size={15}
-                aria-hidden
-                className="shrink-0 rotate-90 text-muted rtl:-rotate-90"
-              />
-              <div className="min-w-0 flex-1 text-right">
-                <div className="truncate text-[13px]! font-bold!">{to.symbol}</div>
+              <ArrowRight size={15} aria-hidden className="shrink-0 text-muted rtl:rotate-180" />
+              <div className="min-w-0 flex-1 text-end">
+                <div className="truncate text-[13px]! font-bold!">{toCode}</div>
                 <div className="truncate text-[11.5px]! text-muted">{to.name}</div>
               </div>
-              <CoinBadge color={to.color} glyph={to.glyph} size={34} />
+              <CoinArt currency={to} paths={paths} size={34} />
             </div>
 
             <dl className="mt-4 flex flex-col gap-3">
               <Row label={k("rate")}>
-                1 {from.symbol} = {crypto(crossRate)} {to.symbol}
+                1 {fromCode} = {coinAmount(figures.rate)} {toCode}
               </Row>
-              <Row label={k("youConvert")}>
-                {crypto(fromNum) || "0"} {from.symbol}
+              <Row label={k("youSend")}>
+                {coinAmount(sending)} {fromCode}
               </Row>
-              <Row label={k("subtotal")}>
-                {crypto(grossTo) || "0"} {to.symbol}
+              <Row label={k("networkFees")}>
+                {coinAmount(figures.totalCharge)} {fromCode}
               </Row>
-              <Row label={k("exchangeFee").replace("{percent}", String(FEE_RATE * 100))}>
-                − {crypto(fee) || "0"} {to.symbol}
-              </Row>
-              <Row label={k("value")}>
-                ≈ {fiat(receive * to.rate)} {PAY_SYMBOL}
+              <Row label={k("youReceive")}>
+                {coinAmount(figures.receive)} {toCode}
               </Row>
               <Row label={k("arrival")}>
                 <span className="inline-flex! items-center gap-1.5">
@@ -290,24 +421,31 @@ export function ExchangeCrypto() {
             </dl>
 
             <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-4">
-              <span className="text-[13.5px]! font-semibold!">{k("youReceive")}</span>
+              <span className="text-[13.5px]! font-semibold!">{k("totalDeducted")}</span>
               <span className="text-[20px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
-                {crypto(receive) || "0"} {to.symbol}
+                {coinAmount(figures.payable)} {fromCode}
               </span>
             </div>
 
             <button
               type="button"
               onClick={submit}
-              className="btn-lift mt-5 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white"
+              disabled={busy}
+              className="btn-lift mt-5 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
             >
-              <Lock size={15} aria-hidden />
-              {k("continue")}
+              {busy ? (
+                <>
+                  <Loader2 size={16} aria-hidden className="animate-spin" />
+                  {k("reviewing")}
+                </>
+              ) : (
+                k("continue")
+              )}
             </button>
 
             <p className="mt-3 flex items-start gap-2 text-[11.5px]! leading-relaxed! text-muted">
               <ShieldCheck size={14} aria-hidden className="mt-px shrink-0 text-hero-mint" />
-              {k("secured").replace("{seconds}", String(RATE_LOCK_SECONDS))}
+              {k("secured")}
             </p>
           </Panel>
         </div>
@@ -316,25 +454,159 @@ export function ExchangeCrypto() {
   );
 }
 
-/** One half of the pair, shown under the fields as a plain-language readback. */
-function PairCard({
-  coin,
-  label,
-  amount,
+/* -------------------------------------------------------------------------- */
+/* Step two                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The server's quote, and the button that executes it.
+ *
+ * Every figure here comes from `store`'s response — none is recomputed locally.
+ * If the backend priced the order differently from the preview (a rate that moved
+ * between typing and submitting), this is where the real number appears, before
+ * the user agrees to it.
+ */
+function ConfirmStep({
+  draft,
+  paths,
+  busy,
+  onBack,
+  onConfirm,
 }: {
-  coin: (typeof COINS)[number];
-  label: string;
-  amount: string;
+  draft: ExchangeDraft;
+  paths: ImagePaths | undefined;
+  busy: boolean;
+  onBack: () => void;
+  onConfirm: () => void;
 }) {
+  const { t } = useLang();
+  const k = (name: string) => t(`exchangeCrypto.${name}`);
+
+  const quote = draft.data;
+  const fromCode = (quote?.sender_wallet?.code ?? "").toUpperCase();
+  const toCode = (quote?.receiver_wallet?.code ?? "").toUpperCase();
+  const fromBrand = coinBrand(fromCode);
+  const toBrand = coinBrand(toCode);
+
   return (
-    <div className={cn("flex items-center gap-3 rounded-xl border border-border bg-surface p-3")}>
-      <CoinBadge color={coin.color} glyph={coin.glyph} size={34} />
-      <div className="min-w-0">
-        <div className="text-[11.5px]! text-muted">{label}</div>
-        <div className="truncate text-[14px]! font-bold! tabular-nums">
-          {amount} {coin.symbol}
+    <div>
+      <h2 className="text-[16px]! font-bold!">{k("confirmTitle")}</h2>
+      <p className="mt-1 text-[12.5px]! leading-relaxed! text-muted">{k("confirmNote")}</p>
+
+      {/* The whole order in one line: what leaves, what arrives. The quote does
+          not carry the coin art paths, so this side falls back to the marks. */}
+      <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface p-3.5">
+        <CoinBadge color={fromBrand.color} glyph={fromBrand.glyph} size={34} />
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[14px]! font-bold! tabular-nums">
+            {coinAmount(quote?.sending_amount)} {fromCode}
+          </div>
+          <div className="truncate text-[11.5px]! text-muted">
+            {quote?.sender_wallet?.name || fromCode}
+          </div>
         </div>
+
+        <ArrowRight size={16} aria-hidden className="shrink-0 text-muted rtl:rotate-180" />
+
+        <div className="min-w-0 flex-1 text-end">
+          <div className="truncate text-[14px]! font-bold! tabular-nums">
+            {coinAmount(quote?.get_amount)} {toCode}
+          </div>
+          <div className="truncate text-[11.5px]! text-muted">
+            {quote?.receiver_wallet?.name || toCode}
+          </div>
+        </div>
+        <CoinBadge color={toBrand.color} glyph={toBrand.glyph} size={34} />
+      </div>
+
+      <dl className="mt-4 flex flex-col gap-3">
+        <Row label={k("rate")}>
+          1 {fromCode} = {coinAmount(quote?.exchange_rate)} {toCode}
+        </Row>
+        <Row label={k("youSend")}>
+          {coinAmount(quote?.sending_amount)} {fromCode}
+        </Row>
+        <Row label={k("networkFees")}>
+          {coinAmount(quote?.total_charge)} {fromCode}
+        </Row>
+        <Row label={k("youReceive")}>
+          {coinAmount(quote?.get_amount)} {toCode}
+        </Row>
+      </dl>
+
+      <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-4">
+        <span className="text-[13.5px]! font-semibold!">{k("totalDeducted")}</span>
+        <span className="text-[20px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
+          {coinAmount(quote?.payable_amount)} {fromCode}
+        </span>
+      </div>
+
+      <div className="mt-5 flex flex-col gap-2.5 sm:flex-row-reverse">
+        <button
+          type="button"
+          onClick={onConfirm}
+          disabled={busy}
+          className="btn-lift inline-flex h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {busy ? (
+            <>
+              <Loader2 size={16} aria-hidden className="animate-spin" />
+              {k("confirming")}
+            </>
+          ) : (
+            k("confirm")
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={busy}
+          className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-border px-5 text-[14px] font-semibold text-heading transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-60 sm:w-28"
+        >
+          {k("back")}
+        </button>
       </div>
     </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Coin art                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The API's coin image, with the brand disc behind it as the fallback — the same
+ * pairing the wallet cards use. A plain `<img>`, not `next/image`: images are
+ * unoptimized in this static export anyway, and the host comes from an env var.
+ */
+function CoinArt({
+  currency,
+  paths,
+  size = 30,
+}: {
+  currency: ExchangeCurrency | undefined;
+  paths: ImagePaths | undefined;
+  size?: number;
+}) {
+  const [broken, setBroken] = useState(false);
+  const code = (currency?.code ?? "").toUpperCase();
+  const brand = coinBrand(code);
+  const flag = imageUrl(paths, currency?.flag);
+
+  if (!flag || broken) return <CoinBadge color={brand.color} glyph={brand.glyph} size={size} />;
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={flag}
+      alt=""
+      width={size}
+      height={size}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      style={{ width: size, height: size }}
+      className="shrink-0 rounded-full object-cover"
+    />
   );
 }

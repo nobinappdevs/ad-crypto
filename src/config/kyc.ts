@@ -1,106 +1,79 @@
 /**
- * The KYC form, as data rather than markup.
+ * Helpers for the KYC form's server-supplied validation rules.
  *
- * The upstream API hands this back as `input_fields` — a list of names, types and
- * validation rules the operator can change without a release — so the page renders
- * whatever it is given instead of hard-coding controls. Keeping the shape here
- * means swapping this module for the real response is the whole migration.
- *
- * Labels are NOT in here: they are translation keys resolved by the page, so the
- * form reads correctly in all five languages. A field's `name` IS its key.
+ * The form itself is not described here — it comes from
+ * `GET /user/profile/kyc/input-fields`, because which documents are asked for and
+ * which formats are accepted is operator policy that changes without a release.
+ * What lives here is the translation from that payload's conventions (sizes in
+ * megabytes, formats as bare extensions) into what a browser and a validator need.
  */
 
-/** Every control the renderer knows how to draw. */
-export type KycFieldType = "text" | "date" | "select" | "country" | "file" | "textarea";
+import type { KycField, KycStatus } from "@/services/kyc.service";
 
-export type KycField = {
-  name: string;
-  type: KycFieldType;
-  required?: boolean;
-  /** `select` only — option values; labels come from `kyc.options.<name>.<value>`. */
-  options?: readonly string[];
-  /** Minimum length a text field has to reach to count as filled in. */
-  minLength?: number;
-  /** Takes both columns of the two-column grid. */
-  wide?: boolean;
-  /** Renders `kyc.fields.<name>.hint` beside the label. */
-  hint?: boolean;
+/** 0 Unverified, 1 Verified, 2 Pending review, 3 Rejected. */
+export const KYC_STATUS_KEY: Record<KycStatus, string> = {
+  0: "unverified",
+  1: "verified",
+  2: "pending",
+  3: "rejected",
 };
 
-export type KycSection = {
-  key: string;
-  fields: readonly KycField[];
-};
-
-export const KYC_SECTIONS: readonly KycSection[] = [
-  {
-    key: "identity",
-    fields: [
-      { name: "firstName", type: "text", required: true, minLength: 2 },
-      { name: "lastName", type: "text", required: true, minLength: 2 },
-      { name: "dob", type: "date", required: true, hint: true },
-      { name: "nationality", type: "country", required: true },
-    ],
-  },
-  {
-    key: "document",
-    fields: [
-      {
-        name: "documentType",
-        type: "select",
-        required: true,
-        options: ["passport", "nationalId", "drivingLicence", "residencePermit"],
-      },
-      { name: "documentNumber", type: "text", required: true, minLength: 4 },
-      { name: "issuedBy", type: "country", required: true },
-      { name: "expiry", type: "date", required: true, hint: true },
-    ],
-  },
-  {
-    key: "scans",
-    fields: [
-      { name: "docFront", type: "file", required: true },
-      { name: "docBack", type: "file", required: true },
-      { name: "selfie", type: "file", required: true, wide: true, hint: true },
-      { name: "notes", type: "textarea", wide: true, hint: true },
-    ],
-  },
-] as const;
-
-/**
- * 0 unverified, 1 verified, 2 pending review, 3 rejected — the API's own flag.
- *
- * Fixed at 0 while there is no backend: the page renders all four states, and
- * submitting moves it to 2 locally. Change this to preview the rest.
- */
-export const KYC_STATUS = 0;
-
-/** The reviewer's limits: 5 MB per scan, and the three formats they can read. */
-export const MAX_FILE_BYTES = 5 * 1024 * 1024;
-export const ACCEPTED_FILE_TYPES = ["image/png", "image/jpeg", "image/webp"];
-
-/** A document has to outlast the review it is submitted for. */
-export const MIN_AGE = 18;
-export const MAX_AGE = 100;
-
-/** Whole years between an ISO date and today, or null if the date is unusable. */
-export function ageFrom(iso: string) {
-  if (!iso) return null;
-  const born = new Date(iso);
-  if (Number.isNaN(born.getTime())) return null;
-  const now = new Date();
-  let age = now.getFullYear() - born.getFullYear();
-  const beforeBirthday =
-    now.getMonth() < born.getMonth() ||
-    (now.getMonth() === born.getMonth() && now.getDate() < born.getDate());
-  if (beforeBirthday) age -= 1;
-  return age;
+/** Only these two leave anything for the user to do; 1 and 2 are waiting states. */
+export function kycAcceptsSubmission(status: KycStatus | undefined) {
+  return status === 0 || status === 3;
 }
 
-/** True when an ISO date is in the past — an expiry that has already passed. */
-export function isPast(iso: string) {
-  if (!iso) return false;
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return false;
-  return date.getTime() < Date.now();
+/** Anything unrecognised is treated as unverified — the state that asks for documents. */
+export function normalizeKycStatus(status: number | undefined): KycStatus {
+  return status === 1 || status === 2 || status === 3 ? status : 0;
+}
+
+/**
+ * `["jpg","png"]` -> `".jpg,.png"` for an `<input accept>`.
+ *
+ * Extensions rather than MIME types on purpose: that is the form the API sends,
+ * and the mapping to MIME is not one-to-one (jpg/jpeg both mean image/jpeg, and
+ * some browsers report nothing at all for less common types). An empty list
+ * returns undefined so the attribute is omitted rather than set to "".
+ */
+export function acceptAttribute(mimes: string[] | undefined) {
+  if (!mimes?.length) return undefined;
+  return mimes.map((ext) => `.${ext.trim().replace(/^\./, "")}`).join(",");
+}
+
+/** The API states file limits in MEGABYTES, as a string ("2"). */
+export function maxFileBytes(max: string | number | undefined): number | null {
+  const mb = typeof max === "string" ? Number(max) : max;
+  if (!mb || !Number.isFinite(mb) || mb <= 0) return null;
+  return mb * 1024 * 1024;
+}
+
+/** A file's extension, lowercased, without the dot. */
+export function fileExtension(name: string) {
+  const dot = name.lastIndexOf(".");
+  return dot === -1 ? "" : name.slice(dot + 1).toLowerCase();
+}
+
+/** Checked by extension, for the same reason `acceptAttribute` uses them. */
+export function fileTypeAllowed(file: File, mimes: string[] | undefined) {
+  if (!mimes?.length) return true;
+  const allowed = mimes.map((ext) => ext.trim().replace(/^\./, "").toLowerCase());
+  return allowed.includes(fileExtension(file.name));
+}
+
+/**
+ * A select option's value and its display label.
+ *
+ * The two differ because the API sends options with stray leading whitespace
+ * (`[" Driving License", " Passport"]`). The label is trimmed so it reads
+ * correctly; the value is sent back BYTE-FOR-BYTE, because the backend's own
+ * `in:` rule compares against the untrimmed string it gave us.
+ */
+export function selectOptions(options: string[] | undefined) {
+  return (options ?? []).map((option) => ({ value: option, label: option.trim() }));
+}
+
+/** Whether the field is required, per either place the API may say so. */
+export function isFieldRequired(field: KycField) {
+  return Boolean(field.required || field.validation?.required);
 }

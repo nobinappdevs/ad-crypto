@@ -41,6 +41,9 @@ const MENU_HEIGHT = 320;
 /** Gap between trigger and menu. */
 const MENU_GAP = 8;
 
+/** Smallest gap kept between the menu and the viewport edge. */
+const EDGE = 12;
+
 const MENU_SCROLL =
   "[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent";
 
@@ -78,6 +81,9 @@ export function SelectMenu({
   label,
   className,
   showHintInTrigger = true,
+  showIconInTrigger = true,
+  bare = false,
+  menuMinWidth = 0,
   placeholder,
   searchable = false,
   searchPlaceholder,
@@ -90,6 +96,17 @@ export function SelectMenu({
   label: string;
   className?: string;
   showHintInTrigger?: boolean;
+  /** Off for a compact trigger whose label already identifies the choice. */
+  showIconInTrigger?: boolean;
+  /**
+   * Drops the trigger's own border, background and radius, for a menu that sits
+   * INSIDE another field — the dial code in front of a phone number. The field
+   * around it owns the frame and the focus ring; two of each would read as two
+   * controls, which is exactly what this is not.
+   */
+  bare?: boolean;
+  /** Floor for the menu's width, in px. Defaults to the trigger's own width. */
+  menuMinWidth?: number;
   /**
    * Shown when `value` matches no option. Without it the trigger falls back to the
    * first option, which would claim a choice the user has not made — fine for a
@@ -130,14 +147,21 @@ export function SelectMenu({
     const rect = triggerRef.current?.getBoundingClientRect();
     if (!rect) return;
     const below = window.innerHeight - rect.bottom;
+
+    // A menu is normally exactly as wide as its field. A narrow trigger — the dial
+    // code in front of a phone number — would give a 100px list to read country
+    // names in, so it may ask for more and is then nudged back inside the viewport.
+    const width = Math.max(rect.width, menuMinWidth);
+    const left = Math.min(Math.max(EDGE, rect.left), Math.max(EDGE, window.innerWidth - width - EDGE));
+
     setAnchor({
       top: rect.top,
       bottom: rect.bottom,
-      left: rect.left,
-      width: rect.width,
+      left,
+      width,
       dropUp: below < MENU_HEIGHT + 16 && rect.top > below,
     });
-  }, []);
+  }, [menuMinWidth]);
 
   /**
    * Reset the query and park the highlight on the current selection each time the
@@ -282,11 +306,18 @@ export function SelectMenu({
         aria-activedescendant={searchable ? undefined : activeId}
         aria-label={label}
         className={cn(
-          "flex h-13 w-full cursor-pointer items-center gap-3 rounded-xl border bg-surface px-3 text-left transition disabled:cursor-not-allowed disabled:opacity-60",
-          open ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/60",
+          "flex h-13 w-full cursor-pointer items-center text-left transition disabled:cursor-not-allowed disabled:opacity-60",
+          bare
+            ? "gap-1.5 px-3 text-heading hover:text-primary"
+            : cn(
+                "gap-3 rounded-xl border bg-surface px-3",
+                open
+                  ? "border-primary ring-2 ring-primary/20"
+                  : "border-border hover:border-primary/60",
+              ),
         )}
       >
-        {selected?.icon}
+        {showIconInTrigger && selected?.icon}
         <span className="min-w-0 flex-1">
           <span
             className={cn(

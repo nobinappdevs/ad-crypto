@@ -1,12 +1,19 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
+import { FALLBACK_MONTHS, monthKeyOf, niceScale } from "@/config/chart";
 import { ChartViewToggle, tooltipPlacement, YAxis } from "./ChartViewToggle";
 
 /**
- * Twelve months x buy / sell / withdraw volume, as a grouped bar chart.
+ * Buy / sell / withdraw activity per month, as a grouped bar chart, from
+ * `GET /user/dashboard`'s `chart` block.
+ *
+ * The plotted measure is a COUNT of transactions, not money moved — that is what
+ * the endpoint returns, and the axis is scaled and formatted as integers to match.
+ * Reading these as dollars would overstate a quiet month by several orders of
+ * magnitude, so nothing here is currency-formatted.
  *
  * Grouped and baseline-anchored rather than the floating segments the source
  * mock used: a bar that does not start at zero encodes its value in a position
@@ -17,20 +24,6 @@ import { ChartViewToggle, tooltipPlacement, YAxis } from "./ChartViewToggle";
  * that thin is unhittable, and the reader wants all three numbers for a month
  * anyway. Hovering therefore opens one tooltip carrying the full group.
  */
-const MONTH_KEYS = [
-  "jan",
-  "feb",
-  "mar",
-  "apr",
-  "may",
-  "jun",
-  "jul",
-  "aug",
-  "sep",
-  "oct",
-  "nov",
-  "dec",
-] as const;
 
 /**
  * Fixed slot order — a series keeps its colour no matter which others are on
@@ -42,30 +35,17 @@ const SERIES = [
   { key: "withdrawCrypto", token: "var(--chart-3)" },
 ] as const;
 
-/** [buy, sell, withdraw] per month, in USD moved. */
-const DATA: readonly (readonly [number, number, number])[] = [
-  [820, 410, 260],
-  [1240, 680, 390],
-  [1105, 520, 315],
-  [1180, 745, 480],
-  [690, 355, 210],
-  [1265, 705, 425],
-  [940, 545, 295],
-  [1330, 780, 505],
-  [1055, 610, 360],
-  [1290, 820, 470],
-  [760, 470, 245],
-  [905, 560, 330],
-];
+export type TransactionsChartProps = {
+  /** The API's own labels; falls back to twelve months when absent. */
+  labels?: string[];
+  buy?: number[];
+  sell?: number[];
+  withdraw?: number[];
+};
 
-/** Whole hundreds, so every tick is an integer the 36px axis column can hold. */
-const Y_MAX = 1500;
-const Y_TICKS = [1500, 1200, 900, 600, 300, 0];
+const count = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 
-/** Axis and table figures are money; the tooltip repeats them the same way. */
-const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
-
-export function TransactionsChart() {
+export function TransactionsChart({ labels, buy, sell, withdraw }: TransactionsChartProps) {
   const { t } = useLang();
   const k = (name: string) => t(`dashboard.${name}`);
 
@@ -73,7 +53,25 @@ export function TransactionsChart() {
   const [asTable, setAsTable] = useState(false);
   const tableId = useId();
 
-  const monthLabel = (i: number) => k(`months.${MONTH_KEYS[i]}`);
+  /** One row per label, padded so a short series can't shorten the axis. */
+  const groups = useMemo(() => {
+    const cols = labels?.length ? labels : [...FALLBACK_MONTHS];
+    return cols.map((_, i) => [buy?.[i] ?? 0, sell?.[i] ?? 0, withdraw?.[i] ?? 0] as const);
+  }, [labels, buy, sell, withdraw]);
+
+  const columns = labels?.length ? labels : [...FALLBACK_MONTHS];
+
+  const scale = useMemo(
+    () => niceScale(Math.max(0, ...groups.flatMap((g) => [...g])), { integer: true }),
+    [groups],
+  );
+
+  /** Translated when the label is a month we know, verbatim otherwise. */
+  const labelAt = (i: number) => {
+    const raw = columns[i] ?? "";
+    const key = monthKeyOf(raw);
+    return key ? k(`months.${key}`) : raw;
+  };
 
   return (
     <div className="px-4 pt-1 pb-5 sm:px-5">
@@ -96,31 +94,67 @@ export function TransactionsChart() {
       </div>
 
       {asTable ? (
-        <DataTable id={tableId} monthLabel={monthLabel} k={k} />
+        <div id={tableId} className="max-h-64 overflow-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="py-2 pr-3 text-start text-[12px]! font-semibold! text-muted">
+                  {k("month")}
+                </th>
+                {SERIES.map((series) => (
+                  <th
+                    key={series.key}
+                    className="py-2 pl-3 text-end text-[12px]! font-semibold! text-muted"
+                  >
+                    {k(`series.${series.key}`)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {groups.map((group, i) => (
+                <tr key={columns[i]} className="border-b border-border last:border-b-0">
+                  <td className="py-2 pr-3 text-[12.5px]!">{labelAt(i)}</td>
+                  {group.map((value, si) => (
+                    <td
+                      key={SERIES[si].key}
+                      className="py-2 pl-3 text-end text-[12.5px]! font-medium! tabular-nums"
+                    >
+                      {count(value)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="flex">
-          <YAxis ticks={Y_TICKS} />
+          <YAxis ticks={scale.ticks} />
 
           <div className="relative min-w-0 flex-1">
             {/* Gridlines: solid hairlines a shade off the surface. Dashes would
                 read as thresholds rather than a grid. */}
-            <div aria-hidden className="absolute inset-x-0 top-0 bottom-6 flex flex-col justify-between">
-              {Y_TICKS.map((tick) => (
+            <div
+              aria-hidden
+              className="absolute inset-x-0 top-0 bottom-6 flex flex-col justify-between"
+            >
+              {scale.ticks.map((tick) => (
                 <span key={tick} className="h-px w-full" style={{ background: "var(--chart-grid)" }} />
               ))}
             </div>
 
             <div className="relative flex h-56 items-end sm:h-60">
-              {DATA.map((group, i) => (
+              {groups.map((group, i) => (
                 <button
-                  key={MONTH_KEYS[i]}
+                  key={columns[i]}
                   type="button"
                   onPointerEnter={() => setActive(i)}
                   onPointerLeave={() => setActive(null)}
                   onFocus={() => setActive(i)}
                   onBlur={() => setActive(null)}
-                  aria-label={`${monthLabel(i)}: ${SERIES.map(
-                    (s, si) => `${k(`series.${s.key}`)} ${usd(group[si])}`,
+                  aria-label={`${labelAt(i)}: ${SERIES.map(
+                    (s, si) => `${k(`series.${s.key}`)} ${count(group[si])}`,
                   ).join(", ")}`}
                   className="group relative flex h-full min-w-0 flex-1 cursor-pointer items-end justify-center gap-0.5 outline-none"
                 >
@@ -140,7 +174,7 @@ export function TransactionsChart() {
                       aria-hidden
                       className="relative w-1.5 rounded-t-sm transition-[height] duration-300 sm:w-2"
                       style={{
-                        height: `${(value / Y_MAX) * 100}%`,
+                        height: `${(value / scale.max) * 100}%`,
                         background: SERIES[si].token,
                       }}
                     />
@@ -155,14 +189,12 @@ export function TransactionsChart() {
                   // Anchored to the group's TALLEST bar: anchoring to the plot
                   // top would sit the card on the bars it is describing.
                   style={tooltipPlacement(
-                    100 - (Math.max(...DATA[active]) / Y_MAX) * 100,
-                    ((active + 0.5) / DATA.length) * 100,
+                    100 - (Math.max(...groups[active]) / scale.max) * 100,
+                    ((active + 0.5) / groups.length) * 100,
                     72,
                   )}
                 >
-                  <div className="text-[11px]! font-semibold text-white/65">
-                    {monthLabel(active)}
-                  </div>
+                  <div className="text-[11px]! font-semibold text-white/65">{labelAt(active)}</div>
                   <div className="mt-1.5 flex flex-col gap-1">
                     {SERIES.map((series, si) => (
                       <div key={series.key} className="flex items-center gap-2">
@@ -175,7 +207,7 @@ export function TransactionsChart() {
                           {k(`series.${series.key}`)}
                         </span>
                         <span className="ml-auto text-[12px]! font-bold tabular-nums">
-                          {usd(DATA[active][si])}
+                          {count(groups[active][si])}
                         </span>
                       </div>
                     ))}
@@ -189,66 +221,18 @@ export function TransactionsChart() {
                 same box — let the row size itself and the grid drifts off the
                 bar baseline. */}
             <div aria-hidden className="flex h-6 pt-2">
-              {MONTH_KEYS.map((_, i) => (
+              {columns.map((column, i) => (
                 <span
-                  key={MONTH_KEYS[i]}
-                  className="min-w-0 flex-1 text-center text-[11px]! leading-4! text-muted"
+                  key={column}
+                  className="min-w-0 flex-1 truncate text-center text-[11px]! leading-4! text-muted"
                 >
-                  {monthLabel(i)}
+                  {labelAt(i)}
                 </span>
               ))}
             </div>
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-/** The chart's WCAG-clean twin — every plotted value, reachable without hover. */
-function DataTable({
-  id,
-  monthLabel,
-  k,
-}: {
-  id: string;
-  monthLabel: (i: number) => string;
-  k: (name: string) => string;
-}) {
-  return (
-    <div id={id} className="max-h-64 overflow-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b border-border">
-            <th className="py-2 pr-3 text-start text-[12px]! font-semibold! text-muted">
-              {k("month")}
-            </th>
-            {SERIES.map((series) => (
-              <th
-                key={series.key}
-                className="py-2 pl-3 text-end text-[12px]! font-semibold! text-muted"
-              >
-                {k(`series.${series.key}`)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {DATA.map((group, i) => (
-            <tr key={MONTH_KEYS[i]} className="border-b border-border last:border-b-0">
-              <td className="py-2 pr-3 text-[12.5px]!">{monthLabel(i)}</td>
-              {group.map((value, si) => (
-                <td
-                  key={SERIES[si].key}
-                  className="py-2 pl-3 text-end text-[12.5px]! font-medium! tabular-nums"
-                >
-                  {usd(value)}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }

@@ -377,6 +377,7 @@
     "forgot": "Forgot Password?",
     "loginCta": "Login Now",
     "registerCta": "Register Now",
+    "registering": "Registering...",
     "loginPrompt": "Don't have an account?",
     "loginAction": "Register Now",
     "registerPrompt": "Already have an account?",
@@ -424,6 +425,7 @@
       "otpTitle": "Confirm Your Email",
       "otpBlurbLead": "We've sent a 6-digit code to",
       "otpBlurbTail": "Enter it below to activate your account.",
+      "yourEmail": "your email address",
       "changeEmail": "Wrong email? Change it",
       "resend": "Resend code",
       "resendIn": "You can request a new code in",
@@ -433,11 +435,21 @@
       "verifiedToast": "Email verified. You can log in now.",
       "securityNote": "The code expires in 10 minutes and can only be used once."
     },
+    "verify2fa": {
+      "title": "Two-Factor Verification",
+      "blurb": "Open your authenticator app and enter the 6-digit code it shows for AdCrypto.",
+      "verify": "Verify Code",
+      "verifying": "Verifying...",
+      "verifiedToast": "Two-factor verified.",
+      "signOut": "Sign in with a different account",
+      "note": "The code changes every 30 seconds. If one is rejected, wait for the next."
+    },
     "digitLabel": "Digit {n}"
   },
   "dashboard": {
     "title": "Dashboard",
     "logout": "Log out",
+    "loggedOut": "Logged out",
     "searchPlaceholder": "Type here to start searching...",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
@@ -480,29 +492,8 @@
       "newCount": "{n} new",
       "empty": "You are all caught up",
       "emptyDesc": "Order updates and security alerts land here.",
-      "viewAll": "View all activity",
-      "items": {
-        "buyFilled": {
-          "title": "Buy order filled",
-          "body": "0.25 BTC credited to your wallet at $43,009.00."
-        },
-        "sellReview": {
-          "title": "Sell order under review",
-          "body": "Your 1.5 ETH payout is with our team — usually within the hour."
-        },
-        "withdrawSent": {
-          "title": "Withdrawal broadcast",
-          "body": "0.08 BTC sent over BNB Smart Chain, waiting on confirmations."
-        },
-        "exchangeDone": {
-          "title": "Swap completed",
-          "body": "42 SOL exchanged for 0.09612 BTC."
-        },
-        "cardReview": {
-          "title": "Card application received",
-          "body": "We will email you as soon as verification finishes."
-        }
-      }
+      "untitled": "Activity",
+      "viewAll": "View all activity"
     },
     "logoutTitle": "Log out of AdCrypto?",
     "logoutDesc": "You will need to sign in again to reach your wallets and orders.",
@@ -535,13 +526,95 @@
       "conversion": "Visitors who funded an account"
     },
     "myWallets": "My Wallets",
+    "loadFailed": "Could not load your dashboard",
+    "retry": "Try again",
+    "noWalletsTitle": "No wallets yet",
+    "noWalletsDesc": "Your wallets appear here as soon as they are created for your account.",
+    "depositAddress": "Deposit address",
+    "copyAddress": "Copy address",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the address and copy it manually.",
+    "chartCountHint": "Transaction count · last 12 months",
+    "txType": {
+      "buy": "Buy",
+      "sell": "Sell",
+      "withdraw": "Withdraw",
+      "exchange": "Exchange"
+    },
+    "txStatus": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "rejected": "Rejected",
+      "unknown": "Unknown"
+    },
+    "txDetail": {
+      "trx_id": "Reference",
+      "screenshot": "Screenshot",
+      "branch": "Branch",
+      "bank_name": "Bank name",
+      "bank_number": "Bank number",
+      "account_name": "Account name",
+      "account_number": "Account number",
+      "wallet_type": "Wallet type",
+      "wallet": "Coin",
+      "sender_wallet": "From",
+      "receiver_wallet": "To",
+      "coin": "Coin",
+      "network": "Network",
+      "network_name": "Network",
+      "payment_method": "Payment method",
+      "method": "Payment method",
+      "amount": "Amount",
+      "enter_amount": "Amount entered",
+      "receive_amount": "Amount received",
+      "exchange_rate": "Exchange rate",
+      "rate": "Exchange rate",
+      "network_fee": "Network fee",
+      "network_fees": "Network fee",
+      "total_charge": "Charge",
+      "total_payable": "Total payable",
+      "address": "Address",
+      "wallet_address": "Wallet address",
+      "note": "Note",
+      "remark": "Remark",
+      "phone": "Phone",
+      "email": "Email",
+      "country": "Country",
+      "source": "Source",
+      "transaction_id": "Payment reference",
+      "txn_hash": "Transaction hash",
+      "sender_wallet_address": "From address",
+      "receiver_wallet_address": "To address",
+      "sending_amount": "Sending amount",
+      "get_amount": "You get",
+      "will_get": "You get",
+      "payable_amount": "Total payable",
+      "fixed_charge": "Fixed charge",
+      "percent_charge": "Percentage charge",
+      "sender_ex_rate": "Sender rate",
+      "available_balance": "Balance after"
+    },
+    "kycNotice": {
+      "unverified": {
+        "title": "Verify your identity",
+        "desc": "Withdrawals and card issuing stay locked until your documents are approved."
+      },
+      "pending": {
+        "title": "Your documents are in review",
+        "desc": "A reviewer has your submission. You will get an email as soon as there is a decision."
+      },
+      "rejected": {
+        "title": "Your verification was rejected",
+        "desc": "Something about the last submission did not check out. Correct it and send it again."
+      },
+      "cta": "Verify now"
+    },
     "viewMore": "View more",
     "viewLess": "View less",
-    "last24h": "24h",
     "transactionsOverview": "Transactions Overview",
     "buyCryptoChart": "Buy Crypto Chart",
     "statusBreakdown": "Order Status Breakdown",
-    "last12Months": "(12 Months)",
     "weeklyProgress": "Weekly Settlement Progress",
     "viewTable": "Table",
     "viewChart": "Chart",
@@ -551,8 +624,6 @@
       "buyCrypto": "Buy Crypto",
       "sellCrypto": "Sell Crypto",
       "withdrawCrypto": "Withdraw Crypto",
-      "buyVolume": "Bought",
-      "buyOrders": "Orders",
       "inProgress": "In progress",
       "pending": "Pending",
       "completed": "Completed",
@@ -594,7 +665,6 @@
     },
     "transactionHistory": "Transaction History",
     "download": "Download",
-    "reIssue": "Re-Issue",
     "table": {
       "productName": "Product Name",
       "type": "Type",
@@ -609,7 +679,19 @@
       "totalRow": "Total",
       "selectedCount": "{selected} of {total} rows selected",
       "newestFew": "(newest {count})",
-      "rowCount": "({count})"
+      "rowCount": "({count})",
+      "asset": "Asset",
+      "amount": "Amount",
+      "charge": "Charge",
+      "payable": "Payable",
+      "emptyTitle": "No transactions yet",
+      "emptyDesc": "Buy, sell, exchange or withdraw crypto and your activity shows up here.",
+      "network": "Network",
+      "method": "Method",
+      "details": "Order details",
+      "showDetails": "Show order details",
+      "hideDetails": "Hide order details",
+      "open": "Open"
     },
     "viewAll": "View all",
     "filters": {
@@ -622,8 +704,13 @@
     },
     "transactionsPage": {
       "subtitle": "Every order on the account — buys, sells and withdrawals — with the fee charged on each.",
-      "searchPlaceholder": "Search coin, reference or email",
-      "empty": "No transactions match that filter."
+      "searchPlaceholder": "Search by transaction ID",
+      "empty": "No transactions match that filter.",
+      "loadFailed": "Could not load your transactions",
+      "showing": "{from}–{to} of {total}",
+      "page": "Page {page} of {pages}",
+      "prev": "Previous page",
+      "next": "Next page"
     },
     "tradeSide": {
       "buy": "Buy",
@@ -772,34 +859,44 @@
   },
   "exchangeCrypto": {
     "title": "Exchange Crypto",
-    "subtitle": "Swap one coin for another inside your AdCrypto wallet — no chain, no waiting.",
-    "liveRate": "Live rate",
-    "from": "You convert",
-    "to": "You receive",
-    "selectFrom": "Coin to convert",
+    "subtitle": "Swap one coin for another inside your AdCrypto wallet — settled instantly, no chain, no waiting.",
+    "liveRate": "Exchange rate",
+    "from": "Exchange from",
+    "to": "Exchange to",
+    "selectFrom": "Coin to exchange",
     "selectTo": "Coin to receive",
     "swap": "Swap the pair",
-    "balance": "Available",
+    "balance": "Available balance",
     "max": "Max",
-    "minAmount": "Min",
-    "maxAmount": "Max",
-    "youConvert": "You convert",
-    "youReceive": "You receive",
-    "instantNote": "This swap happens inside AdCrypto, so nothing touches a blockchain and there is no network fee.",
+    "limit": "Limit",
+    "networkFees": "Network fees",
     "summary": "Swap summary",
     "rate": "Rate",
-    "subtotal": "Subtotal",
-    "exchangeFee": "Exchange fee ({percent}%)",
-    "value": "Estimated value",
+    "youSend": "You send",
+    "youReceive": "You receive",
     "arrival": "Settles in",
     "instant": "Instantly",
-    "continue": "Review swap",
-    "secured": "The rate is held for {seconds} seconds once you continue, and fees are shown before you confirm.",
+    "totalDeducted": "Total deducted",
+    "continue": "Exchange Crypto",
+    "reviewing": "Pricing your swap…",
+    "secured": "You will see the final figures and confirm them before anything leaves your wallet.",
+    "confirmTitle": "Confirm your swap",
+    "confirmNote": "AdCrypto priced this order just now. Nothing moves until you confirm.",
+    "confirm": "Confirm swap",
+    "confirming": "Swapping…",
+    "back": "Back",
+    "success": "Swap completed.",
+    "loadFailed": "Could not load the exchange",
+    "retry": "Try again",
+    "noWallet": "No wallet",
+    "noWallets": "No wallets yet",
+    "noWalletsDesc": "A swap moves value between wallets you already hold — buy or receive a coin first.",
     "errorAmount": "Enter an amount to continue.",
     "errorMin": "Minimum swap is {min} {coin}.",
     "errorMax": "Maximum swap is {max} {coin}.",
-    "errorBalance": "You have {balance} {coin} available.",
-    "submitted": "Swap of {from} to {to} created."
+    "errorBalance": "You need {payable} {coin} including fees, and your wallet holds {balance}.",
+    "errorNoWallet": "You have no {coin} wallet yet, so it cannot be the coin you exchange.",
+    "errorSamePair": "Choose two different coins."
   },
   "cardCustomer": {
     "title": "Create Card Customer",
@@ -923,6 +1020,11 @@
     "statusLabel": "Two-factor",
     "statusOn": "Enabled",
     "statusOff": "Not enabled",
+    "loading": "Loading...",
+    "statusUnknown": "Unknown",
+    "loadFailed": "Could not load your two-factor settings",
+    "retry": "Try again",
+    "saving": "Saving...",
     "setupTitle": "Authenticator setup",
     "setupHint": "Scan the code, or type the key into an app that cannot scan.",
     "bannerOn": "Two-factor authentication is active. Sign-ins and withdrawals ask for a code from your authenticator.",
@@ -971,6 +1073,100 @@
     "enabledToast": "Two-factor authentication enabled.",
     "disabledToast": "Two-factor authentication disabled."
   },
+  "deleteAccount": {
+    "title": "Delete Account",
+    "desc": "Permanently close this account. Your wallets, transaction history and cards go with it, and this cannot be undone.",
+    "cta": "Delete my account",
+    "confirmTitle": "Delete this account?",
+    "confirmDesc": "This closes your AdCrypto account for good. Withdraw any remaining balance first — it cannot be recovered afterwards.",
+    "ack": "I understand this cannot be undone.",
+    "confirmCta": "Delete permanently",
+    "deleting": "Deleting...",
+    "successToast": "Your account has been deleted."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Your name, contact details and address — and the password you sign in with.",
+    "statusLabel": "Verification",
+    "loadFailed": "Could not load your profile",
+    "retry": "Try again",
+    "kycStatus": {
+      "unverified": "Unverified",
+      "verified": "Verified",
+      "pending": "In review",
+      "rejected": "Rejected"
+    },
+    "photo": {
+      "change": "Change photo",
+      "remove": "Remove",
+      "hint": "PNG, JPG or WEBP, up to 2 MB. Square images look best.",
+      "pending": "uploaded when you save",
+      "errorType": "Use a PNG, JPG or WEBP image.",
+      "errorSize": "That image is over 2 MB."
+    },
+    "sections": {
+      "identity": "Personal details",
+      "identityHint": "The name we use on statements and in support conversations.",
+      "address": "Address",
+      "addressHint": "Where you live. Needed before a card can be issued to you."
+    },
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email address",
+    "emailHint": "contact support to change",
+    "username": "Username",
+    "usernameHint": "chosen at sign-up",
+    "mobile": "Mobile number",
+    "mobileCode": "Country code",
+    "mobileCodePlaceholder": "Code",
+    "mobilePlaceholder": "Include your country code",
+    "dateOfBirth": "Date of birth",
+    "country": "Country",
+    "selectCountry": "Select a country",
+    "searchCountry": "Search countries",
+    "noCountry": "No country matches that",
+    "state": "State / Region",
+    "city": "City",
+    "zip": "Postal code",
+    "address": "Street address",
+    "addressPlaceholder": "House number, street, area",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "saved": "Profile updated.",
+    "errorRequired": "This field is required.",
+    "password": {
+      "title": "Password",
+      "hint": "Your current password confirms it is you making the change.",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "show": "Show password",
+      "rules": "at least {min} characters",
+      "cta": "Update password",
+      "saving": "Updating...",
+      "saved": "Password updated.",
+      "secured": "Sent over an encrypted connection, and never stored in readable form.",
+      "errorCurrent": "Enter your current password.",
+      "errorShort": "Use at least {min} characters.",
+      "errorSame": "The new password is the same as the current one.",
+      "errorMatch": "The two passwords do not match."
+    },
+    "account": {
+      "title": "Account",
+      "hint": "What we hold on file for this login.",
+      "kyc": "Identity verification",
+      "twoFa": "Two-factor sign-in",
+      "twoFaHint": "Authenticator app",
+      "manage": "Manage",
+      "verify": "Verify"
+    },
+    "tips": {
+      "title": "Keeping this account yours",
+      "name": "Use the name on your ID — a mismatch is the most common reason verification fails.",
+      "photo": "A recognisable photo helps our support team confirm who they are talking to.",
+      "password": "Change your password if you have ever used it on another site."
+    }
+  },
   "kyc": {
     "title": "KYC Verification",
     "subtitle": "Confirm who you are once, and higher limits, card issuing and fiat payouts open up.",
@@ -997,101 +1193,34 @@
         "note": "Something about the last submission did not check out. Correct it below and send it again."
       }
     },
-    "sections": {
-      "identity": {
-        "title": "Your identity",
-        "hint": "Exactly as printed on the document you are submitting."
-      },
-      "document": {
-        "title": "The document",
-        "hint": "Which ID you are using, and how long it is valid for."
-      },
-      "scans": {
-        "title": "Photos",
-        "hint": "PNG, JPG or WebP, up to 5 MB each."
-      }
-    },
-    "fields": {
-      "firstName": {
-        "label": "First name",
-        "placeholder": "As on your document"
-      },
-      "lastName": {
-        "label": "Last name",
-        "placeholder": "As on your document"
-      },
-      "dob": {
-        "label": "Date of birth",
-        "hint": "you must be 18 or over"
-      },
-      "nationality": {
-        "label": "Nationality"
-      },
-      "documentType": {
-        "label": "Document type"
-      },
-      "documentNumber": {
-        "label": "Document number",
-        "placeholder": "Number printed on the document"
-      },
-      "issuedBy": {
-        "label": "Issuing country"
-      },
-      "expiry": {
-        "label": "Expiry date",
-        "hint": "must still be valid"
-      },
-      "docFront": {
-        "label": "Document — front"
-      },
-      "docBack": {
-        "label": "Document — back"
-      },
-      "selfie": {
-        "label": "Selfie holding the document",
-        "hint": "your face and the document both readable in one shot"
-      },
-      "notes": {
-        "label": "Anything we should know",
-        "hint": "optional",
-        "placeholder": "A recent name change, a second nationality, anything that explains the documents."
-      }
-    },
-    "options": {
-      "documentType": {
-        "passport": "Passport",
-        "nationalId": "National ID card",
-        "drivingLicence": "Driving licence",
-        "residencePermit": "Residence permit"
-      }
-    },
+    "formTitle": "Your documents",
+    "formHint": "Every field marked with * is required by our compliance reviewers.",
+    "optional": "optional",
+    "loadFailed": "Could not load the verification form",
+    "retry": "Try again",
     "chooseOne": "Choose one",
-    "selectCountry": "Select a country",
-    "searchCountry": "Search countries",
-    "noResults": "No matches",
     "filePlaceholder": "No file chosen",
     "fileBrowse": "Click to browse, or drop an image here",
     "fileRemove": "Remove file",
+    "fileHint": "{types}, up to {max} MB",
     "checklist": "What is left",
     "checklistHint": "Each part ticks off as you fill it in.",
     "rulesTitle": "Photo requirements",
     "rules": {
       "legible": "Every line of text readable — no blur, no glare.",
       "corners": "All four corners of the document in frame.",
-      "colour": "Colour photos only; scans and photocopies are rejected.",
-      "size": "PNG, JPG or WebP, under 5 MB each."
+      "colour": "Colour photos only; scans and photocopies are rejected."
     },
     "reviewNote": "Documents are stored encrypted, used only for verification, and never shared with third parties.",
     "submitCta": "Submit for Verification",
+    "submitting": "Submitting...",
     "secured": "Sent over an encrypted connection and visible only to our compliance reviewers.",
     "submittedToast": "Documents submitted. We'll email you when the review is done.",
     "errorRequired": "This field is required.",
     "errorTooShort": "Use at least {min} characters.",
-    "errorDateInvalid": "Enter a valid date.",
-    "errorAge": "You must be at least {age} to verify.",
-    "errorExpired": "That document has already expired.",
-    "errorFileType": "Use a PNG, JPG or WebP image.",
-    "errorFileSize": "That image is over 5 MB.",
+    "errorTooLong": "Use at most {max} characters.",
+    "errorFileType": "Use one of these formats: {types}.",
+    "errorFileSize": "That file is over {max} MB.",
     "errorSummary": "{count} fields still need attention."
   },
   "footer": {

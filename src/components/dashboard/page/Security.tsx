@@ -8,17 +8,29 @@ import {
   Check,
   Copy,
   KeyRound,
+  Loader2,
   Shield,
   ShieldAlert,
   ShieldCheck,
   Smartphone,
+  TriangleAlert,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
+import { getApiErrorMessage } from "@/hooks/useAuth";
+import { useGoogle2fa, useUpdate2faStatus } from "@/hooks/useSecurity";
 import { cn } from "@/components/ui/cn";
 import { Panel } from "@/components/dashboard/ui";
 import { DashPageHeader } from "@/components/dashboard/PageHeader";
-import { AUTHENTICATOR_APPS, SETUP_STEPS, TWO_FA, groupSecret, otpauthUri } from "@/config/security";
+import { DeleteAccountPanel } from "@/components/dashboard/DeleteAccountPanel";
+import { SecuritySkeleton } from "@/components/dashboard/Skeletons";
+import {
+  AUTHENTICATOR_APPS,
+  SETUP_STEPS,
+  groupSecret,
+  otpauthUri,
+  secretFromOtpauthUri,
+} from "@/config/security";
 
 const CODE_LENGTH = 6;
 
@@ -60,28 +72,39 @@ function AuthenticatorLogo() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * Two-factor setup: the shared secret in three forms — as text to type, as a QR to
- * scan, and as the switch that turns it on.
+ * Two-factor setup, from `GET /user/profile/google-2fa`: the account's shared
+ * secret in three forms — as text to type, as a QR to scan, and as the switch that
+ * turns it on (`POST .../google-2fa/status/update`).
  *
  * All three are on screen at once rather than behind a wizard, because which one a
  * user needs depends on where their authenticator is: a phone scans, a desktop app
  * gets the key pasted. Hiding either behind a step forces half of them to hunt.
  *
- * Enrolment state is local: there is no backend yet (see `@/config/env`), so the
- * toggle stands in for `POST .../google-2fa/status/update` and the demo secret
- * comes from `@/config/security`. The confirmation dialog still demands a live code
- * before flipping either way, which is the part that matters — enabling 2FA against
- * an authenticator that was never actually enrolled locks the account out, and
- * disabling it without proof is a takeover.
+ * The confirmation dialog demands a live code in BOTH directions, and that is the
+ * backend's rule as much as ours — enabling 2FA against an authenticator that was
+ * never actually enrolled locks the account out, and disabling it without proof is
+ * a takeover.
  */
 export function Security() {
   const { t } = useLang();
   const k = (name: string) => t(`twoFa.${name}`);
 
-  const [enabled, setEnabled] = useState(TWO_FA.status === 1);
+  const { data, isPending, isError, error, refetch } = useGoogle2fa();
+  const update = useUpdate2faStatus();
+
   const [copied, setCopied] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [code, setCode] = useState("");
+
+  const enabled = data?.qr_status === 1;
+  /**
+   * The API's assembled URI wins over a locally built one — it carries the real
+   * account address as the QR's label, which is the only way an authenticator with
+   * two AdCrypto entries can tell them apart.
+   */
+  const qrValue = data?.qr_text || (data?.qr_secrete ? otpauthUri(data.qr_secrete) : "");
+  /** Falls back to the URI's own `secret` — see `secretFromOtpauthUri` for why. */
+  const secret = data?.qr_secrete || secretFromOtpauthUri(data?.qr_text);
 
   // One timer, cleaned up on unmount: the tick would otherwise set state on a
   // component that is gone if the user navigates away right after copying.
@@ -93,7 +116,7 @@ export function Security() {
 
   async function copySecret() {
     try {
-      await navigator.clipboard.writeText(TWO_FA.secret);
+      await navigator.clipboard.writeText(secret);
       setCopied(true);
     } catch {
       toast.error(k("copyFailed"));
@@ -102,10 +125,17 @@ export function Security() {
 
   function confirmToggle() {
     if (code.length < CODE_LENGTH) return;
-    setEnabled((on) => !on);
-    setConfirmOpen(false);
-    setCode("");
-    toast.success(k(enabled ? "disabledToast" : "enabledToast"));
+    update.mutate(
+      { status: enabled ? 0 : 1, code },
+      {
+        // Only closes on a code the backend accepted. A wrong one keeps the dialog
+        // open with the field ready, which is the whole point of asking here.
+        onSuccess: () => {
+          setConfirmOpen(false);
+          setCode("");
+        },
+      },
+    );
   }
 
   return (
@@ -119,214 +149,266 @@ export function Security() {
               aria-hidden
               className={cn(
                 "grid! h-7 w-7 place-items-center rounded-lg",
-                enabled
-                  ? "bg-hero-mint/12 text-hero-mint"
-                  : "bg-amber-500/12 text-amber-600 dark:text-amber-400",
+                isPending || isError
+                  ? "bg-black/5 text-muted dark:bg-white/8"
+                  : enabled
+                    ? "bg-hero-mint/12 text-hero-mint"
+                    : "bg-amber-500/12 text-amber-600 dark:text-amber-400",
               )}
             >
-              {enabled ? <ShieldCheck size={15} /> : <ShieldAlert size={15} />}
+              {isPending ? (
+                <Loader2 size={15} className="animate-spin" />
+              ) : enabled ? (
+                <ShieldCheck size={15} />
+              ) : (
+                <ShieldAlert size={15} />
+              )}
             </span>
             <span className="min-w-0">
               <span className="block text-[12px]! text-muted">{k("statusLabel")}</span>
               <span className="block text-[13px]! font-bold!">
-                {k(enabled ? "statusOn" : "statusOff")}
+                {isPending ? k("loading") : isError ? k("statusUnknown") : k(enabled ? "statusOn" : "statusOff")}
               </span>
             </span>
           </div>
         }
       />
 
-      <div className="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
-        {/* ------------------------- Setup ------------------------- */}
-        <Panel className="p-4 sm:p-6 lg:col-span-7">
-          <div className="flex items-start gap-3">
-            <span
-              aria-hidden
-              className="grid! h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary"
-            >
-              <KeyRound size={17} />
-            </span>
-            <div className="min-w-0">
-              <h2 className="text-[16px]! leading-tight! font-bold!">{k("setupTitle")}</h2>
-              <p className="mt-1 text-[12.5px]! text-muted">{k("setupHint")}</p>
-            </div>
-          </div>
-
-          {/* Status banner — the one line that answers "am I protected right now?" */}
-          <div
-            className={cn(
-              "mt-5 flex items-start gap-3 rounded-xl border px-4 py-3.5",
-              enabled
-                ? "border-hero-mint/25 bg-hero-mint/8"
-                : "border-amber-500/25 bg-amber-500/8",
-            )}
+      {isPending ? (
+        <SecuritySkeleton header={false} />
+      ) : isError ? (
+        <Panel className="mt-6 p-6 text-center">
+          <span
+            aria-hidden
+            className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-hero-neg/10 text-hero-neg"
           >
-            {enabled ? (
-              <ShieldCheck size={17} aria-hidden className="mt-px shrink-0 text-hero-mint" />
-            ) : (
-              <ShieldAlert
-                size={17}
-                aria-hidden
-                className="mt-px shrink-0 text-amber-600 dark:text-amber-400"
-              />
-            )}
-            <p
-              className={cn(
-                "text-[13px]! leading-relaxed! font-medium!",
-                enabled ? "text-hero-mint" : "text-amber-700 dark:text-amber-400",
-              )}
-            >
-              {k(enabled ? "bannerOn" : "bannerOff")}
-            </p>
-          </div>
-
-          {/* Secret key, for authenticators that are typed into rather than scanned */}
-          <div className="mt-5">
-            <div className="mb-2 flex flex-wrap items-baseline gap-x-1.5">
-              <span className="text-[13px] font-semibold text-heading">{k("secretLabel")}</span>
-              <span className="text-[11.5px]! text-muted">{k("secretHint")}</span>
-            </div>
-            <div className="flex h-13 overflow-hidden rounded-xl border border-border bg-surface transition focus-within:border-primary">
-              {/* Read-only input rather than a `<p>`: it stays selectable and
-                  keyboard-reachable, which is how a user copies it without the
-                  clipboard API (blocked over plain HTTP, among other places). */}
-              <input
-                readOnly
-                value={groupSecret(TWO_FA.secret)}
-                aria-label={k("secretLabel")}
-                onFocus={(e) => e.target.select()}
-                className="min-w-0 flex-1 cursor-default bg-transparent px-3.5 font-mono text-[13.5px] font-semibold tracking-wide text-heading outline-none"
-              />
-              <button
-                type="button"
-                onClick={copySecret}
-                aria-label={copied ? k("copied") : k("copy")}
-                className={cn(
-                  "flex shrink-0 cursor-pointer items-center gap-1.5 border-s border-border px-4 text-[13px] font-semibold transition",
-                  copied
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted hover:bg-primary/10 hover:text-primary",
-                )}
-              >
-                {copied ? <Check size={15} strokeWidth={2.5} /> : <Copy size={15} />}
-                <span className="hidden sm:inline">{copied ? k("copied") : k("copy")}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* QR — rendered locally from the same secret shown above */}
-          <div className="mt-5">
-            <div className="mb-2 flex flex-wrap items-baseline gap-x-1.5">
-              <span className="text-[13px] font-semibold text-heading">{k("qrLabel")}</span>
-              <span className="text-[11.5px]! text-muted">{k("qrHint")}</span>
-            </div>
-            <div className="flex justify-center rounded-2xl border border-border bg-surface p-4 sm:p-6">
-              {/* White plate under the code regardless of theme: a QR inverted for
-                  a dark background is unreadable to a good half of scanners. */}
-              <div className="rounded-xl bg-white p-3.5 shadow-[0_10px_30px_rgb(2_10_22/0.12)] sm:p-4">
-                <QRCode
-                  value={otpauthUri()}
-                  size={196}
-                  bgColor="#ffffff"
-                  fgColor="#091628"
-                  className="h-auto! w-full! max-w-49"
-                />
-              </div>
-            </div>
-          </div>
-
+            <TriangleAlert size={20} />
+          </span>
+          <h2 className="mt-4 text-[16px]! font-bold!">{k("loadFailed")}</h2>
+          <p className="mx-auto mt-1.5 max-w-100 text-[13px]! leading-relaxed! text-muted">
+            {getApiErrorMessage(error)}
+          </p>
           <button
             type="button"
-            onClick={() => {
-              setCode("");
-              setConfirmOpen(true);
-            }}
-            className={cn(
-              "btn-lift mt-6 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-bold text-white",
-              // Same lift and sheen either way; only the glow's colour changes, so
-              // turning 2FA off feels as considered as turning it on.
-              enabled ? "bg-hero-neg [--btn-glow:var(--hero-neg)]" : "bg-primary",
-            )}
+            onClick={() => refetch()}
+            className="btn-lift mt-5 inline-flex h-11 cursor-pointer items-center justify-center rounded-xl bg-primary px-5 text-[14px] font-bold text-white"
           >
-            {enabled ? <Shield size={16} aria-hidden /> : <ShieldCheck size={16} aria-hidden />}
-            {k(enabled ? "disableCta" : "enableCta")}
+            {k("retry")}
           </button>
         </Panel>
-
-        {/* ------------------------- App + steps ------------------------- */}
-        <div className="grid grid-cols-1 gap-5 lg:col-span-5">
-          <Panel className="p-4 sm:p-6">
+      ) : (
+        <div className="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
+          {/* ------------------------- Setup ------------------------- */}
+          <Panel className="p-4 sm:p-6 lg:col-span-7">
             <div className="flex items-start gap-3">
               <span
                 aria-hidden
                 className="grid! h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary"
               >
-                <Smartphone size={17} />
+                <KeyRound size={17} />
               </span>
               <div className="min-w-0">
-                <h2 className="text-[16px]! leading-tight! font-bold!">{k("appTitle")}</h2>
-                <p className="mt-1 text-[12.5px]! leading-relaxed! text-muted">{k("appDesc")}</p>
+                <h2 className="text-[16px]! leading-tight! font-bold!">{k("setupTitle")}</h2>
+                <p className="mt-1 text-[12.5px]! text-muted">{k("setupHint")}</p>
               </div>
             </div>
 
-            <div className="mt-5 flex justify-center">
-              <div className="grid h-30 w-30 place-items-center rounded-2xl border border-border bg-white">
-                <AuthenticatorLogo />
+            {/* Status banner — the one line that answers "am I protected right now?" */}
+            <div
+              className={cn(
+                "mt-5 flex items-start gap-3 rounded-xl border px-4 py-3.5",
+                enabled ? "border-hero-mint/25 bg-hero-mint/8" : "border-amber-500/25 bg-amber-500/8",
+              )}
+            >
+              {enabled ? (
+                <ShieldCheck size={17} aria-hidden className="mt-px shrink-0 text-hero-mint" />
+              ) : (
+                <ShieldAlert
+                  size={17}
+                  aria-hidden
+                  className="mt-px shrink-0 text-amber-600 dark:text-amber-400"
+                />
+              )}
+              <p
+                className={cn(
+                  "text-[13px]! leading-relaxed! font-medium!",
+                  enabled ? "text-hero-mint" : "text-amber-700 dark:text-amber-400",
+                )}
+              >
+                {k(enabled ? "bannerOn" : "bannerOff")}
+              </p>
+            </div>
+
+            {/* Secret key, for authenticators that are typed into rather than scanned */}
+            <div className="mt-5">
+              <div className="mb-2 flex flex-wrap items-baseline gap-x-1.5">
+                <span className="text-[13px] font-semibold text-heading">{k("secretLabel")}</span>
+                <span className="text-[11.5px]! text-muted">{k("secretHint")}</span>
+              </div>
+              <div className="flex h-13 overflow-hidden rounded-xl border border-border bg-surface transition focus-within:border-primary">
+                {/* Read-only input rather than a `<p>`: it stays selectable and
+                    keyboard-reachable, which is how a user copies it without the
+                    clipboard API (blocked over plain HTTP, among other places). */}
+                <input
+                  readOnly
+                  value={isPending ? "" : groupSecret(secret)}
+                  placeholder={isPending ? k("loading") : undefined}
+                  aria-label={k("secretLabel")}
+                  onFocus={(e) => e.target.select()}
+                  className="min-w-0 flex-1 cursor-default bg-transparent px-3.5 font-mono text-[13.5px] font-semibold tracking-wide text-heading outline-none placeholder:font-sans placeholder:text-muted"
+                />
+                <button
+                  type="button"
+                  onClick={copySecret}
+                  disabled={!secret}
+                  aria-label={copied ? k("copied") : k("copy")}
+                  className={cn(
+                    "flex shrink-0 cursor-pointer items-center gap-1.5 border-s border-border px-4 text-[13px] font-semibold transition disabled:cursor-not-allowed disabled:opacity-50",
+                    copied ? "bg-primary/10 text-primary" : "text-muted hover:bg-primary/10 hover:text-primary",
+                  )}
+                >
+                  {copied ? <Check size={15} strokeWidth={2.5} /> : <Copy size={15} />}
+                  <span className="hidden sm:inline">{copied ? k("copied") : k("copy")}</span>
+                </button>
               </div>
             </div>
 
-            <div className="mt-5 flex flex-col gap-2.5">
-              <a
-                href={AUTHENTICATOR_APPS.android}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-lift flex! h-12 items-center justify-center gap-2.5 rounded-xl bg-primary text-[14px] font-bold text-white!"
-              >
-                {/* Play store triangle — lucide has no store marks. */}
-                <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden>
-                  <path d="M3 20.5v-17c0-.83 1-.83 1.5-.5l14 8.5c.5.3.5 1 0 1.3L4.5 21c-.5.33-1.5.33-1.5-.5z" />
-                </svg>
-                {k("getAndroid")}
-              </a>
-              <a
-                href={AUTHENTICATOR_APPS.ios}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex! h-12 items-center justify-center gap-2.5 rounded-xl border border-border bg-surface text-[14px] font-bold text-heading! transition hover:border-primary hover:text-primary!"
-              >
-                <Apple size={15} aria-hidden />
-                {k("getIos")}
-              </a>
+            {/* QR — drawn locally from the URI the API sent */}
+            <div className="mt-5">
+              <div className="mb-2 flex flex-wrap items-baseline gap-x-1.5">
+                <span className="text-[13px] font-semibold text-heading">{k("qrLabel")}</span>
+                <span className="text-[11.5px]! text-muted">{k("qrHint")}</span>
+              </div>
+              <div className="flex justify-center rounded-2xl border border-border bg-surface p-4 sm:p-6">
+                {/* White plate under the code regardless of theme: a QR inverted for
+                    a dark background is unreadable to a good half of scanners. */}
+                <div className="grid min-h-56 w-full max-w-56 place-items-center rounded-xl bg-white p-3.5 shadow-[0_10px_30px_rgb(2_10_22/0.12)] sm:p-4">
+                  {qrValue ? (
+                    <QRCode
+                      value={qrValue}
+                      size={196}
+                      bgColor="#ffffff"
+                      fgColor="#091628"
+                      className="h-auto! w-full! max-w-49"
+                    />
+                  ) : (
+                    <Loader2 size={22} className="animate-spin text-[#091628]/40" aria-hidden />
+                  )}
+                </div>
+              </div>
             </div>
+
+            {/* The backend's own reminder, when it sends one — it is the authority on
+                what happens if the account is never added to an app. */}
+            {data?.alert && (
+              <p className="mt-4 rounded-xl bg-amber-500/8 px-3.5 py-3 text-[12px]! leading-relaxed! text-amber-700 dark:text-amber-400">
+                {data.alert}
+              </p>
+            )}
+
+            <button
+              type="button"
+              disabled={isPending || !secret}
+              onClick={() => {
+                setCode("");
+                setConfirmOpen(true);
+              }}
+              className={cn(
+                "btn-lift mt-6 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-60",
+                // Same lift and sheen either way; only the glow's colour changes, so
+                // turning 2FA off feels as considered as turning it on.
+                enabled ? "bg-hero-neg [--btn-glow:var(--hero-neg)]" : "bg-primary",
+              )}
+            >
+              {enabled ? <Shield size={16} aria-hidden /> : <ShieldCheck size={16} aria-hidden />}
+              {k(enabled ? "disableCta" : "enableCta")}
+            </button>
           </Panel>
 
-          <Panel className="p-4 sm:p-6">
-            <h2 className="text-[16px]! font-bold!">{k("stepsTitle")}</h2>
-            <ol className="mt-4 flex flex-col gap-4">
-              {SETUP_STEPS.map((step, index) => (
-                <li key={step} className="flex items-start gap-3">
-                  <span
-                    aria-hidden
-                    className="grid! h-6.5 w-6.5 shrink-0 place-items-center rounded-lg bg-primary/12 text-[12px]! font-bold! text-primary"
-                  >
-                    {index + 1}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[13.5px] font-semibold text-heading">
-                      {k(`steps.${step}.title`)}
-                    </span>
-                    <span className="mt-0.5 block text-[12px] leading-relaxed text-muted">
-                      {k(`steps.${step}.body`)}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ol>
+          {/* ------------------------- App + steps ------------------------- */}
+          <div className="grid grid-cols-1 gap-5 lg:col-span-5">
+            <Panel className="p-4 sm:p-6">
+              <div className="flex items-start gap-3">
+                <span
+                  aria-hidden
+                  className="grid! h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary"
+                >
+                  <Smartphone size={17} />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-[16px]! leading-tight! font-bold!">{k("appTitle")}</h2>
+                  <p className="mt-1 text-[12.5px]! leading-relaxed! text-muted">{k("appDesc")}</p>
+                </div>
+              </div>
 
-            <p className="mt-5 rounded-xl bg-primary/8 px-3 py-2.5 text-[12px]! leading-relaxed! text-muted">
-              {k("backupNote")}
-            </p>
-          </Panel>
+              <div className="mt-5 flex justify-center">
+                <div className="grid h-30 w-30 place-items-center rounded-2xl border border-border bg-white">
+                  <AuthenticatorLogo />
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-2.5">
+                <a
+                  href={AUTHENTICATOR_APPS.android}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-lift flex! h-12 items-center justify-center gap-2.5 rounded-xl bg-primary text-[14px] font-bold text-white!"
+                >
+                  {/* Play store triangle — lucide has no store marks. */}
+                  <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden>
+                    <path d="M3 20.5v-17c0-.83 1-.83 1.5-.5l14 8.5c.5.3.5 1 0 1.3L4.5 21c-.5.33-1.5.33-1.5-.5z" />
+                  </svg>
+                  {k("getAndroid")}
+                </a>
+                <a
+                  href={AUTHENTICATOR_APPS.ios}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex! h-12 items-center justify-center gap-2.5 rounded-xl border border-border bg-surface text-[14px] font-bold text-heading! transition hover:border-primary hover:text-primary!"
+                >
+                  <Apple size={15} aria-hidden />
+                  {k("getIos")}
+                </a>
+              </div>
+            </Panel>
+
+            <Panel className="p-4 sm:p-6">
+              <h2 className="text-[16px]! font-bold!">{k("stepsTitle")}</h2>
+              <ol className="mt-4 flex flex-col gap-4">
+                {SETUP_STEPS.map((step, index) => (
+                  <li key={step} className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="grid! h-6.5 w-6.5 shrink-0 place-items-center rounded-lg bg-primary/12 text-[12px]! font-bold! text-primary"
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13.5px] font-semibold text-heading">
+                        {k(`steps.${step}.title`)}
+                      </span>
+                      <span className="mt-0.5 block text-[12px] leading-relaxed text-muted">
+                        {k(`steps.${step}.body`)}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+
+              <p className="mt-5 rounded-xl bg-primary/8 px-3 py-2.5 text-[12px]! leading-relaxed! text-muted">
+                {k("backupNote")}
+              </p>
+            </Panel>
+          </div>
+        </div>
+      )}
+
+      {/* Its own row, outside the branch above: whether the 2FA settings loaded has
+          no bearing on whether someone may close their account. Last on the page
+          and apart from the rest — nothing here should read as routine. */}
+      <div className="mt-5 grid grid-cols-1 lg:grid-cols-12">
+        <div className="lg:col-span-5 lg:col-start-8">
+          <DeleteAccountPanel />
         </div>
       </div>
 
@@ -399,13 +481,15 @@ export function Security() {
                 <button
                   type="button"
                   onClick={confirmToggle}
-                  disabled={code.length < CODE_LENGTH}
+                  disabled={code.length < CODE_LENGTH || update.isPending}
                   className={cn(
                     "btn-lift flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-[13px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-50",
                     enabled ? "bg-hero-neg [--btn-glow:var(--hero-neg)]" : "bg-primary",
                   )}
                 >
-                  {k(enabled ? "confirmDisableCta" : "confirmEnableCta")}
+                  {update.isPending
+                    ? k("saving")
+                    : k(enabled ? "confirmDisableCta" : "confirmEnableCta")}
                 </button>
               </div>
             </div>

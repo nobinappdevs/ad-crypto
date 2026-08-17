@@ -8,15 +8,21 @@ import {
   Clock,
   FileCheck2,
   IdCard,
+  Loader2,
   Lock,
   ShieldAlert,
   ShieldCheck,
+  TriangleAlert,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
+import { getApiErrorMessage } from "@/hooks/useAuth";
+import { getKycFieldErrors, useKycFields, useSubmitKyc } from "@/hooks/useKyc";
+import type { KycField, KycValue } from "@/services/kyc.service";
 import { cn } from "@/components/ui/cn";
 import { Panel } from "@/components/dashboard/ui";
 import { DashPageHeader } from "@/components/dashboard/PageHeader";
+import { KycSkeleton } from "@/components/dashboard/Skeletons";
 import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
 import {
   FileField,
@@ -25,37 +31,38 @@ import {
   TextAreaField,
   TextField,
 } from "@/components/dashboard/FormFields";
-import { countryFlag, countryList } from "@/config/countries";
 import {
-  ACCEPTED_FILE_TYPES,
-  KYC_SECTIONS,
-  KYC_STATUS,
-  MAX_AGE,
-  MAX_FILE_BYTES,
-  MIN_AGE,
-  ageFrom,
-  isPast,
-  type KycField,
+  KYC_STATUS_KEY,
+  acceptAttribute,
+  fileTypeAllowed,
+  isFieldRequired,
+  kycAcceptsSubmission,
+  maxFileBytes,
+  normalizeKycStatus,
+  selectOptions,
 } from "@/config/kyc";
 
 /** What each `kyc_status` value looks like. Keyed by the API's own flag. */
 const STATUS_META = {
-  0: { key: "unverified", tone: "bg-amber-500/12 text-amber-600 dark:text-amber-400", Icon: ShieldAlert },
-  1: { key: "verified", tone: "bg-hero-mint/12 text-hero-mint", Icon: CircleCheckBig },
-  2: { key: "pending", tone: "bg-primary/12 text-primary", Icon: Clock },
-  3: { key: "rejected", tone: "bg-hero-neg/12 text-hero-neg", Icon: CircleX },
+  0: {
+    tone: "bg-amber-500/12 text-amber-600 dark:text-amber-400",
+    Icon: ShieldAlert,
+  },
+  1: { tone: "bg-hero-mint/12 text-hero-mint", Icon: CircleCheckBig },
+  2: { tone: "bg-primary/12 text-primary", Icon: Clock },
+  3: { tone: "bg-hero-neg/12 text-hero-neg", Icon: CircleX },
 } as const;
-
-type StatusCode = keyof typeof STATUS_META;
-
-/** A field's value: text and dates are strings, uploads are files. */
-type FieldValue = string | File | null;
 
 /**
  * Divider between sections. `border-t` is load-bearing: preflight zeroes every
  * border width, so an `<hr>` given only a colour draws nothing at all.
  */
 const Rule = () => <hr className="my-6 border-t border-border" />;
+
+/** Text controls take a full row; files and selects pair up on wide screens. */
+function isWide(field: KycField) {
+  return field.type === "textarea";
+}
 
 /* -------------------------------------------------------------------------- */
 /* Page                                                                        */
@@ -65,148 +72,169 @@ const Rule = () => <hr className="my-6 border-t border-border" />;
  * Identity verification: where the account stands, and — while there is anything
  * to do about it — the form that moves it along.
  *
- * The form is BUILT from `@/config/kyc` rather than written out, because upstream
- * these fields are operator-configurable: which documents count, which countries
- * are asked for, whether a selfie is required. A page with the controls hard-coded
- * has to be edited every time that policy changes. The renderer switches on a
- * field's `type`, so adding one to the config is the whole change.
+ * The form is BUILT from `GET /user/profile/kyc/input-fields` rather than written
+ * out, because upstream these fields are operator-configurable: which documents
+ * count, which formats are accepted, how large a scan may be. The renderer
+ * switches on a field's `type`, so a field added server-side needs no change here.
  *
- * It only renders at all when the status is unverified or rejected. Pending means a
+ * That is also why the labels are NOT translated: they are free text an operator
+ * typed ("Front", "ID Type"), not keys this app knows in five languages. Only the
+ * page's own chrome — statuses, rules, buttons — goes through `t()`. Translating
+ * operator strings would mean inventing them, and showing a made-up label over a
+ * document upload is worse than showing an untranslated accurate one.
+ *
+ * The form only renders when the status is unverified or rejected. Pending means a
  * human is looking at the last submission and a second one just splits the queue;
- * verified means there is nothing left to ask for. Both get the status card alone.
+ * verified means there is nothing left to ask for.
  */
 export function Kyc() {
-  const { t, lang } = useLang();
+  const { t } = useLang();
   const k = (name: string) => t(`kyc.${name}`);
 
-  const [status, setStatus] = useState<StatusCode>(KYC_STATUS as StatusCode);
-  const [values, setValues] = useState<Record<string, FieldValue>>({});
+  const { data, isPending, isError, error, refetch } = useKycFields();
+  const submitKyc = useSubmitKyc(k("submittedToast"));
+
+  const [values, setValues] = useState<Record<string, KycValue>>({});
   // A field reports its error once the user has left it, or once they have tried to
   // submit — never while they are still typing their first character into it.
   const [touched, setTouched] = useState<Set<string>>(new Set());
   const [submitted, setSubmitted] = useState(false);
+  /** Field -> message, from the last 422. Cleared as soon as the field changes. */
+  const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
 
+  const status = normalizeKycStatus(data?.kyc_status);
+  const statusKey = KYC_STATUS_KEY[status];
   const meta = STATUS_META[status];
-  const canSubmit = status === 0 || status === 3;
+  const fields = useMemo(() => data?.input_fields ?? [], [data]);
+  const canSubmit = kycAcceptsSubmission(status) && fields.length > 0;
 
-  // Localised and sorted for the active language, so the list reads correctly in
-  // Arabic or Hindi rather than being alphabetised in English and translated.
-  const countries = useMemo(() => countryList(lang), [lang]);
-
-  const countryOptions: SelectOption[] = useMemo(
-    () =>
-      countries.map(({ code, name }) => ({
-        value: code,
-        label: name,
-        hint: code,
-        icon: (
-          <span aria-hidden className="w-6 shrink-0 text-center text-[17px]!">
-            {countryFlag(code)}
-          </span>
-        ),
-      })),
-    [countries],
-  );
-
-  const fields = useMemo(() => KYC_SECTIONS.flatMap((section) => section.fields), []);
-
-  const setValue = (name: string, value: FieldValue) =>
+  function setValue(name: string, value: KycValue) {
     setValues((prev) => ({ ...prev, [name]: value }));
+    // The server's complaint was about the old value; keeping it beside the new
+    // one would read as a rejection of something the user just fixed.
+    setServerErrors((prev) => {
+      if (!(name in prev)) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+  }
 
   const touch = (name: string) => setTouched((prev) => new Set(prev).add(name));
 
-  /** Every field's error, computed in one place; display is gated separately. */
+  /**
+   * Every field's error, computed in one place from the rules the API sent; which
+   * of them is displayed is decided separately by `shown`.
+   */
   const errors = useMemo(() => {
     const out: Record<string, string | null> = {};
 
     for (const field of fields) {
       const value = values[field.name];
+      const required = isFieldRequired(field);
       out[field.name] = null;
 
       if (field.type === "file") {
         const file = value instanceof File ? value : null;
         if (!file) {
-          if (field.required) out[field.name] = k("errorRequired");
-        } else if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
-          out[field.name] = k("errorFileType");
-        } else if (file.size > MAX_FILE_BYTES) {
-          out[field.name] = k("errorFileSize");
+          if (required) out[field.name] = k("errorRequired");
+          continue;
+        }
+        if (!fileTypeAllowed(file, field.validation?.mimes)) {
+          out[field.name] = k("errorFileType").replace(
+            "{types}",
+            (field.validation?.mimes ?? []).join(", ").toUpperCase(),
+          );
+          continue;
+        }
+        const limit = maxFileBytes(field.validation?.max);
+        if (limit && file.size > limit) {
+          out[field.name] = k("errorFileSize").replace(
+            "{max}",
+            String(field.validation?.max ?? ""),
+          );
         }
         continue;
       }
 
       const text = typeof value === "string" ? value.trim() : "";
-
       if (!text) {
-        if (field.required) out[field.name] = k("errorRequired");
+        if (required) out[field.name] = k("errorRequired");
         continue;
       }
-      if (field.minLength && text.length < field.minLength) {
-        out[field.name] = k("errorTooShort").replace("{min}", String(field.minLength));
+
+      // `min`/`max` are lengths for text fields, and the API sends 0 when they
+      // don't apply — so a zero is "no rule", not "must be empty".
+      const min = Number(field.validation?.min ?? 0);
+      if (min > 0 && text.length < min) {
+        out[field.name] = k("errorTooShort").replace("{min}", String(min));
         continue;
       }
-      // Dates carry the only rules that are not "is it filled in": a date of birth
-      // has to belong to an adult, and a document has to still be valid.
-      if (field.name === "dob") {
-        const age = ageFrom(text);
-        if (age === null) out[field.name] = k("errorDateInvalid");
-        else if (age < MIN_AGE) out[field.name] = k("errorAge").replace("{age}", String(MIN_AGE));
-        else if (age > MAX_AGE) out[field.name] = k("errorDateInvalid");
+      const max = Number(field.validation?.max ?? 0);
+      if (max > 0 && text.length > max) {
+        out[field.name] = k("errorTooLong").replace("{max}", String(max));
       }
-      if (field.name === "expiry" && isPast(text)) out[field.name] = k("errorExpired");
     }
 
     return out;
+    // `k` is recreated every render; the dictionary it reads is keyed by language.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fields, values, lang]);
+  }, [fields, values, t]);
 
-  /** Null until the field has been visited or the form submitted. */
-  const shown = (name: string) => (submitted || touched.has(name) ? errors[name] : null);
+  /** Client rule first, then whatever the server said about this field. */
+  const shown = (name: string) =>
+    (submitted || touched.has(name) ? errors[name] : null) ?? serverErrors[name] ?? null;
 
   const missing = fields.filter((field) => errors[field.name]);
-
-  /** The rail's checklist — one entry per section, so progress is visible while filling. */
-  const progress = KYC_SECTIONS.map((section) => ({
-    key: section.key,
-    done: section.fields.every((field) => !errors[field.name]),
-  }));
 
   function submit() {
     setSubmitted(true);
     if (missing.length > 0) {
       toast.error(k("errorSummary").replace("{count}", String(missing.length)));
-      // Put the first offending control in view — on a form this long the error
-      // that blocked the submit is usually off-screen.
+      // Put the first offending control in view — the error that blocked the
+      // submit is often off-screen on a form with several uploads.
       document
         .querySelector("[aria-invalid='true']")
         ?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    // No endpoint yet, so the transition happens here: submitting hands the
-    // documents to a reviewer, which is exactly what status 2 means.
-    setStatus(2);
-    setValues({});
-    setTouched(new Set());
-    setSubmitted(false);
-    toast.success(k("submittedToast"));
+
+    submitKyc.mutate(values, {
+      onSuccess: () => {
+        setValues({});
+        setTouched(new Set());
+        setSubmitted(false);
+        setServerErrors({});
+      },
+      onError: (err) => setServerErrors(getKycFieldErrors(err)),
+    });
   }
 
   /** One control, chosen by the field's declared type. */
   function renderField(field: KycField) {
-    const label = k(`fields.${field.name}.label`);
-    // Declared in the config rather than probed for: `t` echoes an unknown key
-    // back, so "does this field have a hint?" cannot be asked of the dictionary.
-    const fieldHint = field.hint ? k(`fields.${field.name}.hint`) : undefined;
+    const label = field.label || field.name;
+    const required = isFieldRequired(field);
     const error = shown(field.name);
-    const value = typeof values[field.name] === "string" ? (values[field.name] as string) : "";
+    const wide = isWide(field) ? "sm:col-span-2" : undefined;
+    const text = typeof values[field.name] === "string" ? (values[field.name] as string) : "";
 
     if (field.type === "file") {
+      const mimes = field.validation?.mimes;
+      const max = field.validation?.max;
       return (
         <FileField
           key={field.name}
-          required={field.required}
+          required={required}
           label={label}
-          hint={fieldHint}
+          // The limits come from the API, so they are stated rather than assumed.
+          hint={
+            mimes?.length
+              ? k("fileHint")
+                  .replace("{types}", mimes.join(", ").toUpperCase())
+                  .replace("{max}", String(max ?? "—"))
+              : undefined
+          }
+          accept={acceptAttribute(mimes)}
           placeholder={k("filePlaceholder")}
           browseLabel={k("fileBrowse")}
           removeLabel={k("fileRemove")}
@@ -216,51 +244,21 @@ export function Kyc() {
             touch(field.name);
           }}
           error={error}
-          className={field.wide ? "sm:col-span-2" : undefined}
+          className={wide}
         />
       );
     }
 
-    if (field.type === "textarea") {
+    if (field.type === "select") {
+      const options: SelectOption[] = selectOptions(field.validation?.options);
       return (
-        <TextAreaField
-          key={field.name}
-          required={field.required}
-          label={label}
-          hint={fieldHint}
-          placeholder={k(`fields.${field.name}.placeholder`)}
-          value={value}
-          onChange={(next) => setValue(field.name, next)}
-          onBlur={() => touch(field.name)}
-          error={error}
-          rows={3}
-          className={field.wide ? "sm:col-span-2" : undefined}
-        />
-      );
-    }
-
-    if (field.type === "select" || field.type === "country") {
-      const isCountry = field.type === "country";
-      const options: SelectOption[] = isCountry
-        ? countryOptions
-        : (field.options ?? []).map((option) => ({
-            value: option,
-            label: k(`options.${field.name}.${option}`),
-          }));
-
-      return (
-        <div key={field.name} className={cn("min-w-0", field.wide && "sm:col-span-2")}>
-          <FormLabel required={field.required} hint={fieldHint}>
-            {label}
-          </FormLabel>
+        <div key={field.name} className={cn("min-w-0", wide)}>
+          <FormLabel required={required}>{label}</FormLabel>
           <SelectMenu
             label={label}
-            value={value}
+            value={text}
             options={options}
-            placeholder={isCountry ? k("selectCountry") : k("chooseOne")}
-            searchable={isCountry}
-            searchPlaceholder={k("searchCountry")}
-            emptyText={k("noResults")}
+            placeholder={k("chooseOne")}
             showHintInTrigger={false}
             onChange={(next) => {
               setValue(field.name, next);
@@ -272,20 +270,74 @@ export function Kyc() {
       );
     }
 
+    if (field.type === "textarea") {
+      return (
+        <TextAreaField
+          key={field.name}
+          required={required}
+          label={label}
+          value={text}
+          onChange={(next) => setValue(field.name, next)}
+          onBlur={() => touch(field.name)}
+          error={error}
+          rows={3}
+          className={wide}
+        />
+      );
+    }
+
     return (
       <TextField
         key={field.name}
-        required={field.required}
-        type={field.type === "date" ? "date" : "text"}
+        required={required}
+        type={field.type === "date" ? "date" : field.type === "email" ? "email" : "text"}
         label={label}
-        hint={fieldHint}
-        placeholder={field.type === "date" ? undefined : k(`fields.${field.name}.placeholder`)}
-        value={value}
+        value={text}
         onChange={(next) => setValue(field.name, next)}
         onBlur={() => touch(field.name)}
         error={error}
-        className={field.wide ? "sm:col-span-2" : undefined}
+        className={wide}
       />
+    );
+  }
+
+  /* ------------------------------ Loading / error ------------------------------ */
+
+  if (isPending) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {/* The title is known before the fields are, so it stays real — only the
+            form below it is stood in for. */}
+        <DashPageHeader title={k("title")} subtitle={k("subtitle")} />
+        <KycSkeleton header={false} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        <DashPageHeader title={k("title")} subtitle={k("subtitle")} />
+        <Panel className="mt-6 p-6 text-center">
+          <span
+            aria-hidden
+            className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-hero-neg/10 text-hero-neg"
+          >
+            <TriangleAlert size={20} />
+          </span>
+          <h2 className="mt-4 text-[16px]! font-bold!">{k("loadFailed")}</h2>
+          <p className="mx-auto mt-1.5 max-w-100 text-[13px]! leading-relaxed! text-muted">
+            {getApiErrorMessage(error)}
+          </p>
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="btn-lift mt-5 inline-flex h-11 cursor-pointer items-center justify-center rounded-xl bg-primary px-5 text-[14px] font-bold text-white"
+          >
+            {k("retry")}
+          </button>
+        </Panel>
+      </div>
     );
   }
 
@@ -301,7 +353,7 @@ export function Kyc() {
             </span>
             <span className="min-w-0">
               <span className="block text-[12px]! text-muted">{k("statusLabel")}</span>
-              <span className="block text-[13px]! font-bold!">{k(`status.${meta.key}.label`)}</span>
+              <span className="block text-[13px]! font-bold!">{k(`status.${statusKey}.label`)}</span>
             </span>
           </div>
         }
@@ -318,18 +370,15 @@ export function Kyc() {
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-[16px]! font-bold!">{k(`status.${meta.key}.title`)}</h2>
+              <h2 className="text-[16px]! font-bold!">{k(`status.${statusKey}.title`)}</h2>
               <span
-                className={cn(
-                  "rounded-full px-2.5 py-0.5 text-[11.5px]! font-semibold!",
-                  meta.tone,
-                )}
+                className={cn("rounded-full px-2.5 py-0.5 text-[11.5px]! font-semibold!", meta.tone)}
               >
-                {k(`status.${meta.key}.label`)}
+                {k(`status.${statusKey}.label`)}
               </span>
             </div>
             <p className="mt-1.5 text-[13px]! leading-relaxed! text-muted">
-              {k(`status.${meta.key}.note`)}
+              {k(`status.${statusKey}.note`)}
             </p>
           </div>
         </div>
@@ -339,26 +388,24 @@ export function Kyc() {
         <div className="mt-5 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
           {/* ------------------------- Form ------------------------- */}
           <Panel className="p-4 sm:p-6 lg:col-span-8">
-            {KYC_SECTIONS.map((section, index) => (
-              <div key={section.key}>
-                {index > 0 && <Rule />}
-                <FormSection
-                  step={index + 1}
-                  title={k(`sections.${section.key}.title`)}
-                  description={k(`sections.${section.key}.hint`)}
-                >
-                  {section.fields.map(renderField)}
-                </FormSection>
-              </div>
-            ))}
+            <FormSection step={1} title={k("formTitle")} description={k("formHint")}>
+              {fields.map(renderField)}
+            </FormSection>
+
+            <Rule />
 
             <button
               type="button"
               onClick={submit}
-              className="btn-lift mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white"
+              disabled={submitKyc.isPending}
+              className="btn-lift inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <Lock size={15} aria-hidden />
-              {k("submitCta")}
+              {submitKyc.isPending ? (
+                <Loader2 size={15} className="animate-spin" aria-hidden />
+              ) : (
+                <Lock size={15} aria-hidden />
+              )}
+              {submitKyc.isPending ? k("submitting") : k("submitCta")}
             </button>
 
             <p className="mt-3 flex items-start gap-2 text-[11.5px]! leading-relaxed! text-muted">
@@ -383,35 +430,38 @@ export function Kyc() {
                 </div>
               </div>
 
+              {/* One row per field, straight off the API — the checklist has to be
+                  the same list the form is, or it stops meaning anything. */}
               <ul className="mt-4 flex flex-col gap-2.5">
-                {progress.map((section) => (
-                  <li key={section.key} className="flex items-start gap-2.5">
-                    <span
-                      aria-hidden
-                      className={cn(
-                        "mt-px grid! h-4.5 w-4.5 shrink-0 place-items-center rounded-full border transition",
-                        section.done
-                          ? "border-hero-mint bg-hero-mint text-white"
-                          : "border-border text-transparent",
-                      )}
-                    >
-                      <Check size={11} strokeWidth={3} />
-                    </span>
-                    <span className="min-w-0">
+                {fields.map((field) => {
+                  const done = !errors[field.name];
+                  return (
+                    <li key={field.name} className="flex items-center gap-2.5">
                       <span
+                        aria-hidden
                         className={cn(
-                          "block text-[13px] font-semibold",
-                          section.done ? "text-heading" : "text-muted",
+                          "grid! h-4.5 w-4.5 shrink-0 place-items-center rounded-full border transition",
+                          done
+                            ? "border-hero-mint bg-hero-mint text-white"
+                            : "border-border text-transparent",
                         )}
                       >
-                        {k(`sections.${section.key}.title`)}
+                        <Check size={11} strokeWidth={3} />
                       </span>
-                      <span className="mt-0.5 block text-[11.5px] text-muted">
-                        {k(`sections.${section.key}.hint`)}
+                      <span
+                        className={cn(
+                          "min-w-0 truncate text-[13px] font-semibold",
+                          done ? "text-heading" : "text-muted",
+                        )}
+                      >
+                        {field.label || field.name}
+                        {!isFieldRequired(field) && (
+                          <span className="inline! font-normal! text-muted"> ({k("optional")})</span>
+                        )}
                       </span>
-                    </span>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
 
               <hr className="my-5 border-t border-border" />
@@ -421,7 +471,7 @@ export function Kyc() {
                 {k("rulesTitle")}
               </h3>
               <ul className="mt-2.5 flex flex-col gap-2">
-                {["legible", "corners", "colour", "size"].map((rule) => (
+                {["legible", "corners", "colour"].map((rule) => (
                   <li
                     key={rule}
                     className="flex items-start gap-2 text-[12px]! leading-relaxed! text-muted"

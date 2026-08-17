@@ -2,37 +2,52 @@
 
 import { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 import { useIsClient } from "@/hooks/useIsClient";
-import { TOKEN_KEY } from "@/lib/axios";
-import { env } from "@/config/env";
+import { readEmailVerified, readToken, readTwoFaState } from "@/lib/authState";
 
-function Spinner() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-bg">
-      <Loader2 className="animate-spin text-primary" size={28} />
-    </div>
-  );
+/**
+ * What shows while the gate is undecided — one client tick on a reload, or the
+ * moment before a redirect leaves.
+ *
+ * Deliberately empty. A spinner here fired on every single reload of every
+ * dashboard page, and it was never waiting on anything the user could perceive:
+ * the token check is a synchronous localStorage read. The page's own skeleton
+ * takes over the instant this passes, so a spinner only added a flash of a
+ * different loading language in front of it.
+ */
+function Holding() {
+  return <div className="min-h-screen bg-surface" />;
 }
 
+/**
+ * Gate on the dashboard. Three separate refusals, because there are three ways to
+ * arrive with a token that isn't yet good enough: no token at all, an unconfirmed
+ * email address, and an authenticator code this session hasn't answered. Login
+ * issues a working token before either check — see `@/lib/authState`.
+ *
+ * A `null` from either reader means this browser has no record either way; that
+ * passes, since the API rejects the requests that actually matter.
+ */
 export function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   const isClient = useIsClient();
-  const authed = isClient ? Boolean(localStorage.getItem(TOKEN_KEY)) : false;
 
-  // While there is no backend this guard cannot do its job: no API means no
-  // token can ever be issued, so enforcing it would bounce every visitor out of
-  // the dashboard forever. It stands down until one exists — see env.noBackend.
-  // The real behaviour below is left intact, not deleted.
+  const authed = isClient && Boolean(readToken());
+  const destination = !isClient
+    ? null
+    : !authed
+      ? "/login"
+      : readEmailVerified() === false
+        ? "/verify-email"
+        : readTwoFaState() === "pending"
+          ? "/verify-2fa"
+          : null;
+
   useEffect(() => {
-    if (env.noBackend) return;
-    if (isClient && !authed) router.replace("/login");
-  }, [isClient, authed, router]);
+    if (destination) router.replace(destination);
+  }, [destination, router]);
 
-  // A build-time constant, so server and first client render agree — the
-  // dashboard paints immediately with no spinner flash.
-  if (env.noBackend) return <>{children}</>;
-
-  if (!isClient || !authed) return <Spinner />; // same markup on server + first paint
+  // Same markup on the server and the first client paint, so hydration matches.
+  if (!isClient || destination) return <Holding />;
   return <>{children}</>;
 }

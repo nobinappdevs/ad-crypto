@@ -1,45 +1,72 @@
 import { z } from "zod";
 
+/**
+ * Field names here are the API's, not prettier local ones (`first_name`, not
+ * `firstName`; `credentials`, not `email`; `code`, not `otp`). The forms bind
+ * straight to these objects and the services post them untouched, so a rename
+ * would only add a mapping layer for every field to get lost in.
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Register — POST /register                                                   */
+/* -------------------------------------------------------------------------- */
+
+export const registerRequestSchema = z.object({
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  // Sent as the literal "on" the backend's `accepted` rule expects; a checkbox
+  // is the only honest control for it, hence boolean here.
+  policy: z.boolean().refine((v) => v === true, "Please accept the terms to continue"),
+});
+
+export type RegisterRequest = z.infer<typeof registerRequestSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* Login — POST /login                                                         */
+/* -------------------------------------------------------------------------- */
+
 export const loginRequestSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
+  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 
+/* -------------------------------------------------------------------------- */
+/* Verification code — POST /user/verify/code, /password/forgot/verify/code    */
+/* -------------------------------------------------------------------------- */
+
+export const verifyCodeRequestSchema = z.object({
+  code: z.string().length(6, "Enter the 6-digit code"),
+});
+
+export type VerifyCodeRequest = z.infer<typeof verifyCodeRequestSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* Forgot password — POST /password/forgot/find/user                           */
+/* -------------------------------------------------------------------------- */
+
+/** `credentials` takes an email or a username; the form asks for an email. */
 export const forgotPasswordRequestSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
+  credentials: z.string().min(1, "Email is required").email("Enter a valid email address"),
 });
 
 export type ForgotPasswordRequest = z.infer<typeof forgotPasswordRequestSchema>;
 
-export const verifyOtpRequestSchema = z.object({
-  email: z.string().email(),
-  otp: z.string().length(6, "Enter the 6-digit code"),
-});
-
-export type VerifyOtpRequest = z.infer<typeof verifyOtpRequestSchema>;
-
-/**
- * Email verification after sign-up takes the same address + code pair as the
- * reset flow's OTP step, so it shares that shape rather than restating it. It is
- * a separate export because it hits a different endpoint, and the day either
- * side grows a field the two can part ways without a rename.
- */
-export const verifyEmailRequestSchema = verifyOtpRequestSchema;
-
-export type VerifyEmailRequest = VerifyOtpRequest;
+/* -------------------------------------------------------------------------- */
+/* Reset password — POST /password/forgot/reset                                */
+/* -------------------------------------------------------------------------- */
 
 export const resetPasswordRequestSchema = z
   .object({
-    email: z.string().email(),
-    otp: z.string().length(6),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Confirm your new password"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    password_confirmation: z.string().min(1, "Confirm your new password"),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.password_confirmation, {
     message: "Passwords do not match",
-    path: ["confirmPassword"],
+    path: ["password_confirmation"],
   });
 
 export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>;

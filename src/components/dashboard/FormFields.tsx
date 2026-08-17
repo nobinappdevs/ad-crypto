@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { ImageUp, Paperclip, TriangleAlert, X } from "lucide-react";
+import { Eye, EyeOff, ImageUp, Paperclip, TriangleAlert, X } from "lucide-react";
 import { cn } from "@/components/ui/cn";
+import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
 
 /**
  * The pieces the dashboard's long forms are built from — the KYC and card
@@ -147,6 +148,175 @@ export function TextField({
   );
 }
 
+/**
+ * A phone number, and the dial code in front of it.
+ *
+ * One field split in two controls rather than two fields: the code is part of the
+ * number, and asking for it under its own label invites someone to answer "+880"
+ * in the number box as well. The picker is the same `SelectMenu` every other
+ * dropdown on the dashboard uses, so it opens, searches and keyboards identically.
+ */
+export function PhoneField({
+  label,
+  code,
+  codeOptions,
+  onCodeChange,
+  value,
+  onChange,
+  onBlur,
+  placeholder,
+  error,
+  required,
+  hint,
+  codeLabel,
+  codePlaceholder,
+  searchPlaceholder,
+  emptyText,
+  className,
+}: {
+  label: string;
+  code: string;
+  codeOptions: SelectOption[];
+  onCodeChange: (code: string) => void;
+  value: string;
+  onChange: (value: string) => void;
+  onBlur?: () => void;
+  placeholder?: string;
+  error?: string | null;
+  required?: boolean;
+  hint?: string;
+  codeLabel: string;
+  codePlaceholder: string;
+  searchPlaceholder: string;
+  emptyText: string;
+  className?: string;
+}) {
+  const id = useId();
+
+  return (
+    <div className={cn("min-w-0", className)}>
+      <FormLabel htmlFor={id} required={required} hint={hint}>
+        {label}
+      </FormLabel>
+      {/* One frame around both halves. The code picker keeps its own hit area and
+          menu, but reads as the prefix of the field rather than a control beside
+          it — which is what it is. */}
+      <div
+        className={cn(
+          "flex h-13 items-center overflow-hidden rounded-xl border bg-surface transition",
+          error
+            ? "border-hero-neg focus-within:ring-2 focus-within:ring-hero-neg/25"
+            : "border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20",
+        )}
+      >
+        <SelectMenu
+          bare
+          searchable
+          showHintInTrigger={false}
+          showIconInTrigger={false}
+          label={codeLabel}
+          placeholder={codePlaceholder}
+          searchPlaceholder={searchPlaceholder}
+          emptyText={emptyText}
+          value={code}
+          options={codeOptions}
+          onChange={onCodeChange}
+          menuMinWidth={280}
+          className="w-28 shrink-0"
+        />
+        <span aria-hidden className="h-6 w-px shrink-0 bg-border" />
+        <input
+          id={id}
+          type="tel"
+          inputMode="tel"
+          value={value}
+          // Digits, spaces and dashes only: the code lives in the picker, so a "+"
+          // typed here is a second one.
+          onChange={(e) => onChange(e.target.value.replace(/[^\d\s-]/g, ""))}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          autoComplete="tel-national"
+          aria-invalid={Boolean(error)}
+          className="h-full min-w-0 flex-1 bg-transparent px-3 text-[14px] text-heading outline-none placeholder:text-muted"
+        />
+      </div>
+      <FieldError>{error}</FieldError>
+    </div>
+  );
+}
+
+/**
+ * A password input with the reveal toggle.
+ *
+ * The toggle is not a nicety on this form: the password panel asks for three
+ * secrets in a row and rejects the whole thing when two of them disagree, and a
+ * user who cannot see what they typed has no way to find out which one is wrong.
+ *
+ * `toggleLabel` comes in as a prop rather than from `useLang`, like `browseLabel`
+ * on the file field — these controls take their words from the page that renders
+ * them.
+ */
+export function PasswordField({
+  label,
+  value,
+  onChange,
+  onBlur,
+  placeholder,
+  error,
+  required,
+  hint,
+  toggleLabel,
+  autoComplete,
+  className,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  onBlur?: () => void;
+  placeholder?: string;
+  error?: string | null;
+  required?: boolean;
+  hint?: string;
+  toggleLabel: string;
+  autoComplete?: string;
+  className?: string;
+}) {
+  const id = useId();
+  const [show, setShow] = useState(false);
+
+  return (
+    <div className={cn("min-w-0", className)}>
+      <FormLabel htmlFor={id} required={required} hint={hint}>
+        {label}
+      </FormLabel>
+      <div className="relative flex items-center">
+        <input
+          id={id}
+          type={show ? "text" : "password"}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          aria-invalid={Boolean(error)}
+          className={cn(CONTROL, "pe-12", error ? CONTROL_BAD : CONTROL_OK)}
+        />
+        <button
+          type="button"
+          onClick={() => setShow((v) => !v)}
+          aria-label={toggleLabel}
+          aria-pressed={show}
+          title={toggleLabel}
+          className="absolute end-1.5 grid h-9 w-9 cursor-pointer place-items-center rounded-lg text-muted transition hover:bg-primary/10 hover:text-primary"
+        >
+          {show ? <EyeOff size={16} /> : <Eye size={16} />}
+        </button>
+      </div>
+      <FieldError>{error}</FieldError>
+    </div>
+  );
+}
+
 export function TextAreaField({
   label,
   value,
@@ -215,6 +385,7 @@ export function FileField({
   placeholder,
   browseLabel,
   removeLabel,
+  accept = "image/png,image/jpeg,image/webp",
   className,
 }: {
   label: string;
@@ -226,6 +397,8 @@ export function FileField({
   placeholder: string;
   browseLabel: string;
   removeLabel: string;
+  /** Passed to the input. KYC supplies this per field from the API's `mimes`. */
+  accept?: string;
   className?: string;
 }) {
   const id = useId();
@@ -288,7 +461,7 @@ export function FileField({
           ref={inputRef}
           id={id}
           type="file"
-          accept="image/png,image/jpeg,image/webp"
+          accept={accept}
           onChange={(e) => pick(e.target.files?.[0] ?? null)}
           className="sr-only"
         />

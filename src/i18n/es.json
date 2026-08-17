@@ -377,6 +377,7 @@
     "forgot": "¿Olvidaste tu contraseña?",
     "loginCta": "Entrar ahora",
     "registerCta": "Registrarme ahora",
+    "registering": "Registrando...",
     "loginPrompt": "¿No tienes cuenta?",
     "loginAction": "Regístrate",
     "registerPrompt": "¿Ya tienes cuenta?",
@@ -424,6 +425,7 @@
       "otpTitle": "Confirma tu correo",
       "otpBlurbLead": "Hemos enviado un código de 6 dígitos a",
       "otpBlurbTail": "Introdúcelo abajo para activar tu cuenta.",
+      "yourEmail": "tu correo electrónico",
       "changeEmail": "¿Correo incorrecto? Cámbialo",
       "resend": "Reenviar código",
       "resendIn": "Podrás pedir un código nuevo en",
@@ -433,11 +435,21 @@
       "verifiedToast": "Correo verificado. Ya puedes iniciar sesión.",
       "securityNote": "El código caduca en 10 minutos y solo se puede usar una vez."
     },
+    "verify2fa": {
+      "title": "Verificación en dos pasos",
+      "blurb": "Abre tu app de autenticación e introduce el código de 6 dígitos que muestra para AdCrypto.",
+      "verify": "Verificar código",
+      "verifying": "Verificando...",
+      "verifiedToast": "Verificación en dos pasos completada.",
+      "signOut": "Iniciar sesión con otra cuenta",
+      "note": "El código cambia cada 30 segundos. Si uno se rechaza, espera el siguiente."
+    },
     "digitLabel": "Dígito {n}"
   },
   "dashboard": {
     "title": "Panel",
     "logout": "Cerrar sesión",
+    "loggedOut": "Sesión cerrada",
     "searchPlaceholder": "Escribe aquí para buscar...",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
@@ -480,29 +492,8 @@
       "newCount": "{n} nuevas",
       "empty": "Estás al día",
       "emptyDesc": "Aquí llegan las novedades de tus órdenes y las alertas de seguridad.",
-      "viewAll": "Ver toda la actividad",
-      "items": {
-        "buyFilled": {
-          "title": "Orden de compra ejecutada",
-          "body": "0,25 BTC acreditados en tu cartera a $43.009,00."
-        },
-        "sellReview": {
-          "title": "Orden de venta en revisión",
-          "body": "Tu pago de 1,5 ETH está con nuestro equipo — normalmente en menos de una hora."
-        },
-        "withdrawSent": {
-          "title": "Retiro enviado a la red",
-          "body": "0,08 BTC enviados por BNB Smart Chain, esperando confirmaciones."
-        },
-        "exchangeDone": {
-          "title": "Intercambio completado",
-          "body": "42 SOL intercambiados por 0,09612 BTC."
-        },
-        "cardReview": {
-          "title": "Solicitud de tarjeta recibida",
-          "body": "Te escribiremos por correo en cuanto termine la verificación."
-        }
-      }
+      "untitled": "Actividad",
+      "viewAll": "Ver toda la actividad"
     },
     "logoutTitle": "¿Cerrar sesión en AdCrypto?",
     "logoutDesc": "Tendrás que iniciar sesión de nuevo para acceder a tus carteras y órdenes.",
@@ -535,13 +526,95 @@
       "conversion": "Visitantes que financiaron una cuenta"
     },
     "myWallets": "Mis carteras",
+    "loadFailed": "No se pudo cargar tu panel",
+    "retry": "Intentar de nuevo",
+    "noWalletsTitle": "Aún no hay billeteras",
+    "noWalletsDesc": "Tus billeteras aparecerán aquí en cuanto se creen para tu cuenta.",
+    "depositAddress": "Dirección de depósito",
+    "copyAddress": "Copiar dirección",
+    "copied": "Copiado",
+    "copyFailed": "No se pudo copiar. Selecciona la dirección y cópiala manualmente.",
+    "chartCountHint": "Número de transacciones · últimos 12 meses",
+    "txType": {
+      "buy": "Comprar",
+      "sell": "Vender",
+      "withdraw": "Retirar",
+      "exchange": "Intercambiar"
+    },
+    "txStatus": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "rejected": "Rechazada",
+      "unknown": "Desconocido"
+    },
+    "txDetail": {
+      "trx_id": "Referencia",
+      "screenshot": "Captura de pantalla",
+      "branch": "Sucursal",
+      "bank_name": "Nombre del banco",
+      "bank_number": "Número bancario",
+      "account_name": "Titular de la cuenta",
+      "account_number": "Número de cuenta",
+      "wallet_type": "Tipo de cartera",
+      "wallet": "Moneda",
+      "sender_wallet": "Desde",
+      "receiver_wallet": "Hacia",
+      "coin": "Moneda",
+      "network": "Red",
+      "network_name": "Red",
+      "payment_method": "Método de pago",
+      "method": "Método de pago",
+      "amount": "Importe",
+      "enter_amount": "Importe introducido",
+      "receive_amount": "Importe recibido",
+      "exchange_rate": "Tipo de cambio",
+      "rate": "Tipo de cambio",
+      "network_fee": "Comisión de red",
+      "network_fees": "Comisión de red",
+      "total_charge": "Comisión",
+      "total_payable": "Total a pagar",
+      "address": "Dirección",
+      "wallet_address": "Dirección de la cartera",
+      "note": "Nota",
+      "remark": "Observación",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "country": "País",
+      "source": "Origen",
+      "transaction_id": "Referencia de pago",
+      "txn_hash": "Hash de la transacción",
+      "sender_wallet_address": "Dirección de origen",
+      "receiver_wallet_address": "Dirección de destino",
+      "sending_amount": "Importe enviado",
+      "get_amount": "Recibes",
+      "will_get": "Recibes",
+      "payable_amount": "Total a pagar",
+      "fixed_charge": "Comisión fija",
+      "percent_charge": "Comisión porcentual",
+      "sender_ex_rate": "Tipo del remitente",
+      "available_balance": "Saldo posterior"
+    },
+    "kycNotice": {
+      "unverified": {
+        "title": "Verifica tu identidad",
+        "desc": "Los retiros y la emisión de tarjetas seguirán bloqueados hasta que se aprueben tus documentos."
+      },
+      "pending": {
+        "title": "Tus documentos están en revisión",
+        "desc": "Un revisor tiene tu envío. Recibirás un correo en cuanto haya una decisión."
+      },
+      "rejected": {
+        "title": "Tu verificación fue rechazada",
+        "desc": "Algo del último envío no cuadró. Corrígelo y envíalo de nuevo."
+      },
+      "cta": "Verificar ahora"
+    },
     "viewMore": "Ver más",
     "viewLess": "Ver menos",
-    "last24h": "24 h",
     "transactionsOverview": "Resumen de transacciones",
     "buyCryptoChart": "Gráfico de compras",
     "statusBreakdown": "Desglose del estado de los pedidos",
-    "last12Months": "(12 meses)",
     "weeklyProgress": "Progreso semanal de liquidación",
     "viewTable": "Tabla",
     "viewChart": "Gráfico",
@@ -551,8 +624,6 @@
       "buyCrypto": "Comprar cripto",
       "sellCrypto": "Vender cripto",
       "withdrawCrypto": "Retirar cripto",
-      "buyVolume": "Comprado",
-      "buyOrders": "Órdenes",
       "inProgress": "En curso",
       "pending": "Pendiente",
       "completed": "Completado",
@@ -594,7 +665,6 @@
     },
     "transactionHistory": "Historial de transacciones",
     "download": "Descargar",
-    "reIssue": "Reemitir",
     "table": {
       "productName": "Producto",
       "type": "Tipo",
@@ -609,7 +679,19 @@
       "totalRow": "Total",
       "selectedCount": "{selected} de {total} filas seleccionadas",
       "newestFew": "(las {count} más recientes)",
-      "rowCount": "({count})"
+      "rowCount": "({count})",
+      "asset": "Activo",
+      "amount": "Importe",
+      "charge": "Comisión",
+      "payable": "A pagar",
+      "emptyTitle": "Aún no hay transacciones",
+      "emptyDesc": "Compra, vende, intercambia o retira cripto y tu actividad aparecerá aquí.",
+      "network": "Red",
+      "method": "Método",
+      "details": "Detalles del pedido",
+      "showDetails": "Mostrar detalles del pedido",
+      "hideDetails": "Ocultar detalles del pedido",
+      "open": "Abrir"
     },
     "viewAll": "Ver todo",
     "filters": {
@@ -622,8 +704,13 @@
     },
     "transactionsPage": {
       "subtitle": "Todas las órdenes de la cuenta — compras, ventas y retiros — con la comisión cobrada en cada una.",
-      "searchPlaceholder": "Buscar moneda, referencia o correo",
-      "empty": "Ninguna transacción coincide con ese filtro."
+      "searchPlaceholder": "Buscar por ID de transacción",
+      "empty": "Ninguna transacción coincide con ese filtro.",
+      "loadFailed": "No pudimos cargar tus transacciones",
+      "showing": "{from}–{to} de {total}",
+      "page": "Página {page} de {pages}",
+      "prev": "Página anterior",
+      "next": "Página siguiente"
     },
     "tradeSide": {
       "buy": "Compra",
@@ -772,34 +859,44 @@
   },
   "exchangeCrypto": {
     "title": "Intercambiar cripto",
-    "subtitle": "Cambia una moneda por otra dentro de tu billetera AdCrypto: sin cadena y sin esperas.",
-    "liveRate": "Tasa en vivo",
-    "from": "Conviertes",
-    "to": "Recibes",
-    "selectFrom": "Moneda a convertir",
+    "subtitle": "Cambia una moneda por otra dentro de tu cartera AdCrypto: al instante, sin cadena y sin esperas.",
+    "liveRate": "Tipo de cambio",
+    "from": "Cambiar desde",
+    "to": "Cambiar a",
+    "selectFrom": "Moneda a cambiar",
     "selectTo": "Moneda a recibir",
     "swap": "Invertir el par",
-    "balance": "Disponible",
+    "balance": "Saldo disponible",
     "max": "Máx",
-    "minAmount": "Mín",
-    "maxAmount": "Máx",
-    "youConvert": "Conviertes",
+    "limit": "Límite",
+    "networkFees": "Comisiones de red",
+    "summary": "Resumen del cambio",
+    "rate": "Tipo",
+    "youSend": "Envías",
     "youReceive": "Recibes",
-    "instantNote": "El intercambio ocurre dentro de AdCrypto, así que no pasa por ninguna cadena ni tiene comisión de red.",
-    "summary": "Resumen del intercambio",
-    "rate": "Tasa",
-    "subtotal": "Subtotal",
-    "exchangeFee": "Comisión de intercambio ({percent}%)",
-    "value": "Valor estimado",
     "arrival": "Se liquida en",
     "instant": "Al instante",
-    "continue": "Revisar intercambio",
-    "secured": "La tasa se mantiene {seconds} segundos al continuar, y verás las comisiones antes de confirmar.",
+    "totalDeducted": "Total descontado",
+    "continue": "Intercambiar cripto",
+    "reviewing": "Calculando el cambio…",
+    "secured": "Verás las cifras definitivas y las confirmarás antes de que salga nada de tu cartera.",
+    "confirmTitle": "Confirma tu cambio",
+    "confirmNote": "AdCrypto acaba de calcular esta orden. No se mueve nada hasta que confirmes.",
+    "confirm": "Confirmar cambio",
+    "confirming": "Cambiando…",
+    "back": "Volver",
+    "success": "Cambio completado.",
+    "loadFailed": "No se pudo cargar el intercambio",
+    "retry": "Reintentar",
+    "noWallet": "Sin cartera",
+    "noWallets": "Aún no tienes carteras",
+    "noWalletsDesc": "Un cambio mueve valor entre carteras que ya tienes: compra o recibe una moneda primero.",
     "errorAmount": "Introduce un importe para continuar.",
-    "errorMin": "El intercambio mínimo es {min} {coin}.",
-    "errorMax": "El intercambio máximo es {max} {coin}.",
-    "errorBalance": "Tienes {balance} {coin} disponibles.",
-    "submitted": "Intercambio de {from} a {to} creado."
+    "errorMin": "El cambio mínimo es {min} {coin}.",
+    "errorMax": "El cambio máximo es {max} {coin}.",
+    "errorBalance": "Necesitas {payable} {coin} con las comisiones incluidas, y tu cartera tiene {balance}.",
+    "errorNoWallet": "Todavía no tienes una cartera de {coin}, así que no puede ser la moneda que cambias.",
+    "errorSamePair": "Elige dos monedas distintas."
   },
   "cardCustomer": {
     "title": "Crear titular de tarjeta",
@@ -923,6 +1020,11 @@
     "statusLabel": "Doble factor",
     "statusOn": "Activado",
     "statusOff": "Sin activar",
+    "loading": "Cargando...",
+    "statusUnknown": "Desconocido",
+    "loadFailed": "No se pudieron cargar tus ajustes de doble factor",
+    "retry": "Intentar de nuevo",
+    "saving": "Guardando...",
     "setupTitle": "Configurar el autenticador",
     "setupHint": "Escanea el código, o escribe la clave en una app que no pueda escanear.",
     "bannerOn": "La autenticación en dos pasos está activa. Los inicios de sesión y los retiros piden un código de tu autenticador.",
@@ -971,6 +1073,100 @@
     "enabledToast": "Autenticación en dos pasos activada.",
     "disabledToast": "Autenticación en dos pasos desactivada."
   },
+  "deleteAccount": {
+    "title": "Eliminar cuenta",
+    "desc": "Cierra esta cuenta de forma permanente. Tus billeteras, tu historial de transacciones y tus tarjetas se eliminan con ella, y no se puede deshacer.",
+    "cta": "Eliminar mi cuenta",
+    "confirmTitle": "¿Eliminar esta cuenta?",
+    "confirmDesc": "Esto cierra tu cuenta de AdCrypto definitivamente. Retira primero cualquier saldo restante: después no se podrá recuperar.",
+    "ack": "Entiendo que esto no se puede deshacer.",
+    "confirmCta": "Eliminar permanentemente",
+    "deleting": "Eliminando...",
+    "successToast": "Tu cuenta ha sido eliminada."
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Tu nombre, tus datos de contacto y tu dirección — y la contraseña con la que inicias sesión.",
+    "statusLabel": "Verificación",
+    "loadFailed": "No pudimos cargar tu perfil",
+    "retry": "Reintentar",
+    "kycStatus": {
+      "unverified": "Sin verificar",
+      "verified": "Verificado",
+      "pending": "En revisión",
+      "rejected": "Rechazado"
+    },
+    "photo": {
+      "change": "Cambiar foto",
+      "remove": "Quitar",
+      "hint": "PNG, JPG o WEBP, hasta 2 MB. Las imágenes cuadradas se ven mejor.",
+      "pending": "se sube al guardar",
+      "errorType": "Usa una imagen PNG, JPG o WEBP.",
+      "errorSize": "Esa imagen supera los 2 MB."
+    },
+    "sections": {
+      "identity": "Datos personales",
+      "identityHint": "El nombre que usamos en los extractos y en las conversaciones con soporte.",
+      "address": "Dirección",
+      "addressHint": "Dónde vives. Es necesaria antes de poder emitirte una tarjeta."
+    },
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "email": "Correo electrónico",
+    "emailHint": "escribe a soporte para cambiarlo",
+    "username": "Nombre de usuario",
+    "usernameHint": "elegido al registrarte",
+    "mobile": "Número de móvil",
+    "mobileCode": "Prefijo del país",
+    "mobileCodePlaceholder": "Prefijo",
+    "mobilePlaceholder": "Incluye el prefijo del país",
+    "dateOfBirth": "Fecha de nacimiento",
+    "country": "País",
+    "selectCountry": "Selecciona un país",
+    "searchCountry": "Buscar países",
+    "noCountry": "Ningún país coincide",
+    "state": "Estado / Región",
+    "city": "Ciudad",
+    "zip": "Código postal",
+    "address": "Dirección postal",
+    "addressPlaceholder": "Número, calle, zona",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "saved": "Perfil actualizado.",
+    "errorRequired": "Este campo es obligatorio.",
+    "password": {
+      "title": "Contraseña",
+      "hint": "Tu contraseña actual confirma que eres tú quien hace el cambio.",
+      "current": "Contraseña actual",
+      "new": "Nueva contraseña",
+      "confirm": "Confirma la nueva contraseña",
+      "show": "Mostrar contraseña",
+      "rules": "al menos {min} caracteres",
+      "cta": "Actualizar contraseña",
+      "saving": "Actualizando...",
+      "saved": "Contraseña actualizada.",
+      "secured": "Se envía por una conexión cifrada y nunca se guarda en texto legible.",
+      "errorCurrent": "Introduce tu contraseña actual.",
+      "errorShort": "Usa al menos {min} caracteres.",
+      "errorSame": "La nueva contraseña es igual a la actual.",
+      "errorMatch": "Las dos contraseñas no coinciden."
+    },
+    "account": {
+      "title": "Cuenta",
+      "hint": "Lo que tenemos registrado para este acceso.",
+      "kyc": "Verificación de identidad",
+      "twoFa": "Inicio de sesión en dos pasos",
+      "twoFaHint": "App de autenticación",
+      "manage": "Gestionar",
+      "verify": "Verificar"
+    },
+    "tips": {
+      "title": "Mantén esta cuenta a tu nombre",
+      "name": "Usa el nombre de tu documento: la discrepancia es el motivo más común de rechazo.",
+      "photo": "Una foto reconocible ayuda a soporte a confirmar con quién está hablando.",
+      "password": "Cambia la contraseña si alguna vez la has usado en otro sitio."
+    }
+  },
   "kyc": {
     "title": "Verificación KYC",
     "subtitle": "Confirma tu identidad una vez y se abren límites más altos, la emisión de tarjetas y los pagos en moneda fiat.",
@@ -997,101 +1193,34 @@
         "note": "Algo del último envío no cuadró. Corrígelo abajo y vuelve a enviarlo."
       }
     },
-    "sections": {
-      "identity": {
-        "title": "Tu identidad",
-        "hint": "Exactamente como aparece en el documento que vas a enviar."
-      },
-      "document": {
-        "title": "El documento",
-        "hint": "Qué documento usas y hasta cuándo es válido."
-      },
-      "scans": {
-        "title": "Fotos",
-        "hint": "PNG, JPG o WebP, hasta 5 MB cada una."
-      }
-    },
-    "fields": {
-      "firstName": {
-        "label": "Nombre",
-        "placeholder": "Como en tu documento"
-      },
-      "lastName": {
-        "label": "Apellidos",
-        "placeholder": "Como en tu documento"
-      },
-      "dob": {
-        "label": "Fecha de nacimiento",
-        "hint": "debes tener 18 años o más"
-      },
-      "nationality": {
-        "label": "Nacionalidad"
-      },
-      "documentType": {
-        "label": "Tipo de documento"
-      },
-      "documentNumber": {
-        "label": "Número de documento",
-        "placeholder": "Número impreso en el documento"
-      },
-      "issuedBy": {
-        "label": "País emisor"
-      },
-      "expiry": {
-        "label": "Fecha de caducidad",
-        "hint": "debe seguir vigente"
-      },
-      "docFront": {
-        "label": "Documento — anverso"
-      },
-      "docBack": {
-        "label": "Documento — reverso"
-      },
-      "selfie": {
-        "label": "Selfie sosteniendo el documento",
-        "hint": "tu rostro y el documento legibles en la misma foto"
-      },
-      "notes": {
-        "label": "Algo que debamos saber",
-        "hint": "opcional",
-        "placeholder": "Un cambio de nombre reciente, una segunda nacionalidad, cualquier cosa que explique los documentos."
-      }
-    },
-    "options": {
-      "documentType": {
-        "passport": "Pasaporte",
-        "nationalId": "Documento nacional de identidad",
-        "drivingLicence": "Permiso de conducir",
-        "residencePermit": "Permiso de residencia"
-      }
-    },
+    "formTitle": "Tus documentos",
+    "formHint": "Todos los campos marcados con * son obligatorios para nuestros revisores.",
+    "optional": "opcional",
+    "loadFailed": "No se pudo cargar el formulario de verificación",
+    "retry": "Intentar de nuevo",
     "chooseOne": "Elige uno",
-    "selectCountry": "Selecciona un país",
-    "searchCountry": "Buscar países",
-    "noResults": "Sin coincidencias",
     "filePlaceholder": "Ningún archivo elegido",
     "fileBrowse": "Haz clic para buscar, o suelta una imagen aquí",
     "fileRemove": "Quitar archivo",
+    "fileHint": "{types}, hasta {max} MB",
     "checklist": "Qué falta",
     "checklistHint": "Cada parte se marca a medida que la completas.",
     "rulesTitle": "Requisitos de las fotos",
     "rules": {
       "legible": "Cada línea de texto legible — sin desenfoque ni reflejos.",
       "corners": "Las cuatro esquinas del documento dentro del encuadre.",
-      "colour": "Solo fotos en color; los escaneos y las fotocopias se rechazan.",
-      "size": "PNG, JPG o WebP, menos de 5 MB cada una."
+      "colour": "Solo fotos en color; los escaneos y las fotocopias se rechazan."
     },
     "reviewNote": "Los documentos se guardan cifrados, se usan solo para la verificación y nunca se comparten con terceros.",
     "submitCta": "Enviar a verificación",
+    "submitting": "Enviando...",
     "secured": "Se envían por una conexión cifrada y solo los ve nuestro equipo de cumplimiento.",
     "submittedToast": "Documentos enviados. Te escribiremos cuando termine la revisión.",
     "errorRequired": "Este campo es obligatorio.",
     "errorTooShort": "Usa al menos {min} caracteres.",
-    "errorDateInvalid": "Introduce una fecha válida.",
-    "errorAge": "Debes tener al menos {age} años para verificarte.",
-    "errorExpired": "Ese documento ya ha caducado.",
-    "errorFileType": "Usa una imagen PNG, JPG o WebP.",
-    "errorFileSize": "Esa imagen supera los 5 MB.",
+    "errorTooLong": "Usa como máximo {max} caracteres.",
+    "errorFileType": "Usa uno de estos formatos: {types}.",
+    "errorFileSize": "Ese archivo supera los {max} MB.",
     "errorSummary": "Quedan {count} campos por revisar."
   },
   "footer": {

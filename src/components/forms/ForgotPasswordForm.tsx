@@ -3,20 +3,25 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
-import { useForgotPassword, useResetPassword, useVerifyOtp } from "@/hooks/useAuth";
+import {
+  useForgotFindUser,
+  useForgotResendCode,
+  useForgotVerifyCode,
+  useResetPassword,
+} from "@/hooks/useAuth";
 import {
   forgotPasswordRequestSchema,
   resetPasswordRequestSchema,
-  verifyOtpRequestSchema,
+  verifyCodeRequestSchema,
   type ForgotPasswordRequest,
   type ResetPasswordRequest,
-  type VerifyOtpRequest,
+  type VerifyCodeRequest,
 } from "@/schemas/auth.schema";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
 import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
 import { AuthOtpBoxes } from "@/components/auth/AuthOtpBoxes";
-import toast from "react-hot-toast";
 
 /** Seconds the resend link stays disabled after a code goes out. */
 const RESEND_COOLDOWN = 30;
@@ -31,15 +36,20 @@ const STEP_LABEL_KEY: Record<Step, string> = {
 
 /**
  * The full "forgot password" flow, as one linear wizard on a single route rather
- * than three routes: email -> OTP -> new password. Unlike login/register (two
+ * than three routes: email -> code -> new password. Unlike login/register (two
  * peer destinations you can jump between) these steps only ever run in order, so
  * there's nothing a separate URL per step would buy the user — only more places
  * for a refresh to strand them mid-flow.
  *
- * Each step is its own `useForm`, since the fields don't overlap; the email and
- * OTP the later steps need are carried forward in plain state instead. The
- * `key={step}` on the shared wrapper remounts it on every advance, which is what
- * replays the `panel-rise` entrance each step gets on `/login` and `/register`.
+ * Three endpoints, threaded on one server-issued token: `find/user` mails the
+ * code and returns the token, `verify/code` checks the pair, `reset` spends it.
+ * The token is never handled here — it lives in `sessionStorage` (see
+ * `@/lib/authState`) and the hooks read it back on each step, so a step can't
+ * forget to pass it along.
+ *
+ * Each step is its own `useForm`, since the fields don't overlap. The `key={step}`
+ * on the shared wrapper remounts it on every advance, which is what replays the
+ * `panel-rise` entrance each step gets on `/login` and `/register`.
  */
 export function ForgotPasswordForm() {
   const { t } = useLang();
@@ -47,11 +57,11 @@ export function ForgotPasswordForm() {
 
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
   const [cooldown, setCooldown] = useState(0);
 
-  const forgotPassword = useForgotPassword();
-  const verifyOtp = useVerifyOtp();
+  const findUser = useForgotFindUser();
+  const resendCode = useForgotResendCode();
+  const verifyCode = useForgotVerifyCode();
   const resetPassword = useResetPassword(k("resetSuccessToast"));
 
   useEffect(() => {
@@ -71,12 +81,12 @@ export function ForgotPasswordForm() {
 
       {step === "email" && (
         <EmailStep
+          mutate={findUser}
           onSent={(sentEmail) => {
             setEmail(sentEmail);
             setCooldown(RESEND_COOLDOWN);
             setStep("otp");
           }}
-          mutate={forgotPassword}
         />
       )}
 
@@ -84,41 +94,38 @@ export function ForgotPasswordForm() {
         <OtpStep
           email={email}
           cooldown={cooldown}
+          mutate={verifyCode}
+          resendPending={resendCode.isPending}
           onResend={() => {
-            forgotPassword.mutate(
-              { email },
-              {
-                onSuccess: () => {
-                  toast.success(k("resendSuccessToast"));
-                  setCooldown(RESEND_COOLDOWN);
-                },
+            resendCode.mutate(undefined, {
+              // Only start the countdown on a send that actually happened — the
+              // backend rate-limits this and says how long is left on refusal.
+              onSuccess: () => {
+                toast.success(k("resendSuccessToast"));
+                setCooldown(RESEND_COOLDOWN);
               },
-            );
+            });
           }}
-          onVerified={(code) => {
-            setOtp(code);
-            setStep("reset");
-          }}
+          onVerified={() => setStep("reset")}
           onChangeEmail={() => setStep("email")}
-          mutate={verifyOtp}
         />
       )}
 
-      {step === "reset" && <ResetStep email={email} otp={otp} mutate={resetPassword} />}
+      {step === "reset" && <ResetStep mutate={resetPassword} />}
     </div>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/* Step 1 — email                                                              */
+/* Step 1 — which account (POST /password/forgot/find/user)                     */
 /* -------------------------------------------------------------------------- */
 
 function EmailStep({
-  onSent,
   mutate,
+  onSent,
 }: {
+  mutate: ReturnType<typeof useForgotFindUser>;
   onSent: (email: string) => void;
-  mutate: ReturnType<typeof useForgotPassword>;
 }) {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.forgotPassword.${name}`);
@@ -129,14 +136,16 @@ function EmailStep({
     formState: { errors },
   } = useForm<ForgotPasswordRequest>({
     resolver: zodResolver(forgotPasswordRequestSchema),
-    defaultValues: { email: "" },
+    defaultValues: { credentials: "" },
   });
 
   const onSubmit = (data: ForgotPasswordRequest) => {
     mutate.mutate(data, {
-      onSuccess: () => {
-        toast.success(k("otpSentToast"));
-        onSent(data.email);
+      onSuccess: (res) => {
+        toast.success(
+          (res as { message?: { success?: string[] } })?.message?.success?.[0] ?? k("otpSentToast"),
+        );
+        onSent(data.credentials);
       },
     });
   };
@@ -147,19 +156,17 @@ function EmailStep({
         <h1 className="text-[26px]! leading-[1.14]! font-bold! tracking-[-0.03em] text-panel-fg sm:text-[30px]! lg:text-[34px]!">
           {k("emailTitle")}
         </h1>
-        <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">
-          {k("emailBlurb")}
-        </p>
+        <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">{k("emailBlurb")}</p>
       </div>
 
       <Controller
-        name="email"
+        name="credentials"
         control={control}
         render={({ field }) => (
           <AuthInput
             type="email"
             placeholder={t("authPanel.loginEmail")}
-            error={errors.email?.message}
+            error={errors.credentials?.message}
             value={field.value}
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -168,11 +175,7 @@ function EmailStep({
         )}
       />
 
-      <button
-        type="submit"
-        disabled={mutate.isPending}
-        className={AUTH_SUBMIT_CLASS}
-      >
+      <button type="submit" disabled={mutate.isPending} className={AUTH_SUBMIT_CLASS}>
         {mutate.isPending ? k("sending") : k("sendOtp")}
       </button>
     </form>
@@ -180,23 +183,25 @@ function EmailStep({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Step 2 — OTP                                                                */
+/* Step 2 — the code (POST /password/forgot/verify/code)                        */
 /* -------------------------------------------------------------------------- */
 
 function OtpStep({
   email,
   cooldown,
+  mutate,
+  resendPending,
   onResend,
   onVerified,
   onChangeEmail,
-  mutate,
 }: {
   email: string;
   cooldown: number;
+  mutate: ReturnType<typeof useForgotVerifyCode>;
+  resendPending: boolean;
   onResend: () => void;
-  onVerified: (otp: string) => void;
+  onVerified: () => void;
   onChangeEmail: () => void;
-  mutate: ReturnType<typeof useVerifyOtp>;
 }) {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.forgotPassword.${name}`);
@@ -205,16 +210,19 @@ function OtpStep({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<VerifyOtpRequest>({
-    resolver: zodResolver(verifyOtpRequestSchema),
-    defaultValues: { email, otp: "" },
+  } = useForm<VerifyCodeRequest>({
+    resolver: zodResolver(verifyCodeRequestSchema),
+    defaultValues: { code: "" },
   });
 
-  const onSubmit = (data: VerifyOtpRequest) => {
-    mutate.mutate(data, {
-      onSuccess: () => {
-        toast.success(k("otpVerifiedToast"));
-        onVerified(data.otp);
+  const onSubmit = (data: VerifyCodeRequest) => {
+    mutate.mutate(data.code, {
+      onSuccess: (res) => {
+        toast.success(
+          (res as { message?: { success?: string[] } })?.message?.success?.[0] ??
+            k("otpVerifiedToast"),
+        );
+        onVerified();
       },
     });
   };
@@ -226,8 +234,8 @@ function OtpStep({
           {k("otpTitle")}
         </h1>
         <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">
-          {k("otpBlurbLead")} <span className="inline! font-semibold! text-panel-fg">{email}</span>
-          . {k("otpBlurbTail")}{" "}
+          {k("otpBlurbLead")} <span className="inline! font-semibold! text-panel-fg">{email}</span>.{" "}
+          {k("otpBlurbTail")}{" "}
           <button
             type="button"
             onClick={onChangeEmail}
@@ -241,13 +249,13 @@ function OtpStep({
       {/* The same boxes the email-verification screen uses — one OTP design across
           both flows, so a code screen always looks like a code screen. */}
       <Controller
-        name="otp"
+        name="code"
         control={control}
         render={({ field }) => (
           <AuthOtpBoxes
             value={field.value}
             onChange={field.onChange}
-            error={errors.otp?.message}
+            error={errors.code?.message}
             disabled={mutate.isPending}
             autoFocus
           />
@@ -258,18 +266,18 @@ function OtpStep({
         <button
           type="button"
           onClick={onResend}
-          disabled={cooldown > 0}
+          disabled={cooldown > 0 || resendPending}
           className="text-[13.5px]! font-semibold! text-primary disabled:cursor-default disabled:text-panel-muted"
         >
-          {cooldown > 0 ? `${k("resendIn")} 0:${cooldown.toString().padStart(2, "0")}` : k("resend")}
+          {cooldown > 0
+            ? `${k("resendIn")} 0:${cooldown.toString().padStart(2, "0")}`
+            : resendPending
+              ? k("sending")
+              : k("resend")}
         </button>
       </div>
 
-      <button
-        type="submit"
-        disabled={mutate.isPending}
-        className={AUTH_SUBMIT_CLASS}
-      >
+      <button type="submit" disabled={mutate.isPending} className={AUTH_SUBMIT_CLASS}>
         {mutate.isPending ? k("verifying") : k("verify")}
       </button>
     </form>
@@ -277,18 +285,10 @@ function OtpStep({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Step 3 — new password                                                       */
+/* Step 3 — new password (POST /password/forgot/reset)                          */
 /* -------------------------------------------------------------------------- */
 
-function ResetStep({
-  email,
-  otp,
-  mutate,
-}: {
-  email: string;
-  otp: string;
-  mutate: ReturnType<typeof useResetPassword>;
-}) {
+function ResetStep({ mutate }: { mutate: ReturnType<typeof useResetPassword> }) {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.forgotPassword.${name}`);
 
@@ -298,22 +298,20 @@ function ResetStep({
     formState: { errors },
   } = useForm<ResetPasswordRequest>({
     resolver: zodResolver(resetPasswordRequestSchema),
-    defaultValues: { email, otp, password: "", confirmPassword: "" },
+    defaultValues: { password: "", password_confirmation: "" },
   });
 
-  const onSubmit = (data: ResetPasswordRequest) => {
-    mutate.mutate({ email: data.email, otp: data.otp, password: data.password });
-  };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5.5">
+    <form
+      onSubmit={handleSubmit((data) => mutate.mutate(data))}
+      noValidate
+      className="flex flex-col gap-5.5"
+    >
       <div className="flex flex-col gap-2.5">
         <h1 className="text-[26px]! leading-[1.14]! font-bold! tracking-[-0.03em] text-panel-fg sm:text-[30px]! lg:text-[34px]!">
           {k("resetTitle")}
         </h1>
-        <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">
-          {k("resetBlurb")}
-        </p>
+        <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">{k("resetBlurb")}</p>
       </div>
 
       <Controller
@@ -332,12 +330,12 @@ function ResetStep({
       />
 
       <Controller
-        name="confirmPassword"
+        name="password_confirmation"
         control={control}
         render={({ field }) => (
           <AuthPasswordInput
             placeholder={k("confirmPassword")}
-            error={errors.confirmPassword?.message}
+            error={errors.password_confirmation?.message}
             value={field.value}
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -345,11 +343,7 @@ function ResetStep({
         )}
       />
 
-      <button
-        type="submit"
-        disabled={mutate.isPending}
-        className={AUTH_SUBMIT_CLASS}
-      >
+      <button type="submit" disabled={mutate.isPending} className={AUTH_SUBMIT_CLASS}>
         {mutate.isPending ? k("resetting") : k("resetCta")}
       </button>
     </form>
