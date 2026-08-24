@@ -567,6 +567,72 @@ export function ExchangeSkeleton({ header = true }: { header?: boolean }) {
   );
 }
 
+/**
+ * `/dashboard/withdraw-crypto` — the pair, the address field, and the summary.
+ *
+ * Same 7/5 split as `TradeSkeleton` with the source toggle and method cards
+ * dropped: a withdrawal is an amount, a coin and an address.
+ */
+export function WithdrawSkeleton({ header = true }: { header?: boolean }) {
+  return (
+    <Frame header={header}>
+      <div className="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
+        {/* ---- Form ---- */}
+        <Panel className="p-4 sm:p-6 lg:col-span-7">
+          <div className="relative">
+            <SkAmountField selector />
+            <div className="relative z-[1] flex h-0 items-center justify-center">
+              <Sk className="h-9 w-9 rounded-full border-4 border-card" />
+            </div>
+            <SkAmountField className="mt-2" />
+          </div>
+
+          {/* Address, then the warning that always sits under it */}
+          <div className="mt-6">
+            <Sk className="mb-2 h-3 w-28" />
+            <Sk className="h-13 w-full rounded-xl" soft />
+            <Sk className="mt-2.5 h-14 w-full rounded-xl" soft />
+          </div>
+        </Panel>
+
+        {/* ---- Summary ---- */}
+        <div className="lg:col-span-5">
+          <Panel className="p-4 sm:p-6">
+            <Sk className="h-4 w-36" />
+
+            <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface p-3">
+              <Sk className="h-9.5 w-9.5 shrink-0 rounded-full" />
+              <div className="min-w-0 flex-1">
+                <Sk className="h-3.5 w-28" />
+                <Sk className="mt-1.5 h-2.5 w-20" soft />
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-xl border border-border bg-surface p-3">
+              <Sk className="h-2.5 w-24" soft />
+              <Sk className="mt-2 h-3 w-full max-w-56" />
+            </div>
+
+            <div className="mt-4 flex flex-col gap-3">
+              <SkRow width="w-24" />
+              <SkRow width="w-20" />
+              <SkRow width="w-28" />
+            </div>
+
+            <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-4">
+              <Sk className="h-3.5 w-28" />
+              <Sk className="h-5 w-32" />
+            </div>
+
+            <Sk className="mt-5 h-12 w-full rounded-xl" />
+            <Sk className="mt-3 h-2.5 w-full max-w-60" soft />
+          </Panel>
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 /* KYC                                                                         */
 /* -------------------------------------------------------------------------- */
@@ -726,26 +792,6 @@ export function WalletSkeleton({ header = true }: { header?: boolean }) {
         <Panel className="p-4 sm:p-6 lg:col-span-7">
           <SkPanelHeading />
 
-          {/* Network choice */}
-          <div className="mt-5">
-            <Sk className="mb-2 h-3 w-28" />
-            <div className="flex flex-col gap-2">
-              {Array.from({ length: 3 }, (_, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-surface px-3.5 py-3"
-                >
-                  <Sk className="h-4.5 w-4.5 shrink-0 rounded-full" soft />
-                  <div className="min-w-0 flex-1">
-                    <Sk className="h-3 w-28" />
-                    <Sk className="mt-1.5 h-2.5 w-40" soft />
-                  </div>
-                  <Sk className="h-3 w-16 shrink-0" soft />
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* QR plate */}
           <div className="mt-5 flex justify-center rounded-2xl border border-border bg-surface p-4 sm:p-6">
             <div className="grid min-h-56 w-full max-w-56 place-items-center rounded-xl bg-white p-3.5 sm:p-4">
@@ -760,8 +806,25 @@ export function WalletSkeleton({ header = true }: { header?: boolean }) {
               <Sk className="h-3.5 w-full max-w-72" soft />
               <Sk className="h-3.5 w-12 shrink-0" soft />
             </div>
-            <Sk className="mt-2.5 h-10 w-full rounded-xl" soft />
           </div>
+
+          {/* Available networks */}
+          <div className="mt-6">
+            <Sk className="mb-2 h-3 w-36" />
+            <div className="flex flex-col gap-2">
+              {Array.from({ length: 2 }, (_, i) => (
+                <div key={i} className="rounded-xl border border-border bg-surface px-3.5 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <Sk className="h-3 w-24" />
+                    <Sk className="h-2.5 w-32" soft />
+                  </div>
+                  <Sk className="mt-2 h-2.5 w-full max-w-72" soft />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Sk className="mt-5 h-10 w-full rounded-xl" soft />
         </Panel>
 
         {/* ---- Rail ---- */}

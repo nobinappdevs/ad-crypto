@@ -2,7 +2,9 @@ import { num } from "@/config/txlog";
 import type { ExchangeCurrency, ExchangeFees } from "@/services/exchange.service";
 
 /**
- * Pricing a swap the same way the backend does.
+ * Pricing a swap the same way the backend does — shared with Withdraw, which is
+ * charged by the identical rule (its quote even calls the figure `exchange_rate`,
+ * 1 when both sides are the same coin).
  *
  * The page could simply post every keystroke to `store` and read the answer, but
  * that is a request per character to price a number the user has not finished
@@ -133,17 +135,20 @@ export function currencyKey(currency: ExchangeCurrency | undefined): string {
 }
 
 /**
- * The pair to open on: the fattest wallet against the first other coin.
+ * The coin to open on: the fattest wallet the user actually holds.
  *
  * Opening on whatever the API happened to list first means opening on an empty
  * wallet more often than not, and the first thing the user would do is change it.
  */
-export function defaultPair(currencies: ExchangeCurrency[]): { from: string; to: string } {
-  const sendable = currencies
+export function defaultSender(currencies: ExchangeCurrency[]): ExchangeCurrency | undefined {
+  return currencies
     .filter((currency) => ownWallet(currency))
-    .sort((a, b) => walletBalance(b) - walletBalance(a));
+    .sort((a, b) => walletBalance(b) - walletBalance(a))[0];
+}
 
-  const from = sendable[0] ?? currencies[0];
+/** The same choice, plus the first other coin to convert into. */
+export function defaultPair(currencies: ExchangeCurrency[]): { from: string; to: string } {
+  const from = defaultSender(currencies) ?? currencies[0];
   const to = currencies.find((currency) => currencyKey(currency) !== currencyKey(from));
 
   return { from: currencyKey(from), to: currencyKey(to) };

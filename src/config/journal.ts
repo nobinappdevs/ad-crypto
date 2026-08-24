@@ -1,67 +1,51 @@
 /**
- * Journal posts in display order, shared by the list and the details page.
+ * Presentation rules for the journal, now that the posts themselves come from
+ * `GET /website/journal/*`.
  *
- * `wide` entries span two columns of the list's four-column grid and switch to a
- * side-by-side layout, which is what produces the alternating wide/narrow rhythm
- * rather than a uniform grid.
- *
- * Every post currently shares one placeholder image. `image` is per-post, so
- * swapping in real artwork is a matter of pointing each entry at its own file.
- * `cover` stays as the gradient fallback for any post left without an `image`.
+ * What is left here is what the API does not send: the gradient behind a cover
+ * that has no artwork, the wide/narrow rhythm of the grid, and the route the
+ * details page lives at.
  */
-const PLACEHOLDER_COVER = "/assets/journal/blog.webp";
 
-export type JournalPost = {
-  key: string;
-  wide?: boolean;
-  cover: string;
-  image?: string;
-};
-
-export const JOURNAL_POSTS: JournalPost[] = [
-  {
-    key: "custody",
-    image: PLACEHOLDER_COVER,
-    wide: true,
-    cover:
-      "linear-gradient(135deg, rgb(var(--primary__color)) 0%, #0163a0 45%, #012b44 100%)",
-  },
-  {
-    key: "fees",
-    image: PLACEHOLDER_COVER,
-    cover: "linear-gradient(150deg, #34a9fd 0%, rgb(var(--primary__color)) 70%, #013d5f 100%)",
-  },
-  {
-    key: "kycFlow",
-    image: PLACEHOLDER_COVER,
-    cover: "linear-gradient(160deg, #012b44 0%, rgb(var(--primary__color)) 55%, #67bffe 100%)",
-  },
-  {
-    key: "networks",
-    image: PLACEHOLDER_COVER,
-    cover: "linear-gradient(145deg, #013d5f 0%, rgb(var(--primary__color)) 60%, #9ad4fe 100%)",
-  },
-  {
-    key: "security",
-    image: PLACEHOLDER_COVER,
-    cover: "linear-gradient(155deg, #67bffe 0%, rgb(var(--primary__color)) 50%, #0163a0 100%)",
-  },
-  {
-    key: "roadmap",
-    image: PLACEHOLDER_COVER,
-    wide: true,
-    cover: "linear-gradient(120deg, #012b44 0%, rgb(var(--primary__color)) 55%, #34a9fd 100%)",
-  },
+/**
+ * Cover gradients, cycled by position.
+ *
+ * They sit UNDER the image rather than instead of it, so a card is never a blank
+ * hole while the file loads — and they still carry any post the operator
+ * published without artwork.
+ */
+export const JOURNAL_COVERS = [
+  "linear-gradient(135deg, rgb(var(--primary__color)) 0%, #0163a0 45%, #012b44 100%)",
+  "linear-gradient(150deg, #34a9fd 0%, rgb(var(--primary__color)) 70%, #013d5f 100%)",
+  "linear-gradient(160deg, #012b44 0%, rgb(var(--primary__color)) 55%, #67bffe 100%)",
+  "linear-gradient(145deg, #013d5f 0%, rgb(var(--primary__color)) 60%, #9ad4fe 100%)",
+  "linear-gradient(155deg, #67bffe 0%, rgb(var(--primary__color)) 50%, #0163a0 100%)",
+  "linear-gradient(120deg, #012b44 0%, rgb(var(--primary__color)) 55%, #34a9fd 100%)",
 ];
 
-/** The details route is a single static page that reads the post from `?id=`. */
+export const journalCover = (index: number) =>
+  JOURNAL_COVERS[((index % JOURNAL_COVERS.length) + JOURNAL_COVERS.length) % JOURNAL_COVERS.length];
+
+/**
+ * Which cards span two of the grid's four columns.
+ *
+ * Every fifth card, starting with the first — the rhythm the design was drawn
+ * with (a wide card, four narrow, a wide card) held over an arbitrary number of
+ * posts instead of the six that were hard-coded.
+ */
+export const isWideCard = (index: number) => index % 5 === 0;
+
+/** The details route is a single static page that reads the article from `?slug=`. */
 export const JOURNAL_DETAILS_PATH = "/web-journal/details";
 
-export function journalHref(key: string) {
-  return `${JOURNAL_DETAILS_PATH}?id=${encodeURIComponent(key)}`;
+export function journalHref(slug: string | undefined) {
+  return `${JOURNAL_DETAILS_PATH}?slug=${encodeURIComponent(slug ?? "")}`;
 }
 
-export function findJournalPost(key: string | null) {
-  if (!key) return undefined;
-  return JOURNAL_POSTS.find((post) => post.key === key);
+/** A published date in the active language, or "" for anything unparseable. */
+export function journalDate(iso: string | undefined, lang: string): string {
+  if (!iso) return "";
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString(lang, { day: "numeric", month: "short", year: "numeric" });
 }

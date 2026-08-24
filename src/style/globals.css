@@ -716,6 +716,61 @@ input[type="number"] {
 }
 
 /* ---------------------------------------------------------------------- */
+/* Scrollbars                                                              */
+/* ---------------------------------------------------------------------- */
+
+/* One thin scrollbar for the whole app, in the theme's own colours rather than
+   the platform's grey — the default bar is 15-17px of light chrome that reads as
+   a seam down the side of every dark panel.
+
+   Two syntaxes, both needed: `scrollbar-*` is the standard one (Firefox, and
+   Chrome 121+), `::-webkit-scrollbar` covers Safari and older Chromium. They do
+   not conflict — where both are understood, the standard properties win and the
+   webkit rules are ignored.
+
+   Applied to every element, not just the page: the panels, menus and tables in
+   the dashboard scroll inside themselves, and a bar styled only on `html` would
+   leave those looking like a different product. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--primary__color)) rgb(var(--border));
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* The base the thumb runs in.
+   `--border`, NOT `--surface`: the dashboard shell paints the page with
+   `bg-surface`, so a surface-coloured track is the same colour as what is behind
+   it and reads as no track at all. The border token is the one tone in the
+   palette that is already defined to be visible against both the page and the
+   panels sitting on it. */
+*::-webkit-scrollbar-track {
+  background: rgb(var(--border));
+}
+
+/* The brand azure at full strength, so the bar belongs to the product rather
+   than the platform. Hover lifts it with white rather than more blue — the
+   colour is already solid, so there is nowhere darker to go that still reads as
+   the brand. */
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--primary__color));
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, rgb(var(--primary__color)) 82%, white);
+}
+
+/* Where two scrollbars meet. Left unstyled it renders as a pale platform square
+   in the one spot both bars are already drawing. */
+*::-webkit-scrollbar-corner {
+  background: rgb(var(--border));
+}
+
+/* ---------------------------------------------------------------------- */
 /* Named utilities Tailwind can't express                                  */
 /* ---------------------------------------------------------------------- */
 

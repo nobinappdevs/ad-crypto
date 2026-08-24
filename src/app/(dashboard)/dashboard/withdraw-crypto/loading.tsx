@@ -1,5 +1,5 @@
-import { TradeSkeleton } from "@/components/dashboard/Skeletons";
+import { WithdrawSkeleton } from "@/components/dashboard/Skeletons";
 
 export default function Loading() {
-  return <TradeSkeleton />;
+  return <WithdrawSkeleton />;
 }

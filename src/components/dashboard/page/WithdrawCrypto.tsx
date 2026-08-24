@@ -1,13 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowDown,
+  CircleCheck,
   ClipboardPaste,
-  Clock,
-  Lock,
+  Loader2,
+  RotateCcw,
   ShieldCheck,
   TriangleAlert,
+  Wallet,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
@@ -16,88 +18,144 @@ import { Panel } from "@/components/dashboard/ui";
 import { DashPageHeader } from "@/components/dashboard/PageHeader";
 import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
 import { CoinBadge } from "@/components/dashboard/CoinBadge";
-import { AmountField, FieldLabel, Row } from "@/components/dashboard/TradeFields";
 import {
-  COINS,
-  NETWORKS,
-  PAY_SYMBOL,
-  PERCENTS,
-  crypto,
-  fiat,
-  floor8,
-  toNumber,
-} from "@/config/market";
+  AmountField,
+  FieldLabel,
+  LiveRatePill,
+  PercentChips,
+  Row,
+} from "@/components/dashboard/TradeFields";
+import { WithdrawSkeleton } from "@/components/dashboard/Skeletons";
+import { getApiErrorMessage } from "@/hooks/useAuth";
+import {
+  useConfirmWithdraw,
+  useStoreWithdraw,
+  useWalletAddressCheck,
+  useWithdrawIndex,
+} from "@/hooks/useWithdraw";
+import { coinBrand, imageUrl } from "@/config/media";
+import { coinAmount, num } from "@/config/txlog";
+import { PERCENTS, crypto, floor8, toNumber } from "@/config/market";
+import {
+  currencyKey,
+  defaultSender,
+  exchangeFees,
+  exchangeLimits,
+  exchangeQuote,
+  maxSendable,
+  ownWallet,
+  walletBalance,
+} from "@/config/exchange";
+import type { ImagePaths } from "@/services/dashboard.service";
+import type { ExchangeCurrency } from "@/services/exchange.service";
+import type { WithdrawDraft } from "@/services/withdraw.service";
 
-/* -------------------------------------------------------------------------- */
-/* Page                                                                       */
-/* -------------------------------------------------------------------------- */
+/**
+ * Withdraw Crypto — the trade layout, on `GET /user/withdraw-crypto/index`.
+ *
+ * Same two steps as the exchange: `store` prices the order and drafts it,
+ * `confirm` executes it, and the figures on the confirmation are the SERVER's.
+ * What is particular to this page is the destination — the API resolves an
+ * address to the wallet behind it, so the field is checked as it is typed and
+ * the answer decides what actually arrives.
+ *
+ * The network picker the demo version carried is gone: the endpoint takes an
+ * amount, a wallet and an address, and there was never a chain to choose.
+ */
+
+/** How long a typed address waits before it becomes a lookup. */
+const ADDRESS_DEBOUNCE = 500;
 
 export function WithdrawCrypto() {
   const { t } = useLang();
   const k = (name: string) => t(`withdrawCrypto.${name}`);
 
-  const [coinKey, setCoinKey] = useState<string>(COINS[0].key);
-  const [networkKey, setNetworkKey] = useState<string>(NETWORKS[0].key);
+  const { data, isPending, isError, error, refetch } = useWithdrawIndex();
+  const store = useStoreWithdraw();
+  const confirm = useConfirmWithdraw(k("success"));
+
+  const currencies = data?.currencies ?? [];
+  const paths = data?.currency_image_paths;
+  const fees = exchangeFees(data?.transaction_fees);
+
+  const [coinId, setCoinId] = useState<string | null>(null);
+  const [amountRaw, setAmountRaw] = useState("");
   const [address, setAddress] = useState("");
+  /** The address as last SENT to the lookup — one query per address, not per key. */
+  const [checked, setChecked] = useState("");
   const [touched, setTouched] = useState(false);
+  /** The server's quote, once there is one. Its presence IS the review step. */
+  const [draft, setDraft] = useState<WithdrawDraft | null>(null);
 
-  // One side is the raw input, the other is derived from it. Tracking WHICH was
-  // last typed in is what keeps a half-typed "0.0" from being rewritten into
-  // "0" by its own round-trip through the network fee.
-  const [side, setSide] = useState<"send" | "receive">("send");
-  const [sendRaw, setSendRaw] = useState("");
-  const [receiveRaw, setReceiveRaw] = useState("");
+  // The opening coin depends on which wallets have a balance, so it can only be
+  // decided once the payload is here. Set during render rather than in an effect:
+  // an effect would paint one frame with no coin and the field empty.
+  if (currencies.length > 0 && !coinId) {
+    setCoinId(currencyKey(defaultSender(currencies) ?? currencies[0]));
+  }
 
-  const coin = COINS.find((c) => c.key === coinKey) ?? COINS[0];
-  const network = NETWORKS.find((n) => n.key === networkKey) ?? NETWORKS[0];
+  useEffect(() => {
+    const id = setTimeout(() => setChecked(address.trim()), ADDRESS_DEBOUNCE);
+    return () => clearTimeout(id);
+  }, [address]);
+
+  const check = useWalletAddressCheck(checked);
+
+  const coin = currencies.find((c) => currencyKey(c) === coinId) ?? currencies[0];
+  const code = (coin?.code ?? "").toUpperCase();
+
+  const senderWallet = ownWallet(coin);
+  const senderRate = num(coin?.rate);
+  const balance = walletBalance(coin);
+  const sending = toNumber(amountRaw);
 
   /**
-   * The network's fee is quoted in the settlement currency but PAID in the coin
-   * being moved — a withdrawal never touches a fiat balance — so it is converted
-   * at the coin's own rate and deducted from the amount leaving the wallet.
+   * The destination's coin, once the lookup has answered. Until then the
+   * receiving side is priced as the same coin, which is what it will be for any
+   * address belonging to this wallet's currency.
    */
-  const feeCrypto = floor8(network.fee / coin.rate);
+  const destination = check.data?.code ? check.data.code.toUpperCase() : code;
+  const receiverRate = check.data?.rate != null ? num(check.data.rate) : senderRate;
 
-  /** A withdrawal can never exceed the balance, nor the per-order ceiling. */
-  const withdrawable = floor8(Math.min(coin.balance, coin.max));
+  const figures = exchangeQuote({ sending, senderRate, receiverRate, fees });
+  const limits = exchangeLimits(fees, senderRate);
+  /** What the balance can cover once the fee is added on top of the amount. */
+  const sendable = maxSendable({ balance, senderRate, fees });
+
+  const addressInvalid = checked.length > 0 && check.isError;
 
   /**
-   * The floor is not the order limit alone. At the smallest sizes the fee IS the
-   * order — the shared table's minimum is about a dollar, and so is the fee, so a
-   * minimum-size withdrawal would arrive as nothing. Lifting it to three times the
-   * fee keeps at least two thirds of what leaves the wallet, and it makes the
-   * network choice matter: a cheap chain can withdraw far smaller amounts.
+   * The first thing standing between this form and a withdrawal, or null.
+   *
+   * The wallet problem shows immediately — it is the state of the account, not
+   * something the user typed. The rest waits for a blur, so nothing goes red on
+   * the first keystroke.
    */
-  const minSend = Math.max(coin.min, floor8(feeCrypto * 3));
-
-  const sendValue = side === "send" ? sendRaw : crypto(floor8(toNumber(receiveRaw) + feeCrypto));
-  const receiveValue =
-    side === "receive" ? receiveRaw : crypto(Math.max(0, floor8(toNumber(sendRaw) - feeCrypto)));
-
-  const sendNum = toNumber(sendValue);
-  const receiveNum = Math.max(0, sendNum - feeCrypto);
-
-  const error = useMemo(() => {
+  const problem = (() => {
+    if (!coin) return null;
+    if (!senderWallet) return k("errorNoWallet").replace("{coin}", code);
+    if (addressInvalid) return getApiErrorMessage(check.error);
     if (!touched) return null;
-    if (sendNum <= 0) return k("errorAmount");
-    // `minSend` already clears the fee three times over, so an amount that passes
-    // here can never arrive as nothing.
-    if (sendNum < minSend)
-      return k("errorMin").replace("{min}", crypto(minSend)).replace("{coin}", coin.symbol);
-    if (sendNum > coin.max)
-      return k("errorMax").replace("{max}", crypto(coin.max)).replace("{coin}", coin.symbol);
-    if (sendNum > coin.balance)
+    if (sending <= 0) return k("errorAmount");
+    if (limits.min > 0 && sending < limits.min)
+      return k("errorMin").replace("{min}", coinAmount(limits.min)).replace("{coin}", code);
+    if (limits.max > 0 && sending > limits.max)
+      return k("errorMax").replace("{max}", coinAmount(limits.max)).replace("{coin}", code);
+    if (figures.payable > balance)
       return k("errorBalance")
-        .replace("{balance}", crypto(coin.balance))
-        .replace("{coin}", coin.symbol);
-    if (address.trim().length < 12) return k("errorAddress");
+        .replace("{payable}", coinAmount(figures.payable))
+        .replace("{balance}", coinAmount(balance))
+        .replace("{coin}", code);
+    if (!address.trim()) return k("errorAddress");
     return null;
-  }, [touched, sendNum, coin, minSend, address]); // eslint-disable-line react-hooks/exhaustive-deps
+  })();
 
-  const setPercent = (pct: number) => {
-    setSide("send");
-    setSendRaw(crypto(floor8((withdrawable * pct) / 100)));
-  };
+  function setPercent(pct: number) {
+    // Divided out of the SENDABLE figure, not the balance: the fee is charged on
+    // top, so a Max taken from the balance itself could only ever be rejected.
+    setAmountRaw(crypto(floor8((sendable * pct) / 100)));
+    setTouched(true);
+  }
 
   async function paste() {
     try {
@@ -112,72 +170,158 @@ export function WithdrawCrypto() {
 
   function submit() {
     setTouched(true);
-    // `error` is memoised against the pre-click state, so re-check the conditions
-    // a first-time click can trip.
-    if (sendNum <= 0 || sendNum < minSend || sendNum > coin.max) return;
-    if (sendNum > coin.balance) return;
-    if (address.trim().length < 12) return;
-    toast.success(k("submitted").replace("{amount}", `${crypto(receiveNum)} ${coin.symbol}`));
+    if (!senderWallet?.id || !address.trim() || addressInvalid) return;
+    if (sending <= 0 || figures.payable > balance) return;
+    if (limits.min > 0 && sending < limits.min) return;
+    if (limits.max > 0 && sending > limits.max) return;
+
+    store.mutate(
+      { amount: sending, sender_wallet: senderWallet.id, wallet_address: address.trim() },
+      { onSuccess: setDraft },
+    );
   }
 
-  const coinOptions: SelectOption[] = COINS.map((c) => ({
-    value: c.key,
-    label: c.symbol,
-    hint: c.name,
-    // Balance, not price: on this page the question is "how much can I move".
-    meta: crypto(floor8(c.balance)) || "0",
-    icon: <CoinBadge color={c.color} glyph={c.glyph} />,
-  }));
+  function confirmWithdraw() {
+    if (!draft?.identifier) return;
+    confirm.mutate(draft.identifier, {
+      onSuccess: () => {
+        setDraft(null);
+        setAmountRaw("");
+        setAddress("");
+        setTouched(false);
+      },
+    });
+  }
 
-  const networkOptions: SelectOption[] = NETWORKS.map((n) => ({
-    value: n.key,
-    label: n.label,
-    hint: k("arrivalMinutes").replace("{minutes}", String(n.minutes)),
-    meta: `${crypto(floor8(n.fee / coin.rate))} ${coin.symbol}`,
-  }));
+  const header = (
+    <DashPageHeader
+      title={k("title")}
+      subtitle={k("subtitle")}
+      action={
+        coin ? (
+          <LiveRatePill label={k("balance")}>
+            {coinAmount(balance)} {code}
+          </LiveRatePill>
+        ) : undefined
+      }
+    />
+  );
+
+  if (isPending) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <WithdrawSkeleton header={false} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <Panel className="mx-auto mt-6 max-w-[560px] p-6 text-center">
+          <span
+            aria-hidden
+            className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-hero-neg/10 text-hero-neg"
+          >
+            <TriangleAlert size={20} />
+          </span>
+          <h2 className="mt-4 text-[16px]! font-bold!">{k("loadFailed")}</h2>
+          <p className="mx-auto mt-1.5 max-w-100 text-[13px]! leading-relaxed! text-muted">
+            {getApiErrorMessage(error)}
+          </p>
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="btn-lift mt-5 inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-5 text-[14px] font-bold text-white"
+          >
+            <RotateCcw size={15} aria-hidden />
+            {k("retry")}
+          </button>
+        </Panel>
+      </div>
+    );
+  }
+
+  if (!coin) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <Panel className="mx-auto mt-6 max-w-[560px] p-6 text-center">
+          <span
+            aria-hidden
+            className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary"
+          >
+            <Wallet size={20} />
+          </span>
+          <h2 className="mt-4 text-[16px]! font-bold!">{k("noWallets")}</h2>
+          <p className="mx-auto mt-1.5 max-w-100 text-[13px]! leading-relaxed! text-muted">
+            {k("noWalletsDesc")}
+          </p>
+        </Panel>
+      </div>
+    );
+  }
+
+  // The review step takes the whole page rather than sitting beside a form that
+  // is no longer what will run.
+  if (draft) {
+    return (
+      <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
+        {header}
+        <div className="mx-auto mt-6 w-full max-w-[560px]">
+          <Panel className="p-4 sm:p-6">
+            <ConfirmStep
+              draft={draft}
+              busy={confirm.isPending}
+              onBack={() => setDraft(null)}
+              onConfirm={confirmWithdraw}
+            />
+          </Panel>
+        </div>
+      </div>
+    );
+  }
+
+  const coinOption = (currency: ExchangeCurrency): SelectOption => ({
+    value: currencyKey(currency),
+    label: (currency.code ?? "").toUpperCase(),
+    hint: currency.name,
+    // Balance, not price: on this page the question is "how much can I move".
+    meta: ownWallet(currency) ? coinAmount(walletBalance(currency)) : k("noWallet"),
+    icon: <CoinArt currency={currency} paths={paths} size={30} />,
+    keywords: currency.name,
+    disabled: !ownWallet(currency),
+  });
+
+  const busy = store.isPending;
 
   return (
     <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
-      <DashPageHeader
-        title={k("title")}
-        subtitle={k("subtitle")}
-        action={
-          <div className="flex items-center gap-2.5 rounded-xl border border-border bg-card px-3.5 py-2.5">
-            <span aria-hidden className="relative flex h-2 w-2 shrink-0">
-              <span className="absolute inset-0 animate-ping rounded-full bg-hero-mint opacity-70" />
-              <span className="relative h-2 w-2 rounded-full bg-hero-mint" />
-            </span>
-            <span className="text-[12px]! text-muted">{k("liveRate")}</span>
-            <span className="text-[13px]! font-bold! tabular-nums">
-              1 {coin.symbol} = {fiat(coin.rate)} {PAY_SYMBOL}
-            </span>
-          </div>
-        }
-      />
+      {header}
 
       <div className="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
         {/* ------------------------- Form ------------------------- */}
         <Panel className="p-4 sm:p-6 lg:col-span-7">
-          {/* ---- Send / receive pair. Unlike Buy and Sell there is no conversion
-                  here: both sides are the same coin, and the gap between them is
-                  the network's fee. ---- */}
+          {/* The two sides are the same coin unless the address says otherwise —
+              the gap between them is the fee. */}
           <div className="relative">
             <AmountField
               label={k("youSend")}
-              value={sendValue}
-              onChange={(v) => {
-                setSide("send");
-                setSendRaw(v);
-              }}
+              value={amountRaw}
+              onChange={setAmountRaw}
               onBlur={() => setTouched(true)}
-              error={Boolean(error)}
+              error={Boolean(problem)}
+              disabled={busy}
               selector={
                 <SelectMenu
                   label={k("selectCoin")}
-                  value={coinKey}
-                  options={coinOptions}
-                  onChange={setCoinKey}
+                  value={currencyKey(coin)}
+                  options={currencies.map(coinOption)}
+                  onChange={setCoinId}
                   showHintInTrigger={false}
+                  disabled={busy}
                   className="w-38 shrink-0"
                 />
               }
@@ -186,26 +330,14 @@ export function WithdrawCrypto() {
                   <span className="text-[12px]! text-muted">
                     {k("balance")}:{" "}
                     <span className="font-semibold tabular-nums text-heading">
-                      {crypto(withdrawable) || "0"} {coin.symbol}
+                      {coinAmount(balance)} {code}
                     </span>
                   </span>
-                  <div className="flex gap-1.5">
-                    {PERCENTS.map((pct) => (
-                      <button
-                        key={pct}
-                        type="button"
-                        onClick={() => setPercent(pct)}
-                        className="cursor-pointer rounded-lg border border-border px-2 py-1 text-[11.5px] font-semibold text-muted transition hover:border-primary hover:text-primary"
-                      >
-                        {pct === 100 ? k("max") : `${pct}%`}
-                      </button>
-                    ))}
-                  </div>
+                  <PercentChips percents={PERCENTS} maxLabel={k("max")} onPick={setPercent} />
                 </div>
               }
             />
 
-            {/* Conversion glyph, straddling the seam between the two fields. */}
             <div className="relative z-[1] flex h-0 items-center justify-center">
               <span
                 aria-hidden
@@ -218,24 +350,21 @@ export function WithdrawCrypto() {
             <AmountField
               className="mt-2"
               label={k("theyReceive")}
-              value={receiveValue}
-              onChange={(v) => {
-                setSide("receive");
-                setReceiveRaw(v);
-              }}
-              suffix={coin.symbol}
+              value={figures.receive > 0 ? coinAmount(figures.receive) : ""}
+              readOnly
+              suffix={destination}
               footer={
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px]! text-muted">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[12px]! text-muted">
                   <span>
                     {k("limit")}:{" "}
                     <span className="tabular-nums">
-                      {crypto(minSend)} – {crypto(coin.max)} {coin.symbol}
+                      {coinAmount(limits.min)} – {coinAmount(limits.max)} {code}
                     </span>
                   </span>
                   <span>
                     {k("networkFee")}:{" "}
                     <span className="tabular-nums">
-                      {crypto(feeCrypto)} {coin.symbol}
+                      {coinAmount(figures.totalCharge)} {code}
                     </span>
                   </span>
                 </div>
@@ -243,31 +372,13 @@ export function WithdrawCrypto() {
             />
           </div>
 
-          {error && (
-            <p className="mt-3 flex items-center gap-1.5 text-[12.5px]! text-hero-neg">
-              <TriangleAlert size={13} aria-hidden className="shrink-0" />
-              {error}
-            </p>
-          )}
-
-          {/* ---- Network ---- */}
-          <div className="mt-6">
-            <FieldLabel hint={k("networkHint")}>{k("network")}</FieldLabel>
-            <SelectMenu
-              label={k("network")}
-              value={networkKey}
-              options={networkOptions}
-              onChange={setNetworkKey}
-            />
-          </div>
-
           {/* ---- Destination address ---- */}
-          <div className="mt-5">
+          <div className="mt-6">
             <FieldLabel>{k("walletAddress")}</FieldLabel>
             <div
               className={cn(
                 "flex h-13 items-center gap-2 rounded-xl border bg-surface pr-1.5 pl-3 transition focus-within:ring-2",
-                error && !address.trim()
+                addressInvalid
                   ? "border-hero-neg focus-within:ring-hero-neg/25"
                   : "border-border focus-within:border-primary focus-within:ring-primary/20",
               )}
@@ -278,26 +389,68 @@ export function WithdrawCrypto() {
                 onBlur={() => setTouched(true)}
                 placeholder={k("addressPlaceholder")}
                 spellCheck={false}
+                disabled={busy}
                 aria-label={k("walletAddress")}
-                className="min-w-0 flex-1 bg-transparent font-mono text-[13px] text-heading outline-none placeholder:font-sans placeholder:text-muted"
+                aria-invalid={addressInvalid}
+                className="min-w-0 flex-1 bg-transparent font-mono text-[13px] text-heading outline-none placeholder:font-sans placeholder:text-muted disabled:opacity-60"
               />
               <button
                 type="button"
                 onClick={paste}
-                className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-primary/10 px-3 text-[12.5px] font-semibold text-primary transition hover:bg-primary/18"
+                disabled={busy}
+                className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-primary/10 px-3 text-[12.5px] font-semibold text-primary transition hover:bg-primary/18 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <ClipboardPaste size={14} aria-hidden />
                 {k("paste")}
               </button>
             </div>
 
+            {/* The lookup's verdict, under the field that caused it. An address
+                that resolves is worth saying out loud — it is the one part of a
+                withdrawal the user cannot take back. */}
+            {checked.length > 0 && (
+              <p
+                aria-live="polite"
+                className={cn(
+                  "mt-2 flex items-center gap-1.5 text-[12px]!",
+                  check.isFetching
+                    ? "text-muted"
+                    : check.isError
+                      ? "text-hero-neg"
+                      : "text-hero-mint",
+                )}
+              >
+                {check.isFetching ? (
+                  <>
+                    <Loader2 size={13} aria-hidden className="animate-spin" />
+                    {k("addressChecking")}
+                  </>
+                ) : check.isError ? (
+                  <>
+                    <TriangleAlert size={13} aria-hidden />
+                    {getApiErrorMessage(check.error)}
+                  </>
+                ) : (
+                  <>
+                    <CircleCheck size={13} aria-hidden />
+                    {k("addressValid").replace("{coin}", destination)}
+                  </>
+                )}
+              </p>
+            )}
+
             <p className="mt-2.5 flex items-start gap-2 rounded-xl bg-amber-500/10 px-3 py-2.5 text-[12px]! leading-relaxed! text-amber-700 dark:text-amber-300">
               <TriangleAlert size={14} aria-hidden className="mt-0.5 shrink-0" />
-              {k("addressWarning")
-                .replace("{coin}", coin.symbol)
-                .replace("{network}", network.label)}
+              {k("addressWarning")}
             </p>
           </div>
+
+          {problem && (
+            <p className="mt-3 flex items-start gap-1.5 text-[12.5px]! leading-snug! text-hero-neg">
+              <TriangleAlert size={13} aria-hidden className="mt-0.5 shrink-0" />
+              {problem}
+            </p>
+          )}
         </Panel>
 
         {/* ------------------------- Summary ------------------------- */}
@@ -306,16 +459,13 @@ export function WithdrawCrypto() {
             <h2 className="text-[16px]! font-bold!">{k("summary")}</h2>
 
             <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface p-3">
-              <CoinBadge color={coin.color} glyph={coin.glyph} size={38} />
+              <CoinArt currency={coin} paths={paths} size={38} />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[14px]! font-bold!">
-                  {crypto(sendNum) || "0"} {coin.symbol}
+                <div className="truncate text-[14px]! font-bold! tabular-nums">
+                  {coinAmount(sending)} {code}
                 </div>
                 <div className="truncate text-[12px]! text-muted">{coin.name}</div>
               </div>
-              <span className="shrink-0 rounded-lg bg-primary/10 px-2 py-1 text-[11.5px] font-semibold text-primary">
-                {network.label}
-              </span>
             </div>
 
             {/* The destination, echoed back. A withdrawal is the one order the user
@@ -335,36 +485,37 @@ export function WithdrawCrypto() {
 
             <dl className="mt-4 flex flex-col gap-3">
               <Row label={k("amount")}>
-                {crypto(sendNum) || "0"} {coin.symbol}
+                {coinAmount(sending)} {code}
               </Row>
               <Row label={k("networkFee")}>
-                − {crypto(feeCrypto)} {coin.symbol}
+                {coinAmount(figures.totalCharge)} {code}
               </Row>
-              <Row label={k("valueNow")}>
-                ≈ {fiat(receiveNum * coin.rate)} {PAY_SYMBOL}
-              </Row>
-              <Row label={k("arrival")}>
-                <span className="inline-flex! items-center gap-1.5">
-                  <Clock size={13} aria-hidden className="text-muted" />
-                  {k("arrivalMinutes").replace("{minutes}", String(network.minutes))}
-                </span>
+              <Row label={k("theyReceive")}>
+                {coinAmount(figures.receive)} {destination}
               </Row>
             </dl>
 
             <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-4">
-              <span className="text-[13.5px]! font-semibold!">{k("totalReceive")}</span>
+              <span className="text-[13.5px]! font-semibold!">{k("totalDeducted")}</span>
               <span className="text-[20px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
-                {crypto(receiveNum) || "0"} {coin.symbol}
+                {coinAmount(figures.payable)} {code}
               </span>
             </div>
 
             <button
               type="button"
               onClick={submit}
-              className="btn-lift mt-5 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white"
+              disabled={busy}
+              className="btn-lift mt-5 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
             >
-              <Lock size={15} aria-hidden />
-              {k("continue")}
+              {busy ? (
+                <>
+                  <Loader2 size={16} aria-hidden className="animate-spin" />
+                  {k("reviewing")}
+                </>
+              ) : (
+                k("continue")
+              )}
             </button>
 
             <p className="mt-3 flex items-start gap-2 text-[11.5px]! leading-relaxed! text-muted">
@@ -375,5 +526,148 @@ export function WithdrawCrypto() {
         </div>
       </div>
     </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Step two                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The server's quote, and the button that executes it.
+ *
+ * Every figure comes from `store`'s response — none is recomputed locally. The
+ * destination is repeated here in full: this is the last screen before coins
+ * leave, and a truncated address is not something anyone can check.
+ */
+function ConfirmStep({
+  draft,
+  busy,
+  onBack,
+  onConfirm,
+}: {
+  draft: WithdrawDraft;
+  busy: boolean;
+  onBack: () => void;
+  onConfirm: () => void;
+}) {
+  const { t } = useLang();
+  const k = (name: string) => t(`withdrawCrypto.${name}`);
+
+  const quote = draft.data;
+  const code = (quote?.sender_wallet?.code ?? "").toUpperCase();
+  const destination = (quote?.receiver_wallet?.code ?? "").toUpperCase() || code;
+  const brand = coinBrand(code);
+
+  return (
+    <div>
+      <h2 className="text-[16px]! font-bold!">{k("confirmTitle")}</h2>
+      <p className="mt-1 text-[12.5px]! leading-relaxed! text-muted">{k("confirmNote")}</p>
+
+      <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface p-3.5">
+        <CoinBadge color={brand.color} glyph={brand.glyph} size={34} />
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[14px]! font-bold! tabular-nums">
+            {coinAmount(quote?.amount)} {code}
+          </div>
+          <div className="truncate text-[11.5px]! text-muted">
+            {quote?.sender_wallet?.name || code}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-xl border border-border bg-surface p-3.5">
+        <span className="text-[11.5px]! text-muted">{k("walletAddress")}</span>
+        <p className="mt-1 font-mono text-[12px]! leading-relaxed! break-all">
+          {quote?.receiver_wallet?.address || "—"}
+        </p>
+      </div>
+
+      <dl className="mt-4 flex flex-col gap-3">
+        <Row label={k("amount")}>
+          {coinAmount(quote?.amount)} {code}
+        </Row>
+        <Row label={k("networkFee")}>
+          {coinAmount(quote?.total_charge)} {code}
+        </Row>
+        <Row label={k("theyReceive")}>
+          {coinAmount(quote?.will_get)} {destination}
+        </Row>
+      </dl>
+
+      <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-4">
+        <span className="text-[13.5px]! font-semibold!">{k("totalDeducted")}</span>
+        <span className="text-[20px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
+          {coinAmount(quote?.payable_amount)} {code}
+        </span>
+      </div>
+
+      <div className="mt-5 flex flex-col gap-2.5 sm:flex-row-reverse">
+        <button
+          type="button"
+          onClick={onConfirm}
+          disabled={busy}
+          className="btn-lift inline-flex h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {busy ? (
+            <>
+              <Loader2 size={16} aria-hidden className="animate-spin" />
+              {k("confirming")}
+            </>
+          ) : (
+            k("confirm")
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={busy}
+          className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-border px-5 text-[14px] font-semibold text-heading transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-60 sm:w-28"
+        >
+          {k("back")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Coin art                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The API's coin image, with the brand disc behind it as the fallback — the same
+ * pairing the wallet cards use. A plain `<img>`, not `next/image`: images are
+ * unoptimized in this static export anyway, and the host comes from an env var.
+ */
+function CoinArt({
+  currency,
+  paths,
+  size = 30,
+}: {
+  currency: ExchangeCurrency | undefined;
+  paths: ImagePaths | undefined;
+  size?: number;
+}) {
+  const [broken, setBroken] = useState(false);
+  const code = (currency?.code ?? "").toUpperCase();
+  const brand = coinBrand(code);
+  const flag = imageUrl(paths, currency?.flag);
+
+  if (!flag || broken) return <CoinBadge color={brand.color} glyph={brand.glyph} size={size} />;
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={flag}
+      alt=""
+      width={size}
+      height={size}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      style={{ width: size, height: size }}
+      className="shrink-0 rounded-full object-cover"
+    />
   );
 }

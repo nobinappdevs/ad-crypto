@@ -219,14 +219,26 @@ function WalletCard({ wallet, paths }: { wallet: DashboardWallet; paths: ImagePa
   }
 
   return (
-    <div className={cn(dsx.card, "group flex flex-col transition-colors duration-200 hover:border-primary")}>
+    <div
+      className={cn(
+        dsx.card,
+        "group relative flex flex-col transition-colors duration-200 hover:border-primary focus-within:border-primary",
+      )}
+    >
+      {/* The whole card opens the wallet, via an overlay rather than by wrapping
+          the card in a link: the address row carries a copy BUTTON, and a button
+          inside a link is a control that cannot be used without also navigating.
+          The overlay sits under the copy control, which is lifted above it. */}
+      <Link
+        href={walletHref(code.toLowerCase())}
+        aria-label={wallet.currency?.name || code}
+        className="absolute inset-0 z-1 rounded-2xl focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none"
+      />
+
       <div className="flex items-start justify-between gap-2 px-4.5 pt-4">
-        <Link
-          href={walletHref(code.toLowerCase())}
-          className="min-w-0 text-[12.5px]! text-muted transition-colors hover:text-primary!"
-        >
+        <span className="min-w-0 text-[12.5px]! text-muted transition-colors group-hover:text-primary!">
           {wallet.currency?.name || code}
-        </Link>
+        </span>
 
         {/* The API's own coin art, with the brand disc behind it as the fallback.
             A plain <img>, not next/image: images are unoptimized in this static
@@ -270,7 +282,9 @@ function WalletCard({ wallet, paths }: { wallet: DashboardWallet; paths: ImagePa
             aria-label={copied ? k("copied") : k("copyAddress")}
             title={copied ? k("copied") : k("copyAddress")}
             className={cn(
-              "grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-lg transition",
+              // Above the card's link overlay, or the click would navigate
+              // instead of copying.
+              "relative z-2 grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-lg transition",
               copied ? "bg-primary/10 text-primary" : "text-muted hover:bg-primary/10 hover:text-primary",
             )}
           >

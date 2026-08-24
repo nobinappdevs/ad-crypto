@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
+import { useSendMessage } from "@/hooks/useWebsite";
 import {
   contactRequestSchema,
   type ContactRequest,
@@ -57,12 +57,13 @@ const CONTROL =
 
 export function ContactForm() {
   const { t } = useLang();
+  const send = useSendMessage(t("contact.sentSuccess"));
 
   const {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ContactRequest>({
     resolver: zodResolver(contactRequestSchema),
     defaultValues: {
@@ -72,12 +73,17 @@ export function ContactForm() {
     },
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 700));
+  /**
+   * POST /website/contact/message/send.
+   *
+   * The form is only cleared once the server has taken the message — a reset on
+   * failure would throw away what the sender typed along with the error.
+   * Toasting is the mutation's own job, success and failure alike.
+   */
+  const onSubmit = (values: ContactRequest) =>
+    send.mutateAsync(values).then(() => reset()).catch(() => {});
 
-    toast.success(t("contact.sentSuccess"));
-    reset();
-  };
+  const isSubmitting = send.isPending;
 
   return (
     <div className="relative overflow-hidden rounded-[32px]  p-6 dark:shadow-2xl backdrop-blur-xl sm:p-8 lg:p-10">

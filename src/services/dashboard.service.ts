@@ -14,6 +14,31 @@ export interface WalletCurrency {
   code?: string;
   /** Relative to `currency_image_paths`, e.g. "seeder/bitcoin.webp". */
   flag?: string;
+  /** The routes this coin can be moved over, operator-configured per currency. */
+  networks?: CurrencyNetwork[];
+}
+
+/**
+ * One network a currency is available on.
+ *
+ * The row itself is the JOIN — it carries the fee this coin costs on that chain —
+ * while `network` is the chain, shared across every currency that offers it.
+ */
+export interface CurrencyNetwork {
+  id?: number;
+  currency_id?: number;
+  /** The fee for this coin on this network, as a decimal string. */
+  fees?: string | number;
+  network_id?: number;
+  network?: {
+    id?: number;
+    coin_id?: number;
+    slug?: string;
+    name?: string;
+    /** Typical arrival, in minutes. */
+    arrival_time?: number;
+    description?: string;
+  };
 }
 
 export interface DashboardWallet {
@@ -97,6 +122,12 @@ export type TxDetailValue =
 export interface DashboardData {
   /** 0 Unverified, 1 Verified, 2 Pending, 3 Rejected — same scale as KYC. */
   kyc_verified?: number;
+  /** 0/1 flags for the account's other gates, and when the email was confirmed. */
+  email_verified?: number;
+  email_verified_at?: string | null;
+  sms_verified?: number;
+  two_factor_verified?: number;
+  two_factor_status?: number;
   wallets?: DashboardWallet[];
   currency_image_paths?: ImagePaths;
   chart?: DashboardChart;

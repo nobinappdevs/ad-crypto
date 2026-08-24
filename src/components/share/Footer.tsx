@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
+import { useSubscribe } from "@/hooks/useWebsite";
 import { Logo } from "./Logo";
 
 const LAUNCH_YEAR = 2026;
@@ -124,6 +125,9 @@ export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   useReveal(footerRef);
 
+  const [email, setEmail] = useState("");
+  const subscribe = useSubscribe(t("footer.newsletter.success"));
+
   return (
     <footer
       ref={footerRef}
@@ -152,29 +156,39 @@ export function Footer() {
             {t("footer.newsletter.text")}
           </p>
 
-          {/* A real form so Enter submits and the browser validates the address.
-              There is no subscribe endpoint yet, so it stops here — wire the
-              handler up once one exists. */}
+          {/* A real form so Enter submits and the browser validates the address,
+              posting to `POST /website/subscribe`. The field is cleared only once
+              the server has accepted it — clearing on failure would take the
+              address away from someone who then has to retype it. */}
           <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={(e) => {
+              e.preventDefault();
+              const address = email.trim();
+              if (!address || subscribe.isPending) return;
+              subscribe.mutate(address, { onSuccess: () => setEmail("") });
+            }}
             className="flex w-full max-w-[400px] items-center gap-4 border-b pb-3"
             style={{ borderColor: "var(--suite-card-br)" }}
           >
             <input
               type="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={subscribe.isPending}
               data-suite-input
               placeholder={t("footer.newsletter.placeholder")}
               aria-label={t("footer.newsletter.placeholder")}
-              className="min-w-0 flex-1 border-none bg-transparent py-1 text-[14px] outline-none"
+              className="min-w-0 flex-1 border-none bg-transparent py-1 text-[14px] outline-none disabled:opacity-60"
               style={{ color: "var(--suite-fg)" }}
             />
             <button
               type="submit"
+              disabled={subscribe.isPending}
               data-suite-send
               title={t("footer.newsletter.submit")}
               aria-label={t("footer.newsletter.submit")}
-              className="grid! shrink-0 cursor-pointer place-items-center border-none bg-transparent p-1 transition-[transform,color] duration-[280ms]"
+              className="grid! shrink-0 cursor-pointer place-items-center border-none bg-transparent p-1 transition-[transform,color] duration-[280ms] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <svg
                 width="22"
