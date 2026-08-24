@@ -436,35 +436,19 @@ export function TradeSkeleton({ header = true }: { header?: boolean }) {
             ))}
           </div>
 
-          {/* The pay / receive pair, with the conversion glyph on the seam */}
-          <div className="relative mt-6">
-            <SkAmountField />
-            <div className="relative z-[1] flex h-0 items-center justify-center">
-              <Sk className="h-9 w-9 rounded-full border-4 border-card" />
-            </div>
-            <SkAmountField className="mt-2" selector />
+          {/* Four labelled fields, two per row: coin, network, amount, method */}
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {Array.from({ length: 4 }, (_, i) => (
+              <div key={i} className="min-w-0">
+                <Sk className="h-3 w-24" soft />
+                <Sk className="mt-2 h-13 w-full rounded-xl" soft />
+              </div>
+            ))}
           </div>
 
-          <div className="mt-6">
-            <Sk className="h-3 w-28" soft />
-            <Sk className="mt-2 h-13 w-full rounded-xl" soft />
-          </div>
-
-          {/* Method / option cards */}
-          <div className="mt-6">
-            <Sk className="h-3 w-32" soft />
-            <div className="mt-2 grid gap-2.5 sm:grid-cols-3">
-              {Array.from({ length: 3 }, (_, i) => (
-                <div key={i} className="rounded-xl border border-border bg-surface p-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <Sk className="h-3 w-20" />
-                    <Sk className="h-4 w-4 shrink-0 rounded-full" soft />
-                  </div>
-                  <Sk className="mt-2 h-2.5 w-24" soft />
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* The button belongs to the form on these two pages. */}
+          <Sk className="mt-5 h-12 w-full rounded-xl" />
+          <Sk className="mt-3 h-2.5 w-full max-w-60" soft />
         </Panel>
 
         {/* ---- Summary ---- */}
@@ -492,9 +476,6 @@ export function TradeSkeleton({ header = true }: { header?: boolean }) {
               <Sk className="h-3.5 w-24" />
               <Sk className="h-5 w-32" />
             </div>
-
-            <Sk className="mt-5 h-12 w-full rounded-xl" />
-            <Sk className="mt-3 h-2.5 w-full max-w-60" soft />
           </Panel>
         </div>
       </div>

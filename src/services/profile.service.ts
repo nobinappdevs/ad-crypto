@@ -13,6 +13,14 @@ export interface UserInfo {
   /** Relative to `image_paths`; null until the user uploads one. */
   image?: string | null;
   kyc_verified?: number;
+  /**
+   * The verification gates, when this endpoint carries them — some builds return
+   * them here as well as on the dashboard. Optional on purpose: `accountGate`
+   * ignores a flag that is absent rather than reading it as a zero.
+   */
+  email_verified?: number;
+  two_factor_status?: number;
+  two_factor_verified?: number;
   date_of_birth?: string | null;
   country?: string;
   city?: string;

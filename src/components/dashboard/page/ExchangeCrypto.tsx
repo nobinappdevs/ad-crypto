@@ -303,6 +303,7 @@ export function ExchangeCrypto() {
                   options={currencies.map((c) => option(c, true))}
                   onChange={(next) => pick("from", next)}
                   showHintInTrigger={false}
+                  showMetaInTrigger={false}
                   disabled={busy}
                   className="w-38 shrink-0"
                 />
@@ -348,6 +349,7 @@ export function ExchangeCrypto() {
                   options={currencies.map((c) => option(c))}
                   onChange={(next) => pick("to", next)}
                   showHintInTrigger={false}
+                  showMetaInTrigger={false}
                   disabled={busy}
                   className="w-38 shrink-0"
                 />

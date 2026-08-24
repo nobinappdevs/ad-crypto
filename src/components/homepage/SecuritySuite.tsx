@@ -581,9 +581,9 @@ export function SecuritySuite() {
 
             <h2
               className="text-[34px]! leading-[1.02]! font-extrabold! tracking-[-0.03em] text-pretty wrap-break-word sm:text-[44px]! lg:text-[44px]! xl:text-[52px]!"
-              style={{ color: "var(--suite-fg)" }}
+              style={{ color: "var(--suite-fg)" }} 
             >
-              {t("suite.headingLead")}
+              {t("suite.headingLead")} 
               <br />
               <span className="text-primary!">{t("suite.headingAccent")}</span>
             </h2>

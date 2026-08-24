@@ -19,10 +19,17 @@
 /** localStorage key for the bearer token (shared by the services + hooks). */
 export const TOKEN_KEY = "adcrypto_token";
 
-/** localStorage mirror of `user.email_verified` ("1" | "0"). */
+/**
+ * localStorage mirrors of the two verification flags.
+ *
+ * NOT gates. Both guards decide from a live `GET /user/dashboard` on every entry —
+ * a stored copy is only as true as the moment it was written, and an operator
+ * flipping a flag in the admin panel writes to nobody's browser. What is left here
+ * is a routing hint for the step immediately after a code is accepted, where the
+ * response has just said what the state is and there is no reason to wait for
+ * another request to act on it.
+ */
 export const EMAIL_VERIFIED_KEY = "adcrypto_email_verified";
-
-/** localStorage mirror of the account's Google-2FA state (see `TwoFaState`). */
 export const TWO_FA_KEY = "adcrypto_2fa";
 
 /** sessionStorage key for the reset token threaded through the forgot flow. */
@@ -50,21 +57,6 @@ export function setEmailVerified(verified: boolean) {
   try {
     window.localStorage.setItem(EMAIL_VERIFIED_KEY, verified ? "1" : "0");
   } catch {}
-}
-
-/**
- * `true` / `false` when we know, `null` when we don't — a session that predates
- * this flag has no entry, and guessing either way is wrong: guess "verified" and
- * the hole stays open, guess "unverified" and we bounce people who are fine. The
- * guards treat `null` as "let them through"; the API is the real gate.
- */
-export function readEmailVerified(): boolean | null {
-  try {
-    const raw = window.localStorage.getItem(EMAIL_VERIFIED_KEY);
-    return raw === null ? null : raw === "1";
-  } catch {
-    return null;
-  }
 }
 
 /* ── Google 2FA ──
@@ -170,17 +162,78 @@ export function extractUser(res: unknown): AuthUser | undefined {
 /**
  * Whether the account still owes an email code.
  *
- * Two independent things decide it. `data.email_verification` is the site-wide
- * switch — `false` means the feature is off and there is no code to enter, for
- * anyone. `user.email_verified` is this account's own flag. The switch wins when
- * it says "off"; otherwise the per-user flag does.
+ * `user.email_verified` decides it, and nothing overrides it. That is the
+ * account own state — the only thing that can say whether THIS address has
+ * been confirmed — and it is present on every login and register response.
+ *
+ * `data.email_verification` is deliberately NOT trusted over it. Reading that
+ * field first is what let a brand-new, unconfirmed account walk straight into the
+ * dashboard: it is not the per-account answer, and a `false` there against an
+ * `email_verified: 0` is not permission. It is consulted only when the payload
+ * carries no per-account flag at all, where it is the one hint available.
  */
 export function needsEmailVerification(res: unknown): boolean {
-  const r = res as AuthPayload;
-  if (r?.data?.email_verification === false) return false;
   const flag = extractUser(res)?.email_verified;
-  if (flag === undefined || flag === null) return r?.data?.email_verification === true;
-  return String(flag) !== "1";
+  if (flag !== undefined && flag !== null) return String(flag) !== "1";
+  // No per-account flag at all: ask for the code unless the switch says the
+  // feature is off. Defaulting to "ask" is the safe direction — a code that was
+  // not needed can be skipped by verifying or resending, whereas skipping one that
+  // WAS needed is an unverified account inside the dashboard.
+  return (res as AuthPayload)?.data?.email_verification !== false;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Live payloads                                                               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The verification flags an authenticated payload carries — the dashboard's, and
+ * the profile's where that endpoint includes them.
+ *
+ * These are the account's CURRENT state, unlike the mirrors above, which are
+ * whatever login last wrote. An authenticator switched on from another device, or
+ * an email confirmed in another tab, shows up here first.
+ */
+export type AccountFlags = {
+  email_verified?: number | string | null;
+  /**
+   * Deliberately unused. It is null on accounts whose `email_verified` is 1, so
+   * reading it as the flag would bounce verified users to the verify screen.
+   */
+  email_verified_at?: string | null;
+  two_factor_status?: number | string | null;
+  two_factor_verified?: number | string | null;
+};
+
+const isOne = (value: number | string | null | undefined) => String(value) === "1";
+
+/**
+ * Whether a live payload says the email address is confirmed.
+ *
+ * `null` when the payload does not carry the field — that is "unknown", not
+ * "unverified": deciding a gate on a field an endpoint simply does not send would
+ * be our bug, not the user's. Note that `email_verified_at` is deliberately not
+ * consulted; it is null on accounts whose `email_verified` is 1.
+ */
+export function emailVerifiedFromFlags(flags: AccountFlags | undefined): boolean | null {
+  const flag = flags?.email_verified;
+  if (flag === undefined || flag === null) return null;
+  return isOne(flag);
+}
+
+/**
+ * The 2FA state a live payload describes.
+ *
+ * The pair is read in one direction only: `two_factor_status` decides whether the
+ * question exists at all, and `two_factor_verified` is consulted ONLY when it
+ * does. An account with 2FA switched off can carry `two_factor_verified: 0`
+ * forever — that is not a debt, it is a field nobody asked about.
+ */
+export function twoFaFromFlags(flags: AccountFlags | undefined): TwoFaState | null {
+  const status = flags?.two_factor_status;
+  if (status === undefined || status === null) return null;
+  if (!isOne(status)) return "off";
+  return isOne(flags?.two_factor_verified) ? "ok" : "pending";
 }
 
 /**

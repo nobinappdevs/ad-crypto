@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Lock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { useRegister } from "@/hooks/useAuth";
+import { useRegistrationOpen } from "@/hooks/useBasicSettings";
 import { registerRequestSchema, type RegisterRequest } from "@/schemas/auth.schema";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
 import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
@@ -22,6 +24,13 @@ export function RegisterForm() {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.${name}`);
   const register = useRegister();
+  /**
+   * The admin's switch, read from `/basic-settings` rather than assumed. Closed
+   * means the form is not rendered at all — a disabled button beside filled-in
+   * fields reads as a bug, and posting anyway would only trade a clear message for
+   * whatever the API happens to say.
+   */
+  const { open: registrationOpen } = useRegistrationOpen();
 
   const {
     control,
@@ -37,6 +46,36 @@ export function RegisterForm() {
       policy: false,
     },
   });
+
+  if (!registrationOpen) {
+    return (
+      <div
+        className="flex flex-col gap-5.5"
+        style={{ animation: "panel-rise 0.45s ease both" }}
+      >
+        <AuthBackHome />
+
+        <div className="flex flex-col gap-2.5">
+          <span
+            aria-hidden
+            className="grid! h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary"
+          >
+            <Lock size={20} />
+          </span>
+          <h1 className="text-[26px]! leading-[1.14]! font-bold! tracking-[-0.03em] text-panel-fg sm:text-[30px]!">
+            {k("registerClosed")}
+          </h1>
+          <p className="max-w-110 text-[14px]! leading-[1.7]! text-panel-muted">
+            {k("registerClosedNote")}
+          </p>
+        </div>
+
+        <Link href="/login" className={`${AUTH_SUBMIT_CLASS} text-center`}>
+          {k("tabLogin")}
+        </Link>
+      </div>
+    );
+  }
 
   // Server-side complaints stay in the toast: this API returns them as a flat
   // list of sentences (`message.error`), not a bag keyed by field, so there is

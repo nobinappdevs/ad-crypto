@@ -353,6 +353,7 @@ export function Profile() {
                 value={form.mobile}
                 onChange={set("mobile")}
                 onBlur={() => touch("mobile")}
+                
                 error={shown("mobile")}
                 className="sm:col-span-2"
               />
@@ -587,7 +588,7 @@ function SectionTitle({ children }: { children: ReactNode }) {
   return <h2 className="mb-4 text-[14px]! font-bold!">{children}</h2>;
 }
 
-/** The one filled control per panel, sized to its words rather than the column. */
+/** The one filled control per panel, full width at every size. */
 function SubmitButton({
   pending,
   onClick,
@@ -602,7 +603,7 @@ function SubmitButton({
       type="button"
       onClick={onClick}
       disabled={pending}
-      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 text-[14px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 text-[14px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending && <Loader2 size={15} className="animate-spin" aria-hidden />}
       {children}

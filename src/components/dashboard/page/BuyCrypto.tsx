@@ -2,13 +2,20 @@
 
 import { useMemo, useState } from "react";
 import {
-  ArrowDown,
+  ArrowRightLeft,
+  ArrowUpRight,
   ClipboardPaste,
   Clock,
-  Lock,
+  Coins,
+  CreditCard,
+  Loader2,
+  Receipt,
+  RotateCcw,
+  Send,
   ShieldCheck,
   TriangleAlert,
   Wallet,
+  Waypoints,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLang } from "@/hooks/useLang";
@@ -17,77 +24,150 @@ import { Panel } from "@/components/dashboard/ui";
 import { DashPageHeader } from "@/components/dashboard/PageHeader";
 import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
 import { CoinBadge } from "@/components/dashboard/CoinBadge";
-import { AmountField, FieldLabel, Row } from "@/components/dashboard/TradeFields";
 import {
-  COINS,
-  NETWORKS,
-  PAY_SYMBOL,
-  PERCENTS,
-  crypto,
-  fiat,
-  toNumber,
-} from "@/config/market";
+  FieldLabel,
+  Figures,
+  LiveRatePill,
+  SegmentedChoice,
+} from "@/components/dashboard/TradeFields";
+import { TextField } from "@/components/dashboard/FormFields";
+import {
+  CoinArt,
+  DynamicField,
+  MethodArt,
+  StatePanel,
+  SummaryLine as Line,
+} from "@/components/dashboard/OrderPieces";
+import { TradeSkeleton } from "@/components/dashboard/Skeletons";
+import { getApiErrorMessage } from "@/hooks/useAuth";
+import {
+  useAuthorizeSubmit,
+  useBuyIndex,
+  useManualGatewayFields,
+  useManualSubmit,
+  useStoreBuy,
+  useSubmitBuy,
+} from "@/hooks/useBuy";
+import { coinBrand } from "@/config/media";
+import { coinAmount, num } from "@/config/txlog";
+import { toNumber } from "@/config/market";
+import { isFieldRequired } from "@/config/kyc";
+import {
+  OUTSIDE_WALLET,
+  buyLimits,
+  buyQuote,
+  coinNetworks,
+  defaultCurrency,
+  gatewayFees,
+  isAuthorizeRedirect,
+  isManualGateway,
+  networkValue,
+  walletTypes,
+} from "@/config/buy";
+import type { BuyDraft } from "@/services/buy.service";
+import type { KycField, KycValue } from "@/services/kyc.service";
 
-/* -------------------------------------------------------------------------- */
-/* Buy-side options                                                            */
-/* -------------------------------------------------------------------------- */
+/**
+ * Buy Crypto, on live data — and the only flow in the app that can hand the user
+ * to somebody else's website mid-order.
+ *
+ * Three or four steps, of which the user sees at most three:
+ *
+ *  1. the form, priced locally by the same rules the backend uses;
+ *  2. `store`'s quote, shown in full — the SERVER's arithmetic, and the only
+ *     figures that will actually be charged;
+ *  3. whatever the chosen gateway needs:
+ *       · manual  → the operator's instructions and a proof-of-payment form
+ *       · card    → Authorize.Net has no hosted page, so we collect the card
+ *       · other   → a redirect to the gateway's own page, and we are done here
+ *
+ * The gateway decides which of those three runs, not the page: a `-manual` alias
+ * skips `submit` entirely, and everything else asks `submit` where to go next.
+ */
 
-const METHODS = ["coingate", "card", "bank"] as const;
-/** Processing surcharge as a fraction of the order — card rails cost more. */
-const METHOD_SURCHARGE: Record<string, number> = { coingate: 0, card: 0.015, bank: 0 };
+const PAGE = "mx-auto w-full max-w-[1280px] p-4 sm:p-6";
 
-/** Demo settlement-currency balance, so the percentage chips have something to divide. */
-const BALANCE = 12480.35;
+/** Shared frame for the amount and address rows, so they read as one set. */
+const FIELD = "flex h-13 items-center rounded-xl border bg-surface transition focus-within:ring-2";
+const FIELD_OK = "border-border focus-within:border-primary focus-within:ring-primary/20";
+const FIELD_BAD = "border-hero-neg focus-within:ring-hero-neg/25";
 
-/* -------------------------------------------------------------------------- */
-/* Page                                                                        */
-/* -------------------------------------------------------------------------- */
+/** Shortest thing that could plausibly be a chain address. The API is the judge. */
+const MIN_ADDRESS = 10;
 
 export function BuyCrypto() {
   const { t } = useLang();
   const k = (name: string) => t(`buyCrypto.${name}`);
 
-  const [destination, setDestination] = useState<"inside" | "outside">("inside");
-  const [coinKey, setCoinKey] = useState<string>(COINS[0].key);
-  const [networkKey, setNetworkKey] = useState<string>(NETWORKS[0].key);
-  const [method, setMethod] = useState<string>(METHODS[0]);
+  const { data, isPending, isError, error, refetch } = useBuyIndex();
+  const store = useStoreBuy();
+  const submit = useSubmitBuy();
+
+  const currencies = data?.currencies ?? [];
+  const gateways = data?.payment_gateway ?? [];
+  const types = walletTypes(data?.wallet_type);
+  const coinPaths = data?.currency_image_paths;
+  const payPaths = data?.payment_image_paths;
+
+  const [walletType, setWalletType] = useState<string | null>(null);
+  const [coinId, setCoinId] = useState<string | null>(null);
+  /** A network's `network_id`, as a string — what `store` wants. */
+  const [networkId, setNetworkId] = useState<string | null>(null);
+  const [methodId, setMethodId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
+  const [amountRaw, setAmountRaw] = useState("");
   const [touched, setTouched] = useState(false);
 
-  // One side is the raw input, the other is derived from it. Tracking WHICH was
-  // last typed in is what keeps a half-typed "0.0" from being rewritten into
-  // "0" by its own round-trip through the exchange rate.
-  const [side, setSide] = useState<"pay" | "receive">("pay");
-  const [payRaw, setPayRaw] = useState("1000");
-  const [receiveRaw, setReceiveRaw] = useState("");
+  /** The server's quote. Its presence IS the review step. */
+  const [draft, setDraft] = useState<BuyDraft | null>(null);
+  /** Set once the gateway turns out to be a manual one. */
+  const [manual, setManual] = useState(false);
+  /** `submit`'s identifier, once the gateway turns out to want a card. */
+  const [cardIdentifier, setCardIdentifier] = useState<string | null>(null);
 
-  const coin = COINS.find((c) => c.key === coinKey) ?? COINS[0];
-  const network = NETWORKS.find((n) => n.key === networkKey) ?? NETWORKS[0];
+  // The opening selections depend on the payload, so they can only be decided once
+  // it is here. Set during render rather than in an effect: an effect would paint
+  // one frame with no coin and every field empty.
+  if (types.length > 0 && !walletType) setWalletType(types[0]);
+  if (currencies.length > 0 && !coinId) setCoinId(String(defaultCurrency(currencies)?.id ?? ""));
+  if (gateways.length > 0 && !methodId) setMethodId(String(gateways[0]?.id ?? ""));
 
-  const payValue = side === "pay" ? payRaw : crypto(toNumber(receiveRaw) * coin.rate);
-  const receiveValue = side === "receive" ? receiveRaw : crypto(toNumber(payRaw) / coin.rate);
+  const coin = currencies.find((item) => String(item.id) === coinId) ?? currencies[0];
+  const networks = coinNetworks(coin);
+  // Falls back rather than resetting: the coin can change under this, and a network
+  // id belonging to the previous coin simply stops matching.
+  const network = networks.find((item) => networkValue(item) === networkId) ?? networks[0];
+  const gateway = gateways.find((item) => String(item.id) === methodId) ?? gateways[0];
 
-  const receiveNum = toNumber(receiveValue);
-  const payNum = toNumber(payValue);
+  const code = (coin?.code ?? "").toUpperCase();
+  const payCode = (gateway?.currency_code ?? "").toUpperCase();
 
-  const surcharge = payNum * (METHOD_SURCHARGE[method] ?? 0);
-  const total = payNum + surcharge + network.fee;
+  const fees = gatewayFees(gateway);
+  const amount = toNumber(amountRaw);
+  const figures = buyQuote({ amount, coinRate: num(coin?.rate), gatewayRate: fees.rate, fees });
+  const limits = buyLimits(fees, figures.rate);
 
-  const error = useMemo(() => {
+  const outside = walletType === OUTSIDE_WALLET;
+
+  /**
+   * The first thing standing between this form and an order, or null.
+   *
+   * Configuration problems show immediately — a coin with no network is the state
+   * of the platform, not something the user typed. Amount and address problems
+   * wait for a blur, so nothing goes red on the first keystroke.
+   */
+  const problem = (() => {
+    if (!coin || !gateway) return null;
+    if (!network) return k("errorNetwork");
     if (!touched) return null;
-    if (receiveNum <= 0) return k("errorAmount");
-    if (receiveNum < coin.min)
-      return k("errorMin").replace("{min}", crypto(coin.min)).replace("{coin}", coin.symbol);
-    if (receiveNum > coin.max)
-      return k("errorMax").replace("{max}", crypto(coin.max)).replace("{coin}", coin.symbol);
-    if (destination === "outside" && address.trim().length < 12) return k("errorAddress");
+    if (amount <= 0) return k("errorAmount");
+    if (limits.min > 0 && amount < limits.min)
+      return k("errorMin").replace("{min}", coinAmount(limits.min)).replace("{coin}", code);
+    if (limits.max > 0 && amount > limits.max)
+      return k("errorMax").replace("{max}", coinAmount(limits.max)).replace("{coin}", code);
+    if (outside && address.trim().length < MIN_ADDRESS) return k("errorAddress");
     return null;
-  }, [touched, receiveNum, coin, destination, address]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const setPercent = (pct: number) => {
-    setSide("pay");
-    setPayRaw(crypto((BALANCE * pct) / 100));
-  };
+  })();
 
   async function paste() {
     try {
@@ -100,338 +180,899 @@ export function BuyCrypto() {
     toast.error(k("pasteFailed"));
   }
 
-  function submit() {
-    setTouched(true);
-    // `error` is memoised against the pre-click state, so re-check the two
-    // conditions a first-time click can trip.
-    if (receiveNum <= 0 || receiveNum < coin.min || receiveNum > coin.max) return;
-    if (destination === "outside" && address.trim().length < 12) return;
-    toast.success(k("submitted").replace("{amount}", `${crypto(receiveNum)} ${coin.symbol}`));
+  function reset() {
+    setDraft(null);
+    setManual(false);
+    setCardIdentifier(null);
+    setAmountRaw("");
+    setAddress("");
+    setTouched(false);
   }
 
-  const coinOptions: SelectOption[] = COINS.map((c) => ({
-    value: c.key,
-    label: c.symbol,
-    hint: c.name,
-    meta: `$${fiat(c.rate)}`,
-    icon: <CoinBadge color={c.color} glyph={c.glyph} />,
+  function review() {
+    setTouched(true);
+    if (!coin?.id || !gateway?.id || !network?.network_id || !walletType) return;
+    if (amount <= 0) return;
+    if (limits.min > 0 && amount < limits.min) return;
+    if (limits.max > 0 && amount > limits.max) return;
+    if (outside && address.trim().length < MIN_ADDRESS) return;
+
+    store.mutate(
+      {
+        wallet_type: walletType,
+        sender_currency: coin.id,
+        network: network.network_id,
+        amount,
+        payment_method: gateway.id,
+        wallet_address: outside ? address.trim() : undefined,
+      },
+      { onSuccess: setDraft },
+    );
+  }
+
+  /** The confirm button, which is where the three settlement modes part company. */
+  function confirm() {
+    if (!draft?.identifier) return;
+
+    if (isManualGateway(draft.data?.payment_method?.alias)) {
+      setManual(true);
+      return;
+    }
+
+    submit.mutate(draft.identifier, {
+      onSuccess: (result) => {
+        // Authorize.Net points back at the API's own endpoint — that is not a page
+        // to visit, it is the API asking us for the card.
+        if (isAuthorizeRedirect(result.redirect_url)) {
+          setCardIdentifier(result.identifier || draft.identifier || null);
+          return;
+        }
+        if (result.redirect_url) {
+          toast.success(k("redirecting"));
+          window.location.assign(result.redirect_url);
+          return;
+        }
+        // A 200 with nowhere to go cannot be completed here, and pretending
+        // otherwise would leave the user waiting on a screen that never changes.
+        toast.error(k("gatewayFailed"));
+      },
+    });
+  }
+
+  const header = (
+    <DashPageHeader
+      title={k("title")}
+      subtitle={k("subtitle")}
+      action={
+        coin && gateway && figures.rate > 0 ? (
+          <LiveRatePill label={k("liveRate")}>
+            1 {code} = {coinAmount(figures.rate)} {payCode}
+          </LiveRatePill>
+        ) : undefined
+      }
+    />
+  );
+
+  if (isPending) {
+    return (
+      <div className={PAGE}>
+        {header}
+        <TradeSkeleton header={false} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className={PAGE}>
+        {header}
+        <StatePanel tone="bad" icon={<TriangleAlert size={20} />} title={k("loadFailed")}>
+          {getApiErrorMessage(error)}
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="btn-lift mt-5 inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-5 text-[14px] font-bold text-white"
+          >
+            <RotateCcw size={15} aria-hidden />
+            {k("retry")}
+          </button>
+        </StatePanel>
+      </div>
+    );
+  }
+
+  if (!coin || !gateway) {
+    return (
+      <div className={PAGE}>
+        {header}
+        <StatePanel icon={<Wallet size={20} />} title={k("noCoins")}>
+          {k("noCoinsDesc")}
+        </StatePanel>
+      </div>
+    );
+  }
+
+  /* ----------------------------- Later steps ----------------------------- */
+  // Each takes the whole page rather than sitting beside a form that is no longer
+  // what will run.
+
+  if (draft && cardIdentifier) {
+    return (
+      <div className={PAGE}>
+        {header}
+        <CardStep
+          draft={draft}
+          identifier={cardIdentifier}
+          onBack={() => setCardIdentifier(null)}
+          onDone={reset}
+        />
+      </div>
+    );
+  }
+
+  if (draft && manual) {
+    return (
+      <div className={PAGE}>
+        {header}
+        <ManualStep draft={draft} onBack={() => setManual(false)} onDone={reset} />
+      </div>
+    );
+  }
+
+  if (draft) {
+    return (
+      <div className={PAGE}>
+        {header}
+        <div className="mx-auto mt-6 w-full max-w-150">
+          <ReviewStep
+            draft={draft}
+            busy={submit.isPending}
+            onBack={() => setDraft(null)}
+            onConfirm={confirm}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  /* -------------------------------- Form -------------------------------- */
+
+  const coinOptions: SelectOption[] = currencies.map((currency) => ({
+    value: String(currency.id),
+    label: (currency.code ?? "").toUpperCase(),
+    hint: currency.name,
+    icon: <CoinArt currency={currency} paths={coinPaths} size={30} />,
+    keywords: currency.name,
   }));
 
-  const networkOptions: SelectOption[] = NETWORKS.map((n) => ({
-    value: n.key,
-    label: n.label,
-    hint: k("arrivalMinutes").replace("{minutes}", String(n.minutes)),
-    meta: `${n.fee} ${PAY_SYMBOL}`,
+  const networkOptions: SelectOption[] = networks.map((item) => ({
+    value: networkValue(item),
+    // Two rows of one coin could share a `network_id`; the row id never repeats.
+    id: String(item.id ?? networkValue(item)),
+    label: item.name ?? "",
+    hint:
+      item.arrival_time != null
+        ? k("arrivalMinutes").replace("{minutes}", String(item.arrival_time))
+        : undefined,
   }));
+
+  const methodOptions: SelectOption[] = gateways.map((item) => ({
+    value: String(item.id),
+    // A manual method says so in the list, because it changes what happens after
+    // Confirm: no gateway page, an instruction sheet and a proof of payment
+    // instead. Worth knowing BEFORE picking it, not after.
+    label: isManualGateway(item.alias) ? `${item.name ?? ""} (${k("manualTag")})` : (item.name ?? ""),
+    hint: (item.currency_code ?? "").toUpperCase(),
+    icon: <MethodArt gateway={item} paths={payPaths} />,
+    keywords: item.currency_code,
+  }));
+
+  const busy = store.isPending;
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] p-4 sm:p-6">
-      <DashPageHeader
-        title={k("title")}
-        subtitle={k("subtitle")}
-        action={
-          <div className="flex items-center gap-2.5 rounded-xl border border-border bg-card px-3.5 py-2.5">
-            <span aria-hidden className="relative flex h-2 w-2 shrink-0">
-              <span className="absolute inset-0 animate-ping rounded-full bg-hero-mint opacity-70" />
-              <span className="relative h-2 w-2 rounded-full bg-hero-mint" />
-            </span>
-            <span className="text-[12px]! text-muted">{k("liveRate")}</span>
-            <span className="text-[13px]! font-bold! tabular-nums">
-              1 {coin.symbol} = {fiat(coin.rate)} {PAY_SYMBOL}
-            </span>
-          </div>
-        }
-      />
+    <div className={PAGE}>
+      {header}
 
+      {/* Form on the left, the order previewed on the right. The button lives with
+          the FORM: it acts on what was typed there, and the right column is only
+          for reading back. */}
       <div className="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
-        {/* ------------------------- Form ------------------------- */}
         <Panel className="p-4 sm:p-6 lg:col-span-7">
-          {/* Destination — a segmented control rather than two tabs, because it
-              switches one field on and off rather than swapping the whole view. */}
-          <div
-            role="radiogroup"
-            aria-label={k("destination")}
-            className="grid grid-cols-2 gap-1.5 rounded-2xl border border-border bg-surface p-1.5"
-          >
-            {(["inside", "outside"] as const).map((option) => {
-              const active = destination === option;
-              return (
-                <button
-                  key={option}
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  onClick={() => setDestination(option)}
-                  className={cn(
-                    "cursor-pointer rounded-xl px-3 py-2.5 text-center transition",
-                    active
-                      ? "bg-primary text-white shadow-[0_8px_20px_rgb(var(--primary__color)/0.32)]"
-                      : "text-muted hover:text-heading",
-                  )}
-                >
-                  <span className="flex items-center justify-center gap-2 text-[13.5px] font-semibold">
-                    {option === "inside" ? <Wallet size={15} /> : <ArrowDown size={15} />}
-                    {k(option === "inside" ? "insideWallet" : "outsideWallet")}
-                  </span>
-                  <span
-                    className={cn(
-                      "mt-0.5 block text-[11.5px]",
-                      active ? "text-white/80" : "text-muted",
-                    )}
-                  >
-                    {k(option === "inside" ? "insideWalletHint" : "outsideWalletHint")}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          {types.length > 1 && (
+            <div className="mx-auto w-full max-w-100">
+              <SegmentedChoice
+                label={k("destination")}
+                value={walletType ?? types[0]}
+                onChange={setWalletType}
+                options={types.map((type) => ({
+                  value: type,
+                  // The API's wording is English; the labels on screen are ours.
+                  label: type === OUTSIDE_WALLET ? k("outsideWallet") : k("insideWallet"),
+                  icon:
+                    type === OUTSIDE_WALLET ? (
+                      <ArrowUpRight size={15} aria-hidden />
+                    ) : (
+                      <Wallet size={15} aria-hidden />
+                    ),
+                }))}
+              />
+            </div>
+          )}
 
-          {/* ---- Pay / receive pair ---- */}
-          <div className="relative mt-6">
-            <AmountField
-              label={k("youPay")}
-              value={payValue}
-              onChange={(v) => {
-                setSide("pay");
-                setPayRaw(v);
-              }}
-              suffix={PAY_SYMBOL}
-              footer={
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-[12px]! text-muted">
-                    {k("balance")}:{" "}
-                    <span className="font-semibold tabular-nums text-heading">
-                      {fiat(BALANCE)} {PAY_SYMBOL}
-                    </span>
-                  </span>
-                  <div className="flex gap-1.5">
-                    {PERCENTS.map((pct) => (
-                      <button
-                        key={pct}
-                        type="button"
-                        onClick={() => setPercent(pct)}
-                        className="cursor-pointer rounded-lg border border-border px-2 py-1 text-[11.5px] font-semibold text-muted transition hover:border-primary hover:text-primary"
-                      >
-                        {pct === 100 ? k("max") : `${pct}%`}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              }
-            />
-
-            {/* Conversion glyph, straddling the seam between the two fields. */}
-            <div className="relative z-[1] flex h-0 items-center justify-center">
-              <span
-                aria-hidden
-                className="grid! h-9 w-9 place-items-center rounded-full border-4 border-card bg-primary text-white shadow-[0_8px_18px_rgb(var(--primary__color)/0.35)]"
-              >
-                <ArrowDown size={15} />
-              </span>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {/* ---- Coin ---- */}
+            <div className="min-w-0">
+              <FieldLabel>{k("selectCoin")}</FieldLabel>
+              <SelectMenu
+                searchable
+                label={k("selectCoin")}
+                searchPlaceholder={k("searchCoin")}
+                emptyText={k("noCoin")}
+                value={String(coin.id)}
+                options={coinOptions}
+                disabled={busy}
+                onChange={(next) => {
+                  setCoinId(next);
+                  // The chains are per coin, so the previous choice is meaningless
+                  // now — clear it and let the fallback take the new coin's first.
+                  setNetworkId(null);
+                }}
+                showHintInTrigger={false}
+              />
             </div>
 
-            <AmountField
-              className="mt-2"
-              label={k("youReceive")}
-              value={receiveValue}
-              onChange={(v) => {
-                setSide("receive");
-                setReceiveRaw(v);
-              }}
-              onBlur={() => setTouched(true)}
-              error={Boolean(error)}
-              selector={
-                <SelectMenu
-                  label={k("selectCoin")}
-                  value={coinKey}
-                  options={coinOptions}
-                  onChange={setCoinKey}
-                  showHintInTrigger={false}
-                  className="w-38 shrink-0"
-                />
-              }
-              footer={
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px]! text-muted">
-                  <span>
-                    {k("minAmount")}:{" "}
-                    <span className="tabular-nums">
-                      {crypto(coin.min)} {coin.symbol}
-                    </span>
-                  </span>
-                  <span>
-                    {k("maxAmount")}:{" "}
-                    <span className="tabular-nums">
-                      {crypto(coin.max)} {coin.symbol}
-                    </span>
-                  </span>
+            {/* ---- Network ---- */}
+            <div className="min-w-0">
+              <FieldLabel hint={k("networkHint")}>{k("selectNetwork")}</FieldLabel>
+              <SelectMenu
+                label={k("selectNetwork")}
+                value={networkValue(network)}
+                options={networkOptions}
+                onChange={setNetworkId}
+                disabled={busy || networkOptions.length === 0}
+                placeholder={networkOptions.length === 0 ? k("errorNetwork") : undefined}
+              />
+            </div>
+
+            {/* ---- Address, only when the coins leave the platform ---- */}
+            {outside && (
+              <div className="min-w-0 sm:col-span-2">
+                <FieldLabel>{k("walletAddress")}</FieldLabel>
+                <div
+                  className={cn(
+                    FIELD,
+                    "pr-1.5 pl-3",
+                    problem && address.trim().length < MIN_ADDRESS ? FIELD_BAD : FIELD_OK,
+                  )}
+                >
+                  <input
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    onBlur={() => setTouched(true)}
+                    placeholder={k("addressPlaceholder")}
+                    spellCheck={false}
+                    disabled={busy}
+                    aria-label={k("walletAddress")}
+                    className="min-w-0 flex-1 bg-transparent font-mono text-[13px] text-heading outline-none placeholder:font-sans placeholder:text-muted disabled:opacity-60"
+                  />
+                  <button
+                    type="button"
+                    onClick={paste}
+                    disabled={busy}
+                    className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-primary/10 px-3 text-[12.5px] font-semibold text-primary transition hover:bg-primary/18 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <ClipboardPaste size={14} aria-hidden />
+                    {k("paste")}
+                  </button>
                 </div>
-              }
-            />
+
+                <p className="mt-2.5 flex items-start gap-2 rounded-xl bg-amber-500/10 px-3 py-2.5 text-[12px]! leading-relaxed! text-amber-700 dark:text-amber-300">
+                  <TriangleAlert size={14} aria-hidden className="mt-0.5 shrink-0" />
+                  {k("addressWarning")
+                    .replace("{coin}", code)
+                    .replace("{network}", network?.name ?? "")}
+                </p>
+              </div>
+            )}
+
+            {/* ---- Amount ---- */}
+            <div className="min-w-0">
+              <FieldLabel>{k("amount")}</FieldLabel>
+              <div className={cn(FIELD, "pl-3.5", problem && amount <= 0 ? FIELD_BAD : FIELD_OK)}>
+                <input
+                  value={amountRaw}
+                  onChange={(e) => setAmountRaw(e.target.value.replace(/[^\d.,]/g, ""))}
+                  onBlur={() => setTouched(true)}
+                  inputMode="decimal"
+                  placeholder="0.00"
+                  disabled={busy}
+                  aria-label={k("amount")}
+                  className="min-w-0 flex-1 bg-transparent text-[15px] font-semibold tabular-nums text-heading outline-none placeholder:font-normal placeholder:text-muted disabled:opacity-60"
+                />
+                {/* The unit, not a button: the coin is chosen in the field above,
+                    and a second place to change it is a second thing to keep in
+                    sync. */}
+                <span className="grid! shrink-0 place-items-center self-stretch rounded-e-xl bg-primary px-3.5 text-[13px]! font-bold! text-white">
+                  {code}
+                </span>
+              </div>
+
+              <Figures
+                rows={[
+                  [k("minAmount"), `${coinAmount(limits.min)} ${code}`],
+                  [k("maxAmount"), `${coinAmount(limits.max)} ${code}`],
+                ]}
+              />
+            </div>
+
+            {/* ---- Payment method ---- */}
+            <div className="min-w-0">
+              <FieldLabel>{k("paymentMethod")}</FieldLabel>
+              <SelectMenu
+                label={k("paymentMethod")}
+                value={String(gateway.id)}
+                options={methodOptions}
+                onChange={setMethodId}
+                disabled={busy}
+                showHintInTrigger={false}
+              />
+            </div>
           </div>
 
-          {error && (
-            <p className="mt-3 flex items-center gap-1.5 text-[12.5px]! text-hero-neg">
-              <TriangleAlert size={13} aria-hidden className="shrink-0" />
-              {error}
+          {problem && (
+            <p className="mt-4 flex items-start gap-1.5 text-[12.5px]! leading-snug! text-hero-neg">
+              <TriangleAlert size={13} aria-hidden className="mt-0.5 shrink-0" />
+              {problem}
             </p>
           )}
 
-          {/* ---- Network ---- */}
+          <button
+            type="button"
+            onClick={review}
+            disabled={busy}
+            className="btn-lift mt-5 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {busy ? (
+              <>
+                <Loader2 size={16} aria-hidden className="animate-spin" />
+                {k("reviewing")}
+              </>
+            ) : (
+              k("continue")
+            )}
+          </button>
+
+          <p className="mt-3 flex items-start gap-2 text-[11.5px]! leading-relaxed! text-muted">
+            <ShieldCheck size={14} aria-hidden className="mt-px shrink-0 text-hero-mint" />
+            {k("secured")}
+          </p>
+        </Panel>
+
+        {/* ------------------------- Preview ------------------------- */}
+        {/* Priced locally by the same rules the backend uses. From `store` onwards
+            the SERVER's figures replace these. */}
+        <div className="lg:sticky lg:top-6 lg:col-span-5">
+          <Panel className="p-4 sm:p-5">
+            <h2 className="px-1 text-[16px]! font-bold!">{k("summary")}</h2>
+
+            <dl className="mt-3 divide-y divide-border">
+              <Line icon={<Wallet size={15} />} label={k("walletType")}>
+                {outside ? k("outsideWallet") : k("insideWallet")}
+              </Line>
+              <Line
+                plain
+                icon={<CoinArt currency={coin} paths={coinPaths} size={32} />}
+                label={k("coin")}
+              >
+                {coin.name} ({code})
+              </Line>
+              <Line icon={<Waypoints size={15} />} label={k("network")}>
+                {network?.name ?? "—"}
+              </Line>
+              <Line icon={<CreditCard size={15} />} label={k("paymentMethod")}>
+                {gateway.name}
+              </Line>
+              {outside && (
+                <Line icon={<Send size={15} />} label={k("walletAddress")}>
+                  <span
+                    className={cn(
+                      "font-mono text-[11.5px]! break-all",
+                      address.trim() ? "text-heading" : "text-muted",
+                    )}
+                  >
+                    {address.trim() || "—"}
+                  </span>
+                </Line>
+              )}
+              <Line icon={<Coins size={15} />} label={k("enterAmount")}>
+                <span className="tabular-nums">
+                  {coinAmount(amount)} {code}
+                </span>
+              </Line>
+              <Line icon={<ArrowRightLeft size={15} />} label={k("convertAmount")}>
+                <span className="tabular-nums">
+                  {coinAmount(figures.convert)} {payCode}
+                </span>
+              </Line>
+              <Line icon={<ArrowRightLeft size={15} />} label={k("exchangeRate")}>
+                <span className="tabular-nums">
+                  1 {code} = {coinAmount(figures.rate)} {payCode}
+                </span>
+              </Line>
+              <Line icon={<Receipt size={15} />} label={k("feesCharges")}>
+                <span className="tabular-nums text-hero-neg">
+                  {coinAmount(figures.totalCharge)} {payCode}
+                </span>
+              </Line>
+              {network?.arrival_time != null && (
+                <Line icon={<Clock size={15} />} label={k("arrival")}>
+                  {k("arrivalMinutes").replace("{minutes}", String(network.arrival_time))}
+                </Line>
+              )}
+              <Line icon={<Wallet size={15} />} label={k("totalPayable")} strong>
+                <span className="text-[18px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
+                  {coinAmount(figures.payable)} {payCode}
+                </span>
+              </Line>
+            </dl>
+          </Panel>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Step two — the server's quote                                               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * `store`'s answer, and the button that acts on it.
+ *
+ * Every figure here comes from the response — none is recomputed. If the backend
+ * priced the order differently from the preview (a rate that moved between typing
+ * and submitting), this is where the real number appears, before anyone pays it.
+ */
+function ReviewStep({
+  draft,
+  busy,
+  onBack,
+  onConfirm,
+}: {
+  draft: BuyDraft;
+  busy: boolean;
+  onBack: () => void;
+  onConfirm: () => void;
+}) {
+  const { t } = useLang();
+  const k = (name: string) => t(`buyCrypto.${name}`);
+
+  const quote = draft.data;
+  const code = (quote?.wallet?.code ?? "").toUpperCase();
+  const payCode = (quote?.payment_method?.code ?? "").toUpperCase();
+  const brand = coinBrand(code);
+  const amount = num(quote?.amount);
+  const rate = num(quote?.exchange_rate);
+
+  return (
+    <Panel className="p-4 sm:p-5">
+      <h2 className="px-1 text-[16px]! font-bold!">{k("previewTitle")}</h2>
+
+      <dl className="mt-3 divide-y divide-border">
+        <Line icon={<Wallet size={15} />} label={k("walletType")}>
+          {quote?.wallet?.type === OUTSIDE_WALLET ? k("outsideWallet") : k("insideWallet")}
+        </Line>
+        <Line
+          plain
+          icon={<CoinBadge color={brand.color} glyph={brand.glyph} size={32} />}
+          label={k("coin")}
+        >
+          {quote?.wallet?.name} ({code})
+        </Line>
+        <Line icon={<Waypoints size={15} />} label={k("network")}>
+          {quote?.network?.name ?? "—"}
+        </Line>
+        <Line icon={<CreditCard size={15} />} label={k("paymentMethod")}>
+          {quote?.payment_method?.name ?? "—"}
+        </Line>
+        {quote?.wallet?.address && (
+          <Line icon={<Send size={15} />} label={k("walletAddress")}>
+            <span className="font-mono text-[11.5px]! break-all">{quote.wallet.address}</span>
+          </Line>
+        )}
+        <Line icon={<Coins size={15} />} label={k("enterAmount")}>
+          <span className="tabular-nums">
+            {coinAmount(amount)} {code}
+          </span>
+        </Line>
+        <Line icon={<ArrowRightLeft size={15} />} label={k("convertAmount")}>
+          <span className="tabular-nums">
+            {coinAmount(amount * rate)} {payCode}
+          </span>
+        </Line>
+        <Line icon={<ArrowRightLeft size={15} />} label={k("exchangeRate")}>
+          <span className="tabular-nums">
+            1 {code} = {coinAmount(rate)} {payCode}
+          </span>
+        </Line>
+        <Line icon={<Receipt size={15} />} label={k("feesCharges")}>
+          <span className="tabular-nums text-hero-neg">
+            {coinAmount(quote?.total_charge)} {payCode}
+          </span>
+        </Line>
+        <Line icon={<Coins size={15} />} label={k("willGet")}>
+          <span className="tabular-nums text-hero-mint">
+            {coinAmount(quote?.will_get)} {code}
+          </span>
+        </Line>
+        <Line icon={<Wallet size={15} />} label={k("totalPayable")} strong>
+          <span className="text-[19px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
+            {coinAmount(quote?.payable_amount)} {payCode}
+          </span>
+        </Line>
+      </dl>
+
+      <div className="mt-5 flex flex-col gap-2.5 sm:flex-row-reverse">
+        <button
+          type="button"
+          onClick={onConfirm}
+          disabled={busy}
+          className="btn-lift inline-flex h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {busy ? (
+            <>
+              <Loader2 size={16} aria-hidden className="animate-spin" />
+              {k("confirming")}
+            </>
+          ) : (
+            k("confirm")
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={busy}
+          className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-border px-5 text-[14px] font-semibold text-heading transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-60 sm:w-28"
+        >
+          {k("back")}
+        </button>
+      </div>
+    </Panel>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Step three (a) — the manual gateway                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The operator's instructions, and the form they want back.
+ *
+ * Both are data: `desc` is HTML the operator wrote (bank details, wallet
+ * addresses), and `input_fields` declares the controls — the same declaration
+ * shape the KYC form uses, so the same helpers read it. The page renders whatever
+ * it is handed rather than assuming a transaction id and a screenshot.
+ */
+function ManualStep({
+  draft,
+  onBack,
+  onDone,
+}: {
+  draft: BuyDraft;
+  onBack: () => void;
+  onDone: () => void;
+}) {
+  const { t } = useLang();
+  const k = (name: string) => t(`buyCrypto.${name}`);
+
+  const alias = draft.data?.payment_method?.alias ?? "";
+  const { data, isPending, isError, error, refetch } = useManualGatewayFields(alias);
+  const send = useManualSubmit(k("manualSuccess"));
+
+  const [values, setValues] = useState<Record<string, KycValue>>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const fields = useMemo(() => data?.input_fields ?? [], [data]);
+
+  /** Required-only: the API owns the real rules and answers with them. */
+  const missing = fields.filter((field) => {
+    if (!isFieldRequired(field)) return false;
+    const value = values[field.name];
+    return value instanceof File ? false : !String(value ?? "").trim();
+  });
+
+  function submit() {
+    setSubmitted(true);
+    if (missing.length > 0 || !draft.identifier) return;
+    send.mutate({ identifier: draft.identifier, values }, { onSuccess: onDone });
+  }
+
+  const shown = (field: KycField) =>
+    submitted && missing.some((item) => item.name === field.name) ? k("errorRequired") : null;
+
+  return (
+    <div className="mx-auto mt-6 w-full max-w-180">
+      <Panel className="p-4 sm:p-6">
+        <h2 className="text-[16px]! font-bold!">{k("manualTitle")}</h2>
+        <p className="mt-1 text-[12.5px]! text-muted">
+          {draft.data?.payment_method?.name} ·{" "}
+          <span className="font-semibold tabular-nums text-heading">
+            {coinAmount(draft.data?.payable_amount)}{" "}
+            {(draft.data?.payment_method?.code ?? "").toUpperCase()}
+          </span>
+        </p>
+
+        {isPending && (
+          <div className="mt-6 flex items-center gap-2 text-[13px]! text-muted">
+            <Loader2 size={16} aria-hidden className="animate-spin" />
+            {k("reviewing")}
+          </div>
+        )}
+
+        {isError && (
           <div className="mt-6">
-            <FieldLabel hint={k("networkHint")}>{k("network")}</FieldLabel>
-            <SelectMenu
-              label={k("network")}
-              value={networkKey}
-              options={networkOptions}
-              onChange={setNetworkKey}
+            <p className="flex items-start gap-1.5 text-[12.5px]! leading-snug! text-hero-neg">
+              <TriangleAlert size={13} aria-hidden className="mt-0.5 shrink-0" />
+              {getApiErrorMessage(error)}
+            </p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="mt-3 inline-flex h-10 cursor-pointer items-center gap-2 rounded-xl border border-border px-4 text-[13px] font-semibold text-heading transition hover:border-primary"
+            >
+              <RotateCcw size={14} aria-hidden />
+              {k("retry")}
+            </button>
+          </div>
+        )}
+
+        {!isPending && !isError && (
+          <>
+            {/* The operator's own instructions, in their own HTML — so they get a
+                container that styles headings, lists and links rather than
+                free-floating markup. */}
+            {data?.gateway?.desc && (
+              <div
+                className="mt-4 rounded-2xl border border-border bg-surface p-4 text-[13px]! leading-relaxed! text-body [&_a]:text-primary [&_a]:underline [&_li]:mt-1 [&_ol]:mt-1.5 [&_p]:mt-2 [&_strong]:font-bold [&_strong]:text-heading [&_ul]:mt-1.5"
+                dangerouslySetInnerHTML={{ __html: data.gateway.desc }}
+              />
+            )}
+
+            {fields.length === 0 ? (
+              <p className="mt-4 flex items-start gap-2 rounded-xl bg-amber-500/10 px-3 py-2.5 text-[12px]! leading-relaxed! text-amber-700 dark:text-amber-300">
+                <TriangleAlert size={14} aria-hidden className="mt-0.5 shrink-0" />
+                {k("noFields")}
+              </p>
+            ) : (
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                {fields.map((field) => (
+                  <DynamicField
+                    key={field.name}
+                    field={field}
+                    value={values[field.name] ?? null}
+                    error={shown(field)}
+                    ns="buyCrypto"
+                    onChange={(value) => setValues((prev) => ({ ...prev, [field.name]: value }))}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row-reverse">
+              <button
+                type="button"
+                onClick={submit}
+                disabled={send.isPending || fields.length === 0}
+                className="btn-lift inline-flex h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {send.isPending ? (
+                  <>
+                    <Loader2 size={16} aria-hidden className="animate-spin" />
+                    {k("submitting")}
+                  </>
+                ) : (
+                  k("manualSubmit")
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={onBack}
+                disabled={send.isPending}
+                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-border px-5 text-[14px] font-semibold text-heading transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-60 sm:w-28"
+              >
+                {k("back")}
+              </button>
+            </div>
+          </>
+        )}
+      </Panel>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Step three (b) — the card                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The card form, for the one gateway with no hosted page of its own.
+ *
+ * The identifier posted here is `submit`'s, not the draft's: that call opened a
+ * payment attempt and handed back its handle, and the draft's own identifier is
+ * not what this endpoint looks up.
+ *
+ * Nothing is stored and nothing is remembered — the fields live for the length of
+ * this screen, and `autoComplete="off"` keeps the browser from offering to keep
+ * them either.
+ */
+function CardStep({
+  draft,
+  identifier,
+  onBack,
+  onDone,
+}: {
+  draft: BuyDraft;
+  identifier: string;
+  onBack: () => void;
+  onDone: () => void;
+}) {
+  const { t } = useLang();
+  const k = (name: string) => t(`buyCrypto.${name}`);
+
+  const pay = useAuthorizeSubmit(k("cardSuccess"));
+
+  const [number, setNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [code, setCode] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const digits = number.replace(/\D/g, "");
+  const valid =
+    digits.length >= 13 &&
+    digits.length <= 19 &&
+    /^\d{2}\/\d{2}$/.test(expiry) &&
+    code.length >= 3;
+
+  function submit() {
+    setSubmitted(true);
+    if (!valid) return;
+    pay.mutate({ identifier, card_number: digits, date: expiry, code }, { onSuccess: onDone });
+  }
+
+  const quote = draft.data;
+  const coinCode = (quote?.wallet?.code ?? "").toUpperCase();
+  const payCode = (quote?.payment_method?.code ?? "").toUpperCase();
+
+  return (
+    <div className="mt-6">
+      <h2 className="text-[16px]! font-bold!">{k("cardTitle")}</h2>
+
+      <div className="mt-4 grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
+        {/* ---- The card ---- */}
+        <Panel className="p-4 sm:p-6 lg:col-span-7">
+          <h3 className="text-center text-[15px]! font-bold!">{k("payWithCard")}</h3>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <TextField
+              required
+              label={k("cardNumber")}
+              value={number}
+              // Grouped in fours as it is typed: a 16-digit run is unreadable, and
+              // the digits are stripped again before they are posted.
+              onChange={(next) =>
+                setNumber(
+                  next
+                    .replace(/\D/g, "")
+                    .slice(0, 19)
+                    .replace(/(.{4})/g, "$1 ")
+                    .trim(),
+                )
+              }
+              placeholder="1234 1234 1234 1234"
+              inputMode="numeric"
+              autoComplete="off"
+              className="sm:col-span-2"
+            />
+
+            <TextField
+              required
+              label={k("cardExpiry")}
+              value={expiry}
+              // "YY/MM", which is the order the endpoint's own example posts.
+              onChange={(next) => {
+                const raw = next.replace(/\D/g, "").slice(0, 4);
+                setExpiry(raw.length > 2 ? `${raw.slice(0, 2)}/${raw.slice(2)}` : raw);
+              }}
+              placeholder="YY / MM"
+              inputMode="numeric"
+              autoComplete="off"
+            />
+
+            <TextField
+              required
+              label={k("cardCvv")}
+              value={code}
+              onChange={(next) => setCode(next.replace(/\D/g, "").slice(0, 4))}
+              placeholder="CVC"
+              inputMode="numeric"
+              autoComplete="off"
             />
           </div>
 
-          {/* ---- Address, only when the coins leave the platform ---- */}
-          {destination === "outside" && (
-            <div className="mt-5">
-              <FieldLabel>{k("walletAddress")}</FieldLabel>
-              <div
-                className={cn(
-                  "flex h-13 items-center gap-2 rounded-xl border bg-surface pr-1.5 pl-3 transition focus-within:ring-2",
-                  error && !address.trim()
-                    ? "border-hero-neg focus-within:ring-hero-neg/25"
-                    : "border-border focus-within:border-primary focus-within:ring-primary/20",
-                )}
-              >
-                <input
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  onBlur={() => setTouched(true)}
-                  placeholder={k("addressPlaceholder")}
-                  spellCheck={false}
-                  aria-label={k("walletAddress")}
-                  className="min-w-0 flex-1 bg-transparent font-mono text-[13px] text-heading outline-none placeholder:font-sans placeholder:text-muted"
-                />
-                <button
-                  type="button"
-                  onClick={paste}
-                  className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-primary/10 px-3 text-[12.5px] font-semibold text-primary transition hover:bg-primary/18"
-                >
-                  <ClipboardPaste size={14} aria-hidden />
-                  {k("paste")}
-                </button>
-              </div>
-
-              <p className="mt-2.5 flex items-start gap-2 rounded-xl bg-amber-500/10 px-3 py-2.5 text-[12px]! leading-relaxed! text-amber-700 dark:text-amber-300">
-                <TriangleAlert size={14} aria-hidden className="mt-0.5 shrink-0" />
-                {k("addressWarning")
-                  .replace("{coin}", coin.symbol)
-                  .replace("{network}", network.label)}
-              </p>
-            </div>
+          {submitted && !valid && (
+            <p className="mt-4 flex items-start gap-1.5 text-[12.5px]! leading-snug! text-hero-neg">
+              <TriangleAlert size={13} aria-hidden className="mt-0.5 shrink-0" />
+              {k("errorCard")}
+            </p>
           )}
 
-          {/* ---- Payment method ---- */}
-          <div className="mt-6">
-            <FieldLabel>{k("paymentMethod")}</FieldLabel>
-            <div role="radiogroup" aria-label={k("paymentMethod")} className="grid gap-2.5 sm:grid-cols-3">
-              {METHODS.map((option) => {
-                const active = method === option;
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    onClick={() => setMethod(option)}
-                    className={cn(
-                      "cursor-pointer rounded-xl border p-3 text-left transition",
-                      active
-                        ? "border-primary bg-primary/8 ring-2 ring-primary/20"
-                        : "border-border bg-surface hover:border-primary/60",
-                    )}
-                  >
-                    <span className="flex items-center justify-between gap-2">
-                      <span className="text-[13px] font-semibold text-heading">
-                        {k(`methods.${option}`)}
-                      </span>
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "grid! h-4 w-4 shrink-0 place-items-center rounded-full border-2 transition",
-                          active ? "border-primary" : "border-border",
-                        )}
-                      >
-                        {active && <span className="h-2 w-2 rounded-full bg-primary" />}
-                      </span>
-                    </span>
-                    <span className="mt-1 block text-[11.5px] text-muted">
-                      {k(`methodsHint.${option}`)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </Panel>
-
-        {/* ------------------------- Summary ------------------------- */}
-        <div className="lg:sticky lg:top-6 lg:col-span-5">
-          <Panel className="p-4 sm:p-6">
-            <h2 className="text-[16px]! font-bold!">{k("summary")}</h2>
-
-            <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface p-3">
-              <CoinBadge color={coin.color} glyph={coin.glyph} size={38} />
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-[14px]! font-bold!">
-                  {crypto(receiveNum) || "0"} {coin.symbol}
-                </div>
-                <div className="truncate text-[12px]! text-muted">{coin.name}</div>
-              </div>
-              <span className="shrink-0 rounded-lg bg-primary/10 px-2 py-1 text-[11.5px] font-semibold text-primary">
-                {k(destination === "inside" ? "insideWallet" : "outsideWallet")}
-              </span>
-            </div>
-
-            <dl className="mt-4 flex flex-col gap-3">
-              <Row label={k("rate")}>
-                1 {coin.symbol} = {fiat(coin.rate)} {PAY_SYMBOL}
-              </Row>
-              <Row label={k("subtotal")}>
-                {fiat(payNum)} {PAY_SYMBOL}
-              </Row>
-              {surcharge > 0 && (
-                <Row label={k("processingFee")}>
-                  {fiat(surcharge)} {PAY_SYMBOL}
-                </Row>
-              )}
-              <Row label={k("networkFee")}>
-                {fiat(network.fee)} {PAY_SYMBOL}
-              </Row>
-              <Row label={k("arrival")}>
-                <span className="inline-flex! items-center gap-1.5">
-                  <Clock size={13} aria-hidden className="text-muted" />
-                  {k("arrivalMinutes").replace("{minutes}", String(network.minutes))}
-                </span>
-              </Row>
-            </dl>
-
-            <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-4">
-              <span className="text-[13.5px]! font-semibold!">{k("totalPay")}</span>
-              <span className="text-[20px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
-                {fiat(total)} {PAY_SYMBOL}
-              </span>
-            </div>
-
+          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row-reverse">
             <button
               type="button"
               onClick={submit}
-              className="btn-lift mt-5 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white"
+              disabled={pay.isPending}
+              className="btn-lift inline-flex h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
             >
-              <Lock size={15} aria-hidden />
-              {k("continue")}
+              {pay.isPending ? (
+                <>
+                  <Loader2 size={16} aria-hidden className="animate-spin" />
+                  {k("submitting")}
+                </>
+              ) : (
+                k("cardSubmit")
+              )}
             </button>
 
-            <p className="mt-3 flex items-start gap-2 text-[11.5px]! leading-relaxed! text-muted">
-              <ShieldCheck size={14} aria-hidden className="mt-px shrink-0 text-hero-mint" />
-              {k("secured")}
-            </p>
+            <button
+              type="button"
+              onClick={onBack}
+              disabled={pay.isPending}
+              className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-border px-5 text-[14px] font-semibold text-heading transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-60 sm:w-28"
+            >
+              {k("back")}
+            </button>
+          </div>
+
+          <p className="mt-3 flex items-start gap-2 text-[11.5px]! leading-relaxed! text-muted">
+            <ShieldCheck size={14} aria-hidden className="mt-px shrink-0 text-hero-mint" />
+            {k("cardNote")}
+          </p>
+        </Panel>
+
+        {/* ---- What is being charged ---- */}
+        <div className="lg:col-span-5">
+          <Panel className="p-4 sm:p-5">
+            <h3 className="px-1 text-[15px]! font-bold!">{k("paymentInfo")}</h3>
+
+            <dl className="mt-3 divide-y divide-border">
+              <Line icon={<Coins size={15} />} label={k("enterAmount")}>
+                <span className="tabular-nums">
+                  {coinAmount(quote?.amount)} {coinCode}
+                </span>
+              </Line>
+              <Line icon={<ArrowRightLeft size={15} />} label={k("exchangeRate")}>
+                <span className="tabular-nums">
+                  1 {coinCode} = {coinAmount(quote?.exchange_rate)} {payCode}
+                </span>
+              </Line>
+              <Line icon={<Receipt size={15} />} label={k("feesCharges")}>
+                <span className="tabular-nums text-hero-neg">
+                  {coinAmount(quote?.total_charge)} {payCode}
+                </span>
+              </Line>
+              <Line icon={<Coins size={15} />} label={k("willGet")}>
+                <span className="tabular-nums text-hero-mint">
+                  {coinAmount(quote?.will_get)} {coinCode}
+                </span>
+              </Line>
+              <Line icon={<Wallet size={15} />} label={k("totalPayable")} strong>
+                <span className="text-[18px]! leading-none! font-bold! tracking-[-0.02em] tabular-nums">
+                  {coinAmount(quote?.payable_amount)} {payCode}
+                </span>
+              </Line>
+            </dl>
           </Panel>
         </div>
       </div>

@@ -321,6 +321,7 @@ export function WithdrawCrypto() {
                   options={currencies.map(coinOption)}
                   onChange={setCoinId}
                   showHintInTrigger={false}
+                  showMetaInTrigger={false}
                   disabled={busy}
                   className="w-38 shrink-0"
                 />

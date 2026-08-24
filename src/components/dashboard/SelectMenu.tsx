@@ -44,6 +44,15 @@ const MENU_GAP = 8;
 /** Smallest gap kept between the menu and the viewport edge. */
 const EDGE = 12;
 
+/**
+ * Floor for the menu's width. A row is icon + label + a trailing figure, and the
+ * triggers these hang off are often deliberately narrow — the 152px coin picker
+ * beside an amount field. Sized to the trigger alone, such a menu squeezes the
+ * label column to nothing ("S…" for Solana) and grows a horizontal scrollbar,
+ * so the LIST gets its own minimum regardless of what it is anchored to.
+ */
+const MENU_MIN_WIDTH = 260;
+
 const MENU_SCROLL =
   "[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent";
 
@@ -82,8 +91,9 @@ export function SelectMenu({
   className,
   showHintInTrigger = true,
   showIconInTrigger = true,
+  showMetaInTrigger = true,
   bare = false,
-  menuMinWidth = 0,
+  menuMinWidth = MENU_MIN_WIDTH,
   placeholder,
   searchable = false,
   searchPlaceholder,
@@ -99,13 +109,19 @@ export function SelectMenu({
   /** Off for a compact trigger whose label already identifies the choice. */
   showIconInTrigger?: boolean;
   /**
+   * Off for a narrow trigger, where the trailing figure and the label compete for
+   * the same few pixels and the label loses — the compact coin pickers beside an
+   * amount field, whose balance or price is already printed under the field.
+   */
+  showMetaInTrigger?: boolean;
+  /**
    * Drops the trigger's own border, background and radius, for a menu that sits
    * INSIDE another field — the dial code in front of a phone number. The field
    * around it owns the frame and the focus ring; two of each would read as two
    * controls, which is exactly what this is not.
    */
   bare?: boolean;
-  /** Floor for the menu's width, in px. Defaults to the trigger's own width. */
+  /** Floor for the menu's width, in px. Widened past `MENU_MIN_WIDTH`, never under. */
   menuMinWidth?: number;
   /**
    * Shown when `value` matches no option. Without it the trigger falls back to the
@@ -331,7 +347,7 @@ export function SelectMenu({
             <span className="block truncate text-[11.5px] text-muted">{selected.hint}</span>
           )}
         </span>
-        {selected?.meta && (
+        {showMetaInTrigger && selected?.meta && (
           <span className="shrink-0 text-[12.5px] tabular-nums text-muted">{selected.meta}</span>
         )}
         <ChevronDown
@@ -382,7 +398,10 @@ export function SelectMenu({
               id={listId}
               role="listbox"
               aria-label={label}
-              className={cn("min-h-0 flex-1 overflow-y-auto", MENU_SCROLL)}
+              // `overflow-x-hidden` explicitly: setting only `overflow-y` leaves the
+              // other axis computing to `auto`, and one long trailing figure was
+              // enough to grow a horizontal scrollbar across the whole list.
+              className={cn("min-h-0 flex-1 overflow-y-auto overflow-x-hidden", MENU_SCROLL)}
             >
               {visible.length === 0 && (
                 <li className="px-2.5 py-3 text-[12.5px] text-muted">{emptyText}</li>
@@ -439,7 +458,7 @@ export function SelectMenu({
                         )}
                       </span>
                       {option.meta && (
-                        <span className="shrink-0 text-[12.5px] tabular-nums text-muted">
+                        <span className="shrink-0 text-[12.5px] whitespace-nowrap tabular-nums text-muted">
                           {option.meta}
                         </span>
                       )}
