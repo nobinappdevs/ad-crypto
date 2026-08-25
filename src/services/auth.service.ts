@@ -1,5 +1,5 @@
 import { publicApi, privateApi } from "@/lib/axios";
-import { TOKEN_KEY } from "@/lib/authState";
+import { clearAuthState } from "@/lib/authState";
 import type {
   ForgotPasswordRequest,
   LoginRequest,
@@ -48,17 +48,19 @@ export const authService = {
   /* ── Session teardown ── */
 
   /**
-   * POST /user/logout. The local token goes regardless of how the call ends:
+   * POST /user/logout. The local session goes regardless of how the call ends:
    * an expired session is exactly when logout fails, and leaving the token
    * behind would strand the browser in a signed-in state it can't use.
+   *
+   * `clearAuthState`, not just the token — the verification mirrors describe the
+   * account that is being signed out, and a guard reading one of them against the
+   * next account's token is how a fresh sign-in inherits somebody else's gate.
    */
   async logout(): Promise<void> {
     try {
       await privateApi.post("/user/logout");
     } finally {
-      try {
-        window.localStorage.removeItem(TOKEN_KEY);
-      } catch {}
+      clearAuthState();
     }
   },
 

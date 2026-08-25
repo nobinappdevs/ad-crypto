@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -36,6 +37,7 @@ export function VerifyEmailForm() {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.verifyEmail.${name}`);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // Read once, at mount: the address never changes underneath us.
   const [email] = useState(() => getPendingEmail());
@@ -74,6 +76,10 @@ export function VerifyEmailForm() {
   function startOver() {
     clearAuthState();
     clearPendingEmail();
+    // The abandoned account's cached responses go with its token — the guards read
+    // the same `["dashboard"]` entry, and the next account to register in this tab
+    // would otherwise be gated on the flags of the one just walked away from.
+    queryClient.clear();
     router.replace("/register");
   }
 

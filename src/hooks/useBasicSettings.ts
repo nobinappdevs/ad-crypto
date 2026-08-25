@@ -8,17 +8,27 @@ export const BASIC_SETTINGS_KEY = ["basic-settings"] as const;
 /**
  * GET /basic-settings — the operator's switches.
  *
- * Cached for the session and refetched on focus. It changes when an admin saves a
- * setting, not while a form is being filled in, but a tab left open for an hour
- * should not still be honouring a switch that was flipped since.
+ * Deliberately never treated as fresh. These values exist to be changed from the
+ * admin panel, and nothing tells a browser when that happens — held for even a few
+ * minutes, a switch flipped upstream stayed invisible until someone thought to
+ * hard-reload, which is not a thing users do.
+ *
+ * So `staleTime: 0` with `refetchOnMount: "always"`: arriving at a screen that
+ * asks for these settings asks the server, every time, however the user got there.
+ * The cached copy still paints instantly while that request is in flight — this is
+ * "always re-ask", not "always wait" — and the answer replaces it when it lands.
+ * The endpoint is public and small, so the cost of asking is the right trade for
+ * never being wrong about it.
  */
 export function useBasicSettings(enabled = true) {
   return useQuery({
     queryKey: BASIC_SETTINGS_KEY,
     queryFn: () => basicService.get(),
     enabled,
-    staleTime: 5 * 60_000,
+    staleTime: 0,
+    refetchOnMount: "always",
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     select: (res): BasicSettingsData => res?.data ?? {},
   });
 }

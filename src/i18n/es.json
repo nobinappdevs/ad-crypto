@@ -436,9 +436,6 @@
       "helpSub": "¿Dudas sobre una orden, un pago o tu tarjeta? Respondemos en minutos.",
       "helpBtn": "Obtener soporte"
     },
-    "navbar": {
-      "subtitle": "Gestiona tus carteras, órdenes y tarjetas"
-    },
     "account": {
       "profile": "Perfil",
       "security": "Seguridad 2FA",
@@ -483,6 +480,9 @@
       "conversion": "Visitantes que financiaron una cuenta"
     },
     "myWallets": "Mis carteras",
+    "allWallets": "Todas las carteras",
+    "walletsSubtitle": "Todas las monedas que tiene su cuenta, con su dirección de depósito.",
+    "walletsCount": "{count} carteras",
     "loadFailed": "No se pudo cargar tu panel",
     "retry": "Intentar de nuevo",
     "noWalletsTitle": "Aún no hay billeteras",

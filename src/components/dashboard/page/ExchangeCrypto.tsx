@@ -12,7 +12,6 @@ import {
   Wallet,
 } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
-import { cn } from "@/components/ui/cn";
 import { Panel } from "@/components/dashboard/ui";
 import { DashPageHeader } from "@/components/dashboard/PageHeader";
 import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
@@ -84,6 +83,16 @@ export function ExchangeCrypto() {
   const toCode = (to?.code ?? "").toUpperCase();
 
   const senderWallet = ownWallet(from);
+  /**
+   * The receiving side's wallet, and it is required.
+   *
+   * `store` takes a WALLET id on both sides. The field is named
+   * `receiver_currency`, which reads like `currencies[].id` and is not: posting a
+   * currency id there is rejected. Both ids come from the same place —
+   * `currencies[].wallets[].id` — which is also why a coin with no wallet behind it
+   * cannot be either side of a swap, not just the sending one.
+   */
+  const receiverWallet = ownWallet(to);
   const senderRate = num(from?.rate);
   const balance = walletBalance(from);
   const sending = toNumber(amountRaw);
@@ -103,6 +112,9 @@ export function ExchangeCrypto() {
   const problem = (() => {
     if (!from || !to) return null;
     if (!senderWallet) return k("errorNoWallet").replace("{coin}", fromCode);
+    // Same message for the receiving side: from the user's point of view it is the
+    // same fact — that coin has no wallet on this account for the swap to use.
+    if (!receiverWallet) return k("errorNoWallet").replace("{coin}", toCode);
     if (currencyKey(from) === currencyKey(to)) return k("errorSamePair");
     if (!touched) return null;
     if (sending <= 0) return k("errorAmount");
@@ -148,14 +160,19 @@ export function ExchangeCrypto() {
 
   function submit() {
     setTouched(true);
-    if (!senderWallet?.id || !to?.id) return;
+    if (!senderWallet?.id || !receiverWallet?.id) return;
     if (sending <= 0 || figures.payable > balance) return;
     if (limits.min > 0 && sending < limits.min) return;
     if (limits.max > 0 && sending > limits.max) return;
     if (currencyKey(from) === currencyKey(to)) return;
 
+    // Two wallet ids, never a currency id — see `receiverWallet` above.
     store.mutate(
-      { send_amount: sending, sender_wallet: senderWallet.id, receiver_currency: to.id },
+      {
+        send_amount: sending,
+        sender_wallet: senderWallet.id,
+        receiver_currency: receiverWallet.id,
+      },
       { onSuccess: setDraft },
     );
   }
@@ -263,21 +280,26 @@ export function ExchangeCrypto() {
     );
   }
 
-  const option = (currency: ExchangeCurrency, sending?: boolean): SelectOption => ({
-    value: currencyKey(currency),
-    label: (currency.code ?? "").toUpperCase(),
-    hint: currency.name,
-    // On the sending side the balance is the deciding fact — and it is also what
-    // tells the user a coin has no wallet behind it yet.
-    meta: sending
-      ? ownWallet(currency)
-        ? coinAmount(walletBalance(currency))
-        : k("noWallet")
-      : undefined,
-    icon: <CoinArt currency={currency} paths={paths} size={30} />,
-    keywords: currency.name,
-    disabled: sending ? !ownWallet(currency) : false,
-  });
+  const option = (currency: ExchangeCurrency, sending?: boolean): SelectOption => {
+    // A swap posts a wallet id for BOTH sides, so a coin with no wallet is not
+    // selectable on either — offering it on the receiving side only let the user
+    // build an order the server was always going to refuse.
+    const held = Boolean(ownWallet(currency));
+
+    return {
+      value: currencyKey(currency),
+      label: (currency.code ?? "").toUpperCase(),
+      hint: currency.name,
+      // On the sending side the balance is the deciding fact. On the receiving side
+      // the balance is not what the user is choosing on, so it stays out of the
+      // way — but "no wallet" is still worth saying, since it is why the row is
+      // greyed out.
+      meta: held ? (sending ? coinAmount(walletBalance(currency)) : undefined) : k("noWallet"),
+      icon: <CoinArt currency={currency} paths={paths} size={30} />,
+      keywords: currency.name,
+      disabled: !held,
+    };
+  };
 
   const busy = store.isPending;
 

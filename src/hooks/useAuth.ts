@@ -7,10 +7,12 @@ import { authService } from "@/services/auth.service";
 import {
   clearAuthState,
   clearResetToken,
+  emailVerificationFromResponse,
   extractToken,
   needsEmailVerification,
   readResetToken,
   readTwoFaState,
+  setEmailVerificationRequired,
   setEmailVerified,
   setResetToken,
   setToken,
@@ -78,6 +80,31 @@ function trackTwoFa(res: unknown): boolean {
   return (state ?? readTwoFaState()) === "pending";
 }
 
+/**
+ * Stores everything a register/login response says about the session, and reports
+ * whether an email code is still owed.
+ *
+ * Shared by both, because both responses carry the same three things and the
+ * guards afterwards read the same mirrors — one of them writing a field the other
+ * forgot is precisely how the two screens ended up disagreeing.
+ *
+ * The token goes in even when a code is owed: the verify and resend calls
+ * authenticate with it, so there is no way to finish signing up without it.
+ * `email_verification` is kept because no authenticated endpoint repeats it, and
+ * the guards need it to know when the whole question is switched off.
+ */
+function trackAuthResponse(res: unknown): boolean {
+  const token = extractToken(res);
+  if (token) setToken(token);
+
+  const verificationRequired = emailVerificationFromResponse(res);
+  if (verificationRequired !== undefined) setEmailVerificationRequired(verificationRequired);
+
+  const needsCode = needsEmailVerification(res);
+  setEmailVerified(!needsCode);
+  return needsCode;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Register + email verification                                              */
 /* -------------------------------------------------------------------------- */
@@ -88,20 +115,29 @@ function trackTwoFa(res: unknown): boolean {
  * The response carries a usable token even though the account is unverified —
  * that is deliberate on the backend's side, because the verify call needs it to
  * authenticate. So the token is stored either way; where the user lands next is
- * what differs. With email verification switched off server-side there is no
- * code to enter and they go straight to the dashboard.
+ * what the response decides:
+ *
+ *   email_verification: true  + email_verified: 0  ->  /verify-email
+ *   email_verification: true  + email_verified: 1  ->  /dashboard
+ *   email_verification: false                      ->  /dashboard, nothing to ask
+ *
+ * The guards read the same flags back out of localStorage a moment later, so the
+ * screen this sends the user to is the screen that will keep them.
  */
 export function useRegister() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (payload: RegisterRequest) => authService.register(payload),
     onSuccess: (res, variables) => {
-      const token = extractToken(res);
-      if (token) setToken(token);
+      // Whatever this browser fetched for whoever was signed in before belongs to
+      // them, not to the account that exists as of this response — and the guards
+      // read `["dashboard"]`, so a leftover copy of somebody else's flags would
+      // decide this account's gate.
+      queryClient.clear();
 
-      const needsCode = needsEmailVerification(res);
-      setEmailVerified(!needsCode);
+      const needsCode = trackAuthResponse(res);
       // A brand-new account has no authenticator attached; record whatever the
       // response says so the guard starts from a known state instead of "unknown".
       setTwoFaState(twoFaStateFromResponse(res) ?? "off");
@@ -171,15 +207,17 @@ export function useResendCode() {
  */
 export function useLogin() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (payload: LoginRequest) => authService.login(payload),
     onSuccess: (res, variables) => {
-      const token = extractToken(res);
-      if (token) setToken(token);
+      // Signing in is a new session even when it is the same person: nothing this
+      // browser cached under the previous token describes it. The guards read
+      // `["dashboard"]` too, so a stale copy would gate the wrong account.
+      queryClient.clear();
 
-      const needsCode = needsEmailVerification(res);
-      setEmailVerified(!needsCode);
+      const needsCode = trackAuthResponse(res);
       const owesTwoFaCode = trackTwoFa(res);
       toast.success(getApiSuccessMessage(res, "Login successful"));
 

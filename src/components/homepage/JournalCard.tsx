@@ -107,7 +107,7 @@ export function JournalCard({
 
         <Link
           href={journalHref(journal.slug)}
-          className="mt-5 inline-flex! h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-primary/90 hover:text-white"
+          className="mt-5 inline-flex! h-12 w-full items-center justify-center gap-2 rounded-full bg-primary text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-primary/90 hover:text-white"
         >
           {t("webJournal.readArticle")}
           <ArrowRight size={16} aria-hidden className="rtl:rotate-180" />
@@ -140,7 +140,7 @@ export function JournalCardSkeleton({ wide = false }: { wide?: boolean }) {
           <span className="block h-6 w-24 rounded-full bg-black/5 dark:bg-white/6" />
           <span className="block h-6 w-28 rounded-full bg-black/5 dark:bg-white/6" />
         </span>
-        <span className="mt-5 block h-12 w-full rounded-xl bg-black/5 dark:bg-white/6" />
+        <span className="mt-5 block h-12 w-full rounded-full bg-black/5 dark:bg-white/6" />
       </div>
     </div>
   );

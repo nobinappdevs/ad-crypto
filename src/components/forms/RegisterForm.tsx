@@ -1,12 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { useRegister } from "@/hooks/useAuth";
-import { useRegistrationOpen } from "@/hooks/useBasicSettings";
+import { usePolicyRequired, useRegistrationOpen } from "@/hooks/useBasicSettings";
 import { registerRequestSchema, type RegisterRequest } from "@/schemas/auth.schema";
 import { AuthBackHome } from "@/components/auth/AuthBackHome";
 import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
@@ -31,10 +32,18 @@ export function RegisterForm() {
    * whatever the API happens to say.
    */
   const { open: registrationOpen } = useRegistrationOpen();
+  /**
+   * `basic_settings.agree_policy`, the switch that decides whether consent is
+   * asked for at all. Off means the checkbox is not rendered — a control the
+   * operator has turned off should not be on screen, let alone standing between
+   * the user and the button.
+   */
+  const policyRequired = usePolicyRequired();
 
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegisterRequest>({
     resolver: zodResolver(registerRequestSchema),
@@ -46,6 +55,15 @@ export function RegisterForm() {
       policy: false,
     },
   });
+
+  /**
+   * With the checkbox gone the field still has to satisfy the schema, which asks
+   * for a `true` — so it is answered here rather than by weakening the rule. The
+   * setting arrives asynchronously, hence an effect rather than a default value.
+   */
+  useEffect(() => {
+    if (!policyRequired) setValue("policy", true, { shouldValidate: true });
+  }, [policyRequired, setValue]);
 
   if (!registrationOpen) {
     return (
@@ -158,11 +176,13 @@ export function RegisterForm() {
         )}
       />
 
-      {/* onClick lives on the label, not the checkbox glyph — the glyph is the
+      {/* Rendered only where the operator asks for consent (`agree_policy`).
+          onClick lives on the label, not the checkbox glyph — the glyph is the
           only thing that used to toggle it, so clicking "I have agreed with"
           did nothing. The Terms link stops the click from bubbling up to the
           label, so following it doesn't also flip the checkbox underneath it. */}
-      <Controller
+      {policyRequired && (
+        <Controller
         name="policy"
         control={control}
         render={({ field }) => (
@@ -215,8 +235,9 @@ export function RegisterForm() {
               </span>
             )}
           </div>
-        )}
-      />
+          )}
+        />
+      )}
 
       <button type="submit" disabled={register.isPending} className={AUTH_SUBMIT_CLASS}>
         {register.isPending ? k("registering") : k("registerCta")}

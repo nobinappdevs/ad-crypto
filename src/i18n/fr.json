@@ -436,9 +436,6 @@
       "helpSub": "Une question sur un ordre, un virement ou votre carte ? Nous répondons en quelques minutes.",
       "helpBtn": "Obtenir de l’aide"
     },
-    "navbar": {
-      "subtitle": "Gérez vos portefeuilles, vos ordres et vos cartes"
-    },
     "account": {
       "profile": "Profil",
       "security": "Sécurité 2FA",
@@ -483,6 +480,9 @@
       "conversion": "Visiteurs ayant approvisionné un compte"
     },
     "myWallets": "Mes portefeuilles",
+    "allWallets": "Tous les portefeuilles",
+    "walletsSubtitle": "Toutes les cryptos détenues par votre compte, avec leur adresse de dépôt.",
+    "walletsCount": "{count} portefeuilles",
     "loadFailed": "Impossible de charger votre tableau de bord",
     "retry": "Réessayer",
     "noWalletsTitle": "Aucun portefeuille pour l'instant",

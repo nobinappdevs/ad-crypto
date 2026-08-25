@@ -20,33 +20,7 @@ import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
 import { Logo, LogoMark } from "@/components/share/Logo";
 
-/**
- * The rail, in three states: a drawer below `md`, a 56px icon rail from `md`, and
- * a 260px list from `lg` — which the collapse toggle folds back to the rail.
- *
- * Rows are grouped under section labels rather than run as one flat list: seven
- * destinations read as seven unrelated choices, four of which are the same verb on
- * a different balance.
- *
- * The active row is marked by a left rule and the brand colour, NOT a filled pill.
- * In the rail there is no room for a rule, so it becomes a tinted tile instead.
- *
- * ── Hover-expand ──
- * Pointing at the narrow rail opens it to its full width for as long as the pointer
- * is on it, and it folds straight back when the pointer leaves. That replaces the
- * per-row tooltips this file used to carry: a tooltip names one icon at a time,
- * where the expansion names all seven at once, shows the section headings that give
- * them meaning, and lets you read the list without committing to unfolding it.
- *
- * It expands as an OVERLAY, not by widening its grid column: the column stays 56px,
- * so the page behind it never reflows. A sidebar that shoves the whole dashboard
- * sideways every time the pointer crosses it is worse than no labels at all.
- *
- * Which widths count as "narrow" depends on the collapse state — from `md` up when
- * collapsed, only between `md` and `lg` otherwise — so the hover variants are
- * spelled out per case in `HOVER` below rather than composed at runtime. Tailwind
- * only generates classes it can see written out in the source.
- */
+
 type NavItem = {
   key: string;
   icon: ComponentType<{ size?: number | string; strokeWidth?: number; className?: string }>;
@@ -69,7 +43,7 @@ const MENU: { titleKey?: string; items: NavItem[] }[] = [
     titleKey: "navGroups.wallet",
     items: [
       { key: "withdrawCrypto", icon: ArrowDownToLine, href: "/dashboard/withdraw-crypto" },
-      { key: "myCards", icon: WalletCards, href: "/dashboard/my-cards" },
+      // { key: "myCards", icon: WalletCards, href: "/dashboard/my-cards" },
     ],
   },
   {
@@ -294,48 +268,7 @@ export function Sidebar({
             </Link>
           </div>
 
-          <div className={cn("px-3 pb-4 md:hidden", lg("lg:block"), hover.show)}>
-            <div
-              className="relative overflow-hidden rounded-2xl border border-border p-4"
-              style={{
-                background:
-                  "linear-gradient(150deg, rgb(var(--primary__color) / 0.14) 0%, transparent 60%)",
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <span aria-hidden className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-hero-mint opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-hero-mint" />
-                </span>
-                <span className="text-[10px]! font-bold! tracking-widest text-muted uppercase">
-                  {k("sidebar.liveSupport")}
-                </span>
-              </div>
 
-              <p className="mt-2.5 text-[14px]! leading-tight! font-bold! text-heading">
-                {k("sidebar.helpTitle")}
-              </p>
-              <p className="mt-1 text-[11.5px]! leading-relaxed! text-muted">
-                {k("sidebar.helpSub")}
-              </p>
-
-              <Link
-                href="/contact"
-                className="btn-lift mt-3 flex! w-full items-center justify-center gap-2 rounded-xl bg-primary px-3.5 py-2.5 text-[12px] font-semibold text-white!"
-              >
-                <Headphones size={13} strokeWidth={2.5} aria-hidden />
-                {k("sidebar.helpBtn")}
-              </Link>
-            </div>
-          </div>
-
-          {/* ---- Collapse control, on the bottom edge in every state
-                  It used to sit in the brand row, where a 56px rail has no room for
-                  it beside the logo — so it only appeared on hover, and a control you
-                  have to discover by hovering is one most people never find. Down
-                  here the rail has a full row to spare, so the button is visible
-                  whether the sidebar is folded, unfolded or peeking open, and it
-                  never competes with the logo for the same 56px. */}
           <button
             type="button"
             onClick={onToggleCollapsed}

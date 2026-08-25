@@ -104,7 +104,14 @@ export interface ExchangeStoreRequest {
   send_amount: number | string;
   /** The user's WALLET id for the coin being sent — `currencies[].wallets[].id`. */
   sender_wallet: number;
-  /** The CURRENCY id of the coin being received — `currencies[].id`. */
+  /**
+   * The user's WALLET id for the coin being received — `currencies[].wallets[].id`
+   * again, NOT `currencies[].id`.
+   *
+   * The name says currency and means wallet; posting a currency id is rejected.
+   * The server's own reply is the giveaway: it echoes this side back as
+   * `receiver_wallet`, resolved to the same wallet row.
+   */
   receiver_currency: number;
 }
 

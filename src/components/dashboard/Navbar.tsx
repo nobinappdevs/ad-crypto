@@ -55,6 +55,8 @@ const TITLES: { prefix: string; key: string }[] = [
   { prefix: "/dashboard/exchange-crypto", key: "dashboard.nav.exchangeCrypto" },
   { prefix: "/dashboard/my-cards", key: "dashboard.nav.myCards" },
   { prefix: "/dashboard/transactions", key: "dashboard.nav.transactions" },
+  // Before `/dashboard/wallet`, which is a prefix of it — the first match wins.
+  { prefix: "/dashboard/wallets", key: "dashboard.myWallets" },
   { prefix: "/dashboard/wallet", key: "walletDetails.navTitle" },
   { prefix: "/dashboard/profile", key: "dashboard.account.profile" },
   { prefix: "/dashboard/security", key: "dashboard.account.security" },
@@ -246,13 +248,14 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
           <Menu size={22} />
         </button>
 
+        {/* The title alone. The strapline that used to sit under it said the same
+            thing on every screen in the dashboard, which made it decoration rather
+            than information — and it was the only reason this bar needed two
+            lines. */}
         <div className="min-w-0">
           <h1 className="truncate text-[17px]! leading-tight! font-bold! tracking-[-0.01em] sm:text-[19px]!">
             {t(title)}
           </h1>
-          {/* Hidden on a phone: at 360px the title and four controls already fill
-              the row, and a second line pushes the bar past 64px. */}
-          <p className="hidden truncate text-[12px]! text-muted md:block">{k("navbar.subtitle")}</p>
         </div>
       </div>
 

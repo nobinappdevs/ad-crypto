@@ -365,6 +365,25 @@ export function DashboardHomeSkeleton({ header = true }: { header?: boolean }) {
   );
 }
 
+/**
+ * `/dashboard/wallets` — the header block, then nothing but wallet cards.
+ *
+ * Eight rather than the overview's four: this page is the full list, and a
+ * skeleton that stops at one row would collapse the moment the real cards
+ * arrived.
+ */
+export function WalletsSkeleton({ header = true }: { header?: boolean }) {
+  return (
+    <Frame header={header} wide>
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 8 }, (_, i) => (
+          <SkWalletCard key={i} />
+        ))}
+      </div>
+    </Frame>
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 /* Transactions                                                                */
 /* -------------------------------------------------------------------------- */

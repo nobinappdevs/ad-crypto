@@ -5,9 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
-import { useIsClient } from "@/hooks/useIsClient";
+import { useAuthMirror } from "@/hooks/useAuthMirror";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
-import { TOKEN_KEY } from "@/lib/axios";
 import { cn } from "@/components/ui/cn";
 import { NAV_LINKS, isNavActive } from "@/config/nav";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -22,8 +21,9 @@ import { Logo } from "./Logo";
 export function Navbar() {
   const { t } = useLang();
   const pathname = usePathname();
-  const isClient = useIsClient();
-  const authed = isClient ? Boolean(localStorage.getItem(TOKEN_KEY)) : false;
+  // Through the same store the guards read, so signing in or out — in this tab or
+  // another — changes what this bar offers without waiting for a reload.
+  const { authed } = useAuthMirror();
   const { hidden, scrolled } = useHideOnScroll();
   const [open, setOpen] = useState(false);
 

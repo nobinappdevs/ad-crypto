@@ -146,10 +146,20 @@ export function defaultSender(currencies: ExchangeCurrency[]): ExchangeCurrency 
     .sort((a, b) => walletBalance(b) - walletBalance(a))[0];
 }
 
-/** The same choice, plus the first other coin to convert into. */
+/**
+ * The same choice, plus a coin to convert into.
+ *
+ * The receiving side has to be a coin the user HOLDS as well, because the swap
+ * posts a wallet id for it too — opening on a coin with no wallet would put the
+ * form in an error state before the user had touched anything. Falling back to the
+ * first other coin covers the account that holds only one.
+ */
 export function defaultPair(currencies: ExchangeCurrency[]): { from: string; to: string } {
   const from = defaultSender(currencies) ?? currencies[0];
-  const to = currencies.find((currency) => currencyKey(currency) !== currencyKey(from));
+  const other = (currency: ExchangeCurrency) => currencyKey(currency) !== currencyKey(from);
+  const to =
+    currencies.find((currency) => other(currency) && ownWallet(currency)) ??
+    currencies.find(other);
 
   return { from: currencyKey(from), to: currencyKey(to) };
 }

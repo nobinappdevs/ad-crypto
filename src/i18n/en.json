@@ -436,9 +436,6 @@
       "helpSub": "Questions about an order, a payout or your card? We answer in minutes.",
       "helpBtn": "Get support"
     },
-    "navbar": {
-      "subtitle": "Manage your wallets, orders and cards"
-    },
     "account": {
       "profile": "Profile",
       "security": "2FA Security",
@@ -483,6 +480,9 @@
       "conversion": "Visitors who funded an account"
     },
     "myWallets": "My Wallets",
+    "allWallets": "All wallets",
+    "walletsSubtitle": "Every coin your account holds, with its deposit address.",
+    "walletsCount": "{count} wallets",
     "loadFailed": "Could not load your dashboard",
     "retry": "Try again",
     "noWalletsTitle": "No wallets yet",

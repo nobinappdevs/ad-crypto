@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ export function Verify2faForm() {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.verify2fa.${name}`);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const verify = useVerify2faOtp(k("verifiedToast"));
 
@@ -49,6 +51,8 @@ export function Verify2faForm() {
    */
   function signOut() {
     clearAuthState();
+    // Nothing cached under the token being dropped should outlive it.
+    queryClient.clear();
     router.replace("/login");
   }
 

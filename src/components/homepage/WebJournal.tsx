@@ -57,8 +57,12 @@ export function WebJournal() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => setCategorySlug(slug)}
+                    /* `inline-flex` and `whitespace-nowrap` are the chip's shape:
+                       a name and its count sit on ONE line, and a two-word
+                       category doesn't get to wrap and drag the row's height with
+                       it. */
                     className={cn(
-                      "h-9 cursor-pointer rounded-full px-4 text-[13px] font-semibold transition",
+                      "inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[13px] font-semibold whitespace-nowrap transition",
                       isActive
                         ? "bg-primary text-white"
                         : "border border-border text-muted hover:border-primary hover:text-primary",
@@ -66,7 +70,17 @@ export function WebJournal() {
                   >
                     {category.name}
                     {count != null && (
-                      <span className={cn("ms-1.5", isActive ? "text-white/70" : "text-muted")}>
+                      /* Every `!` here is overriding the global `span` rule, which
+                         makes a bare span a BLOCK at body size — which is what put
+                         the count on its own line under the name and stretched the
+                         pill around it. The count is a footnote to the label, so it
+                         renders a step smaller and dimmer, in its own soft bubble. */
+                      <span
+                        className={cn(
+                          "inline-flex! min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px]! leading-none! font-semibold! tabular-nums",
+                          isActive ? "bg-white/20 text-white!" : "bg-border/50 text-muted!",
+                        )}
+                      >
                         {count}
                       </span>
                     )}
