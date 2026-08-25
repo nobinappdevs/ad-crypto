@@ -17,12 +17,8 @@ import { clearAuthState } from "@/lib/authState";
  * The authenticator step between signing in and the dashboard:
  * `POST /user/google-2fa/otp/verify`.
  *
- * No resend and no countdown, unlike the email screens — a TOTP code is generated
- * on the user's own device and rolls over every 30 seconds by itself. There is
- * nothing to ask the server for, so the only escape hatch is signing out.
- *
- * It reuses the same six boxes and the same `code` schema as the email flow: a
- * code screen should look like a code screen wherever it appears.
+ * No resend and no countdown — a TOTP code comes from the user's own device, so the
+ * only escape hatch is signing out. Same six boxes and `code` schema as the email flow.
  */
 export function Verify2faForm() {
   const { t } = useLang();
@@ -44,11 +40,7 @@ export function Verify2faForm() {
   const code = useWatch({ control, name: "code" }) ?? "";
   const submit = handleSubmit((data) => verify.mutate(data.code));
 
-  /**
-   * Lost the authenticator? Then this screen is a dead end, and the token in
-   * hand is useless without a code. Dropping the session at least returns the
-   * user to a place where support can help, rather than a screen they can't pass.
-   */
+  /** Lost the authenticator? The token is useless without a code, so drop the session. */
   function signOut() {
     clearAuthState();
     // Nothing cached under the token being dropped should outlive it.

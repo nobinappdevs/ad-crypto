@@ -9,13 +9,8 @@ export const DASHBOARD_KEY = ["dashboard"] as const;
  * GET /user/dashboard — everything the overview draws, and the only endpoint that
  * carries the account's verification flags.
  *
- * Asked for when a screen that needs it mounts, and when the tab is focused or the
- * connection comes back. There is no timer: nothing here polls.
- *
- * The guards use the same query key, so entering the dashboard costs ONE request
- * that both the gate check and the overview read. Moving between dashboard pages
- * afterwards costs nothing — the layout the guard lives in stays mounted, and the
- * flags it already has are the ones a second call would return.
+ * Asked on mount and on focus/reconnect; nothing polls. The guards share this query
+ * key, so entering the dashboard costs ONE request for both the gate and the page.
  */
 export function useDashboard(enabled = true, options?: { refetchOnMount?: boolean | "always" }) {
   return useQuery({

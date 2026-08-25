@@ -1,11 +1,9 @@
 /**
  * Helpers for the KYC form's server-supplied validation rules.
  *
- * The form itself is not described here — it comes from
- * `GET /user/profile/kyc/input-fields`, because which documents are asked for and
- * which formats are accepted is operator policy that changes without a release.
- * What lives here is the translation from that payload's conventions (sizes in
- * megabytes, formats as bare extensions) into what a browser and a validator need.
+ * The form itself comes from `GET /user/profile/kyc/input-fields` — operator policy
+ * that changes without a release. What lives here is the translation from that
+ * payload's conventions (megabytes, bare extensions) into what a browser needs.
  */
 
 import type { KycField, KycStatus } from "@/services/kyc.service";
@@ -29,12 +27,9 @@ export function normalizeKycStatus(status: number | undefined): KycStatus {
 }
 
 /**
- * `["jpg","png"]` -> `".jpg,.png"` for an `<input accept>`.
- *
- * Extensions rather than MIME types on purpose: that is the form the API sends,
- * and the mapping to MIME is not one-to-one (jpg/jpeg both mean image/jpeg, and
- * some browsers report nothing at all for less common types). An empty list
- * returns undefined so the attribute is omitted rather than set to "".
+ * `["jpg","png"]` -> `".jpg,.png"` for an `<input accept>`. Extensions, not MIME
+ * types: that is the form the API sends, and the mapping is not one-to-one. An
+ * empty list returns undefined, so the attribute is omitted rather than set to "".
  */
 export function acceptAttribute(mimes: string[] | undefined) {
   if (!mimes?.length) return undefined;
@@ -62,12 +57,9 @@ export function fileTypeAllowed(file: File, mimes: string[] | undefined) {
 }
 
 /**
- * A select option's value and its display label.
- *
- * The two differ because the API sends options with stray leading whitespace
- * (`[" Driving License", " Passport"]`). The label is trimmed so it reads
- * correctly; the value is sent back BYTE-FOR-BYTE, because the backend's own
- * `in:` rule compares against the untrimmed string it gave us.
+ * A select option's value and its label. They differ because the API sends options
+ * with stray leading whitespace: the label is trimmed to read correctly, the value
+ * goes back BYTE-FOR-BYTE, since the backend's `in:` rule compares the original.
  */
 export function selectOptions(options: string[] | undefined) {
   return (options ?? []).map((option) => ({ value: option, label: option.trim() }));

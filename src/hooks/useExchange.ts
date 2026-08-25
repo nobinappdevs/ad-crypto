@@ -8,18 +8,16 @@ import {
   type ExchangeIndexData,
   type ExchangeStoreRequest,
 } from "@/services/exchange.service";
-import { getApiErrorMessage, getApiSuccessMessage } from "@/hooks/useAuth";
+import { getApiSuccessMessage } from "@/hooks/useAuth";
+import { useTransactionError } from "@/hooks/useTransactionError";
 import { DASHBOARD_KEY } from "@/hooks/useDashboard";
 import { TRANSACTIONS_KEY } from "@/hooks/useTransactions";
 
 export const EXCHANGE_KEY = ["exchange"] as const;
 
 /**
- * GET /user/exchange-crypto/index — the coins, their rates, and what the user holds.
- *
- * Refetched on focus like the dashboard is: this payload carries balances, and a
- * swap made in another tab has to be visible here before the next one is priced
- * against a figure that is no longer true.
+ * GET /user/exchange-crypto/index — coins, rates, holdings. Refetched on focus: it
+ * carries balances, and a swap in another tab changes them.
  */
 export function useExchangeIndex(enabled = true) {
   return useQuery({
@@ -32,14 +30,11 @@ export function useExchangeIndex(enabled = true) {
 }
 
 /**
- * POST /user/exchange-crypto/store — prices the swap.
- *
- * Deliberately NOT toasting on success: this step only produces a quote, and a
- * "done" toast on an order that has not run yet is the one message that would
- * make the two-step flow unreadable. Failures do toast, because a rejected quote
- * ("You cannot exchange crypto using the same wallet") is the user's answer.
+ * POST /user/exchange-crypto/store — prices the swap. No success toast: this only
+ * produces a quote. Failures do toast — a rejected quote is the user's answer.
  */
 export function useStoreExchange() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: async (payload: ExchangeStoreRequest): Promise<ExchangeDraft> => {
       const res = await exchangeService.store(payload);
@@ -50,19 +45,19 @@ export function useStoreExchange() {
       if (!draft?.identifier) throw new Error("Exchange quote returned no identifier");
       return draft;
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
  * POST /user/exchange-crypto/confirm — executes the draft.
  *
- * This is the call that moves money, so three caches are now stale: the exchange
- * index (both balances changed), the dashboard (wallets and the activity chart),
- * and the ledger (a row was written). Invalidating rather than patching leaves
- * the figures to the server, which is the only party that knows them.
+ * The call that moves money, so three caches go stale: the exchange index, the
+ * dashboard, and the ledger. Invalidated rather than patched — the server owns the
+ * figures.
  */
 export function useConfirmExchange(successMessage: string) {
+  const onApiError = useTransactionError();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -73,6 +68,6 @@ export function useConfirmExchange(successMessage: string) {
       queryClient.invalidateQueries({ queryKey: DASHBOARD_KEY });
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_KEY });
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }

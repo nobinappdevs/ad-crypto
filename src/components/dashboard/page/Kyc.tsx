@@ -53,10 +53,7 @@ const STATUS_META = {
   3: { tone: "bg-hero-neg/12 text-hero-neg", Icon: CircleX },
 } as const;
 
-/**
- * Divider between sections. `border-t` is load-bearing: preflight zeroes every
- * border width, so an `<hr>` given only a colour draws nothing at all.
- */
+/** `border-t` is load-bearing: preflight zeroes border widths, so a bare `<hr>` draws nothing. */
 const Rule = () => <hr className="my-6 border-t border-border" />;
 
 /** Text controls take a full row; files and selects pair up on wide screens. */
@@ -69,23 +66,11 @@ function isWide(field: KycField) {
 /* -------------------------------------------------------------------------- */
 
 /**
- * Identity verification: where the account stands, and — while there is anything
- * to do about it — the form that moves it along.
+ * Identity verification: where the account stands, and the form to move it along.
  *
- * The form is BUILT from `GET /user/profile/kyc/input-fields` rather than written
- * out, because upstream these fields are operator-configurable: which documents
- * count, which formats are accepted, how large a scan may be. The renderer
- * switches on a field's `type`, so a field added server-side needs no change here.
- *
- * That is also why the labels are NOT translated: they are free text an operator
- * typed ("Front", "ID Type"), not keys this app knows in five languages. Only the
- * page's own chrome — statuses, rules, buttons — goes through `t()`. Translating
- * operator strings would mean inventing them, and showing a made-up label over a
- * document upload is worse than showing an untranslated accurate one.
- *
- * The form only renders when the status is unverified or rejected. Pending means a
- * human is looking at the last submission and a second one just splits the queue;
- * verified means there is nothing left to ask for.
+ * The form is BUILT from `GET /user/profile/kyc/input-fields`, so a field added
+ * server-side needs no change here. Its labels are operator free text, which is why
+ * they are not translated. Shown only for unverified/rejected.
  */
 export function Kyc() {
   const { t } = useLang();
@@ -122,10 +107,7 @@ export function Kyc() {
 
   const touch = (name: string) => setTouched((prev) => new Set(prev).add(name));
 
-  /**
-   * Every field's error, computed in one place from the rules the API sent; which
-   * of them is displayed is decided separately by `shown`.
-   */
+  /** Every field's error in one place; `shown` decides which are displayed. */
   const errors = useMemo(() => {
     const out: Record<string, string | null> = {};
 

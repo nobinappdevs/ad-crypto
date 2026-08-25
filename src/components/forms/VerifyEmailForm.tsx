@@ -20,18 +20,11 @@ import { clearPendingEmail, getPendingEmail } from "@/lib/pendingEmail";
 const RESEND_COOLDOWN = 60;
 
 /**
- * Email verification for a freshly registered account: `POST /user/verify/code`.
+ * Email verification for a fresh account: `POST /user/verify/code`.
  *
- * One step, not two, because both endpoints behind this screen authenticate with
- * the token register handed out — neither takes an address, so there is nothing
- * for an "which email?" step to submit. `GuestGuard` sends anyone without a token
- * to `/login`, which is why arriving here at all implies there is one.
- *
- * The address is shown from `@/lib/pendingEmail` (register stashed it) purely so
- * the user knows which inbox to open; the request doesn't carry it.
- *
- * The countdown is what makes the resend link honest: without it the only way to
- * find out the link is still rate-limited is to press it and be told off.
+ * One step, not two — both endpoints here authenticate with register's token and
+ * neither takes an address. The address is shown from `@/lib/pendingEmail` so the
+ * user knows which inbox to open. The countdown keeps the resend link honest.
  */
 export function VerifyEmailForm() {
   const { t } = useLang();
@@ -68,10 +61,8 @@ export function VerifyEmailForm() {
   const submit = handleSubmit((data) => verify.mutate(data.code));
 
   /**
-   * A typo in the sign-up address is otherwise a dead end: the account exists,
-   * the code went somewhere unreachable, and no endpoint here can change it. So
-   * the way out is to drop the half-made session and register again — leaving the
-   * token in place would only have `GuestGuard` bounce them back to this screen.
+   * A typo in the sign-up address is a dead end — no endpoint here can change it.
+   * So the way out is to drop the half-made session and register again.
    */
   function startOver() {
     clearAuthState();

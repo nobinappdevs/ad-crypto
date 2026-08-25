@@ -10,16 +10,14 @@ import type {
  * Withdraw Crypto — `GET /user/withdraw-crypto/index`, `GET .../check-wallet-address`,
  * `POST .../store`, `POST .../confirm`.
  *
- * Same two-step shape as an exchange: `store` prices the order and drafts it,
- * `confirm` executes it. What withdraw adds is the destination — an address the
- * API resolves for you, answering with the coin and rate behind it, which is why
- * the receiving side can be a DIFFERENT coin from the one being sent.
+ * Same two-step shape as an exchange. What withdraw adds is the destination: the API
+ * resolves an address and answers with the coin behind it, which is why the
+ * receiving side can be a DIFFERENT coin.
  */
 
 /**
- * The index payload is the exchange index's, field for field — same currencies,
- * same nested user wallets, same charge table (under the "withdraw" slug). Shared
- * rather than copied, so a change to the shape is a change in one place.
+ * The index payload is the exchange index's, field for field. Shared rather than
+ * copied, so the shape changes in one place.
  */
 export type WithdrawCurrency = ExchangeCurrency;
 export type WithdrawFees = ExchangeFees;
@@ -31,12 +29,10 @@ export interface WithdrawIndexData {
 }
 
 /**
- * `GET /user/withdraw-crypto/check-wallet-address` — what an address turns out
- * to be.
+ * `GET /user/withdraw-crypto/check-wallet-address` — what an address turns out to be.
  *
- * A valid one comes back with the coin it belongs to and that coin's rate; an
- * unknown one is a 404 ("Receiver address not found"). So this is not a format
- * check — it is the lookup that decides what the recipient actually receives.
+ * A valid one comes back with its coin and rate; an unknown one 404s. Not a format
+ * check — the lookup that decides what the recipient receives.
  */
 export interface WalletAddressCheck {
   wallet_address?: string;
@@ -96,9 +92,8 @@ export const withdrawService = {
   },
 
   /**
-   * POST /user/withdraw-crypto/store — prices the withdrawal and drafts it.
-   *
-   * Nothing has left the wallet when this returns; `confirm` is what spends it.
+   * POST /user/withdraw-crypto/store — prices the withdrawal and drafts it. Nothing
+   * has left the wallet; `confirm` is what spends it.
    */
   async store(payload: WithdrawStoreRequest): Promise<{ data?: { data?: WithdrawDraft } }> {
     const form = new FormData();

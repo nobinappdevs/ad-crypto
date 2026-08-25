@@ -11,13 +11,10 @@ import { WalletsSkeleton } from "@/components/dashboard/Skeletons";
 
 /**
  * Every holding on the account, from the same `GET /user/dashboard` the overview
- * reads — the wallet list is part of that payload, so this page costs no request
- * of its own: React Query hands it the copy already in the cache and refreshes it
- * in the background.
+ * reads — so this page usually costs no request of its own.
  *
- * The overview shows the first four cards and links here for the rest. Same card,
- * imported rather than reimplemented, so the deposit address and its copy button
- * behave identically in both places.
+ * The overview shows the first four cards and links here for the rest, using the
+ * same card component so both behave identically.
  */
 export function AllWallets() {
   const { t } = useLang();

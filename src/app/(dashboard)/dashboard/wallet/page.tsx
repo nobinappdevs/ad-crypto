@@ -7,14 +7,9 @@ export const metadata = {
 };
 
 /**
- * One static page reading `?coin=`, rather than a `[coin]` segment.
- *
- * The app is a static export (`output: "export"`), so a dynamic segment would need
- * every wallet enumerated at build time via `generateStaticParams` — which stops
- * working the moment the wallet list comes from the API. Same call, and the same
- * Suspense requirement, as `/web-journal/details`: `useSearchParams` opts out of
- * prerendering, so the client component has to sit behind a boundary or the export
- * fails to build.
+ * One static page reading `?coin=`, not a `[coin]` segment: a static export would
+ * have to enumerate every wallet at build time, which the API's list rules out.
+ * `useSearchParams` opts out of prerendering, hence the Suspense boundary.
  */
 export default function WalletPage() {
   return (

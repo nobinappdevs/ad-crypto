@@ -2,19 +2,14 @@ import { num } from "@/config/txlog";
 import type { BuyCurrency, BuyGateway, BuyNetwork } from "@/services/buy.service";
 
 /**
- * Pricing a purchase the same way the backend does, plus the small rules for
- * reading its index payload.
+ * Pricing a purchase the same way the backend does, plus the rules for reading its
+ * index payload.
  *
- * The page could post every keystroke to `store` and read the answer back, but
- * that is one request per character to price a number nobody has finished typing.
- * So the preview is computed here and the ORDER is still priced by the server:
- * `store` runs once, on review, and its figures are what the confirmation screen
- * shows and what is charged.
+ * The PREVIEW is computed here and the ORDER is still priced by the server: `store`
+ * runs once, on review, and its figures are what is charged.
  *
- * Checked against the endpoint's own worked example — 0.1 ETH (coin rate 15) paid
- * with JazzCash PKR (rate 289.38, 1 fixed + 3%) returns
- * `{exchange_rate: 19.292, min_max_rate: 0.0518…, fixed_charge: 1,
- *   percent_charge: 0.057876, total_charge: 1.057876, payable_amount: 2.987076}`.
+ * Checked against the endpoint's worked example — 0.1 ETH (rate 15) paid with
+ * JazzCash PKR (rate 289.38, 1 fixed + 3%) returns payable 2.987076.
  */
 
 /** The wallet-type strings the API expects back, verbatim. */
@@ -80,12 +75,9 @@ export function buyQuote({
 }
 
 /**
- * The order limits in the COIN being bought.
- *
- * `min_limit`/`max_limit` are configured in the payment method's currency, so they
- * divide by the pair's rate to become an amount the amount field can be compared
- * against. Matches the previous build's screen: CoinGate's 1–1000 USDT renders as
- * "0.0000232509 – 0.0232509475 BTC" at a BTC price of 43,009.
+ * The order limits in the COIN being bought. `min_limit`/`max_limit` are configured
+ * in the payment method's currency, so they divide by the pair's rate to become
+ * something the amount field can be compared against.
  */
 export function buyLimits(
   fees: { minLimit: number; maxLimit: number },
@@ -100,24 +92,18 @@ export function buyLimits(
 /* -------------------------------------------------------------------------- */
 
 /**
- * How a method settles, read off the end of its alias.
- *
- * The operator's alias is the only place this is stated —
- * "payment-method-jazzcash-pkr-manual" versus
- * "payment-method-coingate-usdt-automatic" — and it decides which endpoint the
- * confirm button calls, so it is worth a named function rather than an inline
- * `endsWith` at the call site.
+ * How a method settles, read off the end of its alias — "…-manual" versus
+ * "…-automatic". The operator's alias is the only place this is stated, and it
+ * decides which endpoint the confirm button calls.
  */
 export function isManualGateway(alias: string | undefined): boolean {
   return /-manual$/i.test(alias ?? "");
 }
 
 /**
- * Whether `submit`'s redirect is the API asking us for card details.
- *
- * Authorize.Net has no hosted page: its alias says "automatic" like any other
- * gateway, and the tell is that the URL it hands back points at the API's own
- * `authorize-payment-submit`. Anything else is a real destination to navigate to.
+ * Whether `submit`'s redirect is the API asking US for card details. Authorize.Net
+ * has no hosted page: its alias says "automatic" like any other, and the tell is
+ * that the URL points back at `authorize-payment-submit`.
  */
 export function isAuthorizeRedirect(url: string | undefined): boolean {
   return /authorize-payment-submit/i.test(url ?? "");
@@ -138,9 +124,8 @@ export function coinNetworks(currency: BuyCurrency | undefined): BuyNetwork[] {
 }
 
 /**
- * `store` wants `network_id`, so that is what a network option's value has to be.
- * Kept next to `coinNetworks` because the two ids are easy to mix up and only one
- * of them is accepted.
+ * `store` wants `network_id`, so that is a network option's value. Kept beside
+ * `coinNetworks` because the two ids are easy to mix up and only one is accepted.
  */
 export function networkValue(network: BuyNetwork | undefined): string {
   return network?.network_id != null ? String(network.network_id) : "";

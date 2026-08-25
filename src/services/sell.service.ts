@@ -4,8 +4,7 @@ import type { BuyCurrency, BuyGateway } from "@/services/buy.service";
 import type { KycField, KycValue } from "@/services/kyc.service";
 
 /**
- * Sell Crypto — four calls, and which of them run depends on where the coins are
- * coming from.
+ * Sell Crypto — which calls run depends on where the coins come from.
  *
  * `GET  /user/sell-crypto/index`               what can be sold, and how it can be paid out
  * `POST /user/sell-crypto/store`               prices the order AND returns the payout form to fill
@@ -16,14 +15,9 @@ import type { KycField, KycValue } from "@/services/kyc.service";
  * Inside Wallet:  store → payment-info-store → confirm
  * Outside Wallet: store → sell-payment-store → payment-info-store → confirm
  *
- * The extra call in the outside flow is what gives the user an address to send to:
- * the coins are not in an AdCrypto wallet yet, so the platform has to name the
- * wallet they should arrive in before the order can be settled.
- *
- * Note the direction of the charges, which is the opposite of a purchase: the fees
- * are denominated in the COIN and added on top of the amount (`total_payable` is
- * what leaves), while `will_get` is the gross amount converted at the payout
- * method's rate.
+ * Charges run the opposite way to a purchase: denominated in the COIN and added on
+ * top (`total_payable` is what leaves), while `will_get` is the gross converted at
+ * the payout rate.
  */
 
 /** The coins are the buy index's, field for field — same nesting, same `wallet`. */
@@ -31,12 +25,8 @@ export type SellCurrency = BuyCurrency;
 export type SellGateway = BuyGateway;
 
 /**
- * A platform address for one coin on one network, for coins arriving from
- * outside.
- *
- * `slug` is what `sell-payment-store` takes — not the id. `desc` is the
- * operator's own HTML, and `input_fields` is the proof they want back once the
- * transfer has been made (a transaction hash, a screenshot, or both).
+ * A platform address for one coin on one network, for coins arriving from outside.
+ * `slug` is what `sell-payment-store` takes; `input_fields` is the proof wanted back.
  */
 export interface OutsideAddress {
   id?: number;
@@ -125,11 +115,8 @@ export interface SellDraft {
 }
 
 /**
- * What `store` answers with — and it is more than a quote.
- *
- * `desc` and `payment_gateway_fields` are the payout method's own instructions and
- * form ("Bank name", "Bank number", "Branch"), so the receiving-details screen
- * needs no second request to render itself.
+ * What `store` answers with — more than a quote: `desc` and `payment_gateway_fields`
+ * are the payout method's instructions and form, so the next screen needs no request.
  */
 export interface SellStoreResult {
   data?: SellDraft;
@@ -157,8 +144,8 @@ export const sellService = {
   },
 
   /**
-   * POST /user/sell-crypto/store — prices the order, drafts it, and hands back the
-   * payout form to fill in. Nothing has left the wallet when this returns.
+   * POST /user/sell-crypto/store — prices, drafts, and hands back the payout form.
+   * Nothing has left the wallet when this returns.
    */
   async store(payload: SellStoreRequest): Promise<{ data?: SellStoreResult }> {
     const form = new FormData();
@@ -175,10 +162,8 @@ export const sellService = {
   },
 
   /**
-   * POST /user/sell-crypto/sell-payment-store — claims the deposit address.
-   *
-   * Outside orders only. The draft comes back with `outside_address` filled in,
-   * which is the address the user then sends the coins to.
+   * POST /user/sell-crypto/sell-payment-store — claims the deposit address (outside
+   * orders only). The draft comes back with `outside_address` filled in.
    */
   async sellPaymentStore(identifier: string, slug: string): Promise<{ data?: { data?: SellDraft } }> {
     const form = new FormData();
@@ -192,13 +177,11 @@ export const sellService = {
   },
 
   /**
-   * POST /user/sell-crypto/payment-info-store — where the money should be paid,
-   * plus the proof that the coins were sent.
+   * POST /user/sell-crypto/payment-info-store — where the money goes, plus the proof
+   * the coins were sent.
    *
-   * One call for both sets of fields: the API sorts them back out itself, echoing
-   * them as `gateway_input_values` and `outside_address_input_values`. Multipart,
-   * because a screenshot is usually one of them, and empty values are dropped
-   * rather than sent as `""`.
+   * One call for both sets; the API echoes them back separated. Multipart for the
+   * screenshot, and empty values are dropped rather than sent as "".
    */
   async paymentInfoStore(identifier: string, values: Record<string, KycValue>) {
     const form = new FormData();

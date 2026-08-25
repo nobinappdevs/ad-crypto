@@ -7,28 +7,18 @@ import { FALLBACK_MONTHS, monthKeyOf, niceScale } from "@/config/chart";
 import { ChartViewToggle, tooltipPlacement, YAxis } from "./ChartViewToggle";
 
 /**
- * Buy / sell / withdraw activity per month, as a grouped bar chart, from
- * `GET /user/dashboard`'s `chart` block.
+ * Buy / sell / withdraw activity per month, grouped bars, from `/user/dashboard`'s
+ * `chart` block.
  *
- * The plotted measure is a COUNT of transactions, not money moved — that is what
- * the endpoint returns, and the axis is scaled and formatted as integers to match.
- * Reading these as dollars would overstate a quiet month by several orders of
- * magnitude, so nothing here is currency-formatted.
+ * The measure is a COUNT of transactions, not money — so the axis is integers and
+ * nothing is currency-formatted. Bars are baseline-anchored, since a bar that does
+ * not start at zero cannot be compared by eye.
  *
- * Grouped and baseline-anchored rather than the floating segments the source
- * mock used: a bar that does not start at zero encodes its value in a position
- * the reader has to measure against the axis, which is exactly the comparison
- * this panel exists to make easy.
- *
- * The hit target is the whole month COLUMN, not the individual 6px bar — a bar
- * that thin is unhittable, and the reader wants all three numbers for a month
- * anyway. Hovering therefore opens one tooltip carrying the full group.
+ * The hit target is the whole month column: a 6px bar is unhittable, and the reader
+ * wants all three numbers anyway.
  */
 
-/**
- * Fixed slot order — a series keeps its colour no matter which others are on
- * screen. `token` indexes the validated --chart-N set (see globals.css).
- */
+/** Fixed slot order, so a series keeps its colour. `token` indexes --chart-N. */
 const SERIES = [
   { key: "buyCrypto", token: "var(--chart-1)" },
   { key: "sellCrypto", token: "var(--chart-2)" },
@@ -216,10 +206,8 @@ export function TransactionsChart({ labels, buy, sell, withdraw }: TransactionsC
               )}
             </div>
 
-            {/* X axis. Height is pinned to 24px (8px pad + a 16px line) because
-                the gridline stack above is positioned `bottom-6` against this
-                same box — let the row size itself and the grid drifts off the
-                bar baseline. */}
+            {/* X axis. Height pinned to 24px — the gridlines above are positioned
+                `bottom-6` against this box, so a self-sizing row drifts. */}
             <div aria-hidden className="flex h-6 pt-2">
               {columns.map((column, i) => (
                 <span

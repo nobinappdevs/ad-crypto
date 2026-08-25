@@ -646,9 +646,21 @@
       "network": "Network",
       "method": "Method",
       "details": "Order details",
+      "submitted": "What you submitted",
+      "gateway": "Payment gateway",
+      "transaction": "Transaction",
+      "to": "To",
+      "balanceAfter": "Balance after",
+      "willGet": "You get",
+      "close": "Close",
       "showDetails": "Show order details",
       "hideDetails": "Hide order details",
-      "open": "Open"
+      "open": "Open",
+      "continuePayment": "Continue payment",
+      "more": "Other fields",
+      "manual": "Manual",
+      "automatic": "Automatic",
+      "minutes": "min"
     },
     "viewAll": "View all",
     "filters": {
@@ -660,14 +672,14 @@
       "declined": "Declined"
     },
     "transactionsPage": {
+      "loadMore": "Load more",
+      "loadingMore": "Loading more…",
+      "end": "You have reached the end",
+      "loaded": "{count} of {total} loaded",
       "subtitle": "Every order on the account — buys, sells and withdrawals — with the fee charged on each.",
       "searchPlaceholder": "Search by transaction ID",
       "empty": "No transactions match that filter.",
-      "loadFailed": "Could not load your transactions",
-      "showing": "{from}–{to} of {total}",
-      "page": "Page {page} of {pages}",
-      "prev": "Previous page",
-      "next": "Next page"
+      "loadFailed": "Could not load your transactions"
     },
     "tradeSide": {
       "buy": "Buy",
@@ -726,7 +738,7 @@
     "maxAmount": "Max",
     "limit": "Limit",
     "totalPay": "Total to pay",
-    "continue": "Continue securely",
+    "continue": "Buy Crypto",
     "secured": "Funds are held in escrow until the network confirms your order.",
     "errorAmount": "Enter an amount to continue.",
     "errorMin": "Minimum order is {min} {coin}.",
@@ -823,7 +835,7 @@
     "maxAmount": "Max",
     "limit": "Limit",
     "totalPayout": "Total payout",
-    "continue": "Review sell order",
+    "continue": "Sell Crypto",
     "secured": "The rate is held for 30 seconds once you continue, and fees are shown before you confirm.",
     "errorAmount": "Enter an amount to continue.",
     "errorMin": "Minimum order is {min} {coin}.",
@@ -1301,6 +1313,9 @@
           "features": "Features",
           "support": "Support"
         }
+      },
+      "legal": {
+        "title": "LEGAL"
       },
       "resources": {
         "title": "RESOURCES",

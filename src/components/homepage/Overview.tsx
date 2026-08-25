@@ -7,14 +7,12 @@ import { useReveal } from "@/hooks/useReveal";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
- * The illustration is a fixed canvas: three arcs drawn on a 560x400 viewBox, four
- * pulsing nodes sitting exactly on their endpoints, and three chips pinned to
- * coordinates between them. The alignment between the chips and the arc endpoints
- * is the whole picture, so the canvas is rendered at its real size and scaled to
- * fit (see useFitScale) rather than reflowed.
+ * The illustration is a fixed canvas: three arcs on a 560x400 viewBox, nodes on
+ * their endpoints, chips pinned between them. That alignment IS the picture, so it
+ * renders at real size and scales to fit (see useFitScale) rather than reflowing.
  *
- * 600 wide, not 560: the dot field starts at x=40 and is 560 across. It also
- * bleeds above and below the 420 box by design — the section clips it.
+ * 600 wide, not 560, because the dot field starts at x=40. It bleeds past the box
+ * by design — the section clips it.
  */
 const CANVAS_W = 600;
 const CANVAS_H = 420;
@@ -30,10 +28,7 @@ const CHIP_STYLE: CSSProperties = {
 const CHIP_CLASS =
   "absolute inline-flex! items-center rounded-full border text-[14px]! font-semibold";
 
-/**
- * Each arc's endpoints are where the nodes sit, so the two lists are read
- * together — move a curve and its dots have to move with it.
- */
+/** Each arc's endpoints are where the nodes sit, so the two lists move together. */
 const ARCS = [
   { d: "M40 190 C 150 60, 300 40, 360 96", opacity: 0.75, duration: "3.2s", delay: "0s" },
   { d: "M300 130 C 340 40, 470 44, 520 128", opacity: 0.6, duration: "3.8s", delay: "0.4s" },
@@ -220,17 +215,12 @@ export function Overview() {
       // so the run reads as one continuous field from here down to the footer.
       style={{ background: "var(--suite-bg-flat)" }}
     >
-      {/* The dome. Wider than the section on both sides so only the crown of the
-          curve is visible — an elliptical radius, not a circular one, or it would
-          read as a bubble rather than a horizon.
+      {/* The dome — wider than the section so only the crown shows, on an elliptical
+          radius so it reads as a horizon rather than a bubble.
 
-          The mask is load-bearing, not decoration. At 1180px the dome is taller
-          than this section, so `overflow-hidden` used to shear its fill off at the
-          section's bottom edge — which tinted the whole section by 3% and left a
-          hard step against the untinted section below. Fading the fill out by ~68%
-          of the dome's height means the tint is already gone before either
-          boundary, at any section height. The crown and its hairline sit at 0%,
-          where the mask is still fully opaque, so they are untouched. */}
+          The mask is load-bearing: `overflow-hidden` used to shear the fill at the
+          section's bottom edge, tinting the section and leaving a hard step. Fading
+          the fill out early means the tint is gone before either boundary. */}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-[12%] -left-[12%] top-0 h-[1180px] border-t"
@@ -269,10 +259,8 @@ export function Overview() {
           </div>
 
           {/* ---------------- Illustration ----------------
-              Full-bleed below `sm`: the canvas is scaled to whatever width it is
-              given, so the section's own gutters were coming straight off the
-              illustration's size — and with it the legibility of the chip labels.
-              Cancelling them buys back the difference. */}
+              Full-bleed below `sm`: the canvas scales to the width it is given, so
+              the section's gutters were coming off the illustration itself. */}
           <div data-reveal className="-mx-4 sm:mx-0" style={delay(160)}>
             <OverviewGraphic />
           </div>

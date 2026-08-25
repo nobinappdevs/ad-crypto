@@ -1,12 +1,9 @@
 import type { DashboardTransaction } from "@/services/dashboard.service";
 
 /**
- * Reading the API's transaction rows.
- *
- * Money and amounts arrive as decimal STRINGS ("0.0466666666666670"), the coin
- * involved sits at a different depth per transaction type, and both `type` and
- * `status` are server values this app has to map onto its own vocabulary. Doing
- * that in one place keeps the table free of the guesswork.
+ * Reading the API's transaction rows: money arrives as decimal STRINGS, the coin
+ * sits at a different depth per type, and `type`/`status` are server values that
+ * have to be mapped. One place for all of it, so the table stays free of guesswork.
  */
 
 /** A decimal string to a number. Non-numeric input is 0, never NaN on screen. */
@@ -31,12 +28,10 @@ export function coinAmount(value: string | number | null | undefined): string {
 export type TxTypeKey = "buy" | "sell" | "withdraw" | "exchange";
 
 /**
- * `"Buy Crypto"` -> `"buy"`, or null for a type this build doesn't know.
+ * `"Buy Crypto"` -> `"buy"`, or null for a type this build does not know.
  *
- * Matched loosely on the leading word rather than on the whole string, so a
- * backend that renames "Withdraw Crypto" to "Withdrawal" keeps working. An
- * unknown type returns null and the caller shows the server's own wording, which
- * is always better than mislabelling it as one of these four.
+ * Matched on the leading word, so renaming "Withdraw Crypto" keeps working. An
+ * unknown type returns null and the caller shows the server's own wording.
  */
 export function txTypeKey(type: string | undefined): TxTypeKey | null {
   const value = (type ?? "").toLowerCase();
@@ -60,9 +55,8 @@ export const TX_DIRECTION: Record<TxTypeKey, "in" | "out" | "neutral"> = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The API's `status_code` legend, verbatim from `/user/transaction/logs`:
- * `{"1":"Pending","2":"STATUS_CONFIRM_PAYMENT","3":"STATUS_CANCEL","4":"STATUS_REJECT"}`.
- * Those constant names are not user-facing text, hence the mapping to our own.
+ * The API's `status_code` legend, verbatim: `{"1":"Pending","2":"STATUS_CONFIRM_PAYMENT",
+ * "3":"STATUS_CANCEL","4":"STATUS_REJECT"}`. Those names are not user-facing text.
  */
 export type TxStatusKey = "pending" | "confirmed" | "cancelled" | "rejected" | "unknown";
 
@@ -90,20 +84,77 @@ export const TX_STATUS_CLASS: Record<TxStatusKey, string> = {
 };
 
 /* -------------------------------------------------------------------------- */
+/* The quote                                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The priced order, wherever this row keeps it.
+ *
+ * A buy, a withdraw and an exchange nest it under `details.data`. A SALE does not:
+ * its `details` holds the payout form the user filled in, and the order itself —
+ * both wallets, the method, the network, `will_get` — sits at the row's own `data`.
+ * Reading both here is what keeps every other helper in this file shape-agnostic.
+ */
+export function txQuote(tx: DashboardTransaction) {
+  return tx.details?.data ?? tx.data;
+}
+
+/* -------------------------------------------------------------------------- */
 /* Coin                                                                        */
 /* -------------------------------------------------------------------------- */
 
 /**
- * Which coin a transaction concerns.
+ * The names the API writes into `remark` mapped back to their tickers, for the rows
+ * whose payload does not name the coin any other way. A name that is not here still
+ * shows — as the name, without a ticker.
+ */
+const COIN_CODE_BY_NAME: Record<string, string> = {
+  bitcoin: "BTC",
+  ethereum: "ETH",
+  tether: "USDT",
+  "usd coin": "USDC",
+  dogecoin: "DOGE",
+  litecoin: "LTC",
+  solana: "SOL",
+  ripple: "XRP",
+  xrp: "XRP",
+  "binance coin": "BNB",
+  binance: "BNB",
+  tron: "TRX",
+};
+
+/**
+ * Which coin a transaction concerns. Buy and sell put it at `details.data.wallet`;
+ * exchange and withdraw split it in two, and the sender wins — it is the balance
+ * the row debits.
  *
- * Buy and sell put it at `details.data.wallet`; exchange and withdraw split it
- * into `sender_wallet` / `receiver_wallet`. The sender is preferred for those,
- * because it is the balance the row actually debits.
+ * Past those three, any nested object in the payload that carries a `code` counts:
+ * the shape is per type and the backend adds keys without warning, so a `currency`
+ * or a `coin` should not read as an empty cell.
+ *
+ * The last resort is `remark` — "Sell Crypto With Bitcoin", which the API writes on
+ * every row. It names the coin in words, and a name beats a dash.
  */
 export function txCoin(tx: DashboardTransaction): { name: string; code: string } {
-  const data = tx.details?.data;
-  const wallet = data?.wallet ?? data?.sender_wallet ?? data?.receiver_wallet;
-  return { name: wallet?.name ?? "", code: (wallet?.code ?? "").toUpperCase() };
+  const data = txQuote(tx);
+  const wallet = data?.wallet ?? data?.sender_wallet ?? data?.receiver_wallet ?? codedNode(data);
+
+  const name = pickString(wallet?.name);
+  const code = pickString(wallet?.code).toUpperCase();
+  if (name || code) return { name, code: code || COIN_CODE_BY_NAME[name.toLowerCase()] || "" };
+
+  const remarked = /\bwith\s+(.+)$/i.exec(pickString(tx.remark))?.[1]?.trim() ?? "";
+  return { name: remarked, code: COIN_CODE_BY_NAME[remarked.toLowerCase()] ?? "" };
+}
+
+/** The first nested object in a payload that names a coin — `{name, code}`-shaped. */
+function codedNode(data: Record<string, unknown> | undefined) {
+  for (const value of Object.values(data ?? {})) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) continue;
+    const node = value as Record<string, unknown>;
+    if (pickString(node.code)) return node as { name?: string; code?: string };
+  }
+  return undefined;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -113,11 +164,9 @@ export function txCoin(tx: DashboardTransaction): { name: string; code: string }
 /**
  * One label/value pair out of a transaction's `details.data`.
  *
- * That payload is per TYPE, not one fixed shape: a sell paid out to a bank carries
- * a branch, an account number and the sender's own reference; an exchange carries
- * two wallets and a rate; a withdraw carries an address. Rather than hard-code one
- * type's fields and drop the rest, everything scalar in the payload becomes a row,
- * and the keys this build recognises get an ordering and a translated label.
+ * That payload is per TYPE, not one fixed shape, so rather than hard-code one
+ * type's fields, everything scalar becomes a row — and the keys this build knows
+ * get an ordering and a translated label.
  */
 export interface TxDetail {
   /** The API's own key — also the i18n lookup, `dashboard.txDetail.<key>`. */
@@ -130,12 +179,11 @@ export interface TxDetail {
 }
 
 /**
- * Plumbing and duplicates of columns the table already has. `status` and
- * `reject_reason` are dropped because the status cell renders both, and the
- * timestamps because the date cell does.
+ * Plumbing and duplicates of columns the table already has — the status cell renders
+ * `status` and `reject_reason`, the date cell the timestamps.
  *
- * `transaction_id` is deliberately NOT here: on a manual payment that field is
- * the reference the USER typed in, not a foreign key.
+ * `transaction_id` is deliberately NOT here: on a manual payment it is the
+ * reference the USER typed, not a foreign key.
  */
 const DETAIL_SKIP = new Set([
   "id",
@@ -151,12 +199,18 @@ const DETAIL_SKIP = new Set([
   "deleted_at",
   "image_paths",
   "currency_image_paths",
+  // The limit range converted into the coin, which the form used to validate the
+  // amount before the order existed. Nothing a reader of a finished order can use.
+  "min_max_rate",
+  // A sale's quote carries its submitted form a second time, as a JSON STRING. The
+  // parsed copy is at `details`, which `txSubmitted` renders field by field.
+  "details",
 ]);
 
 /**
- * Row-level fields worth showing that are NOT in `details.data` — the charge
- * split behind `total_charge`, the balance the order left behind, and the
- * server's own description of it. A key already present in `details.data` wins.
+ * Row-level fields worth showing that are NOT in `details.data` — the charge split,
+ * the balance left behind, the server's own description. A key already in
+ * `details.data` wins.
  */
 const ROW_EXTRA = ["remark", "fixed_charge", "percent_charge", "available_balance"] as const;
 
@@ -164,9 +218,8 @@ const ROW_EXTRA = ["remark", "fixed_charge", "percent_charge", "available_balanc
 const NESTED_ADDRESS = ["address", "public_address", "wallet_address"];
 
 /**
- * Reading order for the keys this build knows: what the order was for, then who
- * it pays, then the arithmetic, then the evidence. Anything unrecognised keeps
- * its payload order after these (`sort` is stable).
+ * Reading order for known keys: what the order was for, who it pays, the
+ * arithmetic, then the evidence. Unrecognised keys keep payload order (`sort` is stable).
  */
 const DETAIL_ORDER = [
   "trx_id",
@@ -216,14 +269,14 @@ export function txDetails(tx: DashboardTransaction): TxDetail[] {
     if (value) rows.push({ key, label: humanizeKey(key), value, href });
   };
 
-  for (const [key, raw] of Object.entries(tx.details?.data ?? {})) {
+  for (const [key, raw] of Object.entries(txQuote(tx) ?? {})) {
     if (DETAIL_SKIP.has(key)) continue;
     // An empty cell is not information. A field the server sent as null, "" or an
     // object with nothing readable in it is left out rather than shown as "—".
     push(key, detailValue(raw), detailHref(raw));
     // A wallet carries its address next to its name, and the object flattens to
     // the name — so the address gets a row of its own or it is lost.
-    push(`${key}_address`, nestedAddress(raw));
+    push(key.endsWith("address") ? key : `${key}_address`, nestedAddress(raw));
   }
 
   const seen = new Set(rows.map((row) => row.key));
@@ -238,9 +291,123 @@ export function txDetails(tx: DashboardTransaction): TxDetail[] {
   return rows.sort((a, b) => rank(a.key) - rank(b.key));
 }
 
+/* -------------------------------------------------------------------------- */
+/* What the user submitted                                                     */
+/* -------------------------------------------------------------------------- */
+
+/** The three names the API echoes an operator-declared form back under. */
+const SUBMITTED_GROUPS = [
+  "input_values",
+  "gateway_input_values",
+  "outside_address_input_values",
+] as const;
+
+/**
+ * The answers the user gave on an operator's form — a manual payment's transaction
+ * id and screenshot, a payout's bank details.
+ *
+ * The LABEL comes from the payload, not from `t()`: these are fields an operator
+ * typed, so there is no key to translate. A file field carries the stored filename,
+ * which is shown as-is — the log has no image path to build a URL from, and a
+ * filename at least confirms something was attached.
+ */
+export function txSubmitted(tx: DashboardTransaction): TxDetail[] {
+  const rows: TxDetail[] = [];
+
+  for (const group of SUBMITTED_GROUPS) {
+    for (const field of tx.details?.[group] ?? []) {
+      const value = detailValue(field.value);
+      if (!value) continue;
+      const key = field.name || field.label || String(rows.length);
+      rows.push({
+        key: `${group}.${key}`,
+        label: pickString(field.label) || humanizeKey(key),
+        value,
+        href: detailHref(field.value),
+      });
+    }
+  }
+
+  return rows;
+}
+
+/* -------------------------------------------------------------------------- */
+/* The gateway's own answer                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The handful of fields worth reading out of `gateway_response`.
+ *
+ * Stripe's checkout session alone is sixty keys of branding, tax and shipping
+ * settings — rendering it wholesale would bury the four lines that matter. So this
+ * is a whitelist, and anything a future gateway sends under a different name simply
+ * does not appear rather than arriving as noise.
+ *
+ * `amount_total` is deliberately NOT among them: gateways quote it in the currency's
+ * minor unit (57614 = AU$576.14) and which currencies have two decimals is not
+ * something this side knows. The row's own payable column already carries the figure.
+ */
+const GATEWAY_FIELDS: { key: string; from: string; kind?: "seconds" | "mode" }[] = [
+  { key: "gateway_reference", from: "id" },
+  { key: "payment_status", from: "payment_status" },
+  { key: "gateway_status", from: "status" },
+  { key: "customer_email", from: "customer_email" },
+  { key: "gateway_created", from: "created", kind: "seconds" },
+  { key: "expires_at", from: "expires_at", kind: "seconds" },
+  { key: "gateway_mode", from: "livemode", kind: "mode" },
+];
+
+export function txGateway(tx: DashboardTransaction, lang = "en"): TxDetail[] {
+  const response = tx.details?.gateway_response;
+  if (!response) return [];
+
+  const rows: TxDetail[] = [];
+  for (const field of GATEWAY_FIELDS) {
+    const raw = response[field.from];
+    const value =
+      field.kind === "seconds"
+        ? unixDateTime(raw, lang)
+        : field.kind === "mode"
+          ? modeLabel(raw)
+          : detailValue(raw);
+    if (value) rows.push({ key: field.key, label: humanizeKey(field.key), value });
+  }
+  return rows;
+}
+
+/**
+ * Where an unfinished payment can be resumed, or "".
+ *
+ * Only for a PENDING row: a gateway's checkout URL outlives the order — Stripe's
+ * stays valid for 24 hours — so offering it beside a confirmed purchase invites
+ * paying for the same thing twice. The API's own `submit_url` wins when it sends one.
+ */
+export function txPayUrl(tx: DashboardTransaction): string {
+  if (txStatusKey(tx.status) !== "pending") return "";
+
+  const submit = pickString(tx.submit_url);
+  if (/^https?:\/\//i.test(submit)) return submit;
+
+  const url = pickString(tx.details?.gateway_response?.url);
+  return /^https?:\/\//i.test(url) ? url : "";
+}
+
+/** A unix timestamp in seconds, as the reader's own date and time. */
+function unixDateTime(raw: unknown, lang: string): string {
+  if (typeof raw !== "number" || !Number.isFinite(raw) || raw <= 0) return "";
+  const { date, time } = txDateTime(new Date(raw * 1000).toISOString(), lang);
+  return [date, time].filter(Boolean).join(", ");
+}
+
+/** `livemode` as something readable — a bare "false" says nothing. */
+function modeLabel(raw: unknown): string {
+  if (typeof raw !== "boolean") return "";
+  return raw ? "Live" : "Test";
+}
+
 /** The network a row settled on, for its own column. */
 export function txNetwork(tx: DashboardTransaction): string {
-  const data = tx.details?.data;
+  const data = txQuote(tx);
   return namedValue(data?.network ?? data?.network_name);
 }
 
@@ -249,18 +416,93 @@ export function txNetwork(tx: DashboardTransaction): string {
  * the pair the detail page puts in its header ("Outside Wallet · ADOut USD").
  */
 export function txMethod(tx: DashboardTransaction): { method: string; wallet: string } {
-  const data = tx.details?.data;
+  const data = txQuote(tx);
   return {
     method: namedValue(data?.payment_method ?? data?.method ?? data?.payment_type),
-    wallet: namedValue(data?.wallet_type ?? data?.source),
+    // A sale records the side inside the wallet it sold FROM ("Inside Wallet"),
+    // rather than beside the method the way the other types do.
+    wallet: namedValue(data?.wallet_type ?? data?.source ?? data?.sender_wallet?.type),
   };
 }
 
 /**
- * A value only if it READS as one. These fields are posted as ids
- * (`network=2`, `payment_method=14`) and come back expanded on some payloads and
- * raw on others — "2" under a column headed Network is worse than an empty cell.
- * The bare id still appears in the expanded details, where its key labels it.
+ * "xpKWg5…8xPupz" — an address at a length a table cell can hold, with both ends
+ * kept: those are the characters a reader checks an address by.
+ */
+export function shortAddress(value: string, head = 6, tail = 6): string {
+  const address = value.trim();
+  return address.length <= head + tail + 1
+    ? address
+    : `${address.slice(0, head)}…${address.slice(-tail)}`;
+}
+
+/**
+ * Where the value went — the receiving coin and the address it landed on, or the
+ * rail a purchase used.
+ *
+ * A withdraw and an exchange carry both sides, and the asset column already shows
+ * the sending one, so this is the half that column cannot say.
+ */
+export function txTarget(tx: DashboardTransaction): { title: string; sub: string } {
+  const data = txQuote(tx);
+
+  const receiver = data?.receiver_wallet;
+  if (receiver) {
+    const code = pickString(receiver.code).toUpperCase();
+    const address = nestedAddress(receiver);
+    return { title: code || pickString(receiver.name), sub: address ? shortAddress(address) : "" };
+  }
+
+  const { method, wallet } = txMethod(tx);
+  if (method) return { title: method, sub: wallet };
+
+  // A payout to an address the account does not own arrives flat, not nested.
+  const address = pickString(data?.address) || pickString(data?.wallet_address);
+  return address ? { title: shortAddress(address), sub: "" } : { title: "", sub: "" };
+}
+
+/**
+ * "2 + 0.02%" — the two halves `total_charge` is the sum of. Both are on the row
+ * itself, so this reads on every transaction, and it answers the question a total
+ * charge always raises.
+ */
+export function txChargeSplit(tx: DashboardTransaction): string {
+  const fixed = num(tx.fixed_charge);
+  const percent = num(tx.percent_charge);
+  if (!fixed && !percent) return "";
+  return `${coinAmount(fixed)} + ${coinAmount(percent)}%`;
+}
+
+/**
+ * What the order returns, in the currency it returns it in — "0.66666667 BTC",
+ * "904.36 USD", or "" when the payload does not say.
+ *
+ * A sale is paid OUT, not into a wallet, so its currency is the payout method's
+ * and not a coin at all.
+ */
+export function txWillGet(tx: DashboardTransaction): string {
+  const data = txQuote(tx);
+  const raw = data?.will_get ?? data?.get_amount ?? data?.receive_amount;
+  if (typeof raw !== "number" && typeof raw !== "string") return "";
+
+  const value = num(raw);
+  if (!value) return "";
+
+  const code =
+    codeOf(data?.receiver_wallet) || codeOf(data?.payment_method) || codeOf(data?.wallet);
+  return [coinAmount(value), code].filter(Boolean).join(" ");
+}
+
+/** The ticker on a nested `{code}` node, or "". */
+function codeOf(raw: unknown): string {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return "";
+  return pickString((raw as Record<string, unknown>).code).toUpperCase();
+}
+
+/**
+ * A value only if it READS as one. These are posted as ids and come back expanded on
+ * some payloads and raw on others — "2" under a column headed Network is worse than
+ * an empty cell. The bare id still shows in the expanded details, where its key labels it.
  */
 function namedValue(raw: unknown): string {
   const value = detailValue(raw);
@@ -268,16 +510,14 @@ function namedValue(raw: unknown): string {
 }
 
 /**
- * A detail value as text.
- *
- * Nested objects are only readable when they carry a name — wallets and currencies
- * do, so `{name: "Tether", code: "usdt"}` reads as "Tether (USDT)". Anything else
- * nested returns "" and the caller drops the row.
+ * A detail value as text. Nested objects are only readable when they carry a name —
+ * `{name: "Tether", code: "usdt"}` reads as "Tether (USDT)". Anything else nested
+ * returns "" and the caller drops the row.
  */
 function detailValue(raw: unknown): string {
   if (raw == null) return "";
   if (typeof raw === "boolean") return raw ? "true" : "false";
-  if (typeof raw === "number") return Number.isFinite(raw) ? trimDecimal(String(raw)) : "";
+  if (typeof raw === "number") return Number.isFinite(raw) ? trimDecimal(fromFloat(raw)) : "";
 
   if (typeof raw === "string") return trimDecimal(raw.trim());
 
@@ -308,9 +548,26 @@ function nestedAddress(raw: unknown): string {
 }
 
 /**
- * "10.0000000000000000" -> "10". The API pads every decimal to 16 places, which
- * turns a rate and a fee into a wall of zeros; the significant digits are kept
- * exactly as sent, since this is a string and not a rounded number.
+ * A JSON number to eight places, without the float artifact.
+ *
+ * `details.data` sends the quote's arithmetic as real numbers rather than the
+ * decimal strings the row's own columns use, so the noise binary floats accumulate
+ * arrives with it — 43.407000000000004 for a charge, 576.1355100000001 for a
+ * payable. Eight places is the depth the amount fields work in, and rounding there
+ * removes the artifact without touching a figure anyone entered.
+ *
+ * The fixed string is kept when `Number` would print an exponent, which it does
+ * below 1e-7 — "2e-8" under a column headed Rate is not a number a reader can use.
+ */
+function fromFloat(value: number): string {
+  const fixed = value.toFixed(8);
+  const compact = String(Number(fixed));
+  return compact.includes("e") ? fixed : compact;
+}
+
+/**
+ * "10.0000000000000000" -> "10". The API pads every decimal to 16 places. The
+ * significant digits are kept exactly as sent — this is a string, not a rounding.
  */
 function trimDecimal(value: string): string {
   if (!/^-?\d+\.\d+$/.test(value)) return value;
@@ -334,10 +591,8 @@ function humanizeKey(key: string): string {
 /* -------------------------------------------------------------------------- */
 
 /**
- * `created_at` split into a date and a time, in the active language.
- *
- * Returns empty strings for an unparseable value rather than "Invalid Date" —
- * a blank cell reads as missing data, which is what it is.
+ * `created_at` split into a date and a time, in the active language. Empty strings
+ * for an unparseable value rather than "Invalid Date".
  */
 export function txDateTime(iso: string | undefined, lang: string) {
   if (!iso) return { date: "", time: "" };
@@ -370,4 +625,9 @@ export function relativeTime(iso: string | undefined, lang: string): string {
     if (Math.abs(seconds) >= size) return formatter.format(Math.round(seconds / size), unit);
   }
   return formatter.format(Math.round(seconds), "second");
+}
+
+/** Whether a row has anything behind it — the ledger hides its opener when not. */
+export function txHasDetails(tx: DashboardTransaction): boolean {
+  return txDetails(tx).length > 0 || txSubmitted(tx).length > 0 || txGateway(tx).length > 0;
 }

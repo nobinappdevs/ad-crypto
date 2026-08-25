@@ -23,11 +23,8 @@ export function useGoogle2fa(enabled = true) {
 }
 
 /**
- * POST /user/profile/google-2fa/status/update.
- *
- * The local 2FA mirror is written from the status we just set, not from the
- * response — the response body is an empty array, and leaving the mirror stale
- * would have the guard send a freshly-enrolled user to the code screen.
+ * POST /user/profile/google-2fa/status/update. The mirror is written from the status
+ * just set, not the response (which is empty) — a stale one would gate the user.
  */
 export function useUpdate2faStatus() {
   const queryClient = useQueryClient();

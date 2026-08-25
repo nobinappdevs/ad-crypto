@@ -3,33 +3,16 @@ import { cn } from "@/components/ui/cn";
 import { Panel } from "@/components/dashboard/ui";
 
 /**
- * Loading placeholders for every dashboard page.
- *
- * Each one traces the layout of the page it stands in for — same container width,
- * same grid split, same panels in the same order — so the real content lands on the
- * shape the skeleton already drew instead of pushing it around. A centred spinner
- * cannot do that: it says "something is coming" without saying where.
- *
- * These are plain markup with no hooks, so they work both inside a client page's
- * pending branch and as a route-level `loading.tsx` on the server.
- *
- * Every skeleton takes `header`. Left at its default it renders the whole page,
- * breadcrumb block included — that is the route-transition case, where nothing on
- * screen is real yet. A page that already knows its own title passes `header={false}`
- * and gets just the body, so the heading never blinks out and back.
+ * Loading placeholders for every dashboard page — each traces its page's layout.
+ * Plain markup, so they work as a route `loading.tsx` too; `header={false}` gives
+ * only the body, for a page that already owns its title.
  */
 
 /* -------------------------------------------------------------------------- */
 /* Primitives                                                                  */
 /* -------------------------------------------------------------------------- */
 
-/**
- * One pulsing bar. `soft` is the quieter tone, for text that sits in muted.
- *
- * The `rounded-md` default is dropped the moment the caller names a radius of its
- * own — `cn` here is a plain join, not tailwind-merge, so two radius classes on one
- * element would be settled by stylesheet order rather than by intent.
- */
+/** One pulsing bar. `soft` is the quieter tone; a caller's radius wins. */
 export function Sk({
   className,
   soft,
@@ -53,13 +36,7 @@ export function Sk({
   );
 }
 
-/**
- * The page container — `wide` is the overview's 1500px, everything else is 1280px.
- *
- * `header` off means the page around it is already real, so the frame contributes
- * neither the container nor the heading. `title` off keeps the container but skips
- * the heading, which is what the overview needs: it has no `DashPageHeader`.
- */
+/** The page container. `wide` is the overview's 1500px; `header`/`title` opt out. */
 function Frame({
   header = true,
   title = true,
@@ -230,71 +207,122 @@ function SkChart({ series = 3 }: { series?: number }) {
 }
 
 /**
- * A ledger table. `wide` is the full transactions page — a selection column and
- * more figures per row than the overview's panel carries.
+ * The transaction ledger while it loads, traced over `RecentTransactions` — the
+ * nine-column table on `md` and up, the same rows as cards below it.
+ *
+ * `head` draws the column titles too: on with the first load, off when the rows are
+ * being replaced under a header that is already on screen.
  */
-function SkTable({ rows = 6, wide = false }: { rows?: number; wide?: boolean }) {
-  const numbers = wide ? 4 : 3;
+export function TxRowsSkeleton({
+  rows = 6,
+  head = false,
+  className,
+}: {
+  rows?: number;
+  head?: boolean;
+  className?: string;
+}) {
+  const numbers = 4;
 
   return (
-    <div className="overflow-x-auto">
-      <div className={wide ? "min-w-290" : "min-w-230"}>
-        {/* Head */}
-        <div className="flex items-center gap-4 border-b border-border px-5 py-3.5">
-          {wide && <Sk className="h-4.5 w-4.5 shrink-0 rounded-[5px]" soft />}
-          <Sk className="h-2.5 w-16 shrink-0" soft />
-          <div className="w-36 shrink-0">
-            <Sk className="h-2.5 w-14" soft />
-          </div>
-          {Array.from({ length: numbers }, (_, i) => (
-            <div key={i} className="flex min-w-0 flex-1 justify-end">
-              <Sk className="h-2.5 w-14" soft />
+    <div role="status" aria-busy="true" className={className}>
+      <div className="hidden overflow-x-auto md:block">
+        <div className="min-w-315">
+          {head && (
+            <div className="flex items-center gap-4 border-b border-border px-5 py-3.5">
+              <Sk className="h-2.5 w-20 shrink-0" soft />
+              <div className="w-32 shrink-0">
+                <Sk className="h-2.5 w-12" soft />
+              </div>
+              <div className="w-32 shrink-0">
+                <Sk className="h-2.5 w-8" soft />
+              </div>
+              {Array.from({ length: numbers }, (_, i) => (
+                <div key={i} className="flex min-w-0 flex-1 justify-end">
+                  <Sk className="h-2.5 w-14" soft />
+                </div>
+              ))}
+              <div className="w-28 shrink-0">
+                <Sk className="h-2.5 w-12" soft />
+              </div>
+              <div className="flex w-24 shrink-0 justify-end">
+                <Sk className="h-2.5 w-14" soft />
+              </div>
+            </div>
+          )}
+
+          {Array.from({ length: rows }, (_, r) => (
+            <div
+              key={r}
+              className="flex items-center gap-4 border-b border-border px-5 py-3.5 last:border-b-0"
+            >
+              {/* Transaction: the direction disc, the type, the reference under it. */}
+              <span className="flex shrink-0 items-center gap-2.5">
+                <Sk className="h-9 w-9 shrink-0 rounded-xl" />
+                <span className="flex w-20 flex-col gap-1.5">
+                  <Sk className="h-3 w-14" />
+                  <Sk className="h-2.5 w-20" soft />
+                </span>
+              </span>
+
+              {/* Asset */}
+              <span className="flex w-32 shrink-0 items-center gap-2.5">
+                <Sk className="h-7 w-7 shrink-0 rounded-full" />
+                <span className="flex min-w-0 flex-col gap-1.5">
+                  <Sk className="h-3 w-10" />
+                  <Sk className="h-2.5 w-16" soft />
+                </span>
+              </span>
+
+              {/* To */}
+              <span className="flex w-32 shrink-0 flex-col gap-1.5">
+                <Sk className="h-3 w-14" />
+                <Sk className="h-2.5 w-20" soft />
+              </span>
+
+              {/* Amount, charge, payable, balance */}
+              {Array.from({ length: numbers }, (_, i) => (
+                <div key={i} className="flex min-w-0 flex-1 flex-col items-end gap-1.5">
+                  <Sk className={i === 0 ? "h-3 w-16" : "h-3 w-12"} soft={i > 0} />
+                  {(i === 1 || i === 2) && <Sk className="h-2.5 w-14" soft />}
+                </div>
+              ))}
+
+              {/* Date */}
+              <span className="flex w-28 shrink-0 flex-col gap-1.5">
+                <Sk className="h-3 w-20" />
+                <Sk className="h-2.5 w-12" soft />
+              </span>
+
+              {/* Status pill */}
+              <span className="flex w-24 shrink-0 justify-end">
+                <Sk className="h-6.5 w-20 rounded-full" />
+              </span>
             </div>
           ))}
-          <div className="w-32 shrink-0">
-            <Sk className="h-2.5 w-12" soft />
-          </div>
-          <div className="w-28 shrink-0">
-            <Sk className="h-2.5 w-14" soft />
-          </div>
         </div>
+      </div>
 
-        {/* Rows */}
+      {/* The card list, below `md` */}
+      <div className="divide-y divide-border md:hidden">
         {Array.from({ length: rows }, (_, r) => (
-          <div
-            key={r}
-            className="flex items-center gap-4 border-b border-border px-5 py-4 last:border-b-0"
-          >
-            {wide && <Sk className="h-4.5 w-4.5 shrink-0 rounded-[5px]" soft />}
-
-            <span className="flex shrink-0 items-center gap-2.5">
-              <Sk className="h-8 w-8 shrink-0 rounded-lg" />
-              <Sk className="h-3 w-16" />
-            </span>
-
-            <span className="flex w-36 shrink-0 items-center gap-2.5">
-              <Sk className="h-7 w-7 shrink-0 rounded-full" />
-              <span className="flex min-w-0 flex-col gap-1.5">
-                <Sk className="h-3 w-10" />
-                <Sk className="h-2.5 w-16" soft />
+          <div key={r} className="px-4 py-3.5">
+            <div className="flex items-start gap-3">
+              <Sk className="h-9 w-9 shrink-0 rounded-xl" />
+              <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <Sk className="h-3 w-28" />
+                <Sk className="h-2.5 w-40 max-w-full" soft />
               </span>
-            </span>
-
-            {Array.from({ length: numbers }, (_, i) => (
-              <div key={i} className="flex min-w-0 flex-1 justify-end">
-                <Sk className={i === 0 ? "h-3 w-16" : "h-3 w-12"} soft={i > 0} />
-              </div>
-            ))}
-
-            <span className="flex w-32 shrink-0 flex-col gap-1.5">
-              <Sk className="h-3 w-20" />
-              <Sk className="h-2.5 w-24" soft />
-            </span>
-
-            <span className="flex w-28 shrink-0 items-center gap-1.5">
-              <Sk className="h-1.5 w-1.5 rounded-full" />
-              <Sk className="h-3 w-16" />
-            </span>
+              <span className="flex shrink-0 flex-col items-end gap-1.5">
+                <Sk className="h-3.5 w-16" />
+                <Sk className="h-6 w-20 rounded-full" soft />
+              </span>
+            </div>
+            <div className="mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1.5 ps-12">
+              {Array.from({ length: 4 }, (_, i) => (
+                <Sk key={i} className="h-2.5 w-24 max-w-full" soft />
+              ))}
+            </div>
           </div>
         ))}
       </div>
@@ -359,19 +387,13 @@ export function DashboardHomeSkeleton({ header = true }: { header?: boolean }) {
 
       <Panel className="mt-5">
         <SkPanelTitle action />
-        <SkTable rows={5} />
+        <TxRowsSkeleton rows={5} head />
       </Panel>
     </Frame>
   );
 }
 
-/**
- * `/dashboard/wallets` — the header block, then nothing but wallet cards.
- *
- * Eight rather than the overview's four: this page is the full list, and a
- * skeleton that stops at one row would collapse the moment the real cards
- * arrived.
- */
+/** `/dashboard/wallets` — the header, then eight wallet cards (the full list). */
 export function WalletsSkeleton({ header = true }: { header?: boolean }) {
   return (
     <Frame header={header} wide>
@@ -404,7 +426,7 @@ export function TransactionsSkeleton({ header = true }: { header?: boolean }) {
           <Sk className="ms-auto h-9 w-full max-w-64 rounded-lg" soft />
         </div>
 
-        <SkTable rows={8} wide />
+        <TxRowsSkeleton rows={8} head />
       </Panel>
     </Frame>
   );
@@ -435,10 +457,7 @@ function SkAmountField({ className, selector }: { className?: string; selector?:
   );
 }
 
-/**
- * The four trade pages share one layout — a 7/5 split of form and order summary —
- * so they share one skeleton.
- */
+/** The four trade pages share a 7/5 form-and-summary split, so they share a skeleton. */
 export function TradeSkeleton({ header = true }: { header?: boolean }) {
   return (
     <Frame header={header}>
@@ -503,12 +522,8 @@ export function TradeSkeleton({ header = true }: { header?: boolean }) {
 }
 
 /**
- * `/dashboard/exchange-crypto` — the trade layout without the parts a swap has
- * no use for.
- *
- * Same 7/5 split as `TradeSkeleton`, minus the source toggle, the network field
- * and the method cards: a swap is two coins and one amount, so the form is the
- * pair and nothing else.
+ * `/dashboard/exchange-crypto` — the trade layout minus the source toggle, network
+ * field and method cards: a swap is two coins and one amount.
  */
 export function ExchangeSkeleton({ header = true }: { header?: boolean }) {
   return (
@@ -567,12 +582,7 @@ export function ExchangeSkeleton({ header = true }: { header?: boolean }) {
   );
 }
 
-/**
- * `/dashboard/withdraw-crypto` — the pair, the address field, and the summary.
- *
- * Same 7/5 split as `TradeSkeleton` with the source toggle and method cards
- * dropped: a withdrawal is an amount, a coin and an address.
- */
+/** `/dashboard/withdraw-crypto` — the pair, the address field, and the summary. */
 export function WithdrawSkeleton({ header = true }: { header?: boolean }) {
   return (
     <Frame header={header}>

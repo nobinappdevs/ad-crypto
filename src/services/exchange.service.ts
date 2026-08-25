@@ -2,12 +2,10 @@ import { privateApi } from "@/lib/axios";
 import type { ImagePaths } from "@/services/dashboard.service";
 
 /**
- * Exchange Crypto — `GET /user/exchange-crypto/index`, `POST .../store`, `POST .../confirm`.
+ * Exchange Crypto — `GET /user/exchange-crypto/index`, `POST .../store`, `.../confirm`.
  *
- * A swap is TWO requests, not one. `store` prices the order and returns an
- * `identifier` for the draft it wrote; `confirm` executes that draft. Nothing
- * moves until the second call, which is what lets the user see the server's own
- * figures — rate, charges, payable — before committing rather than after.
+ * A swap is TWO requests: `store` prices and drafts it, `confirm` executes. Nothing
+ * moves until the second, so the user sees the server's figures before committing.
  */
 
 /** The user's holding in one currency. `id` is the WALLET's id, not the coin's. */
@@ -28,25 +26,21 @@ export interface ExchangeCurrency {
   /** Relative to `currency_image_paths`, e.g. "seeder/bitcoin.webp". */
   flag?: string;
   /**
-   * How many of this coin one unit of the platform's base currency buys, as a
-   * decimal string. A pair's rate is therefore the RATIO of the two — see
-   * `exchangeQuote` in `@/config/exchange`.
+   * How many of this coin one unit of the base currency buys, as a decimal string —
+   * so a pair's rate is the RATIO of the two. See `exchangeQuote`.
    */
   rate?: string | number;
   /**
-   * The signed-in user's wallets for this currency — normally one, and empty for
-   * a coin they have never held. No wallet means no `sender_wallet` id to post,
-   * which is why such a coin cannot be the side being sent.
+   * This currency's wallets — empty for a coin never held. No wallet means no id to
+   * post, which is why such a coin cannot be a side of a swap.
    */
   wallets?: ExchangeUserWallet[];
 }
 
 /**
- * The operator's charge configuration for exchanges.
- *
- * `fixed_charge` is denominated in the base currency and converted at the
- * SENDER's rate; `percent_charge` is a percentage ("2.0000" = 2%) of the amount
- * being sent. Both come out on top of the amount, not out of what is received.
+ * The operator's charge configuration. `fixed_charge` is in the base currency and
+ * converted at the SENDER's rate; `percent_charge` is a percentage of the amount
+ * sent. Both come out on top, not out of what is received.
  */
 export interface ExchangeFees {
   title?: string;
@@ -72,9 +66,8 @@ export interface ExchangeQuoteWallet {
 }
 
 /**
- * The priced order. Every figure here is the SERVER's — the page computes its own
- * preview while the user types, but from `store` onwards these are what is shown,
- * because these are what will be executed.
+ * The priced order, all of it the SERVER's. The page previews locally while the
+ * user types, but from `store` onwards these are the figures shown.
  */
 export interface ExchangeQuote {
   sender_wallet?: ExchangeQuoteWallet;
@@ -106,11 +99,8 @@ export interface ExchangeStoreRequest {
   sender_wallet: number;
   /**
    * The user's WALLET id for the coin being received — `currencies[].wallets[].id`
-   * again, NOT `currencies[].id`.
-   *
-   * The name says currency and means wallet; posting a currency id is rejected.
-   * The server's own reply is the giveaway: it echoes this side back as
-   * `receiver_wallet`, resolved to the same wallet row.
+   * again, NOT `currencies[].id`. The name says currency and means wallet; the reply
+   * echoes it back as `receiver_wallet`.
    */
   receiver_currency: number;
 }
@@ -123,10 +113,8 @@ export const exchangeService = {
   },
 
   /**
-   * POST /user/exchange-crypto/store — prices the swap and drafts it.
-   *
-   * Nothing has moved when this returns. It answers with the quote and an
-   * identifier; `confirm` is what spends the balance.
+   * POST /user/exchange-crypto/store — prices the swap and drafts it. Nothing has
+   * moved; `confirm` is what spends the balance.
    */
   async store(payload: ExchangeStoreRequest): Promise<{ data?: { data?: ExchangeDraft } }> {
     const form = new FormData();

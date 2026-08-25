@@ -15,9 +15,8 @@ import type { ContactRequest } from "@/schemas/contact.schema";
 export const WEBSITE_KEY = ["website"] as const;
 
 /**
- * Published content changes on the operator's schedule, not the visitor's, so
- * these are held for five minutes and not refetched when the tab regains focus —
- * an article does not go stale while it is being read.
+ * Published content changes on the operator's schedule, so these are held for five
+ * minutes and not refetched on focus.
  */
 const CONTENT_STALE_TIME = 5 * 60_000;
 
@@ -58,11 +57,8 @@ export function useJournalsByCategory(slug: string, enabled = true) {
 }
 
 /**
- * GET /website/journal/details/{slug}.
- *
- * Not retried: an unknown slug answers 404 ("Journal not found!"), which is an
- * ANSWER — the page renders it as a not-found state — and asking twice more
- * only delays that by a few seconds.
+ * GET /website/journal/details/{slug}. Not retried: an unknown slug answers 404,
+ * which is an ANSWER the page renders as a not-found state.
  */
 export function useJournalDetails(slug: string, enabled = true) {
   return useQuery({
@@ -86,11 +82,8 @@ export function useSendMessage(successMessage: string) {
 }
 
 /**
- * POST /website/subscribe.
- *
- * The backend's own wording is preferred on success because it distinguishes a
- * new subscription from an address that was already on the list — a detail this
- * side cannot know and should not invent.
+ * POST /website/subscribe. The backend's wording wins on success — it distinguishes
+ * a new subscription from an address already on the list.
  */
 export function useSubscribe(successMessage: string) {
   return useMutation({

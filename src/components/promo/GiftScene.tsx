@@ -3,15 +3,10 @@
 /**
  * The gift illustration shared by the About and Auth promo panels.
  *
- * A fixed 340x330 canvas: the SVG gift box, an orbiting coin pair, four sparks
- * and five coin badges are all pinned to exact coordinates, and the way they
- * overlap IS the picture — so it is rendered at its real size and uniformly
- * scaled to whatever width is available (see useFitScale) rather than reflowed.
- *
- * Every offset, radius, timing and delay below is the source design's. The three
- * SVG groups float on deliberately out-of-phase loops (6.6s / 6.6s / 7.5s) and
- * the badges add five more (5.2s-7.2s) with staggered delays, which is what keeps
- * the scene from pulsing as one block.
+ * A fixed 340x330 canvas — the overlap IS the picture, so it renders at real size
+ * and scales to fit (see useFitScale) rather than reflowing. Every offset and
+ * timing is the source design's; the loops are out of phase so the scene does not
+ * pulse as one block.
  */
 import { useId } from "react";
 import { useFitScale } from "@/hooks/useFitScale";
@@ -30,10 +25,9 @@ const SPARKS = [
 ];
 
 export function GiftScene() {
-  // Gradient ids have to be unique per document, and this scene can appear more
-  // than once in a tree, so they are namespaced by React's own id — stripped of
-  // everything but word characters, since React wraps it in punctuation that a
-  // `url(#…)` reference cannot carry.
+  // Gradient ids must be unique per document and this scene can appear twice, so
+  // they are namespaced by React's id — stripped to word characters, which is all
+  // a `url(#…)` reference can carry.
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const id = (name: string) => `${name}-${uid}`;
   const url = (name: string) => `url(#${id(name)})`;
@@ -358,10 +352,8 @@ export function GiftScene() {
           </svg>
         </div>
 
-        {/* The two tilted badges. `rotate` is baked into the same transform the
-            float animation drives, so it has to be part of the keyframe's own
-            start value — which is why these carry their rotation inline and the
-            animation still wins: the loop replaces `transform` wholesale. */}
+        {/* The two tilted badges. `rotate` is inline because the float animation
+            replaces `transform` wholesale, so it has to be in the keyframe's start. */}
         <div
           aria-hidden
           className="absolute grid place-items-center rounded-full"

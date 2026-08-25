@@ -10,31 +10,16 @@ const VERIFY_EMAIL_ROUTE = "/verify-email";
 const VERIFY_2FA_ROUTE = "/verify-2fa";
 
 /**
- * Gate on the signed-out screens. "Signed in, go away" is too blunt here, because
- * both verification screens live in this route group and are only reachable *with*
- * a token — login and register hand one out before the account is cleared to use
- * it. So the guard sorts four states rather than two:
+ * Gate on the signed-out screens. Four states, not two — the verify screens live
+ * in this group and need a token:
  *
- *   no token             -> the login/register/forgot screens; the verify screens
- *                           have nothing to verify against, so they go to /login.
- *   token, email pending -> `/verify-email` and nowhere else in this group.
- *   token, 2FA pending   -> `/verify-2fa` and nowhere else in this group.
- *   token, all clear     -> the dashboard; there is nothing here for them.
+ *   no token             -> login/register/forgot; the verify screens go to /login.
+ *   token, email pending -> `/verify-email` and nowhere else here.
+ *   token, 2FA pending   -> `/verify-2fa` and nowhere else here.
+ *   token, all clear     -> the dashboard.
  *
- * Which of those it is comes from `accountGateState` — the same answer `AuthGuard`
- * uses, so the two can't disagree and volley a user between them. That answer is
- * available on the FIRST render, from what register/login just wrote down, which
- * is what this screen needs: a freshly registered account arrives here a
- * millisecond after the response that created it, long before `GET /user/dashboard`
- * has said anything. Waiting for that request instead is what let an unverified
- * account slide into the dashboard on a payload that simply hadn't answered yet.
- *
- * The live call still runs and still wins once it lands, which is what notices a
- * flag cleared in the admin panel while somebody sits on a code screen.
- *
- * With no token there is nothing to ask about, so these screens stay free of
- * requests in the case that is by far the most common. With one, it is a single
- * call on mount — nothing polls here either.
+ * From `accountGateState`, same as `AuthGuard`. It answers on the first render
+ * (from what register/login wrote), and the live call overrides it once it lands.
  */
 export function GuestGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -57,24 +42,19 @@ export function GuestGuard({ children }: { children: ReactNode }) {
         : null;
     }
 
-    // The email address first, and it is the whole answer while it is unresolved:
-    // an account that still owes a code belongs on that screen and nowhere else,
-    // and one that owes nothing has no business on it.
+    // The email address first, and it is the whole answer while unresolved.
     if (emailVerified === false) {
       return pathname.startsWith(VERIFY_EMAIL_ROUTE) ? null : VERIFY_EMAIL_ROUTE;
     }
-    // Only once the email question is settled — otherwise an unverified account
-    // gets asked for an authenticator code ahead of the code it actually owes.
+    // 2FA only once the email question is settled.
     if (emailVerified === true) {
       if (twoFa === "pending") {
         return pathname.startsWith(VERIFY_2FA_ROUTE) ? null : VERIFY_2FA_ROUTE;
       }
-      // Cleared on both counts: there is nothing on these screens for them.
       if (twoFa !== null) return "/dashboard";
     }
 
-    // Nobody has answered yet. The screen the user is on is the safest place to
-    // be — sending them anywhere on a guess is what made this flicker.
+    // Nobody has answered yet — staying put beats guessing.
     return null;
   })();
 

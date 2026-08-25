@@ -3,13 +3,9 @@ import { COINS } from "./market";
 /**
  * What the account HOLDS — the overview's wallet cards.
  *
- * Deliberately not the same list as `COINS`: that one is what can be TRADED, and
- * the two differ at both ends. The settlement currency is a holding you can
- * withdraw but never a pair to trade against itself, and a coin can sit in a
- * wallet before it is listed for trading.
- *
- * Where a coin appears in both, its balance and price are read FROM the trading
- * table, so a wallet card and the Sell page's "Available" can never disagree.
+ * Not the same list as `COINS`, which is what can be TRADED: the settlement currency
+ * is a holding but never a pair, and a coin can sit in a wallet before it is listed.
+ * Where a coin is in both, its balance and price are read FROM the trading table.
  */
 const traded = (symbol: string) => COINS.find((coin) => coin.symbol === symbol);
 
@@ -110,11 +106,8 @@ export const WALLETS: Wallet[] = [
 export const WALLETS_PREVIEW = 4;
 
 /**
- * Resolve a `?coin=` value to a wallet.
- *
- * Takes `string | null` so the details page can hand it the query param
- * untouched: a missing param and an unknown key are the same "no wallet" answer,
- * and that page treats it as a normal state rather than an error.
+ * Resolve a `?coin=` value to a wallet. Takes `string | null` so the details page can
+ * hand over the query param untouched — missing and unknown are the same answer.
  */
 export function findWallet(key: string | null | undefined) {
   if (!key) return undefined;

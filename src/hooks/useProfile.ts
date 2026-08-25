@@ -27,11 +27,8 @@ export function useProfile(enabled = true) {
 }
 
 /**
- * POST /user/profile/info/update.
- *
- * Refetches rather than writing the form's own values into the cache: the server
- * decides what actually stuck (a rejected avatar, a trimmed field), and the
- * response body is an empty array, so the cache would otherwise be guessing.
+ * POST /user/profile/info/update. Refetches rather than writing the form's values
+ * into the cache — the server decides what stuck, and the response is empty.
  */
 export function useUpdateProfile(successMessage: string) {
   const queryClient = useQueryClient();
@@ -47,10 +44,8 @@ export function useUpdateProfile(successMessage: string) {
 }
 
 /**
- * POST /user/profile/password/update.
- *
- * Nothing is invalidated on success — the token survives the change, and no cached
- * query holds a password. The caller clears its own fields.
+ * POST /user/profile/password/update. Nothing is invalidated — the token survives
+ * and no cached query holds a password. The caller clears its own fields.
  */
 export function useUpdatePassword(successMessage: string) {
   return useMutation({
@@ -61,11 +56,8 @@ export function useUpdatePassword(successMessage: string) {
 }
 
 /**
- * Field name -> first complaint, from a validation failure on either endpoint.
- *
- * Same shape as the KYC submission's: a keyed `errors` bag, so each message can go
- * under the control that caused it instead of into one toast that names a field the
- * user then has to find.
+ * Field name -> first complaint, from a validation failure on either endpoint. Same
+ * keyed `errors` shape as KYC, so each message can go under its own control.
  */
 export function getProfileFieldErrors(err: unknown): Record<string, string> {
   const bag = (err as { response?: { data?: { errors?: Record<string, unknown> } } })?.response?.data
@@ -81,12 +73,8 @@ export function getProfileFieldErrors(err: unknown): Record<string, string> {
 }
 
 /**
- * The header's view of the account: a display name, the email, initials for the
- * avatar fallback, and the avatar URL if one was uploaded.
- *
- * Every part degrades on its own. A profile with no first or last name still has a
- * username, and an account with neither still has an email — so the name falls
- * back through all three rather than rendering an empty header.
+ * The header's view of the account: display name, email, initials, avatar URL.
+ * Every part degrades on its own — the name falls back through name, username, email.
  */
 export function useAccountIdentity() {
   const { data, isPending } = useProfile();
@@ -101,10 +89,8 @@ export function useAccountIdentity() {
     name,
     email,
     /**
-     * The uploaded avatar, or the API's own `default_image` when there is none —
-     * `imageUrl` joins each against the right base (`path_location` for the upload,
-     * the host itself for the default). "" only when the payload carried no paths
-     * at all, in which case callers draw initials.
+     * The uploaded avatar, or the API's `default_image`; `imageUrl` joins each against
+     * the right base. "" only when no paths came at all, and callers draw initials.
      */
     avatar: imageUrl(data?.image_paths, user?.image),
     initials: initialsOf(full, user?.username, email),

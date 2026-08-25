@@ -19,12 +19,8 @@ export const walletBalance = (value: string | number | undefined) =>
 
 
 /**
- * One holding: its coin, its balance, and its deposit address.
- *
- * The card is not a link, unlike the version this replaced. The address needs a
- * copy button, and a button inside a link is a control the user cannot reach
- * without also navigating — so the coin name carries the link and the address row
- * carries the copy.
+ * One holding: its coin, its balance, and its deposit address. Not a link itself —
+ * the address row carries a copy button, which cannot live inside one.
  */
 export function WalletCard({ wallet, paths }: { wallet: DashboardWallet; paths: ImagePaths | undefined }) {
   const { t } = useLang();
@@ -63,10 +59,8 @@ export function WalletCard({ wallet, paths }: { wallet: DashboardWallet; paths: 
         "group relative flex flex-col transition-colors duration-200 hover:border-primary focus-within:border-primary",
       )}
     >
-      {/* The whole card opens the wallet, via an overlay rather than by wrapping
-          the card in a link: the address row carries a copy BUTTON, and a button
-          inside a link is a control that cannot be used without also navigating.
-          The overlay sits under the copy control, which is lifted above it. */}
+      {/* The card opens the wallet via an overlay, not by wrapping it in a link —
+          the copy button sits above the overlay. */}
       <Link
         href={walletHref(code.toLowerCase())}
         aria-label={wallet.currency?.name || code}
@@ -78,10 +72,8 @@ export function WalletCard({ wallet, paths }: { wallet: DashboardWallet; paths: 
           {wallet.currency?.name || code}
         </span>
 
-        {/* The API's own coin art, with the brand disc behind it as the fallback.
-            A plain <img>, not next/image: images are unoptimized in this static
-            export anyway, and the host comes from an env var — pinning it in
-            next.config's remotePatterns would break the day the backend moves. */}
+        {/* The API's coin art, with the brand disc as fallback. A plain <img>:
+            unoptimized here anyway, and the host comes from an env var. */}
         {flag && !flagBroken ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

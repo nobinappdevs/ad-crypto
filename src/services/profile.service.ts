@@ -14,9 +14,8 @@ export interface UserInfo {
   image?: string | null;
   kyc_verified?: number;
   /**
-   * The verification gates, when this endpoint carries them — some builds return
-   * them here as well as on the dashboard. Optional on purpose: `accountGate`
-   * ignores a flag that is absent rather than reading it as a zero.
+   * The verification gates, when this endpoint carries them — some builds do.
+   * Optional on purpose: an absent flag must not read as a zero.
    */
   email_verified?: number;
   two_factor_status?: number;
@@ -35,21 +34,16 @@ export interface ProfileData {
 }
 
 /**
- * The editable half of `user_info`.
- *
- * `email` and `username` are absent because the endpoint does not take them — they
- * are the account's identity, changed through support rather than a form. Only
- * `firstname` and `lastname` are required by the validator; the rest may be sent
+ * The editable half of `user_info`. `email` and `username` are absent because the
+ * endpoint does not take them. Only the names are required; the rest may be sent
  * empty to clear what was there.
  */
 export interface ProfileUpdateRequest {
   firstname: string;
   lastname: string;
   /**
-   * The dial code, bare digits. Not in the documented request body — the collection
-   * only sends `mobile` — but it is a real column (`GET .../info` returns it) and a
-   * number without its code is ambiguous, so it goes out alongside. A backend that
-   * does not validate it simply ignores it.
+   * The dial code, bare digits. Not in the documented body, but it is a real column
+   * and a number without its code is ambiguous — a backend that ignores it loses nothing.
    */
   mobile_code?: string;
   mobile?: string;
@@ -76,13 +70,11 @@ export const profileService = {
   },
 
   /**
-   * POST /user/profile/info/update — multipart, since the avatar rides along with
-   * the text fields.
+   * POST /user/profile/info/update — multipart, since the avatar rides along.
    *
-   * Every text field goes out even when blank, unlike the KYC submission: this
-   * endpoint replaces the record it is given, so omitting a cleared field would
-   * quietly keep the old value instead of clearing it. Only `image` is skipped
-   * when unset, because "no new file" means "keep the current avatar".
+   * Every text field goes out even when blank, unlike KYC: this endpoint replaces the
+   * record, so omitting a cleared field would keep the old value. Only `image` is
+   * skipped when unset — "no new file" means "keep the current avatar".
    */
   async update(values: ProfileUpdateRequest) {
     const { image, ...text } = values;

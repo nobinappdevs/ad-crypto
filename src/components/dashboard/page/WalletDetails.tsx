@@ -51,22 +51,15 @@ import type {
 /* -------------------------------------------------------------------------- */
 
 /**
- * One wallet, in detail: what it holds, where to send more, and over which chains.
+ * One wallet in detail: what it holds, where to send more, and over which chains.
  *
- * The route is a single static page reading `?coin=`, NOT a `[coin]` segment — the
- * app is a static export, so a dynamic segment would need every wallet enumerated
- * at build time, and the wallet list comes from the API. Same decision, and the
- * same Suspense requirement, as `/web-journal/details`.
+ * A static page reading `?coin=`, not a `[coin]` segment — a static export would
+ * have to enumerate every wallet at build time. Its data is already in the
+ * `/user/dashboard` cache, so it usually paints without a request.
  *
- * Everything on it comes from `GET /user/dashboard`, which is already in the cache
- * when the user arrives from the overview's wallet card — so this page usually
- * paints without a request of its own.
- *
- * ── One address, several networks ──
- * The API issues ONE `public_address` per wallet and lists the networks it can be
- * reached over, each with its own fee and arrival time. So the network list is a
- * table rather than a control: choosing a row cannot change an address that does
- * not change. What the rows are for is the decision made in the sending app.
+ * The API issues ONE address per wallet and lists the networks it can be reached
+ * over, so the network list is a table, not a control — the choice is made in the
+ * sending app.
  */
 export function WalletDetails() {
   const { t } = useLang();
@@ -76,10 +69,7 @@ export function WalletDetails() {
   const { data, isPending, isError, error, refetch } = useDashboard();
 
   const wallets = data?.wallets ?? [];
-  /**
-   * Ticker first, since that is what the overview links with — but an id or a
-   * public address resolves too, so a link pasted from anywhere still lands.
-   */
+  /** Ticker first (what the overview links with), but an id or address resolves too. */
   const wallet =
     wallets.find((w) => (w.currency?.code ?? "").toLowerCase() === param) ??
     wallets.find((w) => String(w.id) === param || (w.public_address ?? "").toLowerCase() === param);
@@ -159,11 +149,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 /* The wallet                                                                  */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Split from the lookup above so everything below is keyed to a wallet that is
- * known to exist — otherwise every value here would have to cope with
- * `undefined`, for a state the caller has already handled.
- */
+/** Split from the lookup, so everything here is keyed to a wallet known to exist. */
 function WalletPanels({
   wallet,
   paths,

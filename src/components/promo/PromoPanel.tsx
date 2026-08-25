@@ -20,12 +20,9 @@ export function PromoPanel({
   /** Extra classes on the panel root — its floor height, its grid order. */
   className?: string;
   /**
-   * Classes on the illustration's wrapper.
-   *
-   * The scene is a 330px-tall decoration. On a layout where it sits between the
-   * visitor and the thing they came to do, a caller passes `hidden lg:block` and
-   * gets the panel's words without its weight. `useFitScale` ignores a zero
-   * width, so hiding it never leaves a collapsed scale behind.
+   * Classes on the illustration's wrapper. A caller whose layout puts the 330px
+   * scene in the way passes `hidden lg:block`; `useFitScale` ignores a zero width,
+   * so hiding it leaves no collapsed scale behind.
    */
   sceneClass?: string;
   /** Defaults to `${baseKey}.stats`. */
@@ -34,11 +31,7 @@ export function PromoPanel({
   /** Defaults to `baseKey`. */
   headingBaseKey?: string;
   headingVariant?: "promo" | "descriptive";
-  /**
-   * The margin that insets this block from its parent. The default is the design's
-   * inset inside a bordered card; a caller that has no card around it passes `""`
-   * so the block sits flush in its column instead of floating inside nothing.
-   */
+  /** The inset from the parent. A caller with no card around it passes `""`. */
   insetClass?: string;
 }) {
   const { t } = useLang();

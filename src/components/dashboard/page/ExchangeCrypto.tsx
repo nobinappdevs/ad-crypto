@@ -37,18 +37,11 @@ import type { ImagePaths } from "@/services/dashboard.service";
 import type { ExchangeCurrency, ExchangeDraft } from "@/services/exchange.service";
 
 /**
- * Exchange Crypto — the same shape as Buy, Sell and Withdraw, on live data.
+ * Exchange Crypto — same shape as Buy, Sell and Withdraw, on live data from
+ * `GET /user/exchange-crypto/index`.
  *
- * The form carries exactly what the old exchange screen carried: the pair's rate,
- * the two amounts, a Max fill, the available balance, the order limits and the
- * network fee. What is new is where those figures come from — `GET
- * /user/exchange-crypto/index` rather than demo constants — and the step that
- * follows.
- *
- * The API prices a swap in two calls: `store` quotes and drafts it, `confirm`
- * executes it. So the page previews the order locally while the user types (by
- * the same rules the backend uses), and on submit turns over to the SERVER's
- * quote. Only the button under those numbers spends anything.
+ * A swap is two calls: `store` quotes and drafts it, `confirm` executes it. So the
+ * page previews locally while the user types, then shows the SERVER's quote.
  */
 
 export function ExchangeCrypto() {
@@ -84,13 +77,9 @@ export function ExchangeCrypto() {
 
   const senderWallet = ownWallet(from);
   /**
-   * The receiving side's wallet, and it is required.
-   *
-   * `store` takes a WALLET id on both sides. The field is named
-   * `receiver_currency`, which reads like `currencies[].id` and is not: posting a
-   * currency id there is rejected. Both ids come from the same place —
-   * `currencies[].wallets[].id` — which is also why a coin with no wallet behind it
-   * cannot be either side of a swap, not just the sending one.
+   * The receiving side's wallet, and it is required: `store` takes a WALLET id on
+   * both sides. `receiver_currency` reads like a currency id and is not — which is
+   * also why a coin with no wallet cannot be either side of a swap.
    */
   const receiverWallet = ownWallet(to);
   const senderRate = num(from?.rate);
@@ -102,13 +91,8 @@ export function ExchangeCrypto() {
   /** What the balance can cover once the fee is added on top of the amount. */
   const sendable = maxSendable({ balance, senderRate, fees });
 
-  /**
-   * The first thing standing between this form and a swap, or null.
-   *
-   * Pair problems show immediately — they are the state of the account, not
-   * something the user typed. Amount problems wait for a blur, so the field does
-   * not go red on the first keystroke.
-   */
+  // The first thing standing between this form and a swap, or null. Pair problems
+  // show at once; amount problems wait for a blur.
   const problem = (() => {
     if (!from || !to) return null;
     if (!senderWallet) return k("errorNoWallet").replace("{coin}", fromCode);
@@ -290,10 +274,8 @@ export function ExchangeCrypto() {
       value: currencyKey(currency),
       label: (currency.code ?? "").toUpperCase(),
       hint: currency.name,
-      // On the sending side the balance is the deciding fact. On the receiving side
-      // the balance is not what the user is choosing on, so it stays out of the
-      // way — but "no wallet" is still worth saying, since it is why the row is
-      // greyed out.
+      // The balance decides the sending side, so it shows there only — but "no
+      // wallet" is worth saying either way, since it is why a row is greyed out.
       meta: held ? (sending ? coinAmount(walletBalance(currency)) : undefined) : k("noWallet"),
       icon: <CoinArt currency={currency} paths={paths} size={30} />,
       keywords: currency.name,
@@ -483,12 +465,8 @@ export function ExchangeCrypto() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The server's quote, and the button that executes it.
- *
- * Every figure here comes from `store`'s response — none is recomputed locally.
- * If the backend priced the order differently from the preview (a rate that moved
- * between typing and submitting), this is where the real number appears, before
- * the user agrees to it.
+ * The server's quote, and the button that executes it. Every figure comes from
+ * `store` — if the rate moved since typing, the real number appears here first.
  */
 function ConfirmStep({
   draft,
@@ -599,11 +577,7 @@ function ConfirmStep({
 /* Coin art                                                                    */
 /* -------------------------------------------------------------------------- */
 
-/**
- * The API's coin image, with the brand disc behind it as the fallback — the same
- * pairing the wallet cards use. A plain `<img>`, not `next/image`: images are
- * unoptimized in this static export anyway, and the host comes from an env var.
- */
+/** The API's coin image, with the brand disc as fallback. Plain `<img>` — see OrderPieces. */
 function CoinArt({
   currency,
   paths,

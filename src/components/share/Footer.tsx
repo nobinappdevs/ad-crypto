@@ -10,45 +10,47 @@ import { Logo } from "./Logo";
 const LAUNCH_YEAR = 2026;
 
 /**
- * Column layout mirrors the design: one wide brand column, then four narrow link
- * columns. `href: "#"` marks a destination the site does not have a route for
- * yet — the label is from the design, so these are the ones to point somewhere
- * real as those pages land.
+ * One wide brand column, then four narrow ones — every link a page that exists.
+ *
+ * Partnership, Career and Legal are gone: they were `href="#"`, and a link that
+ * goes nowhere costs more trust than the word it shows is worth. Terms and Privacy
+ * stayed because they now have routes of their own.
+ *
+ * `label` is the full translation path rather than a key under its column, so an
+ * item can move column without losing the string it already has. An item with no
+ * `href` is text rather than a link — an office address is not a page.
  */
-const LINK_COLUMNS: { key: string; items: { key: string; href: string }[] }[] = [
+const LINK_COLUMNS: { key: string; items: { key: string; label: string; href?: string }[] }[] = [
   {
     key: "about",
     items: [
-      { key: "partnership", href: "#" },
-      { key: "terms", href: "#" },
-      { key: "privacy", href: "#" },
+      { key: "about", label: "footer.columns.product.items.about", href: "/about" },
+      { key: "contact", label: "nav.contact", href: "/contact" },
     ],
   },
   {
     key: "product",
     items: [
-      { key: "about", href: "/about" },
-      { key: "features", href: "/service" },
-      { key: "support", href: "/contact" },
+      { key: "features", label: "footer.columns.product.items.features", href: "/service" },
+      { key: "blog", label: "footer.columns.resources.items.blog", href: "/web-journal" },
     ],
   },
   {
-    key: "resources",
+    key: "legal",
     items: [
-      { key: "career", href: "#" },
-      { key: "blog", href: "/web-journal" },
-      { key: "legal", href: "#" },
+      { key: "terms", label: "footer.columns.about.items.terms", href: "/terms" },
+      { key: "privacy", label: "footer.columns.about.items.privacy", href: "/privacy" },
     ],
   },
   {
     key: "contact",
     items: [
-      { key: "site", href: "/" },
-      { key: "phone", href: "tel:+15646445965" },
-      { key: "address", href: "#" },
+      { key: "site", label: "footer.columns.contact.items.site", href: "/" },
+      { key: "phone", label: "footer.columns.contact.items.phone", href: "tel:+15646445965" },
+      { key: "address", label: "footer.columns.contact.items.address" },
     ],
   },
-] as const;
+];
 
 const SOCIALS = [
   {
@@ -156,10 +158,8 @@ export function Footer() {
             {t("footer.newsletter.text")}
           </p>
 
-          {/* A real form so Enter submits and the browser validates the address,
-              posting to `POST /website/subscribe`. The field is cleared only once
-              the server has accepted it — clearing on failure would take the
-              address away from someone who then has to retype it. */}
+          {/* A real form, so Enter submits and the browser validates the address.
+              Cleared only once the server accepts it. */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -255,11 +255,21 @@ export function Footer() {
                 {t(`footer.columns.${column.key}.title`)}
               </span>
               <div className="flex flex-col gap-3.5">
-                {column.items.map((item) => (
-                  <FooterLink key={item.key} href={item.href}>
-                    {t(`footer.columns.${column.key}.items.${item.key}`)}
-                  </FooterLink>
-                ))}
+                {column.items.map((item) =>
+                  item.href ? (
+                    <FooterLink key={item.key} href={item.href}>
+                      {t(item.label)}
+                    </FooterLink>
+                  ) : (
+                    <span
+                      key={item.key}
+                      className="text-[13.5px]!"
+                      style={{ color: "var(--suite-card-muted)" }}
+                    >
+                      {t(item.label)}
+                    </span>
+                  ),
+                )}
               </div>
             </div>
           ))}

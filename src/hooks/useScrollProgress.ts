@@ -19,10 +19,9 @@ export const ease = (t: number) => t * t * (3 - 2 * t);
 /**
  * Drives a scroll-linked scene with a requestAnimationFrame loop.
  *
- * `apply` receives progress 0..1 through `sceneRef`'s scroll runway, eased
- * toward the real scroll position so the motion glides instead of snapping.
- * Runs only on desktop widths; below that it calls `apply(0)` once so the
- * component can render its static stacked layout with no inline transforms.
+ * `apply` gets progress 0..1 through `sceneRef`'s runway, eased toward the real
+ * scroll position. Desktop only — below that it calls `apply(0)` once, so the
+ * component renders its static stacked layout.
  */
 export function useScrollProgress(
   sceneRef: RefObject<HTMLElement | null>,

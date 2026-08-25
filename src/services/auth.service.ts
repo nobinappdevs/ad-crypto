@@ -8,12 +8,9 @@ import type {
 } from "@/schemas/auth.schema";
 
 /**
- * Every auth endpoint in the AdCrypto collection, in the order the flows run.
- *
- * Paths are relative to `NEXT_PUBLIC_API_URL` (`.../public/api/v1`). `publicApi`
- * for anything a signed-out visitor performs, `privateApi` for the rest — note
- * that the register-time email verification is in the *private* group: register
- * hands back a working token, and the verify/resend pair authenticate with it.
+ * Every auth endpoint, in the order the flows run. Paths are relative to
+ * `NEXT_PUBLIC_API_URL`. `publicApi` for what a signed-out visitor does, `privateApi`
+ * for the rest — including register-time verification, which uses register's token.
  */
 export const authService = {
   /* ── Sign-up + sign-in ── */
@@ -48,13 +45,11 @@ export const authService = {
   /* ── Session teardown ── */
 
   /**
-   * POST /user/logout. The local session goes regardless of how the call ends:
-   * an expired session is exactly when logout fails, and leaving the token
-   * behind would strand the browser in a signed-in state it can't use.
+   * POST /user/logout. The local session goes regardless of how the call ends — an
+   * expired session is exactly when logout fails.
    *
-   * `clearAuthState`, not just the token — the verification mirrors describe the
-   * account that is being signed out, and a guard reading one of them against the
-   * next account's token is how a fresh sign-in inherits somebody else's gate.
+   * `clearAuthState`, not just the token: the verification mirrors describe the
+   * account being signed out, and the next sign-in must not inherit them.
    */
   async logout(): Promise<void> {
     try {

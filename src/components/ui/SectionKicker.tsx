@@ -2,13 +2,10 @@ import type { CSSProperties, ReactNode } from "react";
 import { cn } from "@/components/ui/cn";
 
 /**
- * Shared "dash + label" section kicker: a short primary-colour rule next to an
- * uppercase, letter-spaced label, sitting above a section's main heading.
+ * Shared "dash + label" section kicker, above a section's main heading.
  *
- * Sections don't share one text-colour token (--suite-muted, --panel-muted,
- * plain currentColor, ...), so colour is passed through as either a Tailwind
- * class (`textClassName`) or a raw CSS value (`color`, for tokens with no
- * Tailwind mapping) rather than baked in here.
+ * Sections do not share one muted-text token, so colour comes in as a Tailwind
+ * class (`textClassName`) or a raw CSS value (`color`) rather than being baked in.
  */
 export function SectionKicker({
   children,

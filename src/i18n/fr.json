@@ -646,9 +646,21 @@
       "network": "Réseau",
       "method": "Méthode",
       "details": "Détails de la commande",
+      "submitted": "Ce que vous avez envoyé",
+      "gateway": "Passerelle de paiement",
+      "transaction": "Transaction",
+      "to": "Vers",
+      "balanceAfter": "Solde après",
+      "willGet": "Vous recevez",
+      "close": "Fermer",
       "showDetails": "Afficher les détails de la commande",
       "hideDetails": "Masquer les détails de la commande",
-      "open": "Ouvrir"
+      "open": "Ouvrir",
+      "continuePayment": "Continuer le paiement",
+      "more": "Autres champs",
+      "manual": "Manuel",
+      "automatic": "Automatique",
+      "minutes": "min"
     },
     "viewAll": "Tout voir",
     "filters": {
@@ -660,14 +672,14 @@
       "declined": "Refusée"
     },
     "transactionsPage": {
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement…",
+      "end": "Vous avez atteint la fin",
+      "loaded": "{count} sur {total} chargés",
       "subtitle": "Tous les ordres du compte — achats, ventes et retraits — avec la commission prélevée sur chacun.",
       "searchPlaceholder": "Rechercher par ID de transaction",
       "empty": "Aucune transaction ne correspond à ce filtre.",
-      "loadFailed": "Impossible de charger vos transactions",
-      "showing": "{from}–{to} sur {total}",
-      "page": "Page {page} sur {pages}",
-      "prev": "Page précédente",
-      "next": "Page suivante"
+      "loadFailed": "Impossible de charger vos transactions"
     },
     "tradeSide": {
       "buy": "Achat",
@@ -726,7 +738,7 @@
     "maxAmount": "Max",
     "limit": "Limite",
     "totalPay": "Total à payer",
-    "continue": "Continuer en sécurité",
+    "continue": "Acheter des cryptos",
     "secured": "Les fonds sont bloqués en séquestre jusqu'à la confirmation de votre commande par le réseau.",
     "errorAmount": "Saisissez un montant pour continuer.",
     "errorMin": "La commande minimale est de {min} {coin}.",
@@ -823,7 +835,7 @@
     "maxAmount": "Max",
     "limit": "Limite",
     "totalPayout": "Versement total",
-    "continue": "Vérifier la vente",
+    "continue": "Vendre des cryptos",
     "secured": "Le taux est bloqué 30 secondes après validation, et les frais sont affichés avant confirmation.",
     "errorAmount": "Saisissez un montant pour continuer.",
     "errorMin": "La commande minimale est de {min} {coin}.",
@@ -1301,6 +1313,9 @@
           "features": "Fonctionnalités",
           "support": "Assistance"
         }
+      },
+      "legal": {
+        "title": "MENTIONS LÉGALES"
       },
       "resources": {
         "title": "RESSOURCES",

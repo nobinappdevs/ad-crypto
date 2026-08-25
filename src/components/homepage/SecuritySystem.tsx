@@ -20,17 +20,10 @@ import { cn } from "@/components/ui/cn";
  *
  *   row 1   5 | 4 | 3      row 2   3 | 4 | 5      row 3   6 | 6
  *
- * Every row still totals 12, so nothing is left ragged, but the mirrored 5-4-3 /
- * 3-4-5 rhythm gives the section hierarchy that eight equal tiles cannot. The two
- * half-width cards close it out.
- *
- * `wide` cards put the icon beside the text instead of above it — at ~600px a
- * single column of copy runs past a comfortable measure.
- *
- * The uneven grid only turns on at `xl`. On a 12-column grid a 1024px container
- * gives about 63px per column, so a 3-span card came out ~230px wide — roughly 25
- * characters per line at the `lg` body size, which is below a readable measure.
- * Between `sm` and `xl` the section falls back to two equal columns instead.
+ * Every row totals 12, and the mirrored rhythm gives hierarchy eight equal tiles
+ * cannot. `wide` puts the icon beside the text. Only from `xl` — below that a
+ * 3-span card is ~230px, well under a readable measure, so it falls back to two
+ * equal columns.
  */
 const LAYERS: { key: string; icon: LucideIcon; span: string; wide?: boolean }[] = [
   // Ordered so the longest copy takes the widest slot in each row. A 3-column
@@ -98,10 +91,8 @@ function LayerCard({ item, index }: { item: (typeof LAYERS)[number]; index: numb
           }}
         />
 
-        {/* No `flex-1` here on purpose: pushing the footer to the card's bottom
-            opens a visible gap under the shorter descriptions, because the grid
-            stretches every card in a row to the tallest one. Letting the footer
-            follow the text turns that leftover space into bottom padding. */}
+        {/* No `flex-1`: the grid stretches every card to the tallest, so pushing the
+            footer down opens a gap under the shorter ones. */}
         {/* `wide` only means "icon beside the text" once the card really is wide.
             Below `xl` these two share the same two-column grid as every other card,
             where a side-by-side icon leaves ~160px for the copy. */}
@@ -141,10 +132,8 @@ function LayerCard({ item, index }: { item: (typeof LAYERS)[number]; index: numb
   );
 }
 
-// The section header this used to open with was dropped: on /service the page's
-// own PageHeader already names the section, and two headings in a row read as a
-// mistake. Only the cards below translate anything, and each one does its own
-// `useLang` — so nothing is looked up at this level.
+// No section header: on /service the page's own PageHeader already names it. Each
+// card does its own `useLang`, so nothing is looked up at this level.
 export function SecuritySystem() {
   return (
     <section className="relative overflow-hidden py-20 sm:py-24 lg:py-28">

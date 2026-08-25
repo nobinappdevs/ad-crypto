@@ -3,14 +3,10 @@ import type { ImagePaths } from "@/services/dashboard.service";
 /**
  * Resolves the API's three-part image references into one URL.
  *
- * The backend never sends a finished URL. It sends a host (`base_url`), the
- * directory a category lives in (`path_location`), a per-record filename (`flag`,
- * `image`), and a `default_image` that is relative to the HOST rather than to
- * `path_location` — which is the part worth stating out loud, because the fallback
- * lands in the wrong directory if it is joined the same way as the filename.
- *
- * Returns "" when there is nothing to show and no default, so callers can decide
- * between an `<img>` and their own placeholder.
+ * The backend sends a host, a category directory, a per-record filename — and a
+ * `default_image` that is relative to the HOST rather than to `path_location`, which
+ * is the part worth stating: joined the same way, the fallback lands in the wrong
+ * directory. Returns "" when there is nothing to show and no default.
  */
 export function imageUrl(paths: ImagePaths | undefined, file: string | null | undefined): string {
   const base = trimSlashes(paths?.base_url);
@@ -30,11 +26,9 @@ function trimSlashes(value: string | null | undefined) {
 }
 
 /**
- * Brand colour and glyph per ticker, for the disc behind a coin.
- *
- * Local on purpose: the API sends a flag image, and this is what stands in when
- * that image is missing or has not loaded. A neutral grey circle would be the
- * alternative, but a coin is recognised by its colour before its name.
+ * Brand colour and glyph per ticker, for the disc behind a coin — what stands in
+ * when the API's flag image is missing. A coin is recognised by its colour before
+ * its name, which is why this is not a neutral grey circle.
  */
 const COIN_BRAND: Record<string, { color: string; glyph: string }> = {
   BTC: { color: "#f7931a", glyph: "₿" },

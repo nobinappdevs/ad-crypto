@@ -18,11 +18,8 @@ export function useKycFields(enabled = true) {
 }
 
 /**
- * POST /user/profile/kyc/submit.
- *
- * Refetches on success rather than assuming status 2: whether a submission lands
- * as "pending" is the reviewer's workflow, not ours, and the endpoint answers
- * with an empty body. Asking is one request and can't be wrong.
+ * POST /user/profile/kyc/submit. Refetches rather than assuming status 2 — whether a
+ * submission lands as "pending" is the reviewer's workflow, and the body is empty.
  */
 export function useSubmitKyc(successMessage: string) {
   const queryClient = useQueryClient();
@@ -38,11 +35,8 @@ export function useSubmitKyc(successMessage: string) {
 }
 
 /**
- * Field name -> first complaint, from a 422 on submit.
- *
- * Unlike the auth endpoints (which return a flat list of sentences), KYC submit
- * answers with a proper keyed bag — `{"errors":{"front":["The front field is
- * required."]}}` — so each message can go under the control that caused it.
+ * Field name -> first complaint, from a 422 on submit. KYC answers with a keyed bag
+ * (unlike the auth endpoints' flat list), so each message goes under its control.
  */
 export function getKycFieldErrors(err: unknown): Record<string, string> {
   const bag = (err as { response?: { data?: { errors?: Record<string, unknown> } } })?.response?.data

@@ -646,9 +646,21 @@
       "network": "الشبكة",
       "method": "الطريقة",
       "details": "تفاصيل الطلب",
+      "submitted": "ما قمت بإرساله",
+      "gateway": "بوابة الدفع",
+      "transaction": "المعاملة",
+      "to": "إلى",
+      "balanceAfter": "الرصيد بعد",
+      "willGet": "ستحصل على",
+      "close": "إغلاق",
       "showDetails": "عرض تفاصيل الطلب",
       "hideDetails": "إخفاء تفاصيل الطلب",
-      "open": "فتح"
+      "open": "فتح",
+      "continuePayment": "متابعة الدفع",
+      "more": "حقول أخرى",
+      "manual": "يدوي",
+      "automatic": "تلقائي",
+      "minutes": "دقيقة"
     },
     "viewAll": "عرض الكل",
     "filters": {
@@ -660,14 +672,14 @@
       "declined": "مرفوضة"
     },
     "transactionsPage": {
+      "loadMore": "تحميل المزيد",
+      "loadingMore": "جارٍ تحميل المزيد…",
+      "end": "لقد وصلت إلى النهاية",
+      "loaded": "تم تحميل {count} من {total}",
       "subtitle": "كل أوامر الحساب — الشراء والبيع والسحب — مع العمولة المحصّلة على كل منها.",
       "searchPlaceholder": "ابحث برقم العملية",
       "empty": "لا توجد عمليات مطابقة لهذا الفلتر.",
-      "loadFailed": "تعذّر تحميل عملياتك",
-      "showing": "{from}–{to} من {total}",
-      "page": "صفحة {page} من {pages}",
-      "prev": "الصفحة السابقة",
-      "next": "الصفحة التالية"
+      "loadFailed": "تعذّر تحميل عملياتك"
     },
     "tradeSide": {
       "buy": "شراء",
@@ -726,7 +738,7 @@
     "maxAmount": "الأقصى",
     "limit": "الحد",
     "totalPay": "الإجمالي المستحق",
-    "continue": "متابعة آمنة",
+    "continue": "شراء العملات",
     "secured": "تبقى الأموال في الضمان حتى تؤكد الشبكة طلبك.",
     "errorAmount": "أدخل مبلغًا للمتابعة.",
     "errorMin": "الحد الأدنى للطلب هو {min} {coin}.",
@@ -823,7 +835,7 @@
     "maxAmount": "الأقصى",
     "limit": "الحد",
     "totalPayout": "إجمالي الصرف",
-    "continue": "مراجعة أمر البيع",
+    "continue": "بيع العملات",
     "secured": "يُثبَّت السعر 30 ثانية بعد المتابعة، وتظهر الرسوم قبل التأكيد.",
     "errorAmount": "أدخل مبلغًا للمتابعة.",
     "errorMin": "الحد الأدنى للطلب هو {min} {coin}.",
@@ -1301,6 +1313,9 @@
           "features": "المزايا",
           "support": "الدعم"
         }
+      },
+      "legal": {
+        "title": "قانوني"
       },
       "resources": {
         "title": "الموارد",

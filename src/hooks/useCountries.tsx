@@ -9,13 +9,9 @@ import type { SelectOption } from "@/components/dashboard/SelectMenu";
 export const COUNTRIES_KEY = ["countries"] as const;
 
 /**
- * GET /country-list.
- *
- * The dial codes come from the backend's own table rather than a phone-number
- * package: these are the exact strings `mobile_code` is stored and returned in, so
- * a code picked here round-trips instead of nearly matching. It also costs no
- * dependency, and the list never changes within a session — hence the long
- * `staleTime`.
+ * GET /country-list. The dial codes come from the backend's own table rather than a
+ * package, so a code picked here round-trips exactly. The list never changes within
+ * a session, hence the long `staleTime`.
  */
 export function useCountries(enabled = true) {
   return useQuery({
@@ -32,12 +28,9 @@ export const dialKey = (code: string | null | undefined) =>
   (code ?? "").trim().replace(/^\+/, "");
 
 /**
- * Dial codes as select options, one row per distinct code.
- *
- * Deduped because +1 is the United States AND Canada AND twenty Caribbean states:
- * listing it twenty-two times would make the picker unusable, and the value would
- * be identical anyway. The first country to claim a code lends it a flag and a
- * label; the rest go into `keywords`, so searching "Canada" still finds +1.
+ * Dial codes as select options, one row per distinct code — +1 is twenty-two
+ * countries. The first to claim a code lends it a flag; the rest go into
+ * `keywords`, so searching "Canada" still finds +1.
  */
 export function useDialCodeOptions(): { options: SelectOption[]; isPending: boolean } {
   const { data, isPending } = useCountries();

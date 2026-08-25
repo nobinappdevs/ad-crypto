@@ -10,19 +10,16 @@ import {
   type SellStoreResult,
 } from "@/services/sell.service";
 import type { KycValue } from "@/services/kyc.service";
-import { getApiErrorMessage, getApiSuccessMessage } from "@/hooks/useAuth";
+import { getApiSuccessMessage } from "@/hooks/useAuth";
+import { useTransactionError } from "@/hooks/useTransactionError";
 import { DASHBOARD_KEY } from "@/hooks/useDashboard";
 import { TRANSACTIONS_KEY } from "@/hooks/useTransactions";
 
 export const SELL_KEY = ["sell"] as const;
 
 /**
- * GET /user/sell-crypto/index — the coins, the deposit addresses and the payout
- * methods.
- *
- * Refetched on focus for the same reason the dashboard is: this payload carries
- * balances, and a sale made in another tab has to be visible here before the next
- * one is priced against a figure that is no longer true.
+ * GET /user/sell-crypto/index — coins, deposit addresses, payout methods. Refetched
+ * on focus: it carries balances, and a sale in another tab changes them.
  */
 export function useSellIndex(enabled = true) {
   return useQuery({
@@ -35,13 +32,11 @@ export function useSellIndex(enabled = true) {
 }
 
 /**
- * POST /user/sell-crypto/store — prices the sale and returns the payout form.
- *
- * No success toast: this step only produces a quote and a form to fill in, and a
- * "done" message on an order that has not run yet is what would make the flow
- * unreadable. Failures do toast — "network Not Found!" is the user's answer.
+ * POST /user/sell-crypto/store — prices the sale and returns the payout form. No
+ * success toast: the order has not run yet. Failures do toast.
  */
 export function useStoreSell() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: async (payload: SellStoreRequest): Promise<SellStoreResult> => {
       const res = await sellService.store(payload);
@@ -51,17 +46,16 @@ export function useStoreSell() {
       if (!result?.data?.identifier) throw new Error("Sell quote returned no identifier");
       return result;
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
- * POST /user/sell-crypto/sell-payment-store — claims the deposit address.
- *
- * Outside orders only, and silent on success: what it returns is an address to
- * send coins to, which the next screen is about to show in full.
+ * POST /user/sell-crypto/sell-payment-store — claims the deposit address. Outside
+ * orders only, silent on success: the next screen shows the address in full.
  */
 export function useSellPaymentStore() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: async ({
       identifier,
@@ -73,17 +67,16 @@ export function useSellPaymentStore() {
       const res = await sellService.sellPaymentStore(identifier, slug);
       return res?.data?.data ?? {};
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
  * POST /user/sell-crypto/payment-info-store — the payout details and any proof.
- *
- * Silent on success as well: `confirm` is what actually places the order, and two
- * toasts for one button press reads as two things having happened.
+ * Silent too: `confirm` places the order, and two toasts read as two events.
  */
 export function usePaymentInfoStore() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: ({
       identifier,
@@ -92,17 +85,16 @@ export function usePaymentInfoStore() {
       identifier: string;
       values: Record<string, KycValue>;
     }) => sellService.paymentInfoStore(identifier, values),
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
- * POST /user/sell-crypto/confirm — executes the draft.
- *
- * The call that moves the coins, so three caches go stale with it: this page's
- * balances, the dashboard's wallets, and the ledger the sale is now a row in.
+ * POST /user/sell-crypto/confirm — executes the draft. The call that moves coins, so
+ * this page's balances, the dashboard's wallets and the ledger all go stale.
  */
 export function useConfirmSell(successMessage: string) {
+  const onApiError = useTransactionError();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -113,6 +105,6 @@ export function useConfirmSell(successMessage: string) {
       queryClient.invalidateQueries({ queryKey: DASHBOARD_KEY });
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_KEY });
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }

@@ -1,10 +1,9 @@
 import { z } from "zod";
 
 /**
- * Field names here are the API's, not prettier local ones (`first_name`, not
- * `firstName`; `credentials`, not `email`; `code`, not `otp`). The forms bind
- * straight to these objects and the services post them untouched, so a rename
- * would only add a mapping layer for every field to get lost in.
+ * Field names are the API's, not prettier local ones (`first_name`, `credentials`,
+ * `code`). The forms bind straight to these and the services post them untouched, so
+ * a rename would only add a mapping layer to lose fields in.
  */
 
 /* -------------------------------------------------------------------------- */

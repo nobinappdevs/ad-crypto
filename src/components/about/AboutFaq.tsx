@@ -5,13 +5,12 @@ import { useLang } from "@/hooks/useLang";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
- * The FAQ block below the About panel: a sticky intro column and six accordion
- * rows, one open at a time (clicking the open row closes it, as in the design).
+ * The FAQ below the About panel: a sticky intro column and six accordion rows, one
+ * open at a time.
  *
- * The rows animate on `max-height`, which needs a concrete ceiling to tween
- * toward. The design's is 220px, which fits its own English copy on a 700px-wide
- * column — on a narrow screen, or in a language that runs longer, the same answer
- * needs more room, so the cap is raised below `lg` rather than clipping the text.
+ * The rows animate on `max-height`, which needs a concrete ceiling — the design's
+ * 220px fits its own English copy, so the cap is raised below `lg` rather than
+ * clipping a longer translation.
  */
 const ITEMS = ["what", "protection", "currencies", "fees", "speed", "rewards"] as const;
 

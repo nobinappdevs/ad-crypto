@@ -34,11 +34,7 @@ import {
 
 const CODE_LENGTH = 6;
 
-/**
- * Google Authenticator's asterisk mark, drawn rather than fetched: six arms of one
- * rounded bar rotated around the centre. A remote logo would be one network round
- * trip and one third-party host for a 96px decoration.
- */
+/** Google Authenticator's mark, drawn rather than fetched — six rotated bars. */
 function AuthenticatorLogo() {
   const arms = [
     { rotate: 0, fill: "#EA4335" },
@@ -72,18 +68,13 @@ function AuthenticatorLogo() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * Two-factor setup, from `GET /user/profile/google-2fa`: the account's shared
- * secret in three forms — as text to type, as a QR to scan, and as the switch that
- * turns it on (`POST .../google-2fa/status/update`).
+ * Two-factor setup, from `GET /user/profile/google-2fa`: the shared secret as text,
+ * as a QR, and the switch that turns it on.
  *
- * All three are on screen at once rather than behind a wizard, because which one a
- * user needs depends on where their authenticator is: a phone scans, a desktop app
- * gets the key pasted. Hiding either behind a step forces half of them to hunt.
- *
- * The confirmation dialog demands a live code in BOTH directions, and that is the
- * backend's rule as much as ours — enabling 2FA against an authenticator that was
- * never actually enrolled locks the account out, and disabling it without proof is
- * a takeover.
+ * All three at once rather than a wizard — a phone scans, a desktop app gets the
+ * key pasted. The confirmation dialog demands a live code in BOTH directions:
+ * enabling without a real enrolment locks the account out, disabling without proof
+ * is a takeover.
  */
 export function Security() {
   const { t } = useLang();
@@ -97,11 +88,7 @@ export function Security() {
   const [code, setCode] = useState("");
 
   const enabled = data?.qr_status === 1;
-  /**
-   * The API's assembled URI wins over a locally built one — it carries the real
-   * account address as the QR's label, which is the only way an authenticator with
-   * two AdCrypto entries can tell them apart.
-   */
+  /** The API's URI wins: it labels the QR with the account, so two entries differ. */
   const qrValue = data?.qr_text || (data?.qr_secrete ? otpauthUri(data.qr_secrete) : "");
   /** Falls back to the URI's own `secret` — see `secretFromOtpauthUri` for why. */
   const secret = data?.qr_secrete || secretFromOtpauthUri(data?.qr_text);

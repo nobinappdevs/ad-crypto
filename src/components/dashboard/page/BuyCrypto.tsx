@@ -68,21 +68,14 @@ import type { BuyDraft } from "@/services/buy.service";
 import type { KycField, KycValue } from "@/services/kyc.service";
 
 /**
- * Buy Crypto, on live data — and the only flow in the app that can hand the user
- * to somebody else's website mid-order.
+ * Buy Crypto, on live data. Three or four steps, of which the user sees at most three:
  *
- * Three or four steps, of which the user sees at most three:
+ *  1. the form, priced locally by the backend's own rules;
+ *  2. `store`'s quote in full — the figures that will actually be charged;
+ *  3. what the gateway needs: manual → instructions + proof form, card → we collect
+ *     it (Authorize.Net has no hosted page), other → redirect to the gateway.
  *
- *  1. the form, priced locally by the same rules the backend uses;
- *  2. `store`'s quote, shown in full — the SERVER's arithmetic, and the only
- *     figures that will actually be charged;
- *  3. whatever the chosen gateway needs:
- *       · manual  → the operator's instructions and a proof-of-payment form
- *       · card    → Authorize.Net has no hosted page, so we collect the card
- *       · other   → a redirect to the gateway's own page, and we are done here
- *
- * The gateway decides which of those three runs, not the page: a `-manual` alias
- * skips `submit` entirely, and everything else asks `submit` where to go next.
+ * The gateway decides which runs: a `-manual` alias skips `submit` entirely.
  */
 
 const PAGE = "mx-auto w-full max-w-[1280px] p-4 sm:p-6";
@@ -149,13 +142,8 @@ export function BuyCrypto() {
 
   const outside = walletType === OUTSIDE_WALLET;
 
-  /**
-   * The first thing standing between this form and an order, or null.
-   *
-   * Configuration problems show immediately — a coin with no network is the state
-   * of the platform, not something the user typed. Amount and address problems
-   * wait for a blur, so nothing goes red on the first keystroke.
-   */
+  // The first thing standing between this form and an order, or null. Config
+  // problems show at once; amount and address problems wait for a blur.
   const problem = (() => {
     if (!coin || !gateway) return null;
     if (!network) return k("errorNetwork");
@@ -627,11 +615,8 @@ export function BuyCrypto() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * `store`'s answer, and the button that acts on it.
- *
- * Every figure here comes from the response — none is recomputed. If the backend
- * priced the order differently from the preview (a rate that moved between typing
- * and submitting), this is where the real number appears, before anyone pays it.
+ * `store`'s answer, and the button that acts on it. Every figure comes from the
+ * response — if the rate moved since typing, the real number appears here first.
  */
 function ReviewStep({
   draft,
@@ -747,12 +732,8 @@ function ReviewStep({
 /* -------------------------------------------------------------------------- */
 
 /**
- * The operator's instructions, and the form they want back.
- *
- * Both are data: `desc` is HTML the operator wrote (bank details, wallet
- * addresses), and `input_fields` declares the controls — the same declaration
- * shape the KYC form uses, so the same helpers read it. The page renders whatever
- * it is handed rather than assuming a transaction id and a screenshot.
+ * The operator's instructions, and the form they want back. Both are data: `desc`
+ * is their HTML, `input_fields` declares the controls (same shape as KYC).
  */
 function ManualStep({
   draft,
@@ -897,15 +878,10 @@ function ManualStep({
 /* -------------------------------------------------------------------------- */
 
 /**
- * The card form, for the one gateway with no hosted page of its own.
+ * The card form, for the one gateway with no hosted page.
  *
- * The identifier posted here is `submit`'s, not the draft's: that call opened a
- * payment attempt and handed back its handle, and the draft's own identifier is
- * not what this endpoint looks up.
- *
- * Nothing is stored and nothing is remembered — the fields live for the length of
- * this screen, and `autoComplete="off"` keeps the browser from offering to keep
- * them either.
+ * The identifier posted here is `submit`'s, not the draft's. Nothing is stored,
+ * and `autoComplete="off"` keeps the browser out of it too.
  */
 function CardStep({
   draft,

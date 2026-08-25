@@ -53,14 +53,9 @@ import type { WithdrawDraft } from "@/services/withdraw.service";
 /**
  * Withdraw Crypto — the trade layout, on `GET /user/withdraw-crypto/index`.
  *
- * Same two steps as the exchange: `store` prices the order and drafts it,
- * `confirm` executes it, and the figures on the confirmation are the SERVER's.
- * What is particular to this page is the destination — the API resolves an
- * address to the wallet behind it, so the field is checked as it is typed and
- * the answer decides what actually arrives.
- *
- * The network picker the demo version carried is gone: the endpoint takes an
- * amount, a wallet and an address, and there was never a chain to choose.
+ * Same two steps as the exchange: `store` prices and drafts, `confirm` executes.
+ * What is particular here is the destination — the API resolves an address to the
+ * wallet behind it, so the field is checked as it is typed.
  */
 
 /** How long a typed address waits before it becomes a lookup. */
@@ -109,11 +104,7 @@ export function WithdrawCrypto() {
   const balance = walletBalance(coin);
   const sending = toNumber(amountRaw);
 
-  /**
-   * The destination's coin, once the lookup has answered. Until then the
-   * receiving side is priced as the same coin, which is what it will be for any
-   * address belonging to this wallet's currency.
-   */
+  /** The destination's coin once the lookup answers; until then, this wallet's own. */
   const destination = check.data?.code ? check.data.code.toUpperCase() : code;
   const receiverRate = check.data?.rate != null ? num(check.data.rate) : senderRate;
 
@@ -124,13 +115,8 @@ export function WithdrawCrypto() {
 
   const addressInvalid = checked.length > 0 && check.isError;
 
-  /**
-   * The first thing standing between this form and a withdrawal, or null.
-   *
-   * The wallet problem shows immediately — it is the state of the account, not
-   * something the user typed. The rest waits for a blur, so nothing goes red on
-   * the first keystroke.
-   */
+  // The first thing standing between this form and a withdrawal, or null. The
+  // wallet problem shows at once; the rest waits for a blur.
   const problem = (() => {
     if (!coin) return null;
     if (!senderWallet) return k("errorNoWallet").replace("{coin}", code);
@@ -535,11 +521,8 @@ export function WithdrawCrypto() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The server's quote, and the button that executes it.
- *
- * Every figure comes from `store`'s response — none is recomputed locally. The
- * destination is repeated here in full: this is the last screen before coins
- * leave, and a truncated address is not something anyone can check.
+ * The server's quote, and the button that executes it. The destination is repeated
+ * in full — this is the last screen before coins leave.
  */
 function ConfirmStep({
   draft,
@@ -637,11 +620,7 @@ function ConfirmStep({
 /* Coin art                                                                    */
 /* -------------------------------------------------------------------------- */
 
-/**
- * The API's coin image, with the brand disc behind it as the fallback — the same
- * pairing the wallet cards use. A plain `<img>`, not `next/image`: images are
- * unoptimized in this static export anyway, and the host comes from an env var.
- */
+/** The API's coin image, with the brand disc as fallback. Plain `<img>` — see OrderPieces. */
 function CoinArt({
   currency,
   paths,

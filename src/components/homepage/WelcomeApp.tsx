@@ -10,13 +10,9 @@ import { useReveal } from "@/hooks/useReveal";
 import { SHELL } from "@/components/share/Container";
 
 /**
- * The design is an absolutely-positioned composition on a fixed 1180x640 canvas —
- * the heading, the coin tile, the phone, the avatar and the copy are pinned to
- * exact coordinates, and the way they overlap IS the design. Reflowing that onto a
- * grid would lose it, so from `xl` up the canvas is rendered at its real size and
- * uniformly scaled to whatever width is available. Below `xl` the same pieces are
- * rebuilt as a stacked layout, with the coin tile and the avatar kept as
- * percentage-anchored satellites of the phone so the cluster survives intact.
+ * An absolute composition on a fixed 1180x640 canvas — the overlap IS the design.
+ * From `xl` up it renders at real size and scales; below, the pieces are rebuilt as
+ * a stack with the tile and avatar as satellites of the phone.
  */
 const STAGE_W = 1180;
 const STAGE_H = 640;
@@ -73,10 +69,8 @@ function StoreButtons() {
     <div className="flex flex-wrap gap-[14px]">
       {STORES.map((store) => (
         <div key={store.key} className="group relative">
-          {/* Hover panel encoding the same store link, so a desktop visitor can
-              scan straight to their phone. Deliberately NOT theme-aware: a QR
-              has to be dark modules on a light field to scan reliably, so the
-              panel stays white and the modules stay near-black in both themes. */}
+          {/* Hover panel with the same store link as a QR. NOT theme-aware: a QR
+              needs dark modules on a light field to scan. */}
           <div
             aria-hidden
             className="pointer-events-none absolute bottom-full left-1/2 mb-3 w-max -translate-x-1/2 scale-95 rounded-2xl bg-white p-3 text-center opacity-0 ring-1 ring-black/10 shadow-xl transition duration-200 group-hover:scale-100 group-hover:opacity-100"
@@ -152,10 +146,8 @@ export function WelcomeApp() {
             className="pointer-events-none absolute overflow-hidden"
             style={{ inset: "-90px -200px" }}
           >
-            {/* Centred on the canvas, not on design coordinates. This wrapper is
-                inset symmetrically (-90px / -200px), so its centre IS the
-                canvas centre — 50%/50% plus a half-shift lands the disc dead
-                centre behind the composition. */}
+            {/* Centred on the canvas: this wrapper is inset symmetrically, so its
+                centre IS the canvas centre. */}
             <span
               className="absolute top-1/2 left-1/2 rounded-full"
               style={{
@@ -205,10 +197,8 @@ export function WelcomeApp() {
             style={{ left: 200, top: 10, color: "var(--suite-fg)", ...delay(0) }}
           >
             <span className="block!">{t("welcome.headingLine1")}</span>
-            {/* The indent is padding, not a translate: a translate shifts the line
-                out of its own box, so a longer translation is pushed past the
-                canvas edge instead of wrapping inside it. Padding also mirrors
-                correctly in Arabic, which `translateX` does not. */}
+            {/* Padding, not a translate — a translate would push a longer line past
+                the canvas edge, and it does not mirror in Arabic. */}
             <span className="block!" style={{ paddingInlineStart: 96 }}>
               {t("welcome.headingLine2Lead")}{" "}
               <span className="text-primary!">{t("welcome.headingLine2Accent")}</span>

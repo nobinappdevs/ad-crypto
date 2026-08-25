@@ -64,26 +64,15 @@ import type { SellDraft, SellStoreResult } from "@/services/sell.service";
 import type { KycField, KycValue } from "@/services/kyc.service";
 
 /**
- * Sell Crypto, on live data.
- *
- * Where the coins come from decides how many screens there are:
+ * Sell Crypto, on live data. Where the coins come from decides the screens:
  *
  *  Inside Wallet   form → receiving details → done
  *  Outside Wallet  form → send the coins → receiving details → done
  *
- * The extra screen is the deposit address. Coins sold from outside are not in an
- * AdCrypto wallet yet, so the platform claims an address for the pair being sold
- * (`sell-payment-store`) and the user sends to it before the order can settle.
- *
- * "Receiving details" is the operator's own form, and it arrives with `store` —
- * `desc` plus `payment_gateway_fields`, so that screen needs no second request.
- * When the coins came from outside, the deposit address's own `input_fields` (a
- * transaction hash, a screenshot) are appended to it: both sets post together, and
- * the API sorts them back out itself.
- *
- * Charges run the opposite way to a purchase: they are taken in the COIN and added
- * on top of the amount, so `total_payable` is what leaves the wallet and `will_get`
- * is the gross converted at the payout rate.
+ * The extra screen is a deposit address claimed by `sell-payment-store`. The
+ * receiving form is the operator's own and arrives with `store`; when the coins
+ * came from outside, the address's `input_fields` are appended and both sets post
+ * together. Charges are taken in the COIN, on top of the amount.
  */
 
 const PAGE = "mx-auto w-full max-w-[1280px] p-4 sm:p-6";
@@ -156,13 +145,8 @@ export function SellCrypto() {
   /** The deposit address for this pair, for an outside sale. */
   const address = outsideAddressFor(data?.outside_wallet_address, coin?.id, network?.network_id);
 
-  /**
-   * The first thing standing between this form and an order, or null.
-   *
-   * Configuration problems show immediately — a network with no deposit address is
-   * the state of the platform, not something the user typed. Amount problems wait
-   * for a blur, so nothing goes red on the first keystroke.
-   */
+  // The first thing standing between this form and an order, or null. Config
+  // problems show at once; amount problems wait for a blur.
   const problem = (() => {
     if (!coin || !gateway) return null;
     if (!network) return k("errorNetwork");
@@ -567,12 +551,8 @@ export function SellCrypto() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The deposit address the platform claimed for this order, and the exact amount to
- * send to it.
- *
- * Both are copyable and the address is also a QR, because this is the one step the
- * user performs in another application: a mistyped address or a rounded amount is
- * a transfer that cannot be matched to this order.
+ * The deposit address claimed for this order, and the exact amount to send.
+ * Copyable and a QR, since this step happens in another application.
  */
 function PaymentStep({
   draft,
@@ -725,15 +705,9 @@ function CopyRow({
 /**
  * The operator's payout form, and the last button in the flow.
  *
- * Everything here is data: `desc` is HTML they wrote, `fields` is the payout
- * method's declaration ("Bank name", "Branch"), and `addressFields` is what the
- * deposit address asks for as proof of the transfer. Both sets post in one call —
- * the API echoes them back separated as `gateway_input_values` and
- * `outside_address_input_values`.
- *
- * That call does not place the order; `confirm` does. They are chained behind one
- * button, because a screen that asks the user to press Continue twice for one
- * decision is a screen that gets pressed once.
+ * All data: `desc` is their HTML, `fields` the payout method's declaration, and
+ * `addressFields` the proof the deposit address asks for. Both sets post in one
+ * call, then `confirm` places the order — chained behind one button.
  */
 function ReceivingStep({
   identifier,

@@ -10,13 +10,9 @@ import { PhoneMockup } from "./PhoneMockup";
 import { HowItWorksPanel } from "./HowItWorksPanel";
 
 /**
- * Where the phone ends up. X is a fraction of stage width so the travel stays
- * proportional on wider screens (-0.222 x 1440 = the design's -320px).
- *
- * Y cannot be a fraction: the phone STARTS at `100% - PHONE_BOTTOM_OFFSET`, so a
- * proportional shift would land it somewhere different on every window height.
- * It is solved from the destination instead — `PHONE_END_Y` measured from the top
- * of the stage — which is what keeps the composition put as the viewport grows.
+ * Where the phone ends up. X is a fraction of stage width, so the travel stays
+ * proportional. Y cannot be — the phone starts at `100% - PHONE_BOTTOM_OFFSET`, so
+ * it is solved from the destination (`PHONE_END_Y`, measured from the stage top).
  */
 const PHONE_TRAVEL_X = -0.222;
 const PHONE_BOTTOM_OFFSET = 334;
@@ -24,11 +20,8 @@ const PHONE_END_Y = 190;
 const PHONE_END_SCALE = 0.76;
 
 /**
- * The cap on the phone's travel — `SHELL_MAX`'s 1292px, as a number, because the
- * travel is computed rather than a class. Both halves of the composition stop
- * spreading at the same width: on a 2560px window (or a zoomed-out one) a plain
- * fraction of the viewport threw the phone 568px left while the copy went to the
- * window's right edge, and the two stopped reading as one scene.
+ * The cap on the phone's travel — `SHELL_MAX` as a number, since the travel is
+ * computed. Both halves of the composition stop spreading at the same width.
  */
 const HERO_FRAME = 1292;
 
@@ -110,17 +103,12 @@ export function HeroScene() {
   useScrollProgress(sceneRef, apply);
 
   return (
-    // 2500px is the scroll runway (v2's figure). The STAGE, though, is one
-    // viewport tall rather than a fixed 900px: at a fixed height anything taller
-    // than 900px left a dead band below the phone, since the phone and wordmark
-    // anchor to the stage's bottom, not the window's.
+    // 2500px of scroll runway, but the stage is one VIEWPORT tall — at a fixed
+    // height a taller window left a dead band under the phone.
     <div ref={sceneRef} data-hero-scene className="relative bg-hero-bg  lg:h-[2500px]">
-      {/* The floor is set by the copy block, not taste: it is centred inside
-          `100% - 470px`, and the headline stack needs ~400px, so anything under
-          ~880px makes that box smaller than its contents and the text spills into
-          the nav above and the phone below. On a shorter window the sticky
-          element is taller than the viewport, which just means the scene scrolls
-          a little before it pins — the phone's lower edge is masked anyway. */}
+      {/* The floor is set by the copy block: centred inside `100% - 470px`, and the
+          headline stack needs ~400px. On a shorter window the sticky element is
+          taller than the viewport, so the scene scrolls a little before pinning. */}
       <div className="lg:sticky lg:top-0  lg:h-screen lg:min-h-220 lg:overflow-hidden">
         <div
           ref={stageRef}
@@ -176,10 +164,9 @@ export function HeroScene() {
             />
 
             {/* pt clears the fixed nav on mobile, where it is out of flow. */}
-            {/* Centred in the band between the nav (88px) and the phone, rather
-                than pinned to a fixed `top`: the stage is now viewport-height, so
-                a fixed offset would drift away from the phone as the window
-                grows. 470 = the phone's 334px bottom offset plus clearance. */}
+            {/* Centred in the band between the nav and the phone, not pinned to a
+                fixed `top` — the stage is viewport-height. 470 = the phone's bottom
+                offset plus clearance. */}
             <div className="relative z-[3] mx-auto flex w-full max-w-[900px] flex-col items-center px-5 pt-24 pb-10 text-center sm:px-8 sm:pt-28 lg:absolute lg:top-22 lg:left-1/2 lg:h-[calc(100%-470px)] lg:w-215 lg:max-w-none lg:-translate-x-1/2 lg:justify-center lg:px-0 lg:pt-0 lg:pb-0 xl:w-225">
               {/* <div className="relative inline-flex items-center my-4">
       <div className="relative z-20 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary shadow-md shadow-primary/25">
@@ -219,20 +206,13 @@ export function HeroScene() {
 
             </div>
 
-            {/* Oversized wordmark, masked so it fades out toward the bottom in
-                both themes. `relative z-[2]` is
-                required: on mobile this is in normal flow, so without it the
-                absolutely-positioned edge fade above would paint over it. */}
+            {/* Oversized wordmark, masked so it fades toward the bottom. `relative
+                z-[2]` is required or the edge fade above paints over it. */}
             <div
               aria-hidden
-              // Larger and far looser than before: the reference runs the wordmark
-              // wall to wall and lets it crop at both edges, which the scene's
-              // `overflow-hidden` handles.
-              // v2 sets this as a SOLID colour at 50% opacity with a downward
-              // mask, not a background-clipped gradient — the mask fades the
-              // glyphs without also fading the colour, so it reads the same in
-              // both themes. Weight 500 and positive tracking, both unusual for a
-              // display size, are what keep it from looking like a headline.
+              // Wall to wall, cropping at both edges. A SOLID colour at 50% with a
+              // downward mask, not a clipped gradient — the mask fades the glyphs
+              // without fading the colour, so both themes match.
               className="pointer-events-none relative z-2 mt-6 w-full text-center text-[clamp(64px,16vw,230px)] leading-none font-medium tracking-[0.03em] whitespace-nowrap text-hero-wordmark opacity-50 select-none lg:absolute lg:bottom-5.5 lg:left-0 lg:mt-0"
               style={{
                 maskImage:

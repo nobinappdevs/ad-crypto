@@ -3,8 +3,7 @@ import type { ImagePaths } from "@/services/dashboard.service";
 import type { KycField, KycValue } from "@/services/kyc.service";
 
 /**
- * Buy Crypto — the longest flow in the app, and the only one that can leave the
- * site mid-order.
+ * Buy Crypto — the longest flow in the app, and the only one that can leave the site.
  *
  * `GET  /user/buy-crypto/index`                     what can be bought, and how it can be paid for
  * `POST /user/buy-crypto/store`                     prices the order, returns a draft `identifier`
@@ -13,12 +12,9 @@ import type { KycField, KycValue } from "@/services/kyc.service";
  * `POST /user/buy-crypto/manual/submit`             that form, plus the proof of payment
  * `POST /user/buy-crypto/authorize-payment-submit`  card details, for gateways we collect them for
  *
- * Which of the last three runs is not a choice the page makes freely — it is
- * decided by the gateway. A `-manual` alias means the operator settles it by
- * hand, so `submit` is skipped entirely and the manual pair is used. Everything
- * else goes through `submit`, which answers with a `redirect_url`: normally the
- * gateway's own hosted page, to be navigated to, but for Authorize.Net it points
- * back at `authorize-payment-submit`, which is the API asking US for the card.
+ * The gateway decides which of the last three runs: a `-manual` alias skips
+ * `submit`, and everything else follows `submit`'s `redirect_url` — which for
+ * Authorize.Net points back at us to collect the card.
  */
 
 /** The user's holding in one currency. `id` is the WALLET's id, not the coin's. */
@@ -32,12 +28,8 @@ export interface BuyUserWallet {
 }
 
 /**
- * A chain the coin can be delivered over.
- *
- * Two ids, and `store` wants the SECOND one: `id` is this row's own key, while
- * `network_id` is the network being referenced — which is what the endpoint's own
- * examples post (`network=5` against a currency whose Ripple row is
- * `{id: 1, network_id: 5}`).
+ * A chain the coin can be delivered over. `store` wants `network_id`, not `id` —
+ * the first is the network being referenced, the second this row's own key.
  */
 export interface BuyNetwork {
   id?: number;
@@ -58,20 +50,14 @@ export interface BuyCurrency {
   /** How many of this coin one unit of the platform's base currency buys. */
   rate?: string | number;
   networks?: BuyNetwork[];
-  /**
-   * The signed-in user's wallets for this coin — SINGULAR here, unlike the
-   * exchange index's `wallets`. Empty for a coin they have never held.
-   */
+  /** This coin's wallets — SINGULAR here, unlike the exchange index's `wallets`. */
   wallet?: BuyUserWallet[];
 }
 
 /**
- * One way to pay, as configured by the operator.
- *
- * `rate` is how many units of this method's currency one unit of the base
- * currency is worth, so the price of a coin in this currency is the ratio of the
- * two rates. `min_limit`/`max_limit` and `fixed_charge` are denominated in the
- * METHOD's currency; `percent_charge` is a percentage ("3.0000" = 3%).
+ * One way to pay, as configured by the operator. `rate` is against the base
+ * currency, so a coin's price here is the ratio of the two rates. Limits and
+ * `fixed_charge` are in the METHOD's currency; `percent_charge` is a percentage.
  */
 export interface BuyGateway {
   id?: number;
@@ -128,8 +114,8 @@ export interface BuyQuoteMethod {
 }
 
 /**
- * The priced order. Every figure is the SERVER's, and everything except `amount`
- * and `will_get` is denominated in the PAYMENT method's currency.
+ * The priced order. Every figure is the SERVER's, and all but `amount` and
+ * `will_get` are in the PAYMENT method's currency.
  */
 export interface BuyQuote {
   wallet?: BuyQuoteWallet;
@@ -174,10 +160,8 @@ export interface BuyStoreRequest {
 }
 
 /**
- * What `submit` answers with.
- *
- * `redirect_url` is where the payment continues, and `identifier` is a NEW handle
- * scoped to that attempt — the card step must post this one, not the draft's.
+ * What `submit` answers with. `identifier` is a NEW handle scoped to that payment
+ * attempt — the card step must post this one, not the draft's.
  */
 export interface BuySubmitResult {
   redirect_url?: string;
@@ -215,10 +199,8 @@ export const buyService = {
   },
 
   /**
-   * POST /user/buy-crypto/store — prices the order and drafts it.
-   *
-   * Nothing is charged when this returns; it exists so the user can be shown the
-   * server's own figures before agreeing to them.
+   * POST /user/buy-crypto/store — prices the order and drafts it. Nothing is charged;
+   * it exists so the user sees the server's figures before agreeing.
    */
   async store(payload: BuyStoreRequest): Promise<{ data?: { data?: BuyDraft } }> {
     const form = new FormData();
@@ -255,11 +237,8 @@ export const buyService = {
   },
 
   /**
-   * POST /user/buy-crypto/manual/submit — the filled form and the receipt.
-   *
-   * Multipart, because a screenshot of the transfer is usually one of the fields.
-   * Empty values are dropped rather than sent as `""`: an optional field the user
-   * left alone should look absent to the validator, not present and blank.
+   * POST /user/buy-crypto/manual/submit — the filled form and the receipt. Multipart,
+   * since a screenshot is usually one field; empty values are dropped, not sent as "".
    */
   async manualSubmit(identifier: string, values: Record<string, KycValue>) {
     const form = new FormData();

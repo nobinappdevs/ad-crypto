@@ -11,12 +11,8 @@ import type { ImagePaths } from "@/services/dashboard.service";
 import type { JournalSummary } from "@/services/website.service";
 
 /**
- * The cover.
- *
- * A plain `<img>`, not `next/image`: the app is a static export with the image
- * optimizer switched off, and the host arrives in the payload's own
- * `image_paths.base_url` — pinning it in next.config's `remotePatterns` would
- * break the day the backend moves. Same call the dashboard's wallet art makes.
+ * The cover. A plain `<img>`: static export, optimizer off, and the host arrives in
+ * the payload's own `image_paths.base_url`.
  */
 export function JournalCover({
   journal,

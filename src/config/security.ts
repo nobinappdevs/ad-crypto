@@ -1,7 +1,6 @@
 /**
- * The static half of the 2FA screen. The per-account half — secret, otpauth URI,
- * enrolment status — comes from `GET /user/profile/google-2fa`; see
- * `@/hooks/useSecurity`.
+ * The static half of the 2FA screen. The per-account half comes from
+ * `GET /user/profile/google-2fa`; see `@/hooks/useSecurity`.
  */
 
 /** Shown in the authenticator's own list, so it names the platform, not the page. */
@@ -17,12 +16,9 @@ export const AUTHENTICATOR_APPS = {
 };
 
 /**
- * Builds an `otpauth://` URI from a bare secret.
- *
- * A FALLBACK only: the API sends `qr_text` already assembled, and that version is
- * better because it carries the account's real address as the label — an
- * authenticator holding two AdCrypto entries can only tell them apart by it.
- * This is what the QR falls back to when the response has the secret but no URI.
+ * Builds an `otpauth://` URI from a bare secret — a FALLBACK only. The API's own
+ * `qr_text` is better: it carries the account's address as the label, which is how
+ * an authenticator holding two AdCrypto entries tells them apart.
  */
 export function otpauthUri(secret: string, account = TWO_FA_ISSUER) {
   const label = encodeURIComponent(`${TWO_FA_ISSUER}:${account}`);
@@ -39,11 +35,9 @@ export function otpauthUri(secret: string, account = TWO_FA_ISSUER) {
 /**
  * Pulls `?secret=` back out of an `otpauth://` URI.
  *
- * Needed because of a quirk in the backend: on the FIRST call for an account it
- * generates the secret during the request and answers with `qr_secrete: null`
- * while `qr_text` already contains it — only from the second call on do both
- * arrive. Without this the setup screen shows an empty "secret key" box on the one
- * visit that matters, the first, and the enable button has nothing to work from.
+ * Needed for a backend quirk: on the FIRST call for an account, `qr_secrete` is null
+ * while `qr_text` already carries the secret. Without this the setup screen shows an
+ * empty secret box on the one visit that matters.
  */
 export function secretFromOtpauthUri(uri: string | undefined): string {
   if (!uri) return "";

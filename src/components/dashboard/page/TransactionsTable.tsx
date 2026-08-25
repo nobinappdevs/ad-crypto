@@ -9,15 +9,11 @@ import { price, usd } from "@/config/market";
 import { txAmount, txFee, type Transaction } from "@/config/transactions";
 
 /**
- * The transaction ledger, as a table.
+ * The transaction ledger, as a table. Shared with the Transactions page, which
+ * shows the same columns over the full history.
  *
- * Lives here rather than inside the overview because the Transactions page shows
- * the same table over the full history: two copies of ten columns, a selection
- * model and a totals row is how one of them ends up with a different fee column.
- *
- * Totals are summed from the ROWS PASSED IN, not from the whole ledger — the
- * overview shows four rows, and a footer totalling ten under four visible lines is
- * simply wrong.
+ * Totals are summed from the ROWS PASSED IN — a footer totalling ten under four
+ * visible lines is simply wrong.
  */
 
 /** Shared cell classes — numeric columns are end-aligned and tabular so the

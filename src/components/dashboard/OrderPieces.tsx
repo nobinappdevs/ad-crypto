@@ -13,21 +13,13 @@ import type { ImagePaths } from "@/services/dashboard.service";
 import type { KycField, KycValue } from "@/services/kyc.service";
 
 /**
- * The pieces the Buy and Sell order flows are built from.
- *
- * Both pages are the same three or four screens on different endpoints — a form,
- * a summary read back, and a form the OPERATOR declared — so the summary row, the
- * artwork, the empty states and the dynamic control live here rather than in each
- * page. Two copies of a summary row is how one page ends up with a different
- * baseline from the other.
+ * The pieces the Buy and Sell order flows share: the summary row, the artwork, the
+ * empty states and the operator-declared control.
  */
 
 /**
- * One line of a summary: a glyph, what the line is, and what it is set to.
- *
- * The glyph sits in a tinted square of a fixed size so every row lines up down the
- * column — including the coin row, which passes artwork instead of an icon and
- * would otherwise be the one row out of step.
+ * One line of a summary: a glyph, what the line is, and what it is set to. The
+ * glyph square is a fixed size so every row lines up down the column.
  */
 export function SummaryLine({
   icon,
@@ -102,12 +94,9 @@ export function StatePanel({
 }
 
 /**
- * The API's coin image, with the brand disc behind it as the fallback — the same
- * pairing the wallet cards use. A plain `<img>`, not `next/image`: images are
- * unoptimized in this static export anyway, and the host comes from an env var.
- *
- * Typed structurally rather than against one endpoint's currency: every payload
- * that carries a coin carries these two fields under these two names.
+ * The API's coin image, with the brand disc as fallback. A plain `<img>` — images
+ * are unoptimized in this static export and the host comes from an env var.
+ * Typed structurally, since every payload names these two fields the same way.
  */
 export function CoinArt({
   currency,
@@ -140,10 +129,7 @@ export function CoinArt({
   );
 }
 
-/**
- * A payment method's logo, falling back to its currency symbol — most methods have
- * an image, and the ones that do not are still recognised by their currency.
- */
+/** A payment method's logo, falling back to its currency symbol. */
 export function MethodArt({
   gateway,
   paths,
@@ -181,12 +167,8 @@ export function MethodArt({
 
 /**
  * One control from an operator-declared form, chosen by the field's own `type`.
- *
- * The declaration shape is the KYC form's, and every operator-configurable form on
- * this API uses it — a manual payment gateway's proof of payment, a payout
- * method's bank details, a deposit address's transaction hash. `ns` is the
- * translation namespace the surrounding page uses, because the only strings this
- * needs are the file picker's and they are already translated per page.
+ * Same declaration shape as KYC, which every configurable form here uses. `ns` is
+ * the page's translation namespace.
  */
 export function DynamicField({
   field,

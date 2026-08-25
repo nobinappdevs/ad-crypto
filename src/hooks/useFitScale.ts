@@ -3,20 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * Uniformly scales a fixed-size design canvas down to the width it actually has.
+ * Uniformly scales a fixed-size design canvas down to the width it actually has —
+ * for scenes whose overlaps ARE the design, which reflowing would lose.
  *
- * Some of the suite's scenes are absolutely-positioned compositions on a fixed
- * canvas — the overlaps between the pieces ARE the design, so reflowing them onto
- * a grid would lose it. Rendering the canvas at its real size and scaling the
- * whole thing keeps every coordinate exact at any width.
+ * Spread `attach` on the measured wrapper and apply `scale` to the canvas inside,
+ * with a `top left` origin and a wrapper height of `designHeight * scale`.
  *
- * Spread `attach` onto the *measured wrapper* (the element that gets the real
- * available width) and apply `scale` to the canvas inside it, with a
- * `top left` transform origin and a wrapper height of `designHeight * scale`.
- *
- * Measurement happens in the ref callback, which runs during commit — so the
- * canvas is never painted once at full size before being scaled down. A width of
- * 0 is ignored, which is what keeps a `hidden` canvas from collapsing the scale.
+ * Measured in the ref callback (during commit), so the canvas is never painted at
+ * full size first. A width of 0 is ignored, so a hidden canvas keeps its scale.
  */
 export function useFitScale(designWidth: number) {
   const ref = useRef<HTMLElement | null>(null);

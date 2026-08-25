@@ -3,14 +3,11 @@
 import { useEffect, type RefObject } from "react";
 
 /**
- * Flips every `[data-reveal]` descendant of `rootRef` to `data-reveal="in"` the
- * first time it enters the viewport. The transition itself lives in globals.css,
- * keyed off that attribute, with an optional per-element `--reveal-delay` for
- * staggering — so a section only has to mark up what should animate and by how
- * much, not carry any motion logic of its own.
+ * Flips every `[data-reveal]` descendant of `rootRef` to `data-reveal="in"` on first
+ * entry into the viewport. The transition lives in globals.css, keyed off that
+ * attribute, with an optional `--reveal-delay` for staggering.
  *
- * Elements are unobserved once revealed: this is a one-way entrance, not
- * something that re-plays on the way back up.
+ * Elements are unobserved once revealed — a one-way entrance, not a replay.
  */
 export function useReveal(rootRef: RefObject<HTMLElement | null>) {
   useEffect(() => {

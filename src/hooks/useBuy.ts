@@ -12,18 +12,16 @@ import {
   type ManualGatewayData,
 } from "@/services/buy.service";
 import type { KycValue } from "@/services/kyc.service";
-import { getApiErrorMessage, getApiSuccessMessage } from "@/hooks/useAuth";
+import { getApiSuccessMessage } from "@/hooks/useAuth";
+import { useTransactionError } from "@/hooks/useTransactionError";
 import { DASHBOARD_KEY } from "@/hooks/useDashboard";
 import { TRANSACTIONS_KEY } from "@/hooks/useTransactions";
 
 export const BUY_KEY = ["buy"] as const;
 
 /**
- * GET /user/buy-crypto/index — the coins, their networks, and the payment methods.
- *
- * Refetched on focus: the payload carries live rates and the operator's charge
- * table, and an order priced against yesterday's figures is an order the server
- * will re-price at the last step anyway.
+ * GET /user/buy-crypto/index — coins, networks, payment methods. Refetched on focus:
+ * it carries live rates and the charge table.
  */
 export function useBuyIndex(enabled = true) {
   return useQuery({
@@ -36,13 +34,11 @@ export function useBuyIndex(enabled = true) {
 }
 
 /**
- * POST /user/buy-crypto/store — prices the order.
- *
- * No success toast: this step only produces a quote, and a "done" message on an
- * order nobody has paid for is what would make the flow unreadable. Failures do
- * toast — "network Not Found!" is the user's answer.
+ * POST /user/buy-crypto/store — prices the order. No success toast: this only
+ * produces a quote. Failures do toast; the message is the user's answer.
  */
 export function useStoreBuy() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: async (payload: BuyStoreRequest): Promise<BuyDraft> => {
       const res = await buyService.store(payload);
@@ -52,32 +48,28 @@ export function useStoreBuy() {
       if (!draft?.identifier) throw new Error("Buy quote returned no identifier");
       return draft;
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
- * POST /user/buy-crypto/submit — hands the draft to an automatic gateway.
- *
- * Success here is not a completed purchase, so nothing is toasted and no cache is
- * invalidated: the answer is a place to continue, and the caller decides whether
- * that means leaving the site or collecting a card.
+ * POST /user/buy-crypto/submit — hands the draft to an automatic gateway. Success is
+ * not a purchase, so nothing is toasted; the answer is a place to continue.
  */
 export function useSubmitBuy() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: async (identifier: string): Promise<BuySubmitResult> => {
       const res = await buyService.submit(identifier);
       return res?.data ?? {};
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
- * GET /user/buy-crypto/manual/input-fields — the form a manual gateway wants.
- *
- * Keyed by alias and left stale for a while: which fields an operator asks for
- * changes when they edit the gateway, not while somebody is filling it in.
+ * GET /user/buy-crypto/manual/input-fields — the form a manual gateway wants. Left
+ * stale a while: it changes when an operator edits the gateway.
  */
 export function useManualGatewayFields(alias: string, enabled = true) {
   return useQuery({
@@ -91,12 +83,11 @@ export function useManualGatewayFields(alias: string, enabled = true) {
 }
 
 /**
- * POST /user/buy-crypto/manual/submit — the proof of a payment made by hand.
- *
- * The order exists after this, pending the operator's check, so the ledger and the
- * dashboard both go stale even though no coins have moved yet.
+ * POST /user/buy-crypto/manual/submit — proof of a payment made by hand. The order
+ * exists after this, so the ledger and dashboard go stale even with no coins moved.
  */
 export function useManualSubmit(successMessage: string) {
+  const onApiError = useTransactionError();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -113,18 +104,16 @@ export function useManualSubmit(successMessage: string) {
       queryClient.invalidateQueries({ queryKey: DASHBOARD_KEY });
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_KEY });
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
  * POST /user/buy-crypto/authorize-payment-submit — the card, charged on the spot.
- *
- * The one step in this flow that completes a purchase without leaving the site,
- * so it invalidates everything the purchase changed: this page's rates and
- * wallets, the dashboard's balances, and the ledger the order is now a row in.
+ * The one step here that completes a purchase, so everything it touched is invalidated.
  */
 export function useAuthorizeSubmit(successMessage: string) {
+  const onApiError = useTransactionError();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -135,6 +124,6 @@ export function useAuthorizeSubmit(successMessage: string) {
       queryClient.invalidateQueries({ queryKey: DASHBOARD_KEY });
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_KEY });
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }

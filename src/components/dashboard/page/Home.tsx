@@ -13,12 +13,7 @@ import { TransactionsChart } from "./TransactionsChart";
 import { BuyCryptoChart } from "./BuyCryptoChart";
 import { RecentTransactions } from "./RecentTransactions";
 
-/**
- * How many wallet cards the overview shows. The rest are a click away on
- * `/dashboard/wallets` rather than expanded in place: this page is a summary with
- * two charts and a ledger under it, and an account holding a dozen coins would
- * push all of that below the fold to say something the wallets page says better.
- */
+/** How many wallet cards the overview shows; the rest live on `/dashboard/wallets`. */
 const WALLETS_PREVIEW = 4;
 
 /* -------------------------------------------------------------------------- */
@@ -29,12 +24,8 @@ const WALLETS_PREVIEW = 4;
  * The dashboard overview, entirely from `GET /user/dashboard`: what the account
  * holds, a year of activity, and the newest transactions.
  *
- * Worth knowing what this page deliberately does NOT show. The wallet cards used
- * to carry a fiat value, a unit price and a 24h move; the endpoint sends none of
- * those, and there is no market-data endpoint in this API. Rather than price
- * balances from a hard-coded table — which would put a wrong dollar figure under a
- * real holding — each card shows its deposit address instead, which is both true
- * and the thing a user actually comes to a wallet card for.
+ * No fiat value or 24h move on the wallet cards — the endpoint sends neither and
+ * this API has no market data, so each card shows its deposit address instead.
  */
 export function DashboardHome() {
   const { t } = useLang();
@@ -86,10 +77,8 @@ export function DashboardHome() {
       {/* ---------------- Wallet cards ---------------- */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <h2 className="text-[18px]! font-bold!">{k("myWallets")}</h2>
-        {/* A link to the wallets page, not the in-place expander this replaces.
-            Expanding pushed the charts and the ledger off the screen to show cards
-            that have a page of their own, and it was hidden below five wallets —
-            so an account with exactly four had no way to reach that page at all. */}
+        {/* A link to the wallets page, not an in-place expander — which pushed the
+            charts off screen and was hidden below five wallets. */}
         {wallets.length > 0 && (
           <Link
             href="/dashboard/wallets"
@@ -157,7 +146,7 @@ export function DashboardHome() {
           action={
             <Link
               href="/dashboard/transactions"
-              className="inline-flex! h-9 items-center gap-1.5 rounded-lg border border-border px-3 text-[12.5px] font-medium text-heading transition hover:border-primary"
+              className="inline-flex! h-9 items-center gap-1.5 rounded-full border border-border px-4 text-[12.5px] font-medium text-heading transition hover:border-primary"
             >
               {k("viewAll")}
               <ArrowRight size={14} className="text-muted rtl:rotate-180" />

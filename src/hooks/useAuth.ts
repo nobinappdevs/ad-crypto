@@ -36,15 +36,9 @@ const GENERIC_ERROR = "Something went wrong. Please try again.";
 /**
  * Depth-first search for the first non-empty string in a message payload.
  *
- * Recursive because `message.error` arrives in more than one shape from the same
- * API: a flat array of sentences from `/register`
- * (`["The email field is required.", …]`), and a nested bag from `/login`
- * (`{ error: ["The email must not be greater than 40 characters."] }`). Reading
- * only one level deep drops the second and reports "Something went wrong" over a
- * message the backend actually supplied.
- *
- * `depth` is a stop, not a feature — no real payload nests this far, and without
- * it a self-referential object would spin.
+ * Recursive because `message.error` comes in two shapes from the same API: a flat
+ * array of sentences from `/register`, and a nested bag from `/login`. `depth` is a
+ * stop, so a self-referential object cannot spin.
  */
 function firstMessage(value: unknown, depth = 0): string | undefined {
   if (typeof value === "string") return value.trim() || undefined;
@@ -70,9 +64,8 @@ export function getApiSuccessMessage(res: unknown, fallback: string): string {
 }
 
 /**
- * Mirrors a response's 2FA flags locally and reports whether a code is still
- * owed. A response without the flags leaves the stored value alone — "unknown"
- * must not silently clear a session that was already waiting on a code.
+ * Mirrors a response's 2FA flags and reports whether a code is owed. A response
+ * without them leaves the stored value alone — "unknown" must not clear a session.
  */
 function trackTwoFa(res: unknown): boolean {
   const state = twoFaStateFromResponse(res);
@@ -82,16 +75,10 @@ function trackTwoFa(res: unknown): boolean {
 
 /**
  * Stores everything a register/login response says about the session, and reports
- * whether an email code is still owed.
+ * whether an email code is owed.
  *
- * Shared by both, because both responses carry the same three things and the
- * guards afterwards read the same mirrors — one of them writing a field the other
- * forgot is precisely how the two screens ended up disagreeing.
- *
- * The token goes in even when a code is owed: the verify and resend calls
- * authenticate with it, so there is no way to finish signing up without it.
- * `email_verification` is kept because no authenticated endpoint repeats it, and
- * the guards need it to know when the whole question is switched off.
+ * Shared by both, so neither can forget a field the guards read. The token goes in
+ * even when a code is owed — the verify and resend calls authenticate with it.
  */
 function trackAuthResponse(res: unknown): boolean {
   const token = extractToken(res);
@@ -110,19 +97,12 @@ function trackAuthResponse(res: unknown): boolean {
 /* -------------------------------------------------------------------------- */
 
 /**
- * POST /register.
- *
- * The response carries a usable token even though the account is unverified —
- * that is deliberate on the backend's side, because the verify call needs it to
- * authenticate. So the token is stored either way; where the user lands next is
- * what the response decides:
+ * POST /register. The response carries a usable token even while unverified — the
+ * verify call needs it — so it is stored either way; only the destination differs:
  *
  *   email_verification: true  + email_verified: 0  ->  /verify-email
  *   email_verification: true  + email_verified: 1  ->  /dashboard
  *   email_verification: false                      ->  /dashboard, nothing to ask
- *
- * The guards read the same flags back out of localStorage a moment later, so the
- * screen this sends the user to is the screen that will keep them.
  */
 export function useRegister() {
   const router = useRouter();
@@ -131,10 +111,8 @@ export function useRegister() {
   return useMutation({
     mutationFn: (payload: RegisterRequest) => authService.register(payload),
     onSuccess: (res, variables) => {
-      // Whatever this browser fetched for whoever was signed in before belongs to
-      // them, not to the account that exists as of this response — and the guards
-      // read `["dashboard"]`, so a leftover copy of somebody else's flags would
-      // decide this account's gate.
+      // What this browser fetched for the previous session belongs to it, and the
+      // guards read `["dashboard"]` — a leftover copy would gate this account.
       queryClient.clear();
 
       const needsCode = trackAuthResponse(res);
@@ -181,9 +159,8 @@ export function useVerifyCode(successMessage: string) {
 }
 
 /**
- * GET /user/resend/code. The backend refuses inside its own cooldown and says
- * how long is left ("You can resend verification code after 48 seconds"), so the
- * error message is worth surfacing verbatim rather than replacing.
+ * GET /user/resend/code. The backend's refusal says how long is left, so its
+ * message is surfaced verbatim rather than replaced.
  */
 export function useResendCode() {
   return useMutation({
@@ -198,12 +175,8 @@ export function useResendCode() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * POST /login.
- *
- * A token comes back even when the account isn't cleared to use it yet, so there
- * are two gates after this and they run in order: confirm the email address, then
- * answer the authenticator. Each has its own screen and each is skipped when the
- * response says it doesn't apply.
+ * POST /login. A token comes back even when the account cannot use it yet, so two
+ * gates follow, in order: the email address, then the authenticator.
  */
 export function useLogin() {
   const router = useRouter();
@@ -283,11 +256,8 @@ export function useDeleteAccount(successMessage = "Account deleted") {
 /* -------------------------------------------------------------------------- */
 
 /**
- * Step 1, POST /password/forgot/find/user.
- *
- * The token in the response is what makes the next two steps possible — without
- * it `verify/code` and `reset` have nothing to identify the request by, so it is
- * stored before the caller is told the send succeeded.
+ * Step 1, POST /password/forgot/find/user. The token in the response is what the
+ * next two steps identify the request by, so it is stored before reporting success.
  */
 export function useForgotFindUser() {
   return useMutation({

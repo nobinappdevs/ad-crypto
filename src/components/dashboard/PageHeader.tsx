@@ -6,9 +6,8 @@ import { ChevronRight } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 
 /**
- * Breadcrumb + title block that opens every dashboard sub-page. The navbar
- * above carries only the section name, so the trail back to the overview lives
- * here where there is room for it.
+ * Breadcrumb + title block for every dashboard sub-page — the navbar above carries
+ * only the section name, so the trail back lives here.
  */
 export function DashPageHeader({
   title,

@@ -9,18 +9,16 @@ import {
   type WithdrawIndexData,
   type WithdrawStoreRequest,
 } from "@/services/withdraw.service";
-import { getApiErrorMessage, getApiSuccessMessage } from "@/hooks/useAuth";
+import { getApiSuccessMessage } from "@/hooks/useAuth";
+import { useTransactionError } from "@/hooks/useTransactionError";
 import { DASHBOARD_KEY } from "@/hooks/useDashboard";
 import { TRANSACTIONS_KEY } from "@/hooks/useTransactions";
 
 export const WITHDRAW_KEY = ["withdraw"] as const;
 
 /**
- * GET /user/withdraw-crypto/index — the coins, their rates, and what the user holds.
- *
- * Refetched on focus for the same reason the dashboard is: this payload carries
- * balances, and a withdrawal made in another tab has to be visible here before
- * the next one is priced against a figure that is no longer true.
+ * GET /user/withdraw-crypto/index — coins, rates, holdings. Refetched on focus: it
+ * carries balances, and a withdrawal in another tab changes them.
  */
 export function useWithdrawIndex(enabled = true) {
   return useQuery({
@@ -35,10 +33,8 @@ export function useWithdrawIndex(enabled = true) {
 /**
  * GET /user/withdraw-crypto/check-wallet-address — what an address turns out to be.
  *
- * Not retried: "Receiver address not found" is an ANSWER, not a failure, and
- * asking three times cannot change it. Cached per address so re-checking one the
- * user has already typed costs nothing, and never refetched on focus — an
- * address does not become a different wallet while the tab is in the background.
+ * Not retried: "Receiver address not found" is an ANSWER. Cached per address, and
+ * never refetched on focus — an address does not become a different wallet.
  */
 export function useWalletAddressCheck(address: string, enabled = true) {
   return useQuery({
@@ -53,13 +49,11 @@ export function useWalletAddressCheck(address: string, enabled = true) {
 }
 
 /**
- * POST /user/withdraw-crypto/store — prices the withdrawal.
- *
- * No success toast: this step only produces a quote, and a "done" message on an
- * order that has not run yet is what would make the two-step flow unreadable.
- * Failures do toast — "Wallet not found!" is the user's answer.
+ * POST /user/withdraw-crypto/store — prices the withdrawal. No success toast: the
+ * order has not run yet. Failures do toast.
  */
 export function useStoreWithdraw() {
+  const onApiError = useTransactionError();
   return useMutation({
     mutationFn: async (payload: WithdrawStoreRequest): Promise<WithdrawDraft> => {
       const res = await withdrawService.store(payload);
@@ -69,17 +63,16 @@ export function useStoreWithdraw() {
       if (!draft?.identifier) throw new Error("Withdrawal quote returned no identifier");
       return draft;
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }
 
 /**
- * POST /user/withdraw-crypto/confirm — executes the draft.
- *
- * The call that moves the coins, so three caches go stale with it: this page's
- * balances, the dashboard's wallets, and the ledger the withdrawal is now a row in.
+ * POST /user/withdraw-crypto/confirm — executes the draft. The call that moves coins,
+ * so this page's balances, the dashboard's wallets and the ledger all go stale.
  */
 export function useConfirmWithdraw(successMessage: string) {
+  const onApiError = useTransactionError();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -90,6 +83,6 @@ export function useConfirmWithdraw(successMessage: string) {
       queryClient.invalidateQueries({ queryKey: DASHBOARD_KEY });
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_KEY });
     },
-    onError: (err) => toast.error(getApiErrorMessage(err)),
+    onError: onApiError,
   });
 }

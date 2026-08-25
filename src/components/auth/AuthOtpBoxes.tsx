@@ -6,23 +6,12 @@ import { useLang } from "@/hooks/useLang";
 export const OTP_LENGTH = 6;
 
 /**
- * The 6-digit code field, as one box per digit.
+ * The 6-digit code field, as one box per digit — the length is obvious before the
+ * first keystroke, unlike a single `maxLength={6}` input.
  *
- * One `<input maxLength={6}>` is simpler, but it gives the user no sense of how
- * far through the code they are and it fights every password manager and SMS
- * autofill on the way in. Six boxes make the length obvious before the first
- * keystroke, and the progress rule under them turns "did that register?" into
- * something visible.
- *
- * The value is held as one string by the caller, not six — the form submits a
- * code, and six pieces of state would have to be joined back together anyway.
- * Everything the boxes need is derived from it, so a paste, a backspace and a
- * resend all reduce to setting one string.
- *
- * Keyboard behaviour worth keeping: typing advances, Backspace on an empty box
- * steps back and clears the one before it, the arrows walk the row, and a paste
- * anywhere in the row fills from the left and parks the caret after the last
- * digit that landed.
+ * The value is ONE string held by the caller, so a paste, a backspace and a resend
+ * all reduce to setting it. Typing advances, Backspace on an empty box steps back,
+ * the arrows walk the row, and a paste anywhere fills from the left.
  */
 export function AuthOtpBoxes({
   value,
@@ -64,9 +53,8 @@ export function AuthOtpBoxes({
     // holds two, and the second one is the one the user just meant.
     const digit = raw.slice(-1);
 
-    // The slot was emptied (Delete, or a cut). One string cannot hold a gap, so
-    // the code is cut here — the alternative is silently sliding every later
-    // digit one box to the left, which looks like the field eating input.
+    // Emptied (Delete, or a cut). One string cannot hold a gap, so the code is cut
+    // here rather than sliding later digits left.
     if (!digit) {
       commit(value.slice(0, index));
       focusBox(index);
@@ -75,9 +63,8 @@ export function AuthOtpBoxes({
 
     const next = value.slice(0, index) + digit + value.slice(index + 1);
     commit(next);
-    // Follow the code's actual length rather than assuming index + 1: clicking
-    // ahead of what is typed lands the digit at the end, and the caret has to be
-    // where the digit went.
+    // The code's actual length, not index + 1: clicking ahead of what is typed
+    // lands the digit at the end, and the caret follows it.
     focusBox(Math.min(next.length, index + 1));
   }
 

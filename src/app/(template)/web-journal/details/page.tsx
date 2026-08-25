@@ -7,15 +7,9 @@ export const metadata = {
 };
 
 /**
- * A single static page rather than a `[id]` segment.
- *
- * The app is a static export (`output: "export"`), so a dynamic segment would
- * need every id enumerated at build time via `generateStaticParams` — which
- * cannot work once posts come from the API. This page ships as one HTML file and
- * resolves the post client-side from `?id=`.
- *
- * `useSearchParams` bails out of prerendering, so the client component MUST sit
- * behind a Suspense boundary or the export fails to build.
+ * One static page reading `?id=`, not an `[id]` segment: a static export would have
+ * to enumerate every post at build time, which the API's list rules out.
+ * `useSearchParams` opts out of prerendering, hence the Suspense boundary.
  */
 export default function JournalDetailsPage() {
   return (

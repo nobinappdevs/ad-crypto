@@ -1,49 +1,34 @@
 /**
  * Client-side auth state kept alongside the bearer token.
  *
- * The token alone can't gate the dashboard: `POST /register` hands out a working
- * token *before* the email code is confirmed (the verify call itself needs that
- * token to authenticate), so "has a token" and "is allowed in" are two different
- * questions. `user.email_verified` is mirrored here so the guards can answer the
- * second one without waiting on a request.
+ * The token alone cannot gate the dashboard: `/register` hands one out BEFORE the
+ * email code is confirmed, since the verify call needs it. So the flags are
+ * mirrored here and the guards read them without waiting on a request.
  *
- * The password-reset flow has no token of its own — the backend issues a
- * short-lived one from `POST /password/forgot/find/user` and every later step
- * (resend, verify, reset) has to echo it back. That lives in `sessionStorage`,
- * because abandoning the flow by closing the tab is the right outcome.
+ * The reset flow's token is the backend's, echoed back by each step, and lives in
+ * `sessionStorage` — closing the tab should abandon it.
  *
- * Every access is guarded: this runs during prerender too, where there is no
- * `window`, and a browser with storage blocked throws on the property itself.
+ * Every access is guarded: this runs during prerender, and storage can throw.
  */
 
 /** localStorage key for the bearer token (shared by the services + hooks). */
 export const TOKEN_KEY = "adcrypto_token";
 
 /**
- * localStorage mirrors of the verification flags, written from the `/register`
- * and `/login` responses.
+ * localStorage mirrors of the verification flags, from the `/register` and `/login`
+ * responses. These decide the gate on the first render — right after registering
+ * they are the ONLY source that knows.
  *
- * These are what the guards decide on the instant a screen mounts, before any
- * request has answered — and for the step right after registering, they are the
- * ONLY thing that knows: the account was created a moment ago and the response
- * that created it is the only place the answer has appeared so far.
- *
- * `GET /user/dashboard` carries the same flags and overrides them whenever it
- * answers (see `accountGateState`), which is what makes an operator's change in
- * the admin panel reach a tab nobody reloaded. Mirror first, server on top — not
- * one or the other.
+ * `GET /user/dashboard` carries the same flags and overrides them once it answers
+ * (see `accountGateState`), which is how an admin-panel change reaches a live tab.
  */
 export const EMAIL_VERIFIED_KEY = "adcrypto_email_verified";
 export const TWO_FA_KEY = "adcrypto_2fa";
 
 /**
- * localStorage mirror of `data.email_verification` — the OPERATOR's switch, not
- * an account's state, and the one field no authenticated endpoint repeats.
- *
- * It only ever arrives on a register or login response, so it is kept here for
- * the guards to consult afterwards. With the switch off there is no code, no
- * mail and no screen to send anyone to, whatever `email_verified` happens to say
- * on an account created back when it was on.
+ * localStorage mirror of `data.email_verification` — the OPERATOR's switch, and the
+ * one field no authenticated endpoint repeats. With it off there is no code and no
+ * screen to send anyone to, whatever `email_verified` says.
  */
 export const EMAIL_VERIFICATION_KEY = "adcrypto_email_verification";
 
@@ -57,14 +42,10 @@ export const RESET_TOKEN_KEY = "adcrypto_reset_token";
 /**
  * localStorage is not reactive, and the guards have to be.
  *
- * Reading it straight out of a render body looks like it works and then quietly
- * stops: the values are written by a mutation callback, which is not a render, so
- * nothing tells React that the answer changed — and with the React Compiler on,
- * a read whose inputs haven't changed is memoized and never runs again. That is a
- * guard holding an answer from before the user signed in.
- *
- * So every write announces itself and the guards subscribe (see `useAuthMirror`),
- * which is also what makes signing out in one tab reach the others.
+ * A render-body read looks fine and then quietly stops: the values are written by a
+ * mutation callback, and with the React Compiler on the read is memoized and never
+ * runs again. So every write announces itself and the guards subscribe (see
+ * `useAuthMirror`) — which also makes signing out in one tab reach the others.
  */
 const listeners = new Set<() => void>();
 
@@ -113,10 +94,8 @@ export function setEmailVerified(verified: boolean) {
 }
 
 /**
- * `true` / `false` when this browser has been told, `null` when it has not — a
- * session that predates the flag has no entry, and guessing either way is wrong:
- * guess "verified" and the gate stands open, guess "unverified" and a perfectly
- * fine account is bounced to a code screen. `null` means "ask the server".
+ * `true`/`false` when this browser has been told, `null` when it has not. Both
+ * guesses are wrong in their own direction, so `null` means "ask the server".
  */
 export function readEmailVerified(): boolean | null {
   try {
@@ -147,11 +126,10 @@ export function readEmailVerificationRequired(): boolean | null {
 
 /* ── Google 2FA ──
  *
- * Two flags decide this, and only together: `two_factor_status` says whether the
- * account has an authenticator attached at all, `two_factor_verified` says
- * whether this session has answered its code. Collapsed into one value:
+ * Two flags, read together: `two_factor_status` says whether an authenticator is
+ * attached, `two_factor_verified` whether this session has answered. Collapsed to:
  *
- *   "off"     — 2FA isn't switched on; nothing to ask for.
+ *   "off"     — not switched on; nothing to ask for.
  *   "ok"      — switched on and already answered.
  *   "pending" — switched on and still owed a code; the dashboard stays shut.
  */
@@ -233,9 +211,8 @@ type AuthPayload = {
 };
 
 /**
- * `/register` returns the token at `data.token`, `/login` at
- * `data.user_data.token`, and the forgot-flow steps at `data.token` again. One
- * reader for all of them beats three call sites each reaching into its own spot.
+ * `/register` puts the token at `data.token`, `/login` at `data.user_data.token`,
+ * the forgot steps at `data.token`. One reader beats three call sites.
  */
 export function extractToken(res: unknown): string | undefined {
   const r = res as AuthPayload;
@@ -251,17 +228,14 @@ export function extractUser(res: unknown): AuthUser | undefined {
 /**
  * Whether the account still owes an email code, from a login or register payload.
  *
- * Two fields, and they answer different questions. `data.email_verification` is
- * the operator's switch — whether anybody is asked for a code at all.
- * `user.email_verified` is this account's own state. A code is owed only when the
- * switch is on AND the account's flag is not 1:
+ * Two fields answering different questions — the operator's switch, and this
+ * account's own flag. A code is owed only when the switch is on AND the flag is not 1:
  *
  *   {email_verification: true,  email_verified: 0} -> /verify-email
  *   {email_verification: true,  email_verified: 1} -> straight in
  *   {email_verification: false, …}                 -> straight in, nothing to ask
  *
- * The switch is mirrored to localStorage by the callers, because no authenticated
- * endpoint repeats it and the guards have to apply the same veto later.
+ * The callers mirror the switch, since no authenticated endpoint repeats it.
  */
 export function needsEmailVerification(res: unknown): boolean {
   // The switch first, and only as a VETO. `false` means the operator has the
@@ -294,12 +268,9 @@ export function emailVerificationFromResponse(res: unknown): boolean | undefined
 /* -------------------------------------------------------------------------- */
 
 /**
- * The verification flags an authenticated payload carries — the dashboard's, and
- * the profile's where that endpoint includes them.
- *
- * These are the account's CURRENT state, unlike the mirrors above, which are
- * whatever login last wrote. An authenticator switched on from another device, or
- * an email confirmed in another tab, shows up here first.
+ * The verification flags an authenticated payload carries. These are the account's
+ * CURRENT state, unlike the mirrors above — an authenticator switched on elsewhere,
+ * or an email confirmed in another tab, shows up here first.
  */
 export type AccountFlags = {
   email_verified?: number | string | null;
@@ -315,12 +286,9 @@ export type AccountFlags = {
 const isOne = (value: number | string | null | undefined) => String(value) === "1";
 
 /**
- * Whether a live payload says the email address is confirmed.
- *
- * `null` when the payload does not carry the field — that is "unknown", not
- * "unverified": deciding a gate on a field an endpoint simply does not send would
- * be our bug, not the user's. Note that `email_verified_at` is deliberately not
- * consulted; it is null on accounts whose `email_verified` is 1.
+ * Whether a live payload says the email address is confirmed. `null` when the field
+ * is absent — that is "unknown", not "unverified". `email_verified_at` is
+ * deliberately not consulted: it is null even on verified accounts.
  */
 export function emailVerifiedFromFlags(flags: AccountFlags | undefined): boolean | null {
   const flag = flags?.email_verified;
@@ -329,12 +297,9 @@ export function emailVerifiedFromFlags(flags: AccountFlags | undefined): boolean
 }
 
 /**
- * The 2FA state a live payload describes.
- *
- * The pair is read in one direction only: `two_factor_status` decides whether the
- * question exists at all, and `two_factor_verified` is consulted ONLY when it
- * does. An account with 2FA switched off can carry `two_factor_verified: 0`
- * forever — that is not a debt, it is a field nobody asked about.
+ * The 2FA state a live payload describes. One direction only: `two_factor_status`
+ * decides whether the question exists, and `two_factor_verified` is read only when
+ * it does — an account with 2FA off can carry a 0 there forever.
  */
 export function twoFaFromFlags(flags: AccountFlags | undefined): TwoFaState | null {
   const status = flags?.two_factor_status;
@@ -345,10 +310,7 @@ export function twoFaFromFlags(flags: AccountFlags | undefined): TwoFaState | nu
 
 /**
  * Collapses `two_factor_status` + `two_factor_verified` out of a login payload.
- *
- * `null` when the response doesn't carry the flags at all — that's "unknown", not
- * "off", so callers keep whatever they already knew rather than quietly
- * downgrading a session that was waiting on a code.
+ * `null` when they are absent — "unknown", not "off", so callers keep what they knew.
  */
 export function twoFaStateFromResponse(res: unknown): TwoFaState | null {
   const user = extractUser(res);
@@ -365,9 +327,8 @@ export function twoFaStateFromResponse(res: unknown): TwoFaState | null {
 /** Everything this browser has been told about the session, as one value. */
 export type AuthMirror = {
   /**
-   * False on the server and on the first client paint, where there is no storage
-   * to read. It is not "signed out" — it is "not asked yet", and the guards hold
-   * rather than act on it.
+   * False on the server and the first client paint. Not "signed out" — "not asked
+   * yet", which the guards hold on rather than act on.
    */
   isClient: boolean;
   authed: boolean;
@@ -378,11 +339,8 @@ export type AuthMirror = {
 };
 
 /**
- * A STRING, deliberately.
- *
- * `useSyncExternalStore` compares snapshots by identity and re-renders forever if
- * a fresh object comes back each call, so the store's value has to be a primitive.
- * The guards get the object back from `parseAuthMirror`, past that comparison.
+ * A STRING, deliberately: `useSyncExternalStore` compares snapshots by identity, so
+ * a fresh object each call would re-render forever. `parseAuthMirror` unpacks it.
  */
 export function authStateSnapshot(): string {
   const flag = (value: boolean | null) => (value === null ? "-" : value ? "1" : "0");
@@ -425,30 +383,20 @@ export function parseAuthMirror(snapshot: string): AuthMirror {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The one place that decides what an account still owes. BOTH guards call this,
- * so `/dashboard` and the signed-out screens can never disagree about it and
- * bounce a user between them.
+ * The one place that decides what an account still owes. BOTH guards call it, so
+ * they cannot disagree and bounce a user between them.
  *
- * Three sources, in this order of authority:
+ * Three sources, in order of authority:
  *
- *   1. The operator's switch (mirrored from the last register/login response).
- *      `false` settles the email question outright — verification is off, so no
- *      code exists, no mail was sent, and `email_verified: 0` on an account made
- *      back when it was on is a leftover column, not a debt. This is the case that
- *      used to strand people on a code screen nothing could ever satisfy.
- *   2. The live payload — `GET /user/dashboard` carries all three flags. It is the
- *      account's state right now, so an operator's edit or a second tab shows up
- *      here, and it overrides the mirror whenever it has actually answered.
- *   3. The localStorage mirror, written from the register/login response. It is
- *      what makes the decision instant, and immediately after registering it is
- *      the ONLY source that knows: the request in (2) is still in flight, and
- *      until it lands the response that created the account is all there is.
+ *   1. The operator's switch — `false` settles the email question outright, so an
+ *      account marked 0 back when it was on is not stranded on a code screen.
+ *   2. The live payload (`GET /user/dashboard`) — the account's state right now, so
+ *      an admin edit or a second tab shows up here.
+ *   3. The localStorage mirror — what makes the answer instant, and the only source
+ *      that knows in the moment right after registering.
  *
- * `null` is a real answer here and means "nobody has said" — the guards hold
- * rather than guess, because both guesses are wrong in a different direction.
- * What it must never do is silently read as "cleared": an absent field is an
- * endpoint not answering the question, and treating that as permission is exactly
- * how an unverified account walked into the dashboard.
+ * `null` means "nobody has said", and the guards hold rather than guess. What it
+ * must never read as is "cleared": that is how an unverified account walks in.
  */
 export function accountGateState(
   live: AccountFlags | undefined,

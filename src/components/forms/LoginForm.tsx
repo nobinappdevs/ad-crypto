@@ -10,10 +10,8 @@ import { AuthBackHome } from "@/components/auth/AuthBackHome";
 import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
 
 /**
- * The right-hand column on `/login`. `AuthShell` (in the route group's layout)
- * supplies everything else — the promo panel, the theme toggle, the panel frame
- * — so this only ever renders the form itself, and swapping to `/register` swaps
- * only this column.
+ * The right-hand column on `/login` — `AuthShell` supplies the rest, so swapping to
+ * `/register` swaps only this column.
  */
 export function LoginForm() {
   const { t } = useLang();

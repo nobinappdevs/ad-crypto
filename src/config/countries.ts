@@ -1,11 +1,9 @@
 /**
- * ISO 3166-1 alpha-2, minus the uninhabited territories (Antarctica, Bouvet
- * Island, Heard & McDonald, French Southern Territories, South Georgia, US Minor
- * Outlying Islands) — nobody files a card application from one.
+ * ISO 3166-1 alpha-2, minus the uninhabited territories — nobody files a card
+ * application from Bouvet Island.
  *
- * Codes only, on purpose: the display name comes from `Intl.DisplayNames`, so the
- * list reads in whatever language the user picked without us shipping and
- * maintaining five translations of 240 country names.
+ * Codes only: the display name comes from `Intl.DisplayNames`, so the list reads in
+ * the user's language without shipping five translations of 240 country names.
  */
 export const COUNTRY_CODES = [
   "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AR", "AS", "AT", "AU", "AW", "AX", "AZ",
@@ -34,10 +32,8 @@ export const countryFlag = (code: string) =>
     .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
 
 /**
- * Countries as `{ code, name }`, localised and sorted for the given language.
- *
- * Sorting uses the same locale as the names — alphabetical order is not a
- * property of the list, it is a property of the language reading it.
+ * Countries as `{ code, name }`, localised and sorted for the given language —
+ * sorted in that same locale, since alphabetical order is a property of the language.
  */
 export function countryList(locale: string) {
   let names: Intl.DisplayNames | null = null;

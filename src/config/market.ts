@@ -1,11 +1,7 @@
 /**
  * Demo market data for the trade pages, shared so Buy and Sell can never quote a
- * different rate for the same coin.
- *
- * `min`/`max` are per-order limits in the coin's own unit, `rate` is its price in
- * the settlement currency, and `balance` is what the signed-in wallet holds — the
- * same shape the pricing and balance endpoints will return, so wiring this up
- * later is a swap of these constants for a fetch.
+ * different rate for the same coin. Same shape the pricing endpoints return, so
+ * wiring it up later is a swap of these constants for a fetch.
  */
 export const COINS = [
   {
@@ -81,11 +77,9 @@ export const fiat = (n: number) =>
 export const usd = (n: number) => `$${fiat(n)}`;
 
 /**
- * A unit price, to four places below a dollar.
- *
- * Two places is not enough for a sub-dollar asset, and not merely as a matter of
- * taste: at "$0.16" a DOGE row stops reconciling, because 8,500 x 0.16 is not the
- * order amount that 8,500 x 0.1642 produced.
+ * A unit price, to four places below a dollar. Two is not enough for a sub-dollar
+ * asset: at $0.16 a DOGE row stops reconciling, because 8,500 × 0.16 is not the
+ * amount 8,500 × 0.1642 produced.
  */
 export const price = (n: number) =>
   n >= 1
@@ -93,17 +87,15 @@ export const price = (n: number) =>
     : `$${n.toLocaleString("en-US", { minimumFractionDigits: 4, maximumFractionDigits: 4 })}`;
 
 /**
- * Crypto keeps up to 8 places but drops trailing zeros — 0.02325094, not
- * 0.02325094**00**. Zero returns an empty string on purpose: these values are fed
- * back into inputs, where a literal "0" fights the user's next keystroke.
+ * Up to 8 places, trailing zeros dropped. Zero returns "" on purpose: these values
+ * are fed back into inputs, where a literal "0" fights the next keystroke.
  */
 export const crypto = (n: number) =>
   n === 0 ? "" : Number(n.toFixed(8)).toLocaleString("en-US", { maximumFractionDigits: 8 });
 
 /**
- * Eight decimals is as deep as the amount fields go, and `crypto()` ROUNDS to
- * them — so a balance of 0.0221150869 renders as 0.02211509, and a "Max" fill
- * taken from the unfloored number lands a satoshi above what the wallet holds and
- * trips its own balance check. Truncating first keeps the ceiling reachable.
+ * `crypto()` ROUNDS to eight places, so a "Max" fill taken from an unfloored balance
+ * lands a satoshi above what the wallet holds and trips its own check. Truncating
+ * first keeps the ceiling reachable.
  */
 export const floor8 = (n: number) => Math.floor(n * 1e8) / 1e8;

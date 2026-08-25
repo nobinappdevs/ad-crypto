@@ -22,11 +22,7 @@ const STEP_DELAY = 0.16;
 /** Share of the gap to the target closed per frame. Lower = smoother/laggier. */
 const SMOOTHING = 0.045;
 
-/**
- * The slice of the 620vh runway the swap is mapped onto. The lead-in lets the
- * panel settle after it pins; the lead-out holds batch B on screen for a beat
- * before the section scrolls away.
- */
+/** The slice of the runway the swap is mapped onto, with a lead-in and lead-out. */
 const WINDOW_START = 0.08;
 const WINDOW_END = 0.78;
 
@@ -37,11 +33,7 @@ const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 /** Cubic in-out. */
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-/**
- * Left-column cards travel left, right-column cards travel right: batch A slides
- * out sideways and batch B glides back in from the same sides, so the two passes
- * read as one gesture rather than a crossfade.
- */
+/** Left column travels left, right column right, so the swap reads as one gesture. */
 const dirOf = (i: number) => (i % 2 === 0 ? -1 : 1);
 
 const transformA = (i: number, outT: number) =>
@@ -182,21 +174,16 @@ const BATCH_B = ["behavior", "ssl", "waf", "rbac"] as const;
 /* -------------------------------------------------------------------------- */
 
 /**
- * Which card holds the dark skin. It starts on the first tile and is handed to
- * whichever card the pointer enters — the previous holder keeps rendering its own
- * copy for one beat so the two can animate as a single hand-off. `seq` exists
- * only to force the overlay to remount, which is what replays the animation.
+ * Which card holds the dark skin. The previous holder keeps rendering for one beat
+ * so the two animate as a hand-off; `seq` remounts the overlay to replay it.
  */
 type Skin = { cur: number; prev: number; seq: number };
 
 const SKIN_START: Skin = { cur: 0, prev: -1, seq: 0 };
 
 /**
- * How far the skin appears to travel. Not the real distance between cells: the
- * overlay is inside the card, so it can only slide within it — enough to carry
- * the direction of the hand-off, and no further. A larger offset leaves the far
- * edge of the card uncovered mid-flight, which shows as white copy on the light
- * resting surface; this is why the copy's own colour change is delayed too.
+ * How far the skin appears to travel — not the real distance between cells. The
+ * overlay lives inside the card, so a larger offset would leave its far edge bare.
  */
 const SKIN_TRAVEL_X = 34;
 const SKIN_TRAVEL_Y = 26;
@@ -239,10 +226,8 @@ const PILL_OFF = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The chip's gradient is now the SAME in both states, with only its base colour,
- * border and shadow switching — those are colours, and colours interpolate. The
- * two-gradient version could not be transitioned at all (`background-image` does
- * not tween), so the tile used to hard-cut while everything around it glided.
+ * One gradient for both states, with only colours switching — `background-image`
+ * does not tween, so a two-gradient version hard-cut mid-transition.
  */
 const CHIP_GRADIENT =
   "linear-gradient(158deg, rgb(255 255 255 / 0.28) 0%, rgb(255 255 255 / 0.06) 53%, rgb(255 255 255 / 0.02) 100%)";
@@ -352,11 +337,7 @@ export function SecuritySuite() {
   const fillB = useRef<HTMLSpanElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
 
-  /**
-   * Below `lg` there is no runway to scroll through, so the same 0..1 progress is
-   * driven by which group pill was tapped instead — one interpolation, two input
-   * devices, identical motion out the other end.
-   */
+  /** Below `lg` there is no runway, so the tapped pill drives the same 0..1 progress. */
   const tabRef = useRef(0);
 
   // Which pass is current. It flips once, at the midpoint, so labels and pill
@@ -449,11 +430,7 @@ export function SecuritySuite() {
     return () => cancelAnimationFrame(raf);
   }, [applyProgress]);
 
-  /**
-   * Desktop: scroll the runway to the position that maps to the requested pass,
-   * so the pills stay honest about where you are. Below `lg`: just move the
-   * target and let the same tween run.
-   */
+  /** Desktop scrolls the runway to the pass; below `lg` it just moves the target. */
   const goTo = (target: 0 | 1) => {
     tabRef.current = target;
 
@@ -468,11 +445,7 @@ export function SecuritySuite() {
     window.scrollTo({ top: top + travel * (target === 0 ? 0.03 : 0.8), behavior: "smooth" });
   };
 
-  /**
-   * Hand the skin to card `i`. The old holder is remembered rather than dropped:
-   * both cards render an overlay on the next frame — one animating in from the
-   * other's direction, one animating out toward it.
-   */
+  /** Hand the skin to card `i`, remembering the old holder so both can animate. */
   const handOver = (skin: Skin, setSkin: (s: Skin) => void) => (i: number) => {
     if (i === skin.cur) return;
     setSkin({ cur: i, prev: skin.cur, seq: skin.seq + 1 });
@@ -558,22 +531,14 @@ export function SecuritySuite() {
   };
 
   return (
-    // No `overflow-hidden` here, and none on any ancestor of the sticky stage:
-    // an `overflow` other than `visible` makes this element the sticky element's
-    // scroll container, and because the section never scrolls internally the
-    // panel would simply scroll away with the page instead of pinning. The panel
-    // clips its own contents, so nothing needs clipping at this level.
+    // No `overflow-hidden` here or on any ancestor of the sticky stage — it would
+    // become the sticky scroll container and the panel would never pin.
     <section className="relative" style={{ background: "var(--suite-bg)" }}>
-      {/* The scroll runway. 320vh leaves ~2.2 viewports of travel, which is what
-          the swap plus its lead-in and lead-out need — the source design's 620vh
-          was mapped against whole-document progress, so most of it read as dead
-          scrolling here. Below `lg` the section is its own height and the pills
-          drive the swap instead. */}
+      {/* The scroll runway — ~2.2 viewports of travel. Below `lg` the section is its
+          own height and the pills drive the swap. */}
       <div ref={sceneRef} className="relative lg:h-[320vh]">
-        {/* The `lg` step runs tighter than `xl` throughout this block. At 1024px the
-            xl figures (56px section padding, a 300px rail, a 48px gutter, then 44px
-            of panel padding) left the card grid about 140px per column, which is
-            narrower than the cards' own padding plus a readable measure. */}
+        {/* `lg` runs tighter than `xl` throughout: at 1024px the xl figures left the
+            card grid about 140px per column. */}
         <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-8 px-4 py-14 sm:gap-10 sm:px-6 sm:py-16 lg:sticky lg:top-[min(0px,calc(100vh-760px))] lg:min-h-screen lg:flex-row lg:items-center lg:gap-8 lg:px-6 lg:py-10 xl:gap-12 xl:px-14 xl:py-12">
           {/* ---------------- Left column ---------------- */}
           <div className="flex w-full flex-col gap-6 lg:w-[260px] lg:flex-[0_0_260px] lg:gap-[26px] xl:w-[300px] xl:flex-[0_0_300px] xl:gap-[30px]">
@@ -693,11 +658,8 @@ export function SecuritySuite() {
               </div>
 
               {/* ---- The two passes, stacked in one cell ----
-                  On desktop both batches are absolutely positioned inside the
-                  panel. Below `lg` they share a single named grid area instead,
-                  which keeps them overlapping (only one is ever visible) while
-                  letting the container take the height of the taller one — so
-                  tapping between passes never resizes the section. */}
+                  Absolutely positioned on desktop; below `lg` they share one grid
+                  area, so the taller pass sets the height and tapping never resizes. */}
               <div
                 className="relative grid lg:block lg:h-full"
                 style={{ gridTemplateAreas: '"stack"' }}

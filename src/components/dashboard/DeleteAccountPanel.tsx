@@ -7,13 +7,10 @@ import { useLang } from "@/hooks/useLang";
 import { useDeleteAccount } from "@/hooks/useAuth";
 
 /**
- * Closing the account, from the two places a user looks for it: the security page
- * and their profile.
+ * Closing the account, from the security page and the profile.
  *
- * The one irreversible action in the app, so it gets two locks rather than one: a
- * dialog, and inside it a checkbox that has to be ticked before the button enables.
- * A single confirm click is too easy to fire by muscle memory from the dialog above
- * it on the security page, which only toggles 2FA.
+ * The one irreversible action in the app, so it gets two locks: a dialog, and a
+ * checkbox inside it that has to be ticked before the button enables.
  */
 export function DeleteAccountPanel() {
   const { t } = useLang();

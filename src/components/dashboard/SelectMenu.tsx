@@ -17,10 +17,7 @@ export type SelectOption = {
   value: string;
   /** Main line. */
   label: string;
-  /**
-   * React key, for lists where `value` is not unique across entries (a state code
-   * repeated across countries, say). Falls back to `value`.
-   */
+  /** React key, when `value` is not unique across entries. Falls back to `value`. */
   id?: string;
   /** Second line under the label, in the list and optionally the trigger. */
   hint?: string;
@@ -44,13 +41,7 @@ const MENU_GAP = 8;
 /** Smallest gap kept between the menu and the viewport edge. */
 const EDGE = 12;
 
-/**
- * Floor for the menu's width. A row is icon + label + a trailing figure, and the
- * triggers these hang off are often deliberately narrow — the 152px coin picker
- * beside an amount field. Sized to the trigger alone, such a menu squeezes the
- * label column to nothing ("S…" for Solana) and grows a horizontal scrollbar,
- * so the LIST gets its own minimum regardless of what it is anchored to.
- */
+/** Floor for the menu width — a narrow trigger must not squeeze the label column. */
 const MENU_MIN_WIDTH = 260;
 
 const MENU_SCROLL =
@@ -66,22 +57,10 @@ type Anchor = {
 };
 
 /**
- * Listbox with room for an icon, a sub-label and a trailing figure per row —
- * the things a native `<select>` cannot render, and which a coin or network
- * picker needs in order to be readable at a glance.
+ * Listbox with an icon, a sub-label and a trailing figure per row.
  *
- * The menu is PORTALLED to `<body>` and positioned against the trigger's own
- * rect rather than nested in the field. A dropdown rendered in place is clipped
- * by every scroll container and rounded panel above it — which is exactly where
- * these live, inside `overflow-hidden` cards — and it inherits their stacking
- * context, so a long list ends up cut off or painted under the next panel.
- * Positioning is recomputed on scroll and resize so the menu tracks the field,
- * and it flips above the trigger when the viewport has no room below.
- *
- * Full keyboard operation: the arrows move a highlight that is separate from the
- * current selection, Home/End jump to the ends, Enter takes the highlighted row
- * and Escape closes and returns focus to the trigger — so a keyboard user is
- * never dropped at the top of the document.
+ * Portalled to `<body>` so `overflow-hidden` cards cannot clip it; it tracks on
+ * scroll/resize and flips above when short of room. Fully keyboard-operable.
  */
 export function SelectMenu({
   value,
@@ -108,26 +87,13 @@ export function SelectMenu({
   showHintInTrigger?: boolean;
   /** Off for a compact trigger whose label already identifies the choice. */
   showIconInTrigger?: boolean;
-  /**
-   * Off for a narrow trigger, where the trailing figure and the label compete for
-   * the same few pixels and the label loses — the compact coin pickers beside an
-   * amount field, whose balance or price is already printed under the field.
-   */
+  /** Off for a narrow trigger, where the figure would crowd out the label. */
   showMetaInTrigger?: boolean;
-  /**
-   * Drops the trigger's own border, background and radius, for a menu that sits
-   * INSIDE another field — the dial code in front of a phone number. The field
-   * around it owns the frame and the focus ring; two of each would read as two
-   * controls, which is exactly what this is not.
-   */
+  /** Drops the trigger frame, for a menu sitting inside another field (dial code). */
   bare?: boolean;
   /** Floor for the menu's width, in px. Widened past `MENU_MIN_WIDTH`, never under. */
   menuMinWidth?: number;
-  /**
-   * Shown when `value` matches no option. Without it the trigger falls back to the
-   * first option, which would claim a choice the user has not made — fine for a
-   * coin picker that always has a selection, wrong for a required form field.
-   */
+  /** Shown when `value` matches no option, so the trigger claims no choice. */
   placeholder?: string;
   /** Filter box at the top of the list. For long lists — countries, coins. */
   searchable?: boolean;
@@ -179,11 +145,8 @@ export function SelectMenu({
     });
   }, [menuMinWidth]);
 
-  /**
-   * Reset the query and park the highlight on the current selection each time the
-   * menu opens. Adjusted during render rather than in an effect: an effect would
-   * paint one frame with the previous search still in the box.
-   */
+  // Reset the query and highlight on open, during render — an effect would paint
+  // one frame with the previous search still in the box.
   const [wasOpen, setWasOpen] = useState(false);
   if (wasOpen !== open) {
     setWasOpen(open);

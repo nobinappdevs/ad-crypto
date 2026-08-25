@@ -1,9 +1,6 @@
 /**
- * A coin's mark: its glyph on its brand colour. Shared by the trade pages so a
- * coin looks the same in a picker row, a trigger and a summary card.
- *
- * The inset highlight is what keeps the flat brand colour from reading as a
- * sticker at 30px — it gives the disc a light source.
+ * A coin's mark: its glyph on its brand colour, shared by the trade pages. The
+ * inset highlight is what keeps the flat colour from reading as a sticker at 30px.
  */
 export function CoinBadge({
   color,

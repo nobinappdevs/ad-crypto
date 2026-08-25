@@ -5,18 +5,12 @@ import { useLang } from "@/hooks/useLang";
 import { PromoPanel } from "@/components/promo/PromoPanel";
 
 /**
- * The About story: the shared promo half on the left, the copy on the right.
+ * The About story: the shared promo half on the left, the copy on the right, on a
+ * 1fr / 1.08fr split from `lg`.
  *
- * A 1fr / 1.08fr split from `lg` up, stacking below it. The two halves sit
- * DIRECTLY in the page container rather than inside a bordered, shadowed card the
- * way the source mock drew them: the card was narrower than the container it sat
- * in, so the section read as a floating box on the page instead of part of it —
- * and the FAQ below has always been laid out this way, in the same container, with
- * no card of its own.
- *
- * The mock also carried its own logo + theme-toggle strip above the panel. That is
- * dropped here: this page renders inside the template layout, which already has
- * both in the navbar.
+ * Both halves sit directly in the page container — the mock's bordered card was
+ * narrower than the container, so the section read as a floating box. Its
+ * logo/toggle strip is dropped too: the template layout already has both.
  */
 const BULLETS = ["custody", "settlement", "fees"] as const;
 const STATS = ["founded", "transactions", "gateways"] as const;

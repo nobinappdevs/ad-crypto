@@ -19,12 +19,9 @@ import { cn } from "@/components/ui/cn";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 
 /**
- * The first entry is `featured` and takes a 2x2 cell with a highlight list, so
- * the grid opens on something substantial instead of eight identical tiles.
- *
- * That 2x2 plus six single cells leaves one empty slot at the end of a
- * four-column grid, so the last entry is `wide` and spans two columns to close
- * it. Change the number of services and these two flags need revisiting.
+ * The first entry is `featured` and takes a 2x2 cell, so the grid opens on
+ * something substantial. That plus six single cells leaves one slot spare in a
+ * four-column grid, so the last entry is `wide`. Both flags assume this count.
  */
 const SERVICES: { key: string; icon: LucideIcon; featured?: boolean; wide?: boolean }[] = [
   { key: "exchange", icon: ArrowLeftRight, featured: true },

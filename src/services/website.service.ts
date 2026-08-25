@@ -3,12 +3,8 @@ import type { ImagePaths } from "@/services/dashboard.service";
 import type { ContactRequest } from "@/schemas/contact.schema";
 
 /**
- * The public site's endpoints — no token, hence `publicApi`.
- *
- * Four of them serve the journal (list, one article, one category, the category
- * index) and two accept submissions (contact, newsletter). Everything here is
- * readable by anyone, which is why none of it goes through the authenticated
- * client and none of it is invalidated on sign-out.
+ * The public site's endpoints — no token, hence `publicApi`. Four serve the journal
+ * and two accept submissions; none of it is invalidated on sign-out.
  */
 
 export interface JournalCategory {
@@ -42,11 +38,8 @@ export interface JournalListData {
 }
 
 /**
- * `GET /website/journal/details/{slug}`.
- *
- * The rail beside an article arrives under one of two keys depending on what the
- * backend has to offer — `category` (the category index, with counts) or
- * `recent_posts`. Both are optional here because both are optional there.
+ * `GET /website/journal/details/{slug}`. The rail beside an article arrives under
+ * `category` or `recent_posts` depending on the build, so both are optional.
  */
 export interface JournalDetailsData {
   journal?: JournalArticle;
@@ -66,10 +59,9 @@ export interface JournalCategoriesData {
 }
 
 /**
- * Both submit endpoints take a `g-recaptcha-response` field. It is sent empty,
- * exactly as the API's own examples do: the backend only enforces it when the
- * operator has switched reCAPTCHA on, and omitting the field entirely is a 422
- * on some builds. When it IS switched on, this is the one line to change.
+ * Both submit endpoints take `g-recaptcha-response`, sent empty as the API's own
+ * examples do — the backend only enforces it when reCAPTCHA is switched on, and
+ * omitting the field is a 422 on some builds. This is the one line to change.
  */
 function submission(values: Record<string, string | undefined>) {
   const form = new FormData();

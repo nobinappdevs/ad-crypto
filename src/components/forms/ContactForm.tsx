@@ -43,14 +43,9 @@ function Field({
 /**
  * The shared field surface.
  *
- * One flat string, NOT a multi-line template literal: a class list with newlines in
- * it ends up in the DOM's `class` attribute verbatim, and the same list written as a
- * multi-line JSX string literal gets its whitespace collapsed — which is what made
- * the submit button below hydrate with a mismatch. Keeping every class list on one
- * line means the server and the client can only ever produce the same string.
- *
- * `--primary__color` is the project's token; the earlier `--primary-rgb` here did
- * not exist, so the focus ring silently rendered nothing.
+ * One flat string, NOT a multi-line template literal: newlines survive into the
+ * `class` attribute, while the same list in a multi-line JSX string gets collapsed
+ * — which is what made the submit button hydrate with a mismatch.
  */
 const CONTROL =
   "block w-full rounded-2xl border border-hero-border bg-white/3 px-5 text-[15px] text-hero-fg outline-none backdrop-blur-sm transition-all duration-300 placeholder:text-hero-fg-muted/60 hover:border-primary/40 focus:border-primary focus:bg-white/5 focus:shadow-[0_0_0_4px_rgb(var(--primary__color)/0.12)]";
@@ -74,11 +69,8 @@ export function ContactForm() {
   });
 
   /**
-   * POST /website/contact/message/send.
-   *
-   * The form is only cleared once the server has taken the message — a reset on
-   * failure would throw away what the sender typed along with the error.
-   * Toasting is the mutation's own job, success and failure alike.
+   * POST /website/contact/message/send. Cleared only once the server has taken the
+   * message; toasting is the mutation's own job.
    */
   const onSubmit = (values: ContactRequest) =>
     send.mutateAsync(values).then(() => reset()).catch(() => {});

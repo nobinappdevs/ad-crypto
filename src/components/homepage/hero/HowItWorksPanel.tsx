@@ -28,11 +28,8 @@ export function HowItWorksPanel({
       className="relative z-[4] overflow-hidden lg:absolute lg:inset-0"
       style={{ background: "var(--hero-panel-bg)", willChange: "transform" }}
     >
-      {/* Ambient glows + the isometric grid floor from the design.
-          All three live inside the page shell, unpadded: their offsets are
-          measured from the canvas edge, and anchoring them to the viewport
-          instead dragged them out to the window's left edge on wide screens
-          while the phone stayed near the middle. */}
+      {/* Ambient glows and the grid floor. Inside the page shell, unpadded — their
+          offsets are measured from the canvas edge, not the viewport. */}
       <div aria-hidden className={`${SHELL_MAX} pointer-events-none absolute inset-0`}>
         <div
           className="absolute -top-36 left-5 h-[620px] w-[620px] rounded-full blur-[20px] lg:h-[820px] lg:w-[820px]"
@@ -54,21 +51,15 @@ export function HowItWorksPanel({
         />
       </div>
 
-      {/* The page shell, so the copy ends exactly where the nav's CTA and every
-          section's right edge end. The inner wrapper is what the copy anchors to:
-          an absolutely-positioned child would otherwise measure from the shell's
-          PADDING box and sit flush against the window's edge again. */}
+      {/* The page shell, so the copy ends where every section's right edge ends. The
+          inner wrapper is the anchor — an absolute child would measure the padding box. */}
       <div className={`${SHELL} relative lg:absolute lg:inset-0`}>
         <div className="relative lg:h-full">
           <div
             ref={textRef}
-            // `right-0` is the shell's content edge, so the copy ends exactly where
-            // the nav's CTA and every section below it end.
-            //
-            // The width is a fraction of the shell rather than the design's flat
-            // 560px so the column tracks the frame between `lg` and its cap instead
-            // of holding a desktop width down at 1024, where it used to come within
-            // a couple of pixels of the phone.
+            // `right-0` is the shell's content edge. The width is a fraction of the
+            // shell, not the design's flat 560px, so the column tracks the frame at
+            // 1024 instead of crowding the phone.
             className="relative mx-auto w-full max-w-[620px] py-14 sm:py-16 lg:absolute lg:top-[120px] lg:right-0 lg:mx-0 lg:w-[45%] lg:max-w-none lg:py-0"
             style={{ willChange: "transform, opacity" }}
           >

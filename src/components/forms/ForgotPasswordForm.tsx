@@ -35,21 +35,15 @@ const STEP_LABEL_KEY: Record<Step, string> = {
 };
 
 /**
- * The full "forgot password" flow, as one linear wizard on a single route rather
- * than three routes: email -> code -> new password. Unlike login/register (two
- * peer destinations you can jump between) these steps only ever run in order, so
- * there's nothing a separate URL per step would buy the user — only more places
- * for a refresh to strand them mid-flow.
+ * The whole forgot-password flow as one wizard on one route: email → code → new
+ * password. The steps only ever run in order, so separate URLs would only add
+ * places for a refresh to strand someone.
  *
- * Three endpoints, threaded on one server-issued token: `find/user` mails the
- * code and returns the token, `verify/code` checks the pair, `reset` spends it.
- * The token is never handled here — it lives in `sessionStorage` (see
- * `@/lib/authState`) and the hooks read it back on each step, so a step can't
- * forget to pass it along.
+ * Three endpoints threaded on one server-issued token, which lives in
+ * `sessionStorage` and is read back by the hooks rather than handled here.
  *
- * Each step is its own `useForm`, since the fields don't overlap. The `key={step}`
- * on the shared wrapper remounts it on every advance, which is what replays the
- * `panel-rise` entrance each step gets on `/login` and `/register`.
+ * Each step is its own `useForm`; `key={step}` remounts the wrapper, which replays
+ * the `panel-rise` entrance.
  */
 export function ForgotPasswordForm() {
   const { t } = useLang();

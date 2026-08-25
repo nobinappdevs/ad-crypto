@@ -10,18 +10,14 @@ import {
 } from "@/lib/authState";
 
 /**
- * What this browser has been told about the session — token, email flag, 2FA
- * state, and the operator's verification switch — as a value that re-renders when
- * it changes.
+ * What this browser has been told about the session — token, email flag, 2FA state,
+ * verification switch — as a value that re-renders when it changes.
  *
- * `useSyncExternalStore` rather than reading localStorage in the render body,
- * because a plain read is wrong twice over: storage is not reactive, so a value
- * written by a mutation callback never reaches a mounted guard, and with the React
- * Compiler on, the read is memoized and does not happen again at all. Both show up
- * the same way — a guard still holding the answer from before the user signed in.
+ * `useSyncExternalStore`, not a render-body localStorage read: storage is not
+ * reactive, and with the React Compiler on the read is memoized and never runs
+ * again. Either way a guard keeps answering from before the user signed in.
  *
- * The server snapshot is empty, which is how `isClient` stays false through the
- * first paint and hydration matches.
+ * The server snapshot is empty, which keeps `isClient` false until hydration.
  */
 export function useAuthMirror(): AuthMirror {
   const snapshot = useSyncExternalStore(

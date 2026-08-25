@@ -5,10 +5,8 @@ import { Info } from "lucide-react";
 import { cn } from "@/components/ui/cn";
 
 /**
- * The pieces every trade page (Buy / Sell / Exchange) is built from. They live
- * here rather than in one of the pages so the three stay identical — the amount
- * row in particular is each page's main control, and three drifting copies of it
- * is how a form ends up with three different focus rings.
+ * The pieces every trade page (Buy / Sell / Exchange) is built from — shared so
+ * the three stay identical rather than drifting apart.
  */
 
 export function FieldLabel({ children, hint }: { children: string; hint?: string }) {
@@ -26,8 +24,8 @@ export function FieldLabel({ children, hint }: { children: string; hint?: string
 }
 
 /**
- * The big number row. `inputMode="decimal"` keeps a phone on the numeric pad,
- * and the value is a plain string so a half-typed "0." survives re-render.
+ * The big number row. `inputMode="decimal"` keeps a phone on the numeric pad, and
+ * the value stays a string so a half-typed "0." survives re-render.
  */
 export function AmountField({
   label,
@@ -51,11 +49,7 @@ export function AmountField({
   selector?: ReactNode;
   footer?: ReactNode;
   error?: boolean;
-  /**
-   * A derived side the user cannot type into — the receiving half of a swap,
-   * where the endpoint prices the SEND amount and anything typed here would be
-   * reverse-engineered and then contradicted by the server's own quote.
-   */
+  /** A derived side the user cannot type into — the receiving half of a swap. */
   readOnly?: boolean;
   disabled?: boolean;
   className?: string;
@@ -108,11 +102,7 @@ export function Row({ label, children }: { label: string; children: ReactNode })
   );
 }
 
-/**
- * The figures a choice decides, listed under the field that decided them — label
- * on the left, value on the right, so two of these side by side line up across a
- * two-column form.
- */
+/** The figures a choice decides: label on the left, value on the right. */
 export function Figures({ rows }: { rows: [string, string][] }) {
   return (
     <dl className="mt-2.5 flex flex-col gap-1.5">
@@ -135,16 +125,11 @@ const SEG_PAD = 6;
 const SEG_GAP = 6;
 
 /**
- * The "where do the coins come from / go" switch at the top of Buy and Sell.
+ * The source/destination switch at the top of Buy and Sell.
  *
- * The highlight is ONE element that slides between the cells rather than a
- * background painted on whichever button is active: with two independent colour
- * swaps the eye has nothing to follow, and the change reads as a flicker. Kept
- * here beside the other trade pieces so both pages animate identically.
- *
- * Positioned with `inset-inline-start` rather than a transform so it is correct
- * under RTL for free — the cells lay out from the other edge there, and a
- * `translateX` would have to be sign-flipped to follow them.
+ * The highlight is ONE sliding element, not a background swapped between cells, so
+ * the eye has something to follow. Positioned with `inset-inline-start` rather
+ * than a transform, which makes it correct under RTL for free.
  */
 export function SegmentedChoice<T extends string>({
   label,
@@ -154,11 +139,8 @@ export function SegmentedChoice<T extends string>({
 }: {
   label: string;
   value: T;
-  // `NoInfer` on everything but `value`, so the union is read off the current
-  // value alone. Left inferrable, an inline options array widens T to plain
-  // `string`, and a `setState` typed to the union stops being assignable —
-  // `useState`'s setter takes `SetStateAction<T>`, whose function half fails the
-  // `T extends string` constraint and drops T back to the constraint itself.
+  // `NoInfer` everywhere but `value`, so T is read off the current value — an
+  // inline options array would widen it to plain `string`.
   options: readonly { value: NoInfer<T>; label: string; hint?: string; icon?: ReactNode }[];
   onChange: (value: NoInfer<T>) => void;
 }) {

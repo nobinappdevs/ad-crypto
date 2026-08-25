@@ -646,9 +646,21 @@
       "network": "Red",
       "method": "Método",
       "details": "Detalles del pedido",
+      "submitted": "Lo que envió",
+      "gateway": "Pasarela de pago",
+      "transaction": "Transacción",
+      "to": "Destino",
+      "balanceAfter": "Saldo después",
+      "willGet": "Recibes",
+      "close": "Cerrar",
       "showDetails": "Mostrar detalles del pedido",
       "hideDetails": "Ocultar detalles del pedido",
-      "open": "Abrir"
+      "open": "Abrir",
+      "continuePayment": "Continuar el pago",
+      "more": "Otros campos",
+      "manual": "Manual",
+      "automatic": "Automático",
+      "minutes": "min"
     },
     "viewAll": "Ver todo",
     "filters": {
@@ -660,14 +672,14 @@
       "declined": "Rechazada"
     },
     "transactionsPage": {
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando más…",
+      "end": "Has llegado al final",
+      "loaded": "{count} de {total} cargados",
       "subtitle": "Todas las órdenes de la cuenta — compras, ventas y retiros — con la comisión cobrada en cada una.",
       "searchPlaceholder": "Buscar por ID de transacción",
       "empty": "Ninguna transacción coincide con ese filtro.",
-      "loadFailed": "No pudimos cargar tus transacciones",
-      "showing": "{from}–{to} de {total}",
-      "page": "Página {page} de {pages}",
-      "prev": "Página anterior",
-      "next": "Página siguiente"
+      "loadFailed": "No pudimos cargar tus transacciones"
     },
     "tradeSide": {
       "buy": "Compra",
@@ -726,7 +738,7 @@
     "maxAmount": "Máx",
     "limit": "Límite",
     "totalPay": "Total a pagar",
-    "continue": "Continuar de forma segura",
+    "continue": "Comprar cripto",
     "secured": "Los fondos quedan en depósito hasta que la red confirme tu pedido.",
     "errorAmount": "Introduce un importe para continuar.",
     "errorMin": "El pedido mínimo es {min} {coin}.",
@@ -823,7 +835,7 @@
     "maxAmount": "Máx",
     "limit": "Límite",
     "totalPayout": "Cobro total",
-    "continue": "Revisar la venta",
+    "continue": "Vender cripto",
     "secured": "La tasa se mantiene 30 segundos al continuar, y verás las comisiones antes de confirmar.",
     "errorAmount": "Introduce un importe para continuar.",
     "errorMin": "El pedido mínimo es {min} {coin}.",
@@ -1301,6 +1313,9 @@
           "features": "Funciones",
           "support": "Soporte"
         }
+      },
+      "legal": {
+        "title": "LEGAL"
       },
       "resources": {
         "title": "RECURSOS",

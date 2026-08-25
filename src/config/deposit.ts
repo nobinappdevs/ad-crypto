@@ -1,16 +1,13 @@
 /**
- * Deposit routes per wallet: which chains a coin can arrive on, what each one
- * costs in waiting, and the address to send to.
+ * Deposit routes per wallet: which chains a coin can arrive on, what each costs in
+ * waiting, and the address to send to.
  *
- * Separate from `NETWORKS` in `@/config/market` on purpose — that list is the
- * withdrawal side, where a network's `fee` is what WE charge to send. Receiving
- * charges nothing; what a depositor needs to know instead is how many
- * confirmations the chain waits for and how small a deposit is allowed to be.
+ * Separate from `NETWORKS` in `@/config/market`, which is the WITHDRAWAL side —
+ * receiving charges nothing, and what a depositor needs is confirmations and minimums.
  *
- * The addresses are generated rather than stored, because a real one is issued per
- * user per network by the custody service. They are derived from the wallet and
- * network keys, so a given wallet always shows the same address — a placeholder
- * that changes between renders would train people to distrust the copy button.
+ * The addresses are derived from the wallet and network keys rather than stored, so a
+ * wallet always shows the same one — a placeholder that changed between renders
+ * would train people to distrust the copy button.
  */
 
 export type NetworkKey =
@@ -31,10 +28,9 @@ export type DepositNetwork = {
   /** Smallest deposit that gets credited, in USD — converted per coin at its rate. */
   minUsd: number;
   /**
-   * Chains that route every user to ONE shared address and tell deposits apart by
-   * a tag. Sending without it means the funds land in the exchange's pool with
-   * nothing to attribute them to, which is the single most common way a deposit is
-   * lost — so these networks show the tag as loudly as the address.
+   * Chains that route every user to ONE shared address and tell deposits apart by a
+   * tag. Sending without it is the most common way a deposit is lost, so these
+   * networks show the tag as loudly as the address.
    */
   memo?: boolean;
 };
@@ -50,11 +46,9 @@ export const DEPOSIT_NETWORKS: Record<NetworkKey, DepositNetwork> = {
 };
 
 /**
- * Which networks each wallet accepts, best route first.
- *
- * Not every coin on every chain: a coin's native chain is always listed, and a
- * wrapped version only where one genuinely circulates. Offering a route that does
- * not exist is how deposits get burned.
+ * Which networks each wallet accepts, best route first. Not every coin on every
+ * chain — a wrapped version only where one genuinely circulates, since offering a
+ * route that does not exist is how deposits get burned.
  */
 const WALLET_NETWORKS: Record<string, NetworkKey[]> = {
   btc: ["bitcoin", "bep20"],
@@ -66,12 +60,9 @@ const WALLET_NETWORKS: Record<string, NetworkKey[]> = {
 };
 
 /**
- * The networks a wallet accepts, guaranteed non-empty.
- *
- * A holding with no way to deposit into it is a data error, not a state worth
- * designing a page around — so a wallet added to `WALLETS` without a route here
- * falls back to the chain nearly everything is bridged onto instead of rendering a
- * details page with no address on it.
+ * The networks a wallet accepts, guaranteed non-empty. A holding with no deposit
+ * route is a data error, so a wallet with no entry falls back to the chain nearly
+ * everything is bridged onto rather than rendering a page with no address.
  */
 export function walletNetworks(walletKey: string): NetworkKey[] {
   const routes = WALLET_NETWORKS[walletKey];
@@ -109,10 +100,8 @@ function hash(seed: string) {
 
 /**
  * A fixed-length string drawn from `alphabet`, decided entirely by `seed`.
- *
- * xorshift32 rather than `Math.random`: the value has to be identical in the
- * prerendered HTML and in every client render, or hydration mismatches — and a
- * copy button whose address differs from the QR beside it is worse than useless.
+ * xorshift32, not `Math.random`: the value has to be identical in the prerendered
+ * HTML and every client render, or hydration mismatches.
  */
 function scramble(seed: string, length: number, alphabet: string) {
   let state = hash(seed) || 1;
@@ -141,11 +130,9 @@ export function depositMemo(walletKey: string, network: NetworkKey) {
 }
 
 /**
- * What the QR encodes.
- *
- * A bare address scans fine everywhere, but a payment URI lets a wallet app fill
- * in the network too, which is the mistake this whole page is trying to prevent.
- * Chains without a registered scheme fall back to the address alone.
+ * What the QR encodes. A payment URI lets a wallet app fill in the network too,
+ * which is the mistake this page exists to prevent; chains with no registered
+ * scheme fall back to the address alone.
  */
 export function depositUri(walletKey: string, network: NetworkKey) {
   const address = depositAddress(walletKey, network);

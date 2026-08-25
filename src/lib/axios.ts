@@ -22,16 +22,12 @@ privateApi.interceptors.request.use((config) => {
 });
 
 /**
- * This API answers a missing or expired token with HTTP **400** and an
- * explanatory message — not the 401 the status code exists for. So the status
- * alone cannot identify a dead session, and treating every 400 as one would be
- * far worse than missing them: "Verification code does not match" is also a 400,
- * and it would sign the user out in the middle of the flow that was working.
+ * This API answers a missing or expired token with HTTP **400**, not 401 — so the
+ * status alone cannot identify a dead session, and treating every 400 as one would
+ * sign users out mid-flow ("Verification code does not match" is also a 400).
  *
- * A 400 therefore has to say so in words. The phrasing is the backend's
- * ("You are not authorized to access this resource. Please log in to continue.");
- * matching loosely on it survives small rewordings, and a genuine 401 from any
- * other layer still counts.
+ * So a 400 has to say so in words. Matching loosely on the backend's phrasing
+ * survives small rewordings, and a genuine 401 still counts.
  */
 const UNAUTHORIZED = /not authori[sz]ed|unauthenticated|log in to continue/i;
 

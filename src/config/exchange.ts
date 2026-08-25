@@ -3,19 +3,14 @@ import type { ExchangeCurrency, ExchangeFees } from "@/services/exchange.service
 
 /**
  * Pricing a swap the same way the backend does — shared with Withdraw, which is
- * charged by the identical rule (its quote even calls the figure `exchange_rate`,
- * 1 when both sides are the same coin).
+ * charged by the identical rule.
  *
- * The page could simply post every keystroke to `store` and read the answer, but
- * that is a request per character to price a number the user has not finished
- * typing. So the preview is computed here, and the ORDER is still priced by the
- * server — `store` is called once, on review, and its figures are what the
- * confirmation screen shows.
+ * Posting every keystroke to `store` would be a request per character, so the
+ * PREVIEW is computed here and the ORDER is still priced by the server: `store`
+ * runs once, on review, and its figures are what the confirmation shows.
  *
- * Every rule below is checked against the endpoint's own worked example: sending
- * 1 ETH (rate 15) for BTC (rate 1) under a 1 fixed / 2 percent charge returns
- * `{exchange_rate: 0.0666…, fixed_charge: 15, percent_charge: 0.02,
- * total_charge: 15.02, payable_amount: 16.02, get_amount: 0.0666…}`.
+ * Checked against the endpoint's worked example: 1 ETH (rate 15) for BTC (rate 1)
+ * under a 1 fixed / 2 percent charge returns payable 16.02, get 0.0666….
  */
 
 export interface ExchangeFigures {
@@ -43,12 +38,8 @@ export function exchangeFees(fees: ExchangeFees | undefined) {
 }
 
 /**
- * The order limits in the SENDER's coin.
- *
- * `min_limit` / `max_limit` are configured in the base currency, like the fixed
- * charge, and converted the same way. Confirmed against the previous build's
- * screen: a 0.000001–1000 configuration renders as "0.00001500 – 15000.00000000
- * ETH" at an ETH rate of 15.
+ * The order limits in the SENDER's coin. `min_limit`/`max_limit` are configured in
+ * the base currency, like the fixed charge, and converted the same way.
  */
 export function exchangeLimits(fees: { minLimit: number; maxLimit: number }, senderRate: number) {
   return { min: fees.minLimit * senderRate, max: fees.maxLimit * senderRate };
@@ -88,11 +79,9 @@ export function exchangeQuote({
 /**
  * The largest amount this balance can actually pay for.
  *
- * "Max" cannot be the balance itself: the charges are added ON TOP of the amount,
- * so a maxed-out field would always exceed the wallet by the fee and be rejected.
- * Inverting `payable = sending + fixed + sending·percent/100` for `sending` gives
- * the number that lands exactly on the balance — floored to 8 places, since the
- * amount field rounds there and rounding UP would put it back over the edge.
+ * "Max" cannot be the balance: the charges go ON TOP, so a maxed field would always
+ * be rejected. Inverting `payable = sending + fixed + sending·percent/100` gives the
+ * number that lands exactly on it — floored to 8 places, since rounding up re-crosses it.
  */
 export function maxSendable({
   balance,
@@ -116,10 +105,9 @@ export function maxSendable({
 /**
  * The user's wallet for a coin, or undefined if they have none.
  *
- * `store` takes a WALLET id for the side being sent, not a currency id, and the
- * two are different id spaces on this API — so a coin without a wallet cannot be
- * the sender, and must not fall back to its currency id. Being wrong here would
- * mean debiting a wallet the user did not choose.
+ * `store` takes a WALLET id, and the two id spaces are different on this API — so a
+ * coin without a wallet cannot be a side of the swap and must not fall back to its
+ * currency id. Being wrong here debits a wallet the user did not choose.
  */
 export function ownWallet(currency: ExchangeCurrency | undefined) {
   return currency?.wallets?.find((wallet) => typeof wallet.id === "number");
@@ -135,10 +123,8 @@ export function currencyKey(currency: ExchangeCurrency | undefined): string {
 }
 
 /**
- * The coin to open on: the fattest wallet the user actually holds.
- *
- * Opening on whatever the API happened to list first means opening on an empty
- * wallet more often than not, and the first thing the user would do is change it.
+ * The coin to open on: the fattest wallet the user holds. Opening on whatever the
+ * API listed first means opening on an empty wallet more often than not.
  */
 export function defaultSender(currencies: ExchangeCurrency[]): ExchangeCurrency | undefined {
   return currencies
@@ -147,12 +133,9 @@ export function defaultSender(currencies: ExchangeCurrency[]): ExchangeCurrency 
 }
 
 /**
- * The same choice, plus a coin to convert into.
- *
- * The receiving side has to be a coin the user HOLDS as well, because the swap
- * posts a wallet id for it too — opening on a coin with no wallet would put the
- * form in an error state before the user had touched anything. Falling back to the
- * first other coin covers the account that holds only one.
+ * The same choice, plus a coin to convert into — one the user HOLDS as well, since
+ * the swap posts a wallet id for that side too. Falling back to the first other
+ * coin covers an account that holds only one.
  */
 export function defaultPair(currencies: ExchangeCurrency[]): { from: string; to: string } {
   const from = defaultSender(currencies) ?? currencies[0];

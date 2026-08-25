@@ -13,13 +13,9 @@ import { JournalCard, JournalCardSkeleton } from "./JournalCard";
 /**
  * The journal index, from `GET /website/journal/all`.
  *
- * The category chips are the second endpoint pair at work: `journal/categories`
- * fills the row, and picking one switches the grid onto
- * `journal/category/{slug}` — the server's own filtered list, rather than this
- * page filtering a set it may only hold part of.
- *
- * Both queries stay mounted and are toggled with `enabled`, so stepping back to
- * "All" is instant: the unfiltered list is still in the cache where it was left.
+ * Picking a category switches the grid onto `journal/category/{slug}` — the
+ * server's own filtered list. Both queries stay mounted and are toggled with
+ * `enabled`, so stepping back to "All" is instant.
  */
 export function WebJournal() {
   const { t } = useLang();
@@ -57,10 +53,8 @@ export function WebJournal() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => setCategorySlug(slug)}
-                    /* `inline-flex` and `whitespace-nowrap` are the chip's shape:
-                       a name and its count sit on ONE line, and a two-word
-                       category doesn't get to wrap and drag the row's height with
-                       it. */
+                    /* `inline-flex` + `whitespace-nowrap`: the name and its count stay
+                       on one line, and a two-word category cannot drag the row's height. */
                     className={cn(
                       "inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[13px] font-semibold whitespace-nowrap transition",
                       isActive
@@ -70,11 +64,9 @@ export function WebJournal() {
                   >
                     {category.name}
                     {count != null && (
-                      /* Every `!` here is overriding the global `span` rule, which
-                         makes a bare span a BLOCK at body size — which is what put
-                         the count on its own line under the name and stretched the
-                         pill around it. The count is a footnote to the label, so it
-                         renders a step smaller and dimmer, in its own soft bubble. */
+                      /* The `!`s override the global `span` rule, which makes a bare
+                         span a BLOCK at body size — that is what put the count on its
+                         own line and stretched the pill. */
                       <span
                         className={cn(
                           "inline-flex! min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px]! leading-none! font-semibold! tabular-nums",

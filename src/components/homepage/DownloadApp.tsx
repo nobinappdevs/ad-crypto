@@ -8,10 +8,7 @@ import { useLang } from "@/hooks/useLang";
 import { Container } from "@/components/share/Container";
 import { SectionKicker } from "@/components/ui/SectionKicker";
 
-/**
- * Inlined rather than taken from lucide: its `Apple` icon is a piece of fruit,
- * which on an App Store button reads as a mistake.
- */
+/** Inlined because lucide's `Apple` icon is a piece of fruit. */
 function AppleMark({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -20,10 +17,7 @@ function AppleMark({ size = 24 }: { size?: number }) {
   );
 }
 
-/**
- * Loop-arrow doodle sitting beside the headline, curling down to point at the
- * accent phrase — a hand-drawn accent rather than a functional icon.
- */
+/** Hand-drawn loop arrow beside the headline, pointing at the accent phrase. */
 function LoopArrow({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 120 100" fill="none" className={className} aria-hidden>
@@ -93,19 +87,15 @@ export function DownloadApp() {
                 {t("download.headingLead")}{" "}
                 <span className="text-primary!">{t("download.headingAccent")}</span>
               </h2>
-              {/* Anchored to the heading block's own end edge, not past it:
-                  `left-full` put the doodle 96px beyond the wrapper, which in the
-                  single-column layout meant outside the container entirely (the
-                  section's `overflow-hidden` then sliced it in half). */}
+              {/* Anchored to the heading block's end edge, not past it — `left-full`
+                  put it outside the container, where `overflow-hidden` sliced it. */}
               <LoopArrow className="pointer-events-none absolute -top-6 inset-e-0 hidden h-20 w-24 lg:block" />
             </div>
 
             <p className="mt-4 max-w-110 text-body/70">{t("download.subtitle")}</p>
 
-            {/* Ghost pill linking down to the How-It-Works panel higher on the
-                page — a lavender tint plus a white play-disc, matching the
-                reference rather than a solid CTA that would compete with the
-                store badges below. */}
+            {/* Ghost pill down to the How-It-Works panel — deliberately not a solid
+                CTA, which would compete with the store badges. */}
             <Link
               href="#how-it-works"
               className="mt-6 inline-flex! items-center gap-2.5 rounded-full bg-primary/10 py-1.5 pr-5 pl-1.5 text-[14px] font-semibold text-primary transition hover:bg-primary/15"
@@ -116,9 +106,7 @@ export function DownloadApp() {
               {t("download.howItWorks")}
             </Link>
 
-            {/* Store badges: full pill, black, side by side. Hovering reveals a
-                QR panel encoding that same store link, so a desktop visitor
-                can scan straight to their phone. */}
+            {/* Store badges. Hovering reveals a QR for the same link. */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               {STORES.map((store) => {
                 return (

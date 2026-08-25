@@ -20,13 +20,9 @@ const BASE =
   "inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50";
 
 /**
- * The solid variants carry `btn-lift` (see globals.css): they read as raised
- * surfaces, so they get the lift, the glow and the sheen.
- *
- * The flat ones deliberately do not. `ghost` and `outline` have no fill to catch a
- * sheen and no elevation to lift from — giving them a drop shadow on hover would
- * invent a surface that is not there. They change their fill instead, which is the
- * whole point of the variant.
+ * The solid variants carry `btn-lift` (see globals.css) — they read as raised
+ * surfaces. The flat ones deliberately do not: `ghost` and `outline` have no fill
+ * to catch a sheen, so they change their fill instead.
  */
 const VARIANTS: Record<Variant, string> = {
   primary: "btn-lift bg-primary text-white",

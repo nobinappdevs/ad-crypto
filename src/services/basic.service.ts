@@ -2,12 +2,9 @@ import { publicApi } from "@/lib/axios";
 import type { ImagePaths } from "@/services/dashboard.service";
 
 /**
- * `GET /basic-settings` — the operator's switches, served rather than baked in.
- *
- * Public, and the only place the front end can learn what the admin has turned on
- * or off. Anything gated on one of these flags has to ASK: a build-time constant
- * or a value mirrored at login goes stale the moment the setting is changed in the
- * admin panel, which is exactly the bug this endpoint exists to prevent.
+ * `GET /basic-settings` — the operator's switches, and the only place the front end
+ * can learn them. Anything gated on one has to ASK: a build-time constant or a value
+ * mirrored at login goes stale the moment the admin changes it.
  */
 
 export interface SiteSettings {

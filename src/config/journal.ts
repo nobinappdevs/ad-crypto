@@ -1,18 +1,12 @@
 /**
- * Presentation rules for the journal, now that the posts themselves come from
- * `GET /website/journal/*`.
- *
- * What is left here is what the API does not send: the gradient behind a cover
- * that has no artwork, the wide/narrow rhythm of the grid, and the route the
- * details page lives at.
+ * Presentation rules for the journal, now that the posts come from
+ * `GET /website/journal/*` — the cover gradient, the grid's rhythm, and the details
+ * route. Everything the API does not send.
  */
 
 /**
- * Cover gradients, cycled by position.
- *
- * They sit UNDER the image rather than instead of it, so a card is never a blank
- * hole while the file loads — and they still carry any post the operator
- * published without artwork.
+ * Cover gradients, cycled by position. They sit UNDER the image, so a card is never
+ * a blank hole while the file loads — and they carry any post published without artwork.
  */
 export const JOURNAL_COVERS = [
   "linear-gradient(135deg, rgb(var(--primary__color)) 0%, #0163a0 45%, #012b44 100%)",
@@ -27,11 +21,8 @@ export const journalCover = (index: number) =>
   JOURNAL_COVERS[((index % JOURNAL_COVERS.length) + JOURNAL_COVERS.length) % JOURNAL_COVERS.length];
 
 /**
- * Which cards span two of the grid's four columns.
- *
- * Every fifth card, starting with the first — the rhythm the design was drawn
- * with (a wide card, four narrow, a wide card) held over an arbitrary number of
- * posts instead of the six that were hard-coded.
+ * Which cards span two of the grid's four columns: every fifth, starting with the
+ * first — the design's wide/narrow rhythm, held over any number of posts.
  */
 export const isWideCard = (index: number) => index % 5 === 0;
 

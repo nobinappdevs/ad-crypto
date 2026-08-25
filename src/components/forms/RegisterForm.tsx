@@ -13,31 +13,18 @@ import { AuthBackHome } from "@/components/auth/AuthBackHome";
 import { AUTH_SUBMIT_CLASS, AuthInput, AuthPasswordInput } from "@/components/auth/AuthField";
 
 /**
- * The right-hand column on `/register`. `AuthShell` (in the route group's layout)
- * supplies everything else, so this only ever renders the form itself.
+ * The right-hand column on `/register` — `AuthShell` supplies everything else.
  *
- * On success `useRegister` decides where to go: `/verify-email` when the account
- * owes an email code, straight to the dashboard when the backend has email
- * verification switched off. Either way the token it returns is already stored,
- * which is what lets the verify screen authenticate.
+ * On success `useRegister` decides where to go: `/verify-email` when a code is
+ * owed, the dashboard when verification is switched off.
  */
 export function RegisterForm() {
   const { t } = useLang();
   const k = (name: string) => t(`authPanel.${name}`);
   const register = useRegister();
-  /**
-   * The admin's switch, read from `/basic-settings` rather than assumed. Closed
-   * means the form is not rendered at all — a disabled button beside filled-in
-   * fields reads as a bug, and posting anyway would only trade a clear message for
-   * whatever the API happens to say.
-   */
+  /** The admin's switch. Closed means no form at all, rather than a dead button. */
   const { open: registrationOpen } = useRegistrationOpen();
-  /**
-   * `basic_settings.agree_policy`, the switch that decides whether consent is
-   * asked for at all. Off means the checkbox is not rendered — a control the
-   * operator has turned off should not be on screen, let alone standing between
-   * the user and the button.
-   */
+  /** `basic_settings.agree_policy` — off means the checkbox is not rendered. */
   const policyRequired = usePolicyRequired();
 
   const {
@@ -56,11 +43,8 @@ export function RegisterForm() {
     },
   });
 
-  /**
-   * With the checkbox gone the field still has to satisfy the schema, which asks
-   * for a `true` — so it is answered here rather than by weakening the rule. The
-   * setting arrives asynchronously, hence an effect rather than a default value.
-   */
+  // With the checkbox gone the field still has to satisfy the schema, so it is
+  // answered here. The setting arrives async, hence an effect.
   useEffect(() => {
     if (!policyRequired) setValue("policy", true, { shouldValidate: true });
   }, [policyRequired, setValue]);
@@ -176,11 +160,8 @@ export function RegisterForm() {
         )}
       />
 
-      {/* Rendered only where the operator asks for consent (`agree_policy`).
-          onClick lives on the label, not the checkbox glyph — the glyph is the
-          only thing that used to toggle it, so clicking "I have agreed with"
-          did nothing. The Terms link stops the click from bubbling up to the
-          label, so following it doesn't also flip the checkbox underneath it. */}
+      {/* Only where the operator asks for consent. onClick is on the label, not the
+          glyph; the Terms link stops the click bubbling into a toggle. */}
       {policyRequired && (
         <Controller
         name="policy"

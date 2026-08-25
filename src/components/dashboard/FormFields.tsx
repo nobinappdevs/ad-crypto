@@ -6,11 +6,9 @@ import { cn } from "@/components/ui/cn";
 import { SelectMenu, type SelectOption } from "@/components/dashboard/SelectMenu";
 
 /**
- * The pieces the dashboard's long forms are built from — the KYC and card
- * application screens. They share the trade fields' surface (`bg-surface`, a 13px
- * label, the same focus ring) so a form field and an amount field read as parts of
- * one system, but they carry what a validated form needs and a trade row does not:
- * a required marker, and an error slot under the control.
+ * Fields for the dashboard's long forms (KYC, card application). Same surface as
+ * the trade fields, plus what a validated form needs: a required marker and an
+ * error slot.
  */
 
 const CONTROL =
@@ -148,14 +146,7 @@ export function TextField({
   );
 }
 
-/**
- * A phone number, and the dial code in front of it.
- *
- * One field split in two controls rather than two fields: the code is part of the
- * number, and asking for it under its own label invites someone to answer "+880"
- * in the number box as well. The picker is the same `SelectMenu` every other
- * dropdown on the dashboard uses, so it opens, searches and keyboards identically.
- */
+/** A phone number with its dial code — one field, two controls. */
 export function PhoneField({
   label,
   code,
@@ -198,9 +189,7 @@ export function PhoneField({
       <FormLabel htmlFor={id} required={required} hint={hint}>
         {label}
       </FormLabel>
-      {/* One frame around both halves. The code picker keeps its own hit area and
-          menu, but reads as the prefix of the field rather than a control beside
-          it — which is what it is. */}
+      {/* One frame around both halves, so the code reads as a prefix. */}
       <div
         className={cn(
           "flex h-13 items-center overflow-hidden rounded-xl border bg-surface transition",
@@ -246,15 +235,8 @@ export function PhoneField({
 }
 
 /**
- * A password input with the reveal toggle.
- *
- * The toggle is not a nicety on this form: the password panel asks for three
- * secrets in a row and rejects the whole thing when two of them disagree, and a
- * user who cannot see what they typed has no way to find out which one is wrong.
- *
- * `toggleLabel` comes in as a prop rather than from `useLang`, like `browseLabel`
- * on the file field — these controls take their words from the page that renders
- * them.
+ * A password input with a reveal toggle — the password panel asks for three
+ * secrets at once, so seeing them matters. `toggleLabel` comes from the page.
  */
 export function PasswordField({
   label,
@@ -366,14 +348,8 @@ export function TextAreaField({
 }
 
 /**
- * Image upload with a thumbnail of what was picked.
- *
- * The preview is the point: these are photographs of documents, and "IMG_4821.jpg"
- * tells the user nothing about whether they attached the front of their ID or a
- * picture of their lunch. Drag-and-drop is supported alongside the file dialog.
- *
- * The object URL is created here and revoked when the file changes or the field
- * unmounts — a preview left behind is a leaked blob for the life of the tab.
+ * Image upload with a thumbnail — these are photos of documents, so a filename
+ * says nothing. Drag-and-drop too. The object URL is revoked on change/unmount.
  */
 export function FileField({
   label,
@@ -405,14 +381,8 @@ export function FileField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
 
-  /**
-   * Derived from the file rather than mirrored into state by an effect: a preview
-   * IS the file, so an effect that sets state to match it only adds a render pass
-   * where the thumbnail is a frame behind the name beside it.
-   *
-   * The effect below owns just the cleanup, which is the part that genuinely has to
-   * happen outside render — a URL left unrevoked is a blob held for the tab's life.
-   */
+  // Derived from the file, not mirrored into state — the effect below only cleans up.
+
   const preview = useMemo(
     () => (file && file.type.startsWith("image/") ? URL.createObjectURL(file) : null),
     [file],
@@ -473,8 +443,7 @@ export function FileField({
           className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 focus-within:outline-none"
         >
           {preview ? (
-            // A blob URL of a user-picked file: next/image would need it declared
-            // as a remote pattern, and there is nothing to optimise.
+            // A blob URL: nothing for next/image to optimise.
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={preview}

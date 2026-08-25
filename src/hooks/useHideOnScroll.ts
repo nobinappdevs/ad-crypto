@@ -9,10 +9,8 @@ const THRESHOLD = 6;
 const TOP_ZONE = 80;
 
 /**
- * Hide-on-scroll-down, show-on-scroll-up header state.
- *
- * `hidden` — the bar should be translated out of view.
- * `scrolled` — the page has left the top zone, so the bar wants a backdrop.
+ * Hide-on-scroll-down, show-on-scroll-up header state. `hidden` translates the bar
+ * out of view; `scrolled` means it has left the top zone and wants a backdrop.
  */
 export function useHideOnScroll() {
   const [hidden, setHidden] = useState(false);

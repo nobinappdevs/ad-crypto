@@ -4,12 +4,10 @@ import { useRef, useState } from "react";
 import { useLang } from "@/hooks/useLang";
 
 /**
- * The Analytic panel's chart: a revenue area (primary) over a target line
- * (amber), with a snapping tooltip. The tooltip opens on the reference design's
- * own pinned point and follows the pointer from there — geometry lives in a
- * 0-100 viewBox stretched with `preserveAspectRatio="none"`, so the strokes
- * carry `non-scaling-stroke` and every label is HTML on top, where stretching
- * can't distort it.
+ * The Analytic panel's chart: a revenue area over a target line, with a snapping
+ * tooltip. Geometry lives in a 0-100 viewBox stretched with
+ * `preserveAspectRatio="none"`, so strokes carry `non-scaling-stroke` and every
+ * label is HTML on top, where stretching cannot distort it.
  */
 const DATES = [
   "Jan 21, 2023",

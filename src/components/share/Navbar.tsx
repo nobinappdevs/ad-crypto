@@ -13,11 +13,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { Logo } from "./Logo";
 
-/**
- * The banner's nav bar, and the only nav the public site has. It is `fixed` and
- * overlays the banner, so every page's opening section carries enough top
- * padding to clear it.
- */
+/** The public site's only nav. `fixed` over the banner, so sections pad for it. */
 export function Navbar() {
   const { t } = useLang();
   const pathname = usePathname();
@@ -30,14 +26,8 @@ export function Navbar() {
   /** `usePathname` is typed nullable; normalised once so `isNavActive` stays simple. */
   const path = pathname ?? "";
 
-  /**
-   * A route change should never leave the mobile sheet hanging open.
-   *
-   * Adjusted DURING render by comparing against the path the sheet was last drawn
-   * under, not in an effect. An effect would paint the new route with the sheet
-   * still open and then close it on a second pass — a visible flash on a slow
-   * phone, which is the only place this sheet exists at all.
-   */
+  // Closes the mobile sheet on a route change, during render — an effect would
+  // paint one frame with it still open.
   const [renderedPath, setRenderedPath] = useState(pathname);
   if (renderedPath !== pathname) {
     setRenderedPath(pathname);
@@ -56,11 +46,8 @@ export function Navbar() {
         (scrolled || open) && "border-b border-hero-border bg-hero-bg/80 backdrop-blur-md",
       )}
     >
-      {/* The three tracks are equal `flex-1` columns rather than two pinned
-          420px rails: at 1024-1150px those rails plus the 160px wordmark added up
-          to more than the viewport, so the login button was pushed off-screen.
-          Equal flexible columns centre the wordmark the same way at wide widths
-          and simply give ground as the bar tightens. */}
+      {/* Three equal `flex-1` columns, not pinned rails — fixed rails overflowed
+          around 1024-1150px. */}
       <nav className="flex h-18 items-center gap-3 px-4 sm:h-22 sm:gap-4 sm:px-8 xl:px-14">
         <div className="flex flex-1 items-center gap-6 xl:gap-8.5">
           <Link href="/" aria-label={t("brand.name")} className="lg:hidden!">
@@ -84,11 +71,8 @@ export function Navbar() {
                       it underlines the WORD rather than floating below it. */}
                   <span className="relative">
                     {t(link.key)}
-                    {/* Active and hover share one mechanism: a rule that scales in
-                        from the centre. Active holds it open in the brand colour
-                        with a soft bloom; any other link grows a dim one under the
-                        pointer. Two states, one visual language — and because it is
-                        a `scale-x` on a pseudo-layer, nothing in the row reflows. */}
+                    {/* Active and hover are one mechanism: a rule that scales in
+                        from the centre, so nothing reflows. */}
                     <span
                       aria-hidden
                       className={cn(
@@ -117,11 +101,8 @@ export function Navbar() {
           <LanguageSwitcher variant="hero" />
           <ThemeToggle variant="hero" />
 
-          {/* Hidden below `sm`, and the sheet carries it instead. The wordmark, the
-              language pill, the theme toggle, this CTA and the burger together need
-              ~397px of row, so on a 320-390px viewport the burger — the only way
-              into the rest of the nav — was the thing pushed off the edge. The
-              sheet's duplicate link was already written for exactly this split. */}
+          {/* Hidden below `sm` — the row runs out of space and the burger is what
+              gets pushed off. The sheet carries this link instead. */}
           <Link
             href={authed ? "/dashboard" : "/login"}
             className="hidden! h-9 items-center rounded-full bg-hero-accent px-4 text-[13px] font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_rgb(var(--hero-accent)/0.4)] transition duration-200 hover:-translate-y-px hover:bg-hero-accent-soft hover:text-white sm:inline-flex! sm:h-10 sm:px-5 sm:text-[14px]"
@@ -151,13 +132,8 @@ export function Navbar() {
                   key={link.key}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  // A left rule and a tint, not an underline: in a stacked list a
-                  // rule under one row reads as a divider between two of them. This
-                  // is also what the dashboard rail does, so "you are here" looks
-                  // the same on both sides of the product.
-                  //
-                  // Every row carries the same padding whether it is active or not,
-                  // so the marker appearing never shifts the label sideways.
+                  // A left rule and a tint, like the dashboard rail — an underline
+                  // in a stacked list reads as a divider. Padding never changes.
                   className={cn(
                     "relative rounded-lg py-3 ps-3.5 text-[15px]! transition-colors",
                     active
@@ -175,9 +151,7 @@ export function Navbar() {
                 </Link>
               );
             })}
-            {/* Stands in for the header CTA below `sm`, so it has to cover the
-                authed case too — otherwise a signed-in visitor on a phone has no
-                route to the dashboard at all. */}
+            {/* Stands in for the header CTA below `sm`, authed case included. */}
             <Link
               href={authed ? "/dashboard" : "/login"}
               className="py-3 ps-3.5 text-[15px]! text-hero-fg/75 sm:hidden!"

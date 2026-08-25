@@ -6,20 +6,12 @@ import { FALLBACK_MONTHS, monthKeyOf, niceScale } from "@/config/chart";
 import { ChartViewToggle, tooltipPlacement, YAxis } from "./ChartViewToggle";
 
 /**
- * A year of buy orders, as a single-series line with point markers, from
- * `GET /user/dashboard`'s `chart.buy_data`.
+ * A year of buy orders as a single-series line, from `chart.buy_data`.
  *
- * Deliberately ONE measure on ONE axis. The source mock's tooltip carried both a
- * value and a count, which would mean two y-scales on one plot — the alignment
- * between them is arbitrary, so the chart would imply a relationship that isn't in
- * the data. The endpoint settles it anyway: it returns a single number per month,
- * the order count, so there is no second measure to invent one for.
- *
- * It plots the same series the grouped chart's first bar does, and that is the
- * point of having both: this one reads as a trend over the year, that one as a
- * comparison between the three activities in a month.
- *
- * A single series needs no legend: the panel title names it.
+ * ONE measure on ONE axis: two y-scales on one plot would imply a relationship
+ * that is not in the data, and the endpoint sends a single number per month anyway.
+ * It plots the same series the grouped chart's first bar does — this one reads as a
+ * trend, that one as a comparison. No legend; the panel title names it.
  */
 
 export type BuyCryptoChartProps = {
@@ -140,10 +132,8 @@ export function BuyCryptoChart({ labels, buy }: BuyCryptoChartProps) {
                 />
               </svg>
 
-              {/* Markers are HTML, not SVG circles: the viewBox is stretched with
-                  `preserveAspectRatio="none"`, which would squash a circle into
-                  an ellipse. The 2px surface ring separates a marker from the
-                  line passing under it. */}
+              {/* Markers are HTML, not SVG circles — the viewBox is stretched with
+                  `preserveAspectRatio="none"`, which would squash a circle. */}
               {values.map((value, i) => (
                 <span
                   key={columns[i]}
@@ -175,10 +165,8 @@ export function BuyCryptoChart({ labels, buy }: BuyCryptoChartProps) {
               )}
             </div>
 
-            {/* X axis. Absolutely placed on each point's own x rather than laid
-                out as equal flex cells: the first and last points sit ON the
-                plot edges, so evenly-divided cells would centre every label
-                half a step away from the marker it names. */}
+            {/* X axis, absolutely placed on each point's own x: the end points sit ON
+                the plot edges, so equal cells would offset every label. */}
             <div aria-hidden className="relative h-6 pt-2">
               {columns.map((column, i) => (
                 <span

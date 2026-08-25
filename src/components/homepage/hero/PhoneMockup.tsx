@@ -13,19 +13,11 @@ import {
 import { useLang } from "@/hooks/useLang";
 
 /**
- * The screen is the app's real "Buy Crypto" flow, not an abstract portfolio
- * summary: balance carousel -> mode tabs -> wallet scope -> coin/network/payment/
- * amount form -> Continue. It is a flex COLUMN, unlike the rest of the hero's
- * absolutely-positioned pieces, because the form's rows have to stay in order
- * and share whatever height the device has left; the CTA is pinned to the bottom
- * with `mt-auto` and every gap above it is fixed, so the slack lands in one place.
+ * The screen is the app's real Buy Crypto flow. A flex COLUMN, so the form rows keep
+ * their order and the CTA takes the slack with `mt-auto`.
  *
- * The device reads as a solid object WITHOUT being rotated or skewed: no
- * perspective, no tilt, it stands square to the viewer. The volume comes from
- * four flat layers instead — the banded metal rail, a graphite bezel between
- * that rail and the glass, side buttons that clear the frame by 1px, and one
- * diagonal sheen over the whole screen. (A transform is not an option anyway:
- * the scroll handler owns `transform` on this element.)
+ * The device stands square — depth comes from four flat layers (rail, bezel, side
+ * buttons, sheen). A transform is unavailable anyway: the scroll handler owns it.
  */
 const CARDS = [
   { key: "btc", glyph: "₿", ticker: "BTC", balance: "1000.000", chip: "#f7931a", fg: "#ffffff" },
@@ -45,17 +37,7 @@ const BUTTONS = [
 /** Cyan rim light, kept ahead of the drop shadow so it sits closest to the body. */
 const BEZEL_GLOW = "0 0 0 1px rgb(56 173 253 / 0.4), 0 0 30px rgb(56 173 253 / 0.22)";
 
-/**
- * Price cards floating over the device.
- *
- * `lg` and up only. They used to double as filler inside the screen on mobile,
- * where there was no room beside a 300px phone — but the screen is now a full app
- * view with nothing spare to sit in, so below `lg` they are simply dropped.
- *
- * Unlike the phone itself these DO follow the theme, via the `card-*` tokens: an
- * opaque white card with a cast shadow on the light hero, translucent glass on
- * the dark one.
- */
+/** Price cards over the device, `lg` up only. These DO follow the theme (`card-*`). */
 const FLOATING = [
   {
     key: "eth",
@@ -106,15 +88,12 @@ export function PhoneMockup({
   const app = (key: string) => t(`hero.phoneApp.${key}`);
 
   return (
-    // Fixed 300x600 at every breakpoint: the screen's type scale (9-15px) and its
-    // fixed row heights are all tuned to that width, so reflowing the device is not
-    // an option — under 360px it is uniformly scaled down instead, with a negative
-    // margin taking back the 12% of height the scale no longer occupies. Below that
-    // width the 300px body plus its side buttons was being clipped by the stage.
+    // Fixed 300x600 everywhere — the screen's type scale and row heights are tuned to
+    // it, so under 360px it is uniformly scaled down instead, with a negative margin
+    // taking back the height the scale no longer occupies.
     //
-    // `scale-*` is safe here even though the scroll handler owns `transform` on this
-    // element: Tailwind v4 compiles it to the standalone `scale` property, and the
-    // handler only ever runs at `lg` and up, where this variant does not apply.
+    // `scale-*` is safe despite the scroll handler owning `transform`: Tailwind v4
+    // compiles it to the standalone `scale` property.
     <div
       ref={phoneRef}
       data-hero-phone
@@ -142,10 +121,8 @@ export function PhoneMockup({
         />
       ))}
 
-      {/* Body. The mask fades the phone's bottom into the hero on first paint;
-          the scroll handler removes it once the phone starts travelling — which
-          is why the rail, not a wrapper, carries the ref: everything that has to
-          fade has to be inside the masked element. */}
+      {/* Body. The mask fades the phone into the hero until it starts travelling —
+          which is why the rail carries the ref, not a wrapper. */}
       <div
         ref={bezelRef}
         data-hero-bezel
@@ -234,10 +211,8 @@ export function PhoneMockup({
                     </span>
                   </div>
                   <div className="mt-2 text-[15px] leading-none font-bold tracking-[-0.01em]">
-                    {/* `font-bold` is needed on the span itself: the base rule sets
-                        spans to 500 and the phone's override only inherits size and
-                        colour, so the ticker would otherwise be lighter than the
-                        number it sits next to. */}
+                    {/* `font-bold` on the span itself: the phone's override inherits
+                        only size and colour, so the base 500 would win. */}
                     {card.balance}{" "}
                     <span className="inline! font-bold text-primary">{card.ticker}</span>
                   </div>

@@ -4,16 +4,12 @@ import type { OutsideAddress, SellCurrency } from "@/services/sell.service";
 /**
  * Pricing a sale the way the backend does.
  *
- * The direction of the charges is what separates this from a purchase, and it is
- * worth stating plainly: the fees are denominated in the COIN and added ON TOP of
- * the amount, so `payable` (what leaves the wallet) is larger than the amount,
- * while `willGet` is the gross amount converted at the payout rate and is NOT
- * reduced by them.
+ * The direction of the charges is what separates this from a purchase: the fees are
+ * in the COIN and added ON TOP, so `payable` is larger than the amount, while
+ * `willGet` is the gross converted at the payout rate and is NOT reduced by them.
  *
- * Checked against the endpoint's own worked example — selling 0.002 BTC (rate 1)
- * for ADOut USD (rate 45218, 2 fixed + 1%) returns
- * `{exchange_rate: 45218, fixed_charge: 0.0000442301…, percent_charge: 0.00002,
- *   total_charge: 0.0000642301…, total_payable: 0.00206423…, will_get: 90.436}`.
+ * Checked against the endpoint's worked example — 0.002 BTC for ADOut USD (rate
+ * 45218, 2 fixed + 1%) returns payable 0.00206423…, will_get 90.436.
  */
 
 export interface SellFigures {
@@ -64,13 +60,9 @@ export function sellQuote({
 }
 
 /**
- * The largest amount this balance can actually cover.
- *
- * "Max" cannot be the balance itself: the charges are added on top, so a maxed-out
- * field would always exceed the wallet by the fee and be rejected. Inverting
- * `payable = amount + fixed/rate + amount·percent/100` for `amount` gives the
- * figure that lands exactly on the balance, floored to 8 places because the field
- * rounds there and rounding UP would put it back over the edge.
+ * The largest amount this balance can cover. "Max" cannot be the balance itself —
+ * the charges go on top. Inverting `payable = amount + fixed/rate + amount·percent/100`
+ * gives the figure that lands exactly on it, floored to 8 places.
  */
 export function maxSellable({
   balance,
@@ -92,12 +84,9 @@ export function maxSellable({
 /* -------------------------------------------------------------------------- */
 
 /**
- * The platform address coins should be sent to for this coin on this network.
- *
- * Keyed by both, because that pair is what a deposit address belongs to — an
- * address for BTC on Ripple is not the one to use for BTC on Cardano. Disabled
- * rows are skipped: `status` is the operator's switch for taking one out of
- * service without deleting it.
+ * The platform address to send this coin on this network to — keyed by both, since
+ * that pair is what an address belongs to. Disabled rows are skipped: `status` is
+ * the operator's switch for taking one out of service.
  */
 export function outsideAddressFor(
   addresses: OutsideAddress[] | undefined,

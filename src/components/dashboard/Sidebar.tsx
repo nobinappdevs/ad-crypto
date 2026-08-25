@@ -20,7 +20,6 @@ import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
 import { Logo, LogoMark } from "@/components/share/Logo";
 
-
 type NavItem = {
   key: string;
   icon: ComponentType<{ size?: number | string; strokeWidth?: number; className?: string }>;
@@ -47,29 +46,12 @@ const MENU: { titleKey?: string; items: NavItem[] }[] = [
     ],
   },
   {
-    // Last, and on its own: the ledger is where you go AFTER doing something, so it
-    // reads as the record of the groups above rather than one more action.
+    // The ledger, last and on its own — a record rather than an action.
     items: [{ key: "transactions", icon: ReceiptText, href: "/dashboard/transactions" }],
   },
 ];
 
-/**
- * What hovering the rail turns on, per collapse state.
- *
- * `group-hover/rail` is a NAMED group on purpose: an unnamed `group` on the aside
- * would also satisfy every `group-hover` inside it, so any descendant hover style
- * would fire from anywhere in the sidebar.
- *
- * `focus-within` rides along with each one, so tabbing into the rail reveals the
- * same thing pointing at it does — otherwise a keyboard user gets seven unlabelled
- * icons and no way to see what they are.
- *
- * `width` and `shadow` are the exception: they style the ASIDE, which is the group
- * itself, and `group-hover` compiles to `:where(.group):hover *` — descendants only.
- * The element being hovered needs plain `hover:` / `focus-within:`. Getting this
- * wrong is not a no-op, it is the worst of both: every label unfolds inside a rail
- * that is still 56px wide.
- */
+/** Hover/focus reveal styles for the collapsed rail. */
 const HOVER_COLLAPSED = {
   width: "md:hover:w-65 md:focus-within:w-65",
   shadow:
@@ -85,6 +67,7 @@ const HOVER_COLLAPSED = {
     "md:group-hover/rail:border-primary md:group-hover/rail:bg-transparent md:group-focus-within/rail:border-primary md:group-focus-within/rail:bg-transparent",
 };
 
+/** The same reveal, but only below `lg` — above it the rail is already open. */
 const HOVER_EXPANDABLE = {
   width: "md:max-lg:hover:w-65 md:max-lg:focus-within:w-65",
   shadow:
@@ -119,10 +102,7 @@ export function Sidebar({
   const pathname = usePathname() ?? "";
   const k = (name: string) => t(`dashboard.${name}`);
 
-  /**
-   * Collapsing DROPS the `lg:` overrides so the `md:` rail styles apply at large
-   * widths too. Every row therefore needs one expression rather than two variants.
-   */
+  /** Collapsed drops the `lg:` overrides, so the `md:` rail styles apply there too. */
   const lg = (classes: string) => (collapsed ? "" : classes);
 
   const hover = collapsed ? HOVER_COLLAPSED : HOVER_EXPANDABLE;
@@ -138,7 +118,7 @@ export function Sidebar({
         open ? "translate-x-0" : "-translate-x-full md:translate-x-0",
       )}
     >
-      {/* Brand light, so the rail's top edge is not a flat block of card colour. */}
+      {/* Brand light along the top edge. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-primary/6 to-transparent"
@@ -152,23 +132,18 @@ export function Sidebar({
           hover.brandRow,
         )}
       >
-        {/* The brand row is brand only — the collapse control lives at the bottom
-            edge, where there is room for it in the rail too. */}
         <Link
           href="/"
           aria-label={k("sidebar.goHome")}
           onClick={onClose}
-          // `shrink-0` so the 300ms width animation CLIPS the row's contents at the
-          // rail's edge instead of squashing a 120px wordmark into 16px on the way.
+          // `shrink-0` so the width animation clips the wordmark instead of squashing it.
           className="inline-flex! shrink-0 items-center overflow-hidden"
         >
           <span className={cn("block md:hidden", lg("lg:block"), hover.show)}>
             <Logo className="max-w-30 lg:max-w-30 xl:max-w-30" />
           </span>
           <span className={cn("hidden md:block", lg("lg:hidden"), hover.hide)}>
-            {/* Tile rather than a bare 25px crop: at 56px the glyph on its own reads
-                as a stray graphic, and the tile gives it the same footprint as the
-                icons below it. */}
+            {/* Tiled, so the mark has the same footprint as the icons below. */}
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/8">
               <LogoMark height={26} />
             </span>
@@ -240,7 +215,7 @@ export function Sidebar({
                   {row}
                 </Link>
               ) : (
-                // A section that does not exist yet: same row, no dead navigation.
+                // No route yet: same row, no dead navigation.
                 <button key={key} type="button" className={cn(rowClass, "w-full cursor-pointer")}>
                   {row}
                 </button>
@@ -267,7 +242,6 @@ export function Sidebar({
               <Headphones size={17} />
             </Link>
           </div>
-
 
           <button
             type="button"

@@ -38,15 +38,8 @@ import {
 import { relativeTime } from "@/config/txlog";
 
 /**
- * The dashboard's top bar: which page you are on, on the left; everything about
- * the account, on the right.
- *
- * Sticky, because the page below it scrolls for a long way — a transaction table
- * or a KYC form leaves the header off-screen otherwise, and with it the way back
- * to any other section on a phone.
- *
- * Longest prefix wins, so a future `/dashboard/buy-crypto/xyz` still titles itself
- * "Buy Crypto" rather than falling back to the overview.
+ * The dashboard's top bar: the current page on the left, the account on the right.
+ * Longest prefix wins, so `/dashboard/buy-crypto/xyz` still titles itself correctly.
  */
 const TITLES: { prefix: string; key: string }[] = [
   { prefix: "/dashboard/buy-crypto", key: "dashboard.nav.buyCrypto" },
@@ -103,15 +96,8 @@ const NOTIF_META: Record<NotificationKind, { icon: typeof Bell; tone: string; hr
 };
 
 /**
- * The account's picture, or its initials when there is none.
- *
- * A plain `<img>` rather than `next/image`: the upload is served from the API host,
- * which comes from an env var — declaring it in next.config's `remotePatterns`
- * would break the day the backend moves — and images are unoptimized in this
- * static export regardless, so there is nothing to give up.
- *
- * `broken` covers the case the URL resolves to nothing; without it a deleted
- * upload leaves an empty box where a face should be.
+ * The account's picture, or its initials. A plain `<img>` — env-var host, and
+ * images are unoptimized here anyway. `broken` covers a URL that resolves to nothing.
  */
 function Avatar({
   identity,
@@ -195,11 +181,8 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
   const { data: notifications = [] } = useNotifications();
   const identity = useAccountIdentity();
 
-  /**
-   * Read once at mount, not on every render: opening the panel updates the stored
-   * timestamp, and re-reading it live would clear the "new" highlight out from
-   * under the rows the user is still looking at.
-   */
+  // Read once at mount: opening the panel updates the stored timestamp, and
+  // re-reading live would clear the "new" highlight under the user's eyes.
   const [seenAt, setSeenAt] = useState(0);
   useEffect(() => setSeenAt(readNotificationsSeenAt()), []);
   const unseen = notifications.filter((n) => isUnseen(n, seenAt)).length;
@@ -248,10 +231,7 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
           <Menu size={22} />
         </button>
 
-        {/* The title alone. The strapline that used to sit under it said the same
-            thing on every screen in the dashboard, which made it decoration rather
-            than information — and it was the only reason this bar needed two
-            lines. */}
+        {/* The title alone — the old strapline said the same thing on every screen. */}
         <div className="min-w-0">
           <h1 className="truncate text-[17px]! leading-tight! font-bold! tracking-[-0.01em] sm:text-[19px]!">
             {t(title)}

@@ -1,12 +1,9 @@
 import { privateApi } from "@/lib/axios";
 
 /**
- * One control in the KYC form, exactly as the backend describes it.
- *
- * The form is operator-configurable upstream — which documents are asked for,
- * which formats are accepted — so the field list is data, not markup, and the
- * page renders whatever it is handed. Everything here is optional except the
- * identity of the field, because a config the operator edits is not a contract.
+ * One control in the KYC form, exactly as the backend describes it. The form is
+ * operator-configurable, so the field list is data and the page renders what it is
+ * handed — hence everything but the field's identity being optional.
  */
 export interface KycField {
   /** "file" | "select" | "text" | "textarea" | "date" | … — drives the control. */
@@ -50,11 +47,8 @@ export const kycService = {
   },
 
   /**
-   * POST /user/profile/kyc/submit — multipart, because the document scans are
-   * part of the same submission as the text fields describing them.
-   *
-   * Empty values are dropped rather than sent as `""`: an optional field the user
-   * left alone should look absent to the validator, not present and blank.
+   * POST /user/profile/kyc/submit — multipart, since the scans are part of the same
+   * submission. Empty values are dropped rather than sent as "".
    */
   async submit(values: Record<string, KycValue>) {
     const form = new FormData();

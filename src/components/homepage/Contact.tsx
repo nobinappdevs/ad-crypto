@@ -5,9 +5,8 @@ import { Container } from "@/components/share/Container";
 import { ContactForm } from "@/components/forms/ContactForm";
 
 /**
- * The three words step progressively to the right, as in the reference. The
- * indents are in `em` so the staircase keeps its proportions at every breakpoint,
- * and they use padding-inline-start so the stagger mirrors correctly in Arabic.
+ * The three words step to the right. Indents are in `em` so the staircase keeps its
+ * proportions, via padding-inline-start so it mirrors in Arabic.
  */
 const TITLE_LINES = [
   { key: "contact.titleLine1", indent: "0em" },
@@ -34,11 +33,8 @@ function ContactHeading() {
 
   return (
     <div>
-      {/* The staircase is set against the LONGEST translation, not the English
-          copy: the column is only half the container from `lg` up, and at 78-92px
-          Spanish ("Y Vamos A" / "Conectar") plus its 1.2em indent ran past that
-          column's edge. `lg` therefore steps back down before `xl` climbs again,
-          and `wrap-break-word` is the floor under any string longer still. */}
+      {/* Set against the LONGEST translation, not the English copy — from `lg` the
+          column is half the container, and Spanish ran past its edge. */}
       <h2 className="text-[clamp(34px,12vw,46px)]! leading-[1.1]! font-bold tracking-[0.01em] wrap-break-word text-hero-fg uppercase sm:text-[62px]! md:text-[72px]! lg:text-[60px]! xl:text-[84px]!">
         {/* {TITLE_LINES.map((line) => (
           <span key={line.key} className="block!" style={{ paddingInlineStart: line.indent }}>

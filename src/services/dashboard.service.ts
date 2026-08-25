@@ -19,10 +19,8 @@ export interface WalletCurrency {
 }
 
 /**
- * One network a currency is available on.
- *
- * The row itself is the JOIN — it carries the fee this coin costs on that chain —
- * while `network` is the chain, shared across every currency that offers it.
+ * One network a currency is available on. The row is the JOIN — it carries this
+ * coin's fee on that chain — while `network` is the chain itself.
  */
 export interface CurrencyNetwork {
   id?: number;
@@ -51,9 +49,8 @@ export interface DashboardWallet {
 }
 
 /**
- * Twelve months of activity. The arrays are per-month TRANSACTION COUNTS, not
- * money moved — verified against an account whose two buy orders and one
- * withdrawal came back as `buy_data[7] === 2` and `withdraw_data[7] === 1`.
+ * Twelve months of activity. The arrays are per-month TRANSACTION COUNTS, not money
+ * moved — verified against an account with two buys and one withdrawal.
  */
 export interface DashboardChart {
   labels?: string[];
@@ -83,23 +80,63 @@ export interface DashboardTransaction {
   reject_reason?: string | null;
   created_at?: string;
   /**
-   * Per-type payload. The coin involved lives at different depths depending on
-   * the type — `wallet` for buy, `sender_wallet`/`receiver_wallet` for exchange
-   * and withdraw — which is why reading it is its own helper.
+   * Per-type payload. The coin sits at different depths by type (`wallet` for buy,
+   * `sender_wallet`/`receiver_wallet` for exchange and withdraw), hence its own helper.
    *
-   * The rest of the payload is per type as well and NOT a fixed set: a sell paid
-   * out to a bank carries a branch and an account number, a withdraw carries an
-   * address, and the backend adds fields without warning. Hence the open shape —
-   * `txDetails` in `@/config/txlog` renders whatever is actually there.
+   * The rest is not a fixed set either — the backend adds fields without warning, so
+   * the shape stays open and `txDetails` renders whatever is there.
    */
   details?: {
-    data?: {
-      wallet?: TxDetailWallet;
-      sender_wallet?: TxDetailWallet;
-      receiver_wallet?: TxDetailWallet;
-      [key: string]: TxDetailValue;
-    };
+    data?: TxQuote;
+    /**
+     * What the user typed and uploaded, echoed back with the declaration it was
+     * asked for by. Named per flow: a manual purchase uses `input_values`, a sale
+     * splits the payout form and the deposit proof into the other two.
+     */
+    input_values?: TxSubmittedField[];
+    gateway_input_values?: TxSubmittedField[];
+    outside_address_input_values?: TxSubmittedField[];
+    /**
+     * The gateway's own answer, verbatim — a Stripe checkout session runs to sixty
+     * fields. Open, therefore, and read selectively: see `txGateway`.
+     */
+    gateway_response?: Record<string, TxDetailValue>;
   };
+  /**
+   * The SAME quote, at the row's own level — where a sale keeps it.
+   *
+   * A sell's `details` holds the payout form instead of the order, so its wallets,
+   * method, network and `will_get` arrive here. `txQuote` reads whichever of the two
+   * the row happens to use.
+   */
+  data?: TxQuote;
+  /** Where an unfinished automatic payment can be resumed, when the API sends one. */
+  submit_url?: string | null;
+}
+
+/**
+ * The priced order as the log echoes it back — the wallets on each side, the rate,
+ * the charges, and whatever else the flow recorded.
+ *
+ * Open past the wallets: the set is per type and the backend adds fields without
+ * warning, so `txDetails` renders whatever is there rather than a fixed list.
+ */
+export interface TxQuote {
+  wallet?: TxDetailWallet;
+  sender_wallet?: TxDetailWallet;
+  receiver_wallet?: TxDetailWallet;
+  [key: string]: TxDetailValue;
+}
+
+/** One answered field of an operator-declared form, as the log echoes it back. */
+export interface TxSubmittedField {
+  /** "text" | "file" | "select" | … — the control it was collected with. */
+  type?: string;
+  /** The operator's own wording ("Transaction ID"), which is what to display. */
+  label?: string;
+  name?: string;
+  value?: TxDetailValue;
+  required?: boolean;
 }
 
 /** A wallet as the detail payload carries it — the name and ticker are what's read. */

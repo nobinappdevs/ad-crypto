@@ -1,19 +1,12 @@
 /**
  * The banner glow that page headers sit on.
  *
- * Deliberately paints NO base colour: it composites over whatever the page
- * background already is. An earlier version filled `bg-hero-bg` (4,4,10), which
- * differs from the page's `--bg` (10,12,20) just enough to draw a hard horizontal
- * band where the header met the section below it.
+ * Paints NO base colour — it composites over the page background. Filling one drew
+ * a hard band where the header met the section below, which is also why the glow is
+ * masked out toward the bottom rather than faded into a specific dark colour.
  *
- * For the same reason the glow is masked out toward the bottom rather than faded
- * into a specific dark colour — by the section's lower edge there is nothing left
- * but page background, so the seam cannot come back if either token changes.
- *
- * Every layer is driven by the `--hero-*` custom properties, which already carry
- * light and dark values, so this follows the theme with no per-mode classes.
- *
- * Render inside a `relative` parent; content beside it needs `relative z-10`.
+ * Driven by the `--hero-*` properties, so it follows the theme by itself. Render
+ * inside a `relative` parent; content beside it needs `relative z-10`.
  */
 const FADE_OUT = "linear-gradient(180deg, #000 0%, #000 52%, rgb(0 0 0 / 0.35) 78%, transparent 100%)";
 

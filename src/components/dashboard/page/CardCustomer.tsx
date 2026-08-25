@@ -35,10 +35,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 type Docs = "idFront" | "idBack" | "photo";
 
-/**
- * Divider between sections. `border-t` is load-bearing: preflight zeroes every
- * border width, so an `<hr>` given only a colour draws nothing at all.
- */
+/** `border-t` is load-bearing: preflight zeroes border widths, so a bare `<hr>` draws nothing. */
 const Rule = () => <hr className="my-6 border-t border-border" />;
 
 /** Whole years between `iso` and today, or null if the date is unusable. */

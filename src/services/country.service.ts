@@ -1,12 +1,9 @@
 import { publicApi } from "@/lib/axios";
 
 /**
- * One row of the backend's own country table.
- *
- * `mobile_code` is NOT always a bare dial code — the table carries entries like
- * "+358-18" (Åland) and "1-242" (Bahamas), i.e. a code with its area prefix. It is
- * stored and returned verbatim, so it is kept verbatim here too: normalising it
- * would mean writing back a value the backend never gave us.
+ * One row of the backend's own country table. `mobile_code` is not always a bare
+ * dial code — the table carries "+358-18" and "1-242" — and it is kept verbatim,
+ * since normalising it would write back a value the backend never gave us.
  */
 export interface Country {
   id?: number;

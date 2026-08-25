@@ -4,11 +4,9 @@ import type { DashboardTransaction } from "@/services/dashboard.service";
 /**
  * The ledger, from `GET /user/transaction/logs`.
  *
- * The rows are the same shape the dashboard's `recent_transactions` carries — same
- * fields, same decimal strings, same per-type `details` — so they reuse
- * `DashboardTransaction` and the same table renders both. What this endpoint adds
- * is everything a full listing needs: a type filter, a reference search, and Laravel
- * pagination around it.
+ * The rows are the same shape as the dashboard's `recent_transactions`, so they
+ * reuse `DashboardTransaction` and one table renders both. What this adds is a type
+ * filter, a reference search, and Laravel pagination.
  */
 
 /** Laravel's paginator, trimmed to the parts the UI actually reads. */
@@ -31,8 +29,8 @@ export interface TransactionLogsData {
 
 export interface TransactionLogsParams {
   /**
-   * One of buy | sell | withdraw | exchange. Anything else is a 400 from this
-   * endpoint ("Invalid type"), so "all" is expressed by leaving it out.
+   * One of buy | sell | withdraw | exchange. Anything else is a 400, so "all" is
+   * expressed by leaving it out.
    */
   type?: string;
   /** Partial match on the reference, e.g. "BC692". */

@@ -81,18 +81,12 @@ const formFrom = (user: UserInfo | undefined): Form => ({
 /* -------------------------------------------------------------------------- */
 
 /**
- * The account's own record — `GET /user/profile/info` to read it, and the two
- * writes that go with it: `info/update` for the details and `password/update` for
- * the credential.
+ * The account's own record — `GET /user/profile/info`, plus `info/update` and
+ * `password/update`.
  *
- * Two panels rather than one form, because they are two endpoints and two kinds of
- * risk. Saving a city is routine; changing a password is not, and it asks for the
- * current one as proof. Merging them behind a single button would make every name
- * correction demand a password.
- *
- * What is deliberately absent: email and username. The update endpoint takes
- * neither — they identify the login — and an input that silently discards what was
- * typed is worse than no input at all. The header's account menu still shows both.
+ * Two panels, because they are two endpoints and two kinds of risk: a password
+ * change asks for the current one as proof, a city correction should not. Email and
+ * username are absent on purpose — the update endpoint takes neither.
  */
 export function Profile() {
   const { t, lang } = useLang();
@@ -483,11 +477,8 @@ export function Profile() {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The avatar, and the control that replaces it.
- *
- * Round rather than the dashed rectangle the KYC uploads use: this image is shown
- * as a circle everywhere else in the app, and a picker that crops differently from
- * the result it produces is a small lie about what was chosen.
+ * The avatar and the control that replaces it. Round, not the dashed rectangle the
+ * KYC uploads use — this image is a circle everywhere else in the app.
  */
 function AvatarPicker({
   name,

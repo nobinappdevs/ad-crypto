@@ -1,13 +1,10 @@
 import { privateApi } from "@/lib/axios";
 
 /**
- * One notification. `message` is a per-event object the backend assembles, not a
- * sentence — the panel composes the line from these parts, which is what lets it
- * render in the user's language rather than the server's.
+ * One notification. `message` is a per-event object, not a sentence — the panel
+ * composes the line, which is what lets it render in the user's language.
  *
- * Note what is NOT here: any read/unread flag. There is no endpoint to mark one
- * read either, so the panel cannot show a "new" badge without inventing state the
- * backend would immediately contradict.
+ * Note what is NOT here: any read/unread flag, and no endpoint to set one.
  */
 export interface UserNotification {
   id?: number;

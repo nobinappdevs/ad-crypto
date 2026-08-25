@@ -14,15 +14,10 @@ import { JournalCard, JournalCover, JournalPill } from "./JournalCard";
 /**
  * One article, from `GET /website/journal/details/{slug}`.
  *
- * The route is a single static page reading `?slug=`, NOT a `[slug]` segment:
- * the app is a static export, so a dynamic segment would need every article
- * enumerated at build time, and the articles come from the API. That is also why
- * the page sits behind a Suspense boundary — `useSearchParams` opts out of
- * prerendering.
- *
- * The rail the endpoint returns alongside the article varies by build: some send
- * `recent_posts`, some send the `category` index. Both are rendered when
- * present, neither is required.
+ * A static page reading `?slug=`, not a `[slug]` segment — a static export would
+ * have to enumerate every article at build time (hence the Suspense boundary too).
+ * The rail beside it varies by build: `recent_posts` or the `category` index,
+ * whichever arrives.
  */
 export function JournalDetails() {
   const { t, lang } = useLang();
@@ -99,14 +94,9 @@ export function JournalDetails() {
           />
 
           {/* The body is HTML from the operator's own editor, so it is injected
-              rather than escaped — the alternative is showing readers the markup.
-              It is first-party content from the same backend that serves the
-              page, not anything a visitor can write into.
-
-              Capped in `ch` rather than pixels: line length is what governs
-              readability, and it should hold whatever the font size resolves to.
-              The child selectors give the injected tags the rhythm the rest of
-              the page has, since they arrive with no classes of their own. */}
+              rather than escaped — first-party content from the same backend.
+              Capped in `ch`, since line length is what governs readability, and the
+              child selectors give the injected tags the page's rhythm. */}
           {journal.description && (
             <div
               className="mt-10 max-w-[68ch] [&_a]:text-primary [&_a]:underline [&_h2]:mt-8 [&_h3]:mt-6 [&_img]:mt-6 [&_img]:rounded-2xl [&_li]:list-disc [&_p]:mt-4 [&_p]:leading-[1.8] [&_ul]:mt-4 [&_ul]:ps-5"
