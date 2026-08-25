@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import {
   ArrowDownToLine,
@@ -21,18 +20,19 @@ import {
 } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { useTheme } from "@/hooks/useTheme";
-import { useLogout } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useAccountIdentity } from "@/hooks/useProfile";
 import { LanguageSwitcher } from "@/components/share/LanguageSwitcher";
-import { Button } from "@/components/ui/Button";
 import { cn } from "@/components/ui/cn";
+import { LogoutDialog } from "./LogoutDialog";
 import {
+  getNotificationsSeenAt,
+  getNotificationsSeenAtServer,
   isUnseen,
   markNotificationsSeen,
   notificationBody,
   notificationKind,
-  readNotificationsSeenAt,
+  subscribeNotificationsSeen,
   type NotificationKind,
 } from "@/config/notifications";
 import { relativeTime } from "@/config/txlog";
@@ -166,8 +166,6 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname() ?? "";
   const k = (name: string) => t(`dashboard.${name}`);
-  // POST /user/logout — the hook clears the token, the cache and the route.
-  const logout = useLogout(k("loggedOut"));
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -181,10 +179,14 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
   const { data: notifications = [] } = useNotifications();
   const identity = useAccountIdentity();
 
-  // Read once at mount: opening the panel updates the stored timestamp, and
-  // re-reading live would clear the "new" highlight under the user's eyes.
-  const [seenAt, setSeenAt] = useState(0);
-  useEffect(() => setSeenAt(readNotificationsSeenAt()), []);
+  // Read once, not live: opening the panel updates the stored timestamp, and
+  // following it would clear the "new" highlight under the user's eyes. The
+  // snapshot is 0 on the server, so hydration matches — see `getNotificationsSeenAt`.
+  const seenAt = useSyncExternalStore(
+    subscribeNotificationsSeen,
+    getNotificationsSeenAt,
+    getNotificationsSeenAtServer,
+  );
   const unseen = notifications.filter((n) => isUnseen(n, seenAt)).length;
 
   /** Opening the panel is what "seeing" them means — record it, keep the highlight. */
@@ -432,52 +434,7 @@ export function Navbar({ onMenu }: { onMenu: () => void }) {
         </div>
       </div>
 
-      {/* Portalled to <body>: inside the sticky header it would be trapped in that
-          stacking context and land under the rail. */}
-      {confirmLogout &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-60 grid place-items-center bg-black/50 p-4 backdrop-blur-sm"
-            onClick={() => setConfirmLogout(false)}
-          >
-            <div
-              role="dialog"
-              aria-modal="true"
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-center shadow-card"
-            >
-              <span
-                aria-hidden
-                className="mx-auto grid! h-12 w-12 place-items-center rounded-full bg-hero-neg/10 text-hero-neg"
-              >
-                <LogOut size={20} />
-              </span>
-              <h2 className="mt-4 text-[17px]! font-bold!">{k("logoutTitle")}</h2>
-              <p className="mt-1.5 text-[13px]! leading-relaxed! text-muted">{k("logoutDesc")}</p>
-
-              <div className="mt-6 flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setConfirmLogout(false)}
-                  className="flex-1 cursor-pointer rounded-xl border border-border bg-surface px-4 py-2.5 text-[13px] font-semibold text-heading transition hover:bg-black/4 dark:hover:bg-white/5"
-                >
-                  {k("cancel")}
-                </button>
-                <Button
-                  variant="danger"
-                  size="md"
-                  fullWidth
-                  loading={logout.isPending}
-                  onClick={() => logout.mutate()}
-                  className="flex-1"
-                >
-                  {k("confirmLogout")}
-                </Button>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
+      <LogoutDialog open={confirmLogout} onClose={() => setConfirmLogout(false)} />
     </header>
   );
 }

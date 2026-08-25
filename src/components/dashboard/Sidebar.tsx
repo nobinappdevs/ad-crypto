@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { ComponentType } from "react";
+import { useState, type ComponentType } from "react";
 import { usePathname } from "next/navigation";
 import {
   ArrowDownToLine,
@@ -11,19 +11,23 @@ import {
   HandCoins,
   Headphones,
   LayoutGrid,
+  LogOut,
   ReceiptText,
   ShoppingCart,
-  WalletCards,
+  Wallet,
   X,
 } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import { cn } from "@/components/ui/cn";
 import { Logo, LogoMark } from "@/components/share/Logo";
+import { LogoutDialog } from "./LogoutDialog";
 
 type NavItem = {
   key: string;
   icon: ComponentType<{ size?: number | string; strokeWidth?: number; className?: string }>;
   href?: string;
+  /** Where the label lives under `dashboard.`, when it is not `nav.<key>`. */
+  labelKey?: string;
 };
 
 const MENU: { titleKey?: string; items: NavItem[] }[] = [
@@ -41,6 +45,7 @@ const MENU: { titleKey?: string; items: NavItem[] }[] = [
   {
     titleKey: "navGroups.wallet",
     items: [
+      { key: "wallets", icon: Wallet, href: "/dashboard/wallets", labelKey: "myWallets" },
       { key: "withdrawCrypto", icon: ArrowDownToLine, href: "/dashboard/withdraw-crypto" },
       // { key: "myCards", icon: WalletCards, href: "/dashboard/my-cards" },
     ],
@@ -102,6 +107,8 @@ export function Sidebar({
   const pathname = usePathname() ?? "";
   const k = (name: string) => t(`dashboard.${name}`);
 
+  const [logoutOpen, setLogoutOpen] = useState(false);
+
   /** Collapsed drops the `lg:` overrides, so the `md:` rail styles apply there too. */
   const lg = (classes: string) => (collapsed ? "" : classes);
 
@@ -140,7 +147,9 @@ export function Sidebar({
           className="inline-flex! shrink-0 items-center overflow-hidden"
         >
           <span className={cn("block md:hidden", lg("lg:block"), hover.show)}>
-            <Logo className="max-w-30 lg:max-w-30 xl:max-w-30" />
+            {/* One size at every breakpoint: the rail is 260px wide throughout,
+                so the wordmark has no reason to grow with the window. */}
+            <Logo className="max-w-24 lg:max-w-24 xl:max-w-24" />
           </span>
           <span className={cn("hidden md:block", lg("lg:hidden"), hover.hide)}>
             {/* Tiled, so the mark has the same footprint as the icons below. */}
@@ -176,7 +185,7 @@ export function Sidebar({
               </span>
             )}
 
-            {section.items.map(({ key, icon: Icon, href }) => {
+            {section.items.map(({ key, icon: Icon, href, labelKey }) => {
               const active = isActive(pathname, href);
 
               const row = (
@@ -191,7 +200,7 @@ export function Sidebar({
                       active && "text-primary",
                     )}
                   >
-                    {k(`nav.${key}`)}
+                    {k(labelKey ?? `nav.${key}`)}
                   </span>
                 </>
               );
@@ -210,13 +219,28 @@ export function Sidebar({
                   : "border-transparent text-heading/70 hover:text-heading",
               );
 
+              // Collapsed, the label is `display:none`, so the row would have no
+              // accessible name and no tooltip — the title carries both.
+              const label = k(labelKey ?? `nav.${key}`);
+
               return href ? (
-                <Link key={key} href={href} onClick={onClose} className={cn(rowClass, "flex!")}>
+                <Link
+                  key={key}
+                  href={href}
+                  onClick={onClose}
+                  title={label}
+                  className={cn(rowClass, "flex!")}
+                >
                   {row}
                 </Link>
               ) : (
                 // No route yet: same row, no dead navigation.
-                <button key={key} type="button" className={cn(rowClass, "w-full cursor-pointer")}>
+                <button
+                  key={key}
+                  type="button"
+                  title={label}
+                  className={cn(rowClass, "w-full cursor-pointer")}
+                >
                   {row}
                 </button>
               );
@@ -224,12 +248,12 @@ export function Sidebar({
           </div>
         ))}
 
-        {/* ---- Support, pinned to the bottom */}
-        <div className="mt-auto">
+        {/* ---- Support and the way out, pinned to the bottom */}
+        <div className="mt-auto pt-2">
           {/* Rail version: the card is all text, so it becomes its own icon. */}
           <div
             className={cn(
-              "hidden px-2 pb-4 md:flex md:justify-center",
+              "hidden px-2 pb-2 md:flex md:justify-center",
               lg("lg:hidden"),
               hover.hide,
             )}
@@ -237,11 +261,32 @@ export function Sidebar({
             <Link
               href="/contact"
               aria-label={k("sidebar.helpBtn")}
+              title={k("sidebar.helpBtn")}
               className="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary transition hover:bg-primary hover:text-white"
             >
               <Headphones size={17} />
             </Link>
           </div>
+
+          {/* Signing out belongs where the account rows are, not only behind the
+              avatar menu — the same dialog either way, so it is asked the same. */}
+          <button
+            type="button"
+            onClick={() => setLogoutOpen(true)}
+            title={k("logout")}
+            className={cn(
+              "flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-hero-neg/80 transition-colors hover:bg-hero-neg/8 hover:text-hero-neg md:justify-center md:px-0",
+              lg("lg:justify-start lg:px-4"),
+              hover.plainRow,
+            )}
+          >
+            <LogOut size={18} aria-hidden className="shrink-0 rtl:rotate-180" />
+            <span
+              className={cn("block text-[14px] font-medium md:hidden", lg("lg:block"), hover.show)}
+            >
+              {k("logout")}
+            </span>
+          </button>
 
           <button
             type="button"
@@ -265,6 +310,8 @@ export function Sidebar({
           </button>
         </div>
       </nav>
+
+      <LogoutDialog open={logoutOpen} onClose={() => setLogoutOpen(false)} />
     </aside>
   );
 }

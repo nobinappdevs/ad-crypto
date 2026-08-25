@@ -65,6 +65,34 @@ export function markNotificationsSeen() {
   } catch {}
 }
 
+/**
+ * The stored timestamp for `useSyncExternalStore`, cached for the life of the page.
+ *
+ * Cached DELIBERATELY, and never invalidated: opening the panel writes a new
+ * timestamp, and a snapshot that followed the store would clear the "new" highlight
+ * under the reader's eyes while they are looking at it. A reload reads again.
+ *
+ * The subscribe/snapshot pair rather than an effect because the value cannot be
+ * read on the server: this way hydration renders the server's answer and the client
+ * swaps in its own, with no cascading `setState` and no markup mismatch.
+ */
+let seenAtCache: number | null = null;
+
+export function getNotificationsSeenAt(): number {
+  if (seenAtCache === null) seenAtCache = readNotificationsSeenAt();
+  return seenAtCache;
+}
+
+/** No `localStorage` on the server, so nothing has been seen yet. */
+export function getNotificationsSeenAtServer(): number {
+  return 0;
+}
+
+/** Nothing to subscribe to — the snapshot is fixed once it has been taken. */
+export function subscribeNotificationsSeen(): () => void {
+  return () => {};
+}
+
 /** Created after the last time the panel was opened. */
 export function isUnseen(notification: UserNotification, seenAt: number): boolean {
   if (!seenAt) return true;

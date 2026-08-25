@@ -253,7 +253,6 @@ export function ExchangeCrypto() {
           <Panel className="p-4 sm:p-6">
             <ConfirmStep
               draft={draft}
-              paths={paths}
               busy={confirm.isPending}
               onBack={() => setDraft(null)}
               onConfirm={confirmSwap}
@@ -470,13 +469,11 @@ export function ExchangeCrypto() {
  */
 function ConfirmStep({
   draft,
-  paths,
   busy,
   onBack,
   onConfirm,
 }: {
   draft: ExchangeDraft;
-  paths: ImagePaths | undefined;
   busy: boolean;
   onBack: () => void;
   onConfirm: () => void;

@@ -30,7 +30,9 @@ export function BuyCryptoChart({ labels, buy }: BuyCryptoChartProps) {
   const [asTable, setAsTable] = useState(false);
   const tableId = useId();
 
-  const columns = labels?.length ? labels : [...FALLBACK_MONTHS];
+  // Memoised because it seeds `values` below: a fresh array each render would
+  // re-run that memo every time and defeat the point of it.
+  const columns = useMemo(() => (labels?.length ? labels : [...FALLBACK_MONTHS]), [labels]);
   const values = useMemo(() => columns.map((_, i) => buy?.[i] ?? 0), [columns, buy]);
   const scale = useMemo(() => niceScale(Math.max(0, ...values), { integer: true }), [values]);
 
